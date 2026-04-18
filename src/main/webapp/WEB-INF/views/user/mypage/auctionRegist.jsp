@@ -23,6 +23,32 @@
             font-weight: bold;
         }
     </style>
+    <script type="text/javascript">
+    	function checkUserInput() {
+			// alert("호출")
+			let title = document.getElementById("AUCTION_TITLE");
+			let auctionPrice = document.getElementById("AUCTION_PRICE");
+			
+			if(title.value == "")
+			{
+				alert("제목을 입력히세요.");
+				return false;
+			}
+			
+			if(auctionPrice.value == "")
+			{
+				alert("시작가를 입력해주세요.");
+				return false;
+			}
+			else if(auctionPrice.value % 1000 != 0)
+			{
+				alert("1000원 단위로 입력해주세요.");
+				return false;
+			}
+		}
+    	
+    
+    </script>
 </head>
 <body>
 
@@ -45,24 +71,25 @@
                 
                 <div class="mb-4">
                     <label class="wf-label">경매 제목</label>
-                    <input type="text" name="AUCTION_TITLE" class="form-control wf-input" placeholder="">
+                    <input type="text" name="AUCTION_TITLE" id="AUCTION_TITLE" class="form-control wf-input" placeholder="">
                 </div>
 
                 <div class="mb-4 d-flex align-items-end" style="gap: 15px;">
                     <div style="flex-grow: 1;">
                         <label class="wf-label">경매 시작가</label>
-                        <input type="number" name="START_PRICE" class="form-control wf-input" placeholder="">
+                        <input type="number" name="START_PRICE" id="AUCTION_PRICE" class="form-control wf-input" placeholder=""
+                        min="0" step="1000">
                     </div>
                     <span class="fw-bold pb-2" style="font-size: 1.2rem;">원</span>
                 </div>
 
                 <div class="mb-5">
                     <label class="wf-label">경매 소개 글</label>
-                    <textarea name="AUCTION_INFO" class="form-control wf-input" rows="10" placeholder="내용을 입력하세요."></textarea>
+                    <textarea name="AUCTION_INFO" class="form-control wf-input" rows="8" placeholder="내용을 입력하세요."></textarea>
                 </div>
 
                 <div class="d-flex justify-content-center" style="gap: 100px;">
-                    <button type="submit" class="btn btn-wf px-5">등록</button>
+                    <button type="submit" class="btn btn-wf px-5" onclick="return checkUserInput()">등록</button>
                     <button type="button" class="btn btn-wf px-5" onclick="">취소</button>
                 </div>
 

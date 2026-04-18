@@ -9,8 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/user/mypage/auction")
-public class AuctionRegistController extends HttpServlet
+@WebServlet("/user/mypage/report-submit")
+public class ReportSubmitController extends HttpServlet
 {
 
 	private static final long serialVersionUID = 1L;
