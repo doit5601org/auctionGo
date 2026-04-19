@@ -29,9 +29,9 @@ public class AuctionRegistController extends HttpServlet
 		resp.sendRedirect(req.getContextPath() + "/user/mypage/auctionList");
 	}
 
-		
 
-	
-	
-	
+
+
+
+
 }
