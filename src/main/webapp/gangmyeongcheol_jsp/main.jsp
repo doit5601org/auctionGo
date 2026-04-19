@@ -39,10 +39,6 @@
     .request-btn { font-size: 11px; padding: 3px 11px; border-radius: 20px; }
 
     .sub-banner { background: white; border-radius: 14px; padding: 22px 28px; border: 1px solid #bbdefb; }
-
-    footer { background: #1a2a3a; color: #aaa; font-size: 13px; padding: 32px 0; }
-    footer a { color: #aaa; text-decoration: none; }
-    footer a:hover { color: white; }
 </style>
 </head>
 <body>
@@ -50,7 +46,7 @@
 <!-- 네비바 -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">🎌 FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -62,7 +58,7 @@
             </ul>
             <div class="d-flex me-3">
                 <input type="text" class="form-control form-control-sm search-input" placeholder="피규어 검색...">
-                <button class="btn btn-primary btn-sm search-btn px-3">🔍</button>
+                <button class="btn btn-primary btn-sm search-btn px-3">검색</button>
             </div>
             <div class="d-flex gap-2">
                 <a href="#" class="btn btn-outline-primary btn-sm">로그인</a>
@@ -94,7 +90,7 @@
 <!-- 진행중인 경매 -->
 <section class="container mt-5">
     <div class="section-header">
-        <h6>🔥 지금 진행중인 경매</h6>
+        <h6>지금 진행중인 경매</h6>
         <a href="main.jsp">전체보기 →</a>
     </div>
     <div class="row row-cols-2 row-cols-md-4 g-3">
@@ -104,7 +100,7 @@
                 <img src="https://placehold.co/300x300/e3f2fd/1565c0?text=Miku+1%2F7" alt="">
                 <div class="p-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="timer-pill">⏱ 23:14:05</span>
+                        <span class="timer-pill">23:14:05</span>
                         <span class="badge" style="background:#e3f2fd;color:#1565c0;font-size:10px">S급</span>
                     </div>
                     <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 1/7 스케일 피규어</p>
@@ -122,7 +118,7 @@
                 <img src="https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku" alt="">
                 <div class="p-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="timer-pill">⏱ 47:30:12</span>
+                        <span class="timer-pill">47:30:12</span>
                         <span class="badge" style="background:#e3f2fd;color:#1565c0;font-size:10px">A급</span>
                     </div>
                     <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 Racing Miku 2023</p>
@@ -140,7 +136,7 @@
                 <img src="https://placehold.co/300x300/fff3e0/e65100?text=Luffy+Gear5" alt="">
                 <div class="p-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="timer-pill urgent">⏱ 01:22:44</span>
+                        <span class="timer-pill urgent">01:22:44</span>
                         <span class="badge" style="background:#e3f2fd;color:#1565c0;font-size:10px">S급</span>
                     </div>
                     <p class="fw-bold small mb-1" style="line-height:1.3">몽키 D. 루피 기어5 피규어</p>
@@ -158,7 +154,7 @@
                 <img src="https://placehold.co/300x300/f3e5f5/7b1fa2?text=Nendoroid" alt="">
                 <div class="p-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="timer-pill">⏱ 71:05:30</span>
+                        <span class="timer-pill">71:05:30</span>
                         <span class="badge" style="background:#e3f2fd;color:#1565c0;font-size:10px">A급</span>
                     </div>
                     <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 넨도로이드 #33</p>
@@ -188,7 +184,7 @@
 <!-- 유저 컬렉션 -->
 <section class="container mt-5 mb-5">
     <div class="section-header">
-        <h6>✨ 유저 컬렉션 구경하기</h6>
+        <h6>유저 컬렉션 구경하기</h6>
         <a href="productList.jsp">전체보기 →</a>
     </div>
     <div class="row row-cols-2 row-cols-md-4 g-3">
