@@ -268,31 +268,6 @@
     </div>
 </section>
 
-<!-- 푸터 -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <div class="fw-bold text-white mb-2" style="font-size:16px">🎌 FigureAuction</div>
-                <p class="mb-0">피규어 컬렉션 & 중고 경매 플랫폼</p>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="fw-bold text-white mb-2">바로가기</div>
-                <div class="d-flex flex-column gap-1">
-                    <a href="main.jsp">경매 목록</a>
-                    <a href="productList.jsp">컬렉션 보기</a>
-                    <a href="productMyList.jsp">내 상품 관리</a>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="fw-bold text-white mb-2">고객센터</div>
-                <p class="mb-1">이용약관 · 개인정보처리방침</p>
-                <p class="mb-0">© 2026 FigureAuction. All rights reserved.</p>
-            </div>
-        </div>
-    </div>
-</footer>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
