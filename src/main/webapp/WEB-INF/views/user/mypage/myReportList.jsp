@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -87,6 +87,86 @@
                     <td>26/04/21</td>
                 </tr>
                 <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
+                    <td>경매</td>
+                    <td>도배</td>
+                    <td>아이패드 프로 6세대</td>
+                    <td>26/04/18</td>
+                    <td class="status-wait">대기</td>
+                    <td>-</td>
+                </tr>
+                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
                     <td>경매</td>
                     <td>도배</td>
                     <td>아이패드 프로 6세대</td>
