@@ -32,7 +32,7 @@
 	
 	<div class="productItem">
 		<div>
-			<img alt="상품 이미지 1" src="images/tempFigureImage.png">
+			<img alt="상품 이미지 1" src="${ pageContext.request.contextPath }/images/tempFigureImage.png">
 		</div>
 		<div>
 			<div>등록 회원: 회원1</div>
@@ -50,7 +50,7 @@
 	
 	<div class="productItem">
 		<div>
-			<img alt="상품 이미지 1" src="images/tempFigureImage.png">
+			<img alt="상품 이미지 1" src="${ pageContext.request.contextPath }/images/tempFigureImage.png">
 		</div>
 		<div>
 			<div>등록 회원: 회원1</div>
@@ -68,7 +68,7 @@
 	
 	<div class="productItem">
 		<div>
-			<img alt="상품 이미지 1" src="images/tempFigureImage.png">
+			<img alt="상품 이미지 1" src="${ pageContext.request.contextPath }/images/tempFigureImage.png">
 		</div>
 		<div>
 			<div>등록 회원: 회원1</div>

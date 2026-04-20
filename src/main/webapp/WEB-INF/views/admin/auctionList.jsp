@@ -30,7 +30,7 @@
 
 	<div class="auctionItem">
 		<div>
-			<img alt="경매 상품 이미지" src="images/tempFigureImage.png">
+			<img alt="경매 상품 이미지" src="${ pageContext.request.contextPath }/images/tempFigureImage.png">
 		</div>
 		<div>
 			<div>경매 등록자: 회원2</div>
@@ -54,7 +54,7 @@
 	
 	<div class="auctionItem">
 		<div>
-			<img alt="경매 상품 이미지" src="images/tempFigureImage.png">
+			<img alt="경매 상품 이미지" src="${ pageContext.request.contextPath }/images/tempFigureImage.png">
 		</div>
 		<div>
 			<div>경매 등록자: 회원2</div>
@@ -78,7 +78,7 @@
 	
 	<div class="auctionItem">
 		<div>
-			<img alt="경매 상품 이미지" src="images/tempFigureImage.png">
+			<img alt="경매 상품 이미지" src="${ pageContext.request.contextPath }/images/tempFigureImage.png">
 		</div>
 		<div>
 			<div>경매 등록자: 회원2</div>
@@ -102,7 +102,7 @@
 	
 	<div class="auctionItem">
 		<div>
-			<img alt="경매 상품 이미지" src="images/tempFigureImage.png">
+			<img alt="경매 상품 이미지" src="${ pageContext.request.contextPath }/images/tempFigureImage.png">
 		</div>
 		<div>
 			<div>경매 등록자: 회원2</div>
