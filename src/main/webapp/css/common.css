@@ -10,6 +10,20 @@ label.away{position: absolute; left: -999em;}
 fieldset{border: none;}
 legend{position: absolute; left: -999em;}
 table{border-collapse: collapse; border-spacing: 0px;}
-body{
-	background-color: #f7f7f7 !important;
-}
+/* 페이지 전체를 flex 박스로 만듭니다 */
+		body {
+		    display: flex;
+		    flex-direction: column;
+		    min-height: 100vh; /* 화면 높이의 100%를 최소 높이로 설정 */
+		    margin: 0;
+		}
+		
+		/* 메인 콘텐츠 영역이 남는 공간을 모두 차지하게 합니다 */
+		main.container, .container {
+		    flex: 1;
+		}
+		
+		/* 푸터는 자연스럽게 맨 아래로 밀려납니다 */
+		footer {
+		    flex-shrink: 0;
+		}

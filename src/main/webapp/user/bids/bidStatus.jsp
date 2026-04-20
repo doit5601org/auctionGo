@@ -25,6 +25,7 @@
                 <table class="table align-middle">
                     <thead class="table-light">
                         <tr class="text-center text-nowrap">
+                            <th>번호</th>
                             <th>상품명</th>
                             <th>현재가</th>
                             <th>나의 최고 입찰가</th>
@@ -34,7 +35,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                    	<!-- 게시물이 존재하지 않을 때 -->
+                    	<!-- <tr>
+                   			<td colspan="7" class="text-center">
+                   			
+		                    	입찰 내역이 존재하지 않습니다.
+                   			</td>
+                   		</tr> -->
+                   		<!-- 게시물이 존재할 때 -->
                         <tr>
+                       		<td class="text-center">10</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 3회 입찰</div>
@@ -50,6 +60,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">9</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 3회 입찰</div>
@@ -65,6 +76,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">8</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 3회 입찰</div>
@@ -80,6 +92,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">7</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 1회 입찰</div>
@@ -95,6 +108,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">6</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 3회 입찰</div>
@@ -110,6 +124,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">5</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 1회 입찰</div>
@@ -125,6 +140,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">4</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 1회 입찰</div>
@@ -140,6 +156,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">3</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 1회 입찰</div>
@@ -155,6 +172,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">2</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 1회 입찰</div>
@@ -170,6 +188,7 @@
                             </td>
                         </tr>
                         <tr>
+                        	<td class="text-center">1</td>
                             <td>
                                 <div class="fw-bold">아이언맨 피규어</div>
                                 <div class="text-muted small">총 1회 입찰</div>
