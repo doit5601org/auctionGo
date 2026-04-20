@@ -27,16 +27,21 @@
 							<table class="table align-middle border-top">
 								<thead class="table-light">
 									<tr class="text-center">
-										<th style="width: 50%">경매 상품 정보</th>
+										<th style="width: 5%">번호</th>
+										<th style="width: 45%">경매 상품 정보</th>
 										<th style="width: 20%">입찰 현황</th>
 										<th style="width: 15%">남은 시간</th>
 										<th style="width: 15%">참여 인원</th>
 									</tr>
 								</thead>
 								<tbody>
+									<!-- <tr>
+										<td colspan="5" class="text-center">진행 중인 경매가 존재하지 않습니다.</td>
+									</tr> -->
 									<tr>
+										<td class="text-center">10</td>
 										<td>
-											<div class="d-flex align-items-center">
+											<div class="d-flex align-items-center ps-3">
 												<div class="bg-light rounded me-3"
 													style="width: 60px; height: 60px;"></div>
 												<div>
@@ -48,7 +53,7 @@
 											</div>
 										</td>
 										<td>
-											<div class="small">
+											<div class="small px-3">
 												<div class="d-flex justify-content-between mb-1">
 													<span class="fw-bold text-success">1순위</span> <span
 														class="fw-bold text-success">155,000원</span>
@@ -67,8 +72,9 @@
 											class="badge rounded-pill bg-primary px-3">12명</span></td>
 									</tr>
 									<tr>
+										<td class="text-center">9</td>
 										<td>
-											<div class="d-flex align-items-center">
+											<div class="d-flex align-items-center ps-3">
 												<div class="bg-light rounded me-3"
 													style="width: 60px; height: 60px;"></div>
 												<div>
@@ -80,7 +86,7 @@
 											</div>
 										</td>
 										<td>
-											<div class="small">
+											<div class="small px-3">
 												<div class="d-flex justify-content-between mb-1">
 													<span class="fw-bold text-success">1순위</span> <span
 														class="fw-bold text-success">155,000원</span>
@@ -99,8 +105,9 @@
 											class="badge rounded-pill bg-primary px-3">12명</span></td>
 									</tr>
 									<tr>
+										<td class="text-center">8</td>
 										<td>
-											<div class="d-flex align-items-center">
+											<div class="d-flex align-items-center ps-3">
 												<div class="bg-light rounded me-3"
 													style="width: 60px; height: 60px;"></div>
 												<div>
@@ -112,7 +119,7 @@
 											</div>
 										</td>
 										<td>
-											<div class="small">
+											<div class="small px-3">
 												<div class="d-flex justify-content-between mb-1">
 													<span class="fw-bold text-success">1순위</span> <span
 														class="fw-bold text-success">155,000원</span>
@@ -131,8 +138,9 @@
 											class="badge rounded-pill bg-primary px-3">12명</span></td>
 									</tr>
 									<tr>
+										<td class="text-center">7</td>
 										<td>
-											<div class="d-flex align-items-center">
+											<div class="d-flex align-items-center ps-3">
 												<div class="bg-light rounded me-3"
 													style="width: 60px; height: 60px;"></div>
 												<div>
@@ -144,7 +152,7 @@
 											</div>
 										</td>
 										<td>
-											<div class="small">
+											<div class="small px-3">
 												<div class="d-flex justify-content-between mb-1">
 													<span class="fw-bold text-success">1순위</span> <span
 														class="fw-bold text-success">155,000원</span>
@@ -163,8 +171,9 @@
 											class="badge rounded-pill bg-primary px-3">12명</span></td>
 									</tr>
 									<tr>
+										<td class="text-center">6</td>
 										<td>
-											<div class="d-flex align-items-center">
+											<div class="d-flex align-items-center ps-3">
 												<div class="bg-light rounded me-3"
 													style="width: 60px; height: 60px;"></div>
 												<div>
@@ -176,7 +185,7 @@
 											</div>
 										</td>
 										<td>
-											<div class="small">
+											<div class="small px-3">
 												<div class="d-flex justify-content-between mb-1">
 													<span class="fw-bold text-success">1순위</span> <span
 														class="fw-bold text-success">155,000원</span>
@@ -195,8 +204,9 @@
 											class="badge rounded-pill bg-primary px-3">12명</span></td>
 									</tr>
 									<tr>
+										<td class="text-center">5</td>
 										<td>
-											<div class="d-flex align-items-center">
+											<div class="d-flex align-items-center ps-3">
 												<div class="bg-light rounded me-3"
 													style="width: 60px; height: 60px;"></div>
 												<div>
@@ -208,7 +218,73 @@
 											</div>
 										</td>
 										<td>
-											<div class="small">
+											<div class="small px-3">
+												<div class="d-flex justify-content-between mb-1">
+													<span class="fw-bold text-success">1순위</span> <span
+														class="fw-bold text-success">155,000원</span>
+												</div>
+												<div class="d-flex justify-content-between mb-1 text-muted">
+													<span>2순위</span> <span>150,000원</span>
+												</div>
+												<div class="d-flex justify-content-between text-muted">
+													<span>3순위</span> <span>-</span>
+												</div>
+											</div>
+										</td>
+										<td class="text-center"><span class="text-danger fw-bold">02:45:12</span>
+										</td>
+										<td class="text-center"><span
+											class="badge rounded-pill bg-primary px-3">125명</span></td>
+									</tr>
+									<tr>
+										<td class="text-center">4</td>
+										<td>
+											<div class="d-flex align-items-center ps-3" >
+												<div class="bg-light rounded me-3"
+													style="width: 60px; height: 60px;"></div>
+												<div>
+													<div class="fw-bold">
+														<a href="/auctions/#" class="text-decoration-none text-dark link-primary">아이언맨 마크 85 피규어</a>
+													</div>
+													<div class="text-muted small">시작일: 2026-04-19</div>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div class="small px-3">
+												<div class="d-flex justify-content-between mb-1 ">
+													<span class="fw-bold text-success">1순위</span> <span
+														class="fw-bold text-success">155,000원</span>
+												</div>
+												<div class="d-flex justify-content-between mb-1 text-muted">
+													<span>2순위</span> <span>150,000원</span>
+												</div>
+												<div class="d-flex justify-content-between text-muted">
+													<span>3순위</span> <span>-</span>
+												</div>
+											</div>
+										</td>
+										<td class="text-center"><span class="text-danger fw-bold">02:45:12</span>
+										</td>
+										<td class="text-center"><span
+											class="badge rounded-pill bg-primary px-3">8명</span></td>
+									</tr>
+									<tr>
+										<td class="text-center">3</td>
+										<td>
+											<div class="d-flex align-items-center ps-3">
+												<div class="bg-light rounded me-3"
+													style="width: 60px; height: 60px;"></div>
+												<div>
+													<div class="fw-bold">
+														<a href="/auctions/#" class="text-decoration-none text-dark link-primary">아이언맨 마크 85 피규어</a>
+													</div>
+													<div class="text-muted small">시작일: 2026-04-19</div>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div class="small px-3">
 												<div class="d-flex justify-content-between mb-1">
 													<span class="fw-bold text-success">1순위</span> <span
 														class="fw-bold text-success">155,000원</span>
@@ -227,8 +303,9 @@
 											class="badge rounded-pill bg-primary px-3">12명</span></td>
 									</tr>
 									<tr>
+										<td class="text-center">2</td>
 										<td>
-											<div class="d-flex align-items-center">
+											<div class="d-flex align-items-center ps-3">
 												<div class="bg-light rounded me-3"
 													style="width: 60px; height: 60px;"></div>
 												<div>
@@ -240,7 +317,7 @@
 											</div>
 										</td>
 										<td>
-											<div class="small">
+											<div class="small px-3">
 												<div class="d-flex justify-content-between mb-1">
 													<span class="fw-bold text-success">1순위</span> <span
 														class="fw-bold text-success">155,000원</span>
@@ -259,8 +336,9 @@
 											class="badge rounded-pill bg-primary px-3">12명</span></td>
 									</tr>
 									<tr>
+										<td class="text-center">1</td>
 										<td>
-											<div class="d-flex align-items-center">
+											<div class="d-flex align-items-center ps-3">
 												<div class="bg-light rounded me-3"
 													style="width: 60px; height: 60px;"></div>
 												<div>
@@ -272,71 +350,7 @@
 											</div>
 										</td>
 										<td>
-											<div class="small">
-												<div class="d-flex justify-content-between mb-1">
-													<span class="fw-bold text-success">1순위</span> <span
-														class="fw-bold text-success">155,000원</span>
-												</div>
-												<div class="d-flex justify-content-between mb-1 text-muted">
-													<span>2순위</span> <span>150,000원</span>
-												</div>
-												<div class="d-flex justify-content-between text-muted">
-													<span>3순위</span> <span>-</span>
-												</div>
-											</div>
-										</td>
-										<td class="text-center"><span class="text-danger fw-bold">02:45:12</span>
-										</td>
-										<td class="text-center"><span
-											class="badge rounded-pill bg-primary px-3">12명</span></td>
-									</tr>
-									<tr>
-										<td>
-											<div class="d-flex align-items-center">
-												<div class="bg-light rounded me-3"
-													style="width: 60px; height: 60px;"></div>
-												<div>
-													<div class="fw-bold">
-														<a href="/auctions/#" class="text-decoration-none text-dark link-primary">아이언맨 마크 85 피규어</a>
-													</div>
-													<div class="text-muted small">시작일: 2026-04-19</div>
-												</div>
-											</div>
-										</td>
-										<td>
-											<div class="small">
-												<div class="d-flex justify-content-between mb-1">
-													<span class="fw-bold text-success">1순위</span> <span
-														class="fw-bold text-success">155,000원</span>
-												</div>
-												<div class="d-flex justify-content-between mb-1 text-muted">
-													<span>2순위</span> <span>150,000원</span>
-												</div>
-												<div class="d-flex justify-content-between text-muted">
-													<span>3순위</span> <span>-</span>
-												</div>
-											</div>
-										</td>
-										<td class="text-center"><span class="text-danger fw-bold">02:45:12</span>
-										</td>
-										<td class="text-center"><span
-											class="badge rounded-pill bg-primary px-3">12명</span></td>
-									</tr>
-									<tr>
-										<td>
-											<div class="d-flex align-items-center">
-												<div class="bg-light rounded me-3"
-													style="width: 60px; height: 60px;"></div>
-												<div>
-													<div class="fw-bold">
-														<a href="/auctions/#" class="text-decoration-none text-dark link-primary">아이언맨 마크 85 피규어</a>
-													</div>
-													<div class="text-muted small">시작일: 2026-04-19</div>
-												</div>
-											</div>
-										</td>
-										<td>
-											<div class="small">
+											<div class="small px-3">
 												<div class="d-flex justify-content-between mb-1">
 													<span class="fw-bold text-success">1순위</span> <span
 														class="fw-bold text-success">155,000원</span>

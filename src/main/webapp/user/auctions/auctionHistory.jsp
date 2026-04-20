@@ -63,17 +63,22 @@ $(function() {
 <table class="table align-middle" id="auction-history-table">
     <thead class="table-light">
         <tr>
-            <th class="text-start">상품명</th>
-            <th>최종 낙찰가</th>
-            <th>종료일시</th>
-            <th>결과</th>
-            <th>비고</th>
+            <th class="text-start" style="width: 5%;">번호</th>
+            <th class="text-center" style="width: 25%;">상품명</th>
+            <th style="width: 25%;">최종 낙찰가</th>
+            <th style="width: 20%;">종료일시</th>
+            <th style="width: 15%;">결과</th>
+            <th style="width: 10%;">비고</th>
         </tr>
     </thead>
     <tbody>
+   		<!-- <tr>
+   			<td colspan="6" class="text-center">경매 이력이 존재하지 않습니다.</td>
+   		</tr> -->
         <tr>
+        	<td class="text-center">10</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
                     도라에몽 피규어
                 </a>
             </td>
@@ -93,8 +98,9 @@ $(function() {
             </td>
         </tr>
         <tr>
+        	<td class="text-center">9</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
                     해리포터 지팡이
                 </a>
             </td>
@@ -114,8 +120,9 @@ $(function() {
             </td>
         </tr>
         <tr>
+        	<td class="text-center">8</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
                     도라에몽 피규어
                 </a>
             </td>
@@ -135,8 +142,9 @@ $(function() {
             </td>
         </tr>
         <tr>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark">
+        <td class="text-center">7</td>
+            <td class="text-start"> 
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary" >
                     해리포터 지팡이
                 </a>
             </td>
@@ -156,8 +164,9 @@ $(function() {
             </td>
         </tr>
         <tr>
+        <td class="text-center">6</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
                     도라에몽 피규어
                 </a>
             </td>
@@ -177,8 +186,9 @@ $(function() {
             </td>
         </tr>
         <tr>
+        <td class="text-center">5</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
                     해리포터 지팡이
                 </a>
             </td>
@@ -198,8 +208,9 @@ $(function() {
             </td>
         </tr>
         <tr>
+        <td class="text-center">4</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary" >
                     도라에몽 피규어
                 </a>
             </td>
@@ -219,8 +230,9 @@ $(function() {
             </td>
         </tr>
         <tr>
+        <td class="text-center">3</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
                     해리포터 지팡이
                 </a>
             </td>
@@ -240,8 +252,9 @@ $(function() {
             </td>
         </tr>
         <tr>
+        <td class="text-center">2</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
                     도라에몽 피규어
                 </a>
             </td>
@@ -261,8 +274,9 @@ $(function() {
             </td>
         </tr>
         <tr>
+        <td class="text-center">1</td>
             <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark">
+                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
                     해리포터 지팡이
                 </a>
             </td>
