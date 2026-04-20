@@ -5,61 +5,22 @@
 <meta charset="UTF-8">
 <title>FigureAuction</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-    body { background-color: #f0f7ff; }
-    .navbar { background: white; border-bottom: 1px solid #e3f2fd; }
-    .navbar-brand { color: #1565c0 !important; font-weight: 900; font-size: 20px; }
-    .nav-link { color: #444 !important; font-size: 14px; font-weight: 500; }
-    .nav-link:hover, .nav-link.active { color: #1565c0 !important; }
-    .navbar .search-input { border-radius: 20px 0 0 20px; border: 1.5px solid #90caf9; font-size: 13px; width: 240px; }
-    .navbar .search-btn { border-radius: 0 20px 20px 0; background-color: #1565c0; border: none; }
-
-    .hero { background: linear-gradient(135deg, #1565c0 0%, #1976d2 60%, #42a5f5 100%); color: white; padding: 52px 0 44px; }
-    .hero h1 { font-size: 30px; font-weight: 900; line-height: 1.35; }
-    .hero-search input { border-radius: 12px 0 0 12px; border: none; padding: 13px 18px; font-size: 14px; }
-    .hero-search button { border-radius: 0 12px 12px 0; background-color: #0d47a1; border: none; padding: 13px 22px; font-weight: bold; }
-    .tag-chip { background: rgba(255,255,255,0.18); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 14px; font-size: 12px; cursor: pointer; text-decoration: none; }
-    .tag-chip:hover { background: rgba(255,255,255,0.3); color: white; }
-
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .section-header h6 { font-weight: 800; font-size: 16px; color: #1a1a1a; margin: 0; }
-    .section-header a { font-size: 13px; color: #1565c0; text-decoration: none; }
-
-    .auction-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(21,101,192,0.07); transition: transform 0.15s; cursor: pointer; }
-    .auction-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(21,101,192,0.13); }
-    .auction-card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
-    .timer-pill { background: #fff3e0; color: #e65100; font-size: 11px; font-weight: bold; border-radius: 20px; padding: 2px 10px; }
-    .timer-pill.urgent { background: #ffebee; color: #c62828; }
-    .current-price { color: #1565c0; font-size: 15px; font-weight: 800; }
-
-    .collection-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(21,101,192,0.07); transition: transform 0.15s; }
-    .collection-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(21,101,192,0.13); }
-    .collection-card img { width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; }
-    .owner-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
-    .request-btn { font-size: 11px; padding: 3px 11px; border-radius: 20px; }
-
-    .sub-banner { background: white; border-radius: 14px; padding: 22px 28px; border: 1px solid #bbdefb; }
-</style>
 </head>
 <body>
 
-<!-- 네비바 -->
-<nav class="navbar navbar-expand-lg sticky-top">
+<%-- 네비바 --%>
+<nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">🎌 FigureAuction</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav me-auto ms-4 gap-1">
-                <li class="nav-item"><a class="nav-link active" href="main.jsp">경매</a></li>
+                <li class="nav-item"><a class="nav-link active" href="auctionList.jsp">경매</a></li>
                 <li class="nav-item"><a class="nav-link" href="productList.jsp">컬렉션</a></li>
                 <li class="nav-item"><a class="nav-link" href="productMyList.jsp">내 상품</a></li>
             </ul>
-            <div class="d-flex me-3">
-                <input type="text" class="form-control form-control-sm search-input" placeholder="피규어 검색...">
-                <button class="btn btn-primary btn-sm search-btn px-3">검색</button>
-            </div>
             <div class="d-flex gap-2">
                 <a href="#" class="btn btn-outline-primary btn-sm">로그인</a>
                 <a href="#" class="btn btn-primary btn-sm">회원가입</a>
@@ -68,197 +29,217 @@
     </div>
 </nav>
 
-<!-- 히어로 -->
+<%-- 히어로 배너 --%>
 <section class="hero">
     <div class="container">
         <h1 class="mb-2">내 컬렉션을 전시하고<br>경매로 연결하세요</h1>
-        <p class="mb-4 opacity-75" style="font-size:14px">피규어를 보관·전시하고, 원하는 피규어의 경매를 요청해보세요.</p>
-        <div class="input-group hero-search mb-4" style="max-width:460px">
+        <p class="mb-4 opacity-75">피규어를 보관·전시하고, 원하는 피규어의 경매를 요청해보세요.</p>
+        <div class="input-group hero-search mb-4">
             <input type="text" class="form-control" placeholder="원하는 피규어를 검색해보세요">
             <button class="btn btn-dark">검색</button>
         </div>
         <div class="d-flex flex-wrap gap-2">
-            <a href="#" class="tag-chip"># VOCALOID</a>
-            <a href="#" class="tag-chip"># 원피스</a>
-            <a href="#" class="tag-chip"># 귀멸의칼날</a>
-            <a href="#" class="tag-chip"># 굿스마일</a>
-            <a href="#" class="tag-chip"># 미개봉</a>
+            <a href="auctionList.jsp" class="tag-chip"># VOCALOID</a>
+            <a href="auctionList.jsp" class="tag-chip"># 원피스</a>
+            <a href="auctionList.jsp" class="tag-chip"># 귀멸의칼날</a>
+            <a href="auctionList.jsp" class="tag-chip"># 굿스마일</a>
+            <a href="auctionList.jsp" class="tag-chip"># 미개봉</a>
         </div>
     </div>
 </section>
 
-<!-- 진행중인 경매 -->
+<%-- 진행중인 경매 목록 --%>
 <section class="container mt-5">
-    <div class="section-header">
-        <h6>지금 진행중인 경매</h6>
-        <a href="main.jsp">전체보기 →</a>
+    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0">지금 진행중인 경매</h6>
+        <a href="auctionList.jsp" class="text-decoration-none small">전체보기 →</a>
     </div>
     <div class="row row-cols-2 row-cols-md-4 g-3">
 
+        <%-- 임시 데이터 A001 --%>
         <div class="col">
-            <div class="auction-card" onclick="location.href='auctionDetail.jsp?auctionId=A001'">
-                <img src="https://placehold.co/300x300/e3f2fd/1565c0?text=Miku+1%2F7" alt="">
-                <div class="p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="timer-pill">23:14:05</span>
-                        <span class="badge" style="background:#e3f2fd;color:#1565c0;font-size:10px">S급</span>
-                    </div>
-                    <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 1/7 스케일 피규어</p>
-                    <p class="text-muted mb-1" style="font-size:11px">굿스마일컴퍼니</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="current-price">35,000원</span>
-                        <span class="text-muted" style="font-size:11px">입찰 3회</span>
+            <a href="auctionDetail.jsp?auctionId=A001" class="text-decoration-none text-dark">
+                <div class="auction-card card h-100">
+                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/h43/h21/8830676697118.jpg"
+                         class="w-100" alt="미쿠 1/7"
+                         onerror="this.src='https://placehold.co/300x300/e3f2fd/1565c0?text=Miku+1%2F7'">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="badge bg-warning text-dark">23:14:05</span>
+                            <span class="badge bg-secondary">S급</span>
+                        </div>
+                        <p class="fw-bold small mb-1">하츠네 미쿠 1/7 스케일 피규어</p>
+                        <p class="text-muted small mb-1">굿스마일컴퍼니</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary">35,000원</span>
+                            <span class="text-muted small">입찰 3회</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
+        <%-- 임시 데이터 A002 --%>
         <div class="col">
-            <div class="auction-card" onclick="location.href='auctionDetail.jsp?auctionId=A002'">
-                <img src="https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku" alt="">
-                <div class="p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="timer-pill">47:30:12</span>
-                        <span class="badge" style="background:#e3f2fd;color:#1565c0;font-size:10px">A급</span>
-                    </div>
-                    <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 Racing Miku 2023</p>
-                    <p class="text-muted mb-1" style="font-size:11px">굿스마일컴퍼니</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="current-price">28,000원</span>
-                        <span class="text-muted" style="font-size:11px">입찰 1회</span>
+            <a href="auctionDetail.jsp?auctionId=A002" class="text-decoration-none text-dark">
+                <div class="auction-card card h-100">
+                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/hb5/h90/9570322350110.jpg"
+                         class="w-100" alt="Racing Miku 2023"
+                         onerror="this.src='https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku'">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="badge bg-warning text-dark">47:30:12</span>
+                            <span class="badge bg-secondary">A급</span>
+                        </div>
+                        <p class="fw-bold small mb-1">하츠네 미쿠 Racing Miku 2023</p>
+                        <p class="text-muted small mb-1">굿스마일컴퍼니</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary">28,000원</span>
+                            <span class="text-muted small">입찰 1회</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
+        <%-- 임시 데이터 A003 --%>
         <div class="col">
-            <div class="auction-card" onclick="location.href='auctionDetail.jsp?auctionId=A003'">
-                <img src="https://placehold.co/300x300/fff3e0/e65100?text=Luffy+Gear5" alt="">
-                <div class="p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="timer-pill urgent">01:22:44</span>
-                        <span class="badge" style="background:#e3f2fd;color:#1565c0;font-size:10px">S급</span>
-                    </div>
-                    <p class="fw-bold small mb-1" style="line-height:1.3">몽키 D. 루피 기어5 피규어</p>
-                    <p class="text-muted mb-1" style="font-size:11px">반다이</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="current-price">62,000원</span>
-                        <span class="text-muted" style="font-size:11px">입찰 7회</span>
+            <a href="auctionDetail.jsp?auctionId=A003" class="text-decoration-none text-dark">
+                <div class="auction-card card h-100">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                         class="w-100" alt="피카츄"
+                         onerror="this.src='https://placehold.co/300x300/ffe066/e65100?text=Pikachu'">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="badge bg-danger">01:22:44</span>
+                            <span class="badge bg-secondary">S급</span>
+                        </div>
+                        <p class="fw-bold small mb-1">피카츄 1/7 스케일 피규어</p>
+                        <p class="text-muted small mb-1">반다이</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary">62,000원</span>
+                            <span class="text-muted small">입찰 7회</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
+        <%-- 임시 데이터 A004 --%>
         <div class="col">
-            <div class="auction-card" onclick="location.href='auctionDetail.jsp?auctionId=A004'">
-                <img src="https://placehold.co/300x300/f3e5f5/7b1fa2?text=Nendoroid" alt="">
-                <div class="p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="timer-pill">71:05:30</span>
-                        <span class="badge" style="background:#e3f2fd;color:#1565c0;font-size:10px">A급</span>
-                    </div>
-                    <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 넨도로이드 #33</p>
-                    <p class="text-muted mb-1" style="font-size:11px">굿스마일컴퍼니</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="current-price">18,000원</span>
-                        <span class="text-muted" style="font-size:11px">입찰 2회</span>
+            <a href="auctionDetail.jsp?auctionId=A004" class="text-decoration-none text-dark">
+                <div class="auction-card card h-100">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"
+                         class="w-100" alt="파이리"
+                         onerror="this.src='https://placehold.co/300x300/ffccbc/bf360c?text=Charmander'">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="badge bg-warning text-dark">71:05:30</span>
+                            <span class="badge bg-secondary">A급</span>
+                        </div>
+                        <p class="fw-bold small mb-1">파이리 넨도로이드 피규어</p>
+                        <p class="text-muted small mb-1">반다이</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary">18,000원</span>
+                            <span class="text-muted small">입찰 2회</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
     </div>
 </section>
 
-<!-- 경매 요청 안내 배너 -->
+<%-- 경매 요청 안내 배너 --%>
 <section class="container mt-5">
     <div class="sub-banner d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
-            <h6 class="fw-bold mb-1" style="color:#1565c0">갖고 싶은 피규어가 있나요?</h6>
+            <h6 class="fw-bold mb-1">갖고 싶은 피규어가 있나요?</h6>
             <p class="mb-0 text-muted small">다른 유저의 컬렉션에서 원하는 피규어를 발견했다면 경매 요청을 보내보세요.</p>
         </div>
         <a href="productList.jsp" class="btn btn-primary btn-sm px-4">컬렉션 둘러보기 →</a>
     </div>
 </section>
 
-<!-- 유저 컬렉션 -->
+<%-- 유저 컬렉션 --%>
 <section class="container mt-5 mb-5">
-    <div class="section-header">
-        <h6>유저 컬렉션 구경하기</h6>
-        <a href="productList.jsp">전체보기 →</a>
+    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0">유저 컬렉션 구경하기</h6>
+        <a href="productList.jsp" class="text-decoration-none small">전체보기 →</a>
     </div>
     <div class="row row-cols-2 row-cols-md-4 g-3">
 
         <div class="col">
-            <div class="collection-card">
-                <img src="https://placehold.co/300x300/e3f2fd/1565c0?text=Miku+1%2F7" alt=""
-                     onclick="location.href='productDetail.jsp?productId=P001'">
-                <div class="p-3">
-                    <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 1/7 스케일 피규어</p>
-                    <p class="text-muted mb-2" style="font-size:11px">굿스마일컴퍼니 · S급 · 미개봉</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-1">
-                            <img src="https://placehold.co/22x22/1565c0/ffffff?text=M" class="owner-avatar" alt="">
-                            <span style="font-size:11px;color:#666">miku_fan</span>
+            <a href="productDetail.jsp?productId=P001" class="text-decoration-none text-dark">
+                <div class="collection-card card h-100">
+                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/h43/h21/8830676697118.jpg"
+                         class="w-100" alt=""
+                         onerror="this.src='https://placehold.co/300x300/e3f2fd/1565c0?text=Miku'">
+                    <div class="p-3">
+                        <p class="fw-bold small mb-1">하츠네 미쿠 1/7 스케일 피규어</p>
+                        <p class="text-muted small mb-2">굿스마일컴퍼니 · S급 · 미개봉</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">miku_fan</span>
+                            <button class="btn btn-outline-primary btn-sm" style="font-size:11px">경매 요청</button>
                         </div>
-                        <button class="btn btn-outline-primary request-btn">경매 요청</button>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="col">
-            <div class="collection-card">
-                <img src="https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku" alt=""
-                     onclick="location.href='productDetail.jsp?productId=P002'">
-                <div class="p-3">
-                    <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 Racing Miku 2023</p>
-                    <p class="text-muted mb-2" style="font-size:11px">굿스마일컴퍼니 · A급 · 개봉</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-1">
-                            <img src="https://placehold.co/22x22/c62828/ffffff?text=R" class="owner-avatar" alt="">
-                            <span style="font-size:11px;color:#666">racing_col</span>
+            <a href="productDetail.jsp?productId=P002" class="text-decoration-none text-dark">
+                <div class="collection-card card h-100">
+                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/hb5/h90/9570322350110.jpg"
+                         class="w-100" alt=""
+                         onerror="this.src='https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku'">
+                    <div class="p-3">
+                        <p class="fw-bold small mb-1">하츠네 미쿠 Racing Miku 2023</p>
+                        <p class="text-muted small mb-2">굿스마일컴퍼니 · A급 · 개봉</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">racing_col</span>
+                            <button class="btn btn-outline-primary btn-sm" style="font-size:11px">경매 요청</button>
                         </div>
-                        <button class="btn btn-outline-primary request-btn">경매 요청</button>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="col">
-            <div class="collection-card">
-                <img src="https://placehold.co/300x300/fff3e0/e65100?text=Luffy+Gear5" alt=""
-                     onclick="location.href='productDetail.jsp?productId=P003'">
-                <div class="p-3">
-                    <p class="fw-bold small mb-1" style="line-height:1.3">몽키 D. 루피 기어5 피규어</p>
-                    <p class="text-muted mb-2" style="font-size:11px">반다이 · S급 · 미개봉</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-1">
-                            <img src="https://placehold.co/22x22/e65100/ffffff?text=L" class="owner-avatar" alt="">
-                            <span style="font-size:11px;color:#666">onepiece_kr</span>
+            <a href="productDetail.jsp?productId=P003" class="text-decoration-none text-dark">
+                <div class="collection-card card h-100">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                         class="w-100" alt=""
+                         onerror="this.src='https://placehold.co/300x300/ffe066/e65100?text=Pikachu'">
+                    <div class="p-3">
+                        <p class="fw-bold small mb-1">피카츄 1/7 스케일 피규어</p>
+                        <p class="text-muted small mb-2">반다이 · S급 · 미개봉</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">poke_fan</span>
+                            <button class="btn btn-outline-primary btn-sm" style="font-size:11px">경매 요청</button>
                         </div>
-                        <button class="btn btn-outline-primary request-btn">경매 요청</button>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="col">
-            <div class="collection-card">
-                <img src="https://placehold.co/300x300/f3e5f5/7b1fa2?text=Nendoroid" alt=""
-                     onclick="location.href='productDetail.jsp?productId=P004'">
-                <div class="p-3">
-                    <p class="fw-bold small mb-1" style="line-height:1.3">하츠네 미쿠 넨도로이드 #33</p>
-                    <p class="text-muted mb-2" style="font-size:11px">굿스마일컴퍼니 · A급 · 개봉</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-1">
-                            <img src="https://placehold.co/22x22/7b1fa2/ffffff?text=N" class="owner-avatar" alt="">
-                            <span style="font-size:11px;color:#666">nendo_shop</span>
+            <a href="productDetail.jsp?productId=P004" class="text-decoration-none text-dark">
+                <div class="collection-card card h-100">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"
+                         class="w-100" alt=""
+                         onerror="this.src='https://placehold.co/300x300/ffccbc/bf360c?text=Charmander'">
+                    <div class="p-3">
+                        <p class="fw-bold small mb-1">파이리 넨도로이드 피규어</p>
+                        <p class="text-muted small mb-2">반다이 · A급 · 개봉</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">nendo_shop</span>
+                            <button class="btn btn-outline-primary btn-sm" style="font-size:11px">경매 요청</button>
                         </div>
-                        <button class="btn btn-outline-primary request-btn">경매 요청</button>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
     </div>

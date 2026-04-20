@@ -5,26 +5,15 @@
 <meta charset="UTF-8">
 <title>상품 등록</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-    body { background-color: #f0f7ff; }
-    .navbar { background: white; border-bottom: 1px solid #e3f2fd; }
-    .navbar-brand { color: #1565c0 !important; font-weight: 900; font-size: 20px; }
-    .nav-link { color: #444 !important; font-size: 14px; font-weight: 500; }
-    .nav-link:hover { color: #1565c0 !important; }
-    .page-header { background-color: #1565c0; color: white; padding: 18px 24px; border-radius: 10px; margin-bottom: 24px; }
-    .card { border: none; border-radius: 10px; box-shadow: 0 2px 8px rgba(21,101,192,0.08); }
-    .section-title { font-size: 13px; font-weight: bold; color: #1565c0; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e3f2fd; }
-    .upload-box { border: 2px dashed #90caf9; border-radius: 10px; padding: 30px; text-align: center; background-color: #f5f9ff; cursor: pointer; }
-    .upload-box:hover { border-color: #1565c0; background-color: #e3f2fd; }
-</style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg sticky-top">
+<%-- 네비바 --%>
+<nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="main.jsp">🎌 FigureAuction</a>
         <div class="d-flex gap-3 ms-4">
-            <a href="main.jsp" class="nav-link">경매</a>
+            <a href="auctionList.jsp" class="nav-link">경매</a>
             <a href="productList.jsp" class="nav-link">컬렉션</a>
             <a href="productMyList.jsp" class="nav-link active">내 상품</a>
         </div>
@@ -40,21 +29,26 @@
     <div class="card p-4">
         <form action="product_register_act.do" method="post" enctype="multipart/form-data">
 
-            <p class="section-title">상품 이미지</p>
+            <%-- 상품 이미지 업로드: 이미지 최대 5장 업로드 (JPG, PNG, 각 10MB 이하) --%>
+            <p class="fw-bold border-bottom pb-2 mb-3">상품 이미지</p>
             <div class="mb-4">
-                <div class="upload-box" onclick="document.getElementById('imgInput').click()">
-                    <div class="text-muted mb-2" style="font-size:32px">📷</div>
-                    <p class="fw-bold mb-1 small">이미지를 클릭하여 업로드</p>
-                    <p class="text-muted mb-0" style="font-size:12px">최대 5장 · JPG, PNG · 각 10MB 이하</p>
+                <div class="border border-2 border-dashed rounded p-4 text-center"
+                     onclick="document.getElementById('imgInput').click()" style="cursor:pointer">
+                    <div class="text-muted mb-1" style="font-size:32px">📷</div>
+                    <p class="fw-bold small mb-1">이미지를 클릭하여 업로드</p>
+                    <p class="text-muted small mb-0">최대 5장 · JPG, PNG · 각 10MB 이하</p>
                 </div>
-                <input type="file" id="imgInput" name="productImages" multiple accept="image/*" class="d-none">
+                <input type="file" id="imgInput" name="productImages" multiple accept="image/*" class="d-none"
+                       onchange="showPreview(this)">
+                <div id="imgPreview" class="d-flex gap-2 mt-2 flex-wrap"></div>
             </div>
 
-            <p class="section-title">기본 정보</p>
+            <p class="fw-bold border-bottom pb-2 mb-3">기본 정보</p>
             <div class="row g-3 mb-4">
                 <div class="col-12">
                     <label class="form-label fw-bold small">상품명 <span class="text-danger">*</span></label>
-                    <input type="text" name="productName" class="form-control form-control-sm" placeholder="상품명을 입력하세요" required>
+                    <input type="text" name="productName" class="form-control form-control-sm"
+                           placeholder="상품명을 입력하세요" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold small">제조사 <span class="text-danger">*</span></label>
@@ -101,7 +95,7 @@
                 </div>
             </div>
 
-            <p class="section-title">상품 상태</p>
+            <p class="fw-bold border-bottom pb-2 mb-3">상품 상태</p>
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
                     <label class="form-label fw-bold small">상태 등급 <span class="text-danger">*</span></label>
@@ -141,12 +135,32 @@
             </div>
 
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary w-50" onclick="location.href='productMyList.jsp'">취소</button>
+                <button type="button" class="btn btn-outline-secondary w-50"
+                        onclick="location.href='productMyList.jsp'">취소</button>
                 <button type="submit" class="btn btn-primary w-50">등록하기</button>
             </div>
         </form>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// 이미지 선택 시 미리보기 표시
+function showPreview(input) {
+    const preview = document.getElementById('imgPreview');
+    preview.innerHTML = '';
+    const files = Array.from(input.files).slice(0, 5);
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #ddd';
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+</script>
 </body>
 </html>
