@@ -73,7 +73,7 @@
                     <input type="text" name="characterName" class="form-control form-control-sm" value="하츠네 미쿠">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold small">사이즈 <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold small">사이즈ss<span class="text-danger">*</span></label>
                     <select name="sizeId" class="form-select form-select-sm" required>
                         <option value="1">1/4</option>
                         <option value="2" selected>1/7</option>
