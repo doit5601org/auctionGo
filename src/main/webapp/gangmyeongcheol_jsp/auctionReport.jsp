@@ -9,13 +9,14 @@
 <meta charset="UTF-8">
 <title>경매 신고</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
 <%-- 네비바 --%>
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">🎌 FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
         <div class="d-flex gap-3 ms-4">
             <a href="auctionList.jsp" class="nav-link">경매</a>
             <a href="productList.jsp" class="nav-link">컬렉션</a>
@@ -67,6 +68,5 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

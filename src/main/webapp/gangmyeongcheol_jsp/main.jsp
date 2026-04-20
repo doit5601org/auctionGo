@@ -5,13 +5,14 @@
 <meta charset="UTF-8">
 <title>FigureAuction</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
 <%-- 네비바 --%>
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">🎌 FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -60,7 +61,7 @@
         <div class="col">
             <a href="auctionDetail.jsp?auctionId=A001" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/h43/h21/8830676697118.jpg"
+                    <img src="${pageContext.request.contextPath}/images/miku1.jpg"
                          class="w-100" alt="미쿠 1/7"
                          onerror="this.src='https://placehold.co/300x300/e3f2fd/1565c0?text=Miku+1%2F7'">
                     <div class="p-3">
@@ -83,7 +84,7 @@
         <div class="col">
             <a href="auctionDetail.jsp?auctionId=A002" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/hb5/h90/9570322350110.jpg"
+                    <img src="${pageContext.request.contextPath}/images/miku2.jpg"
                          class="w-100" alt="Racing Miku 2023"
                          onerror="this.src='https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku'">
                     <div class="p-3">
@@ -106,7 +107,7 @@
         <div class="col">
             <a href="auctionDetail.jsp?auctionId=A003" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                    <img src="${pageContext.request.contextPath}/images/pikachu1.jpg"
                          class="w-100" alt="피카츄"
                          onerror="this.src='https://placehold.co/300x300/ffe066/e65100?text=Pikachu'">
                     <div class="p-3">
@@ -129,7 +130,7 @@
         <div class="col">
             <a href="auctionDetail.jsp?auctionId=A004" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"
+                    <img src="${pageContext.request.contextPath}/images/charmander.jpg"
                          class="w-100" alt="파이리"
                          onerror="this.src='https://placehold.co/300x300/ffccbc/bf360c?text=Charmander'">
                     <div class="p-3">
@@ -173,7 +174,7 @@
         <div class="col">
             <a href="productDetail.jsp?productId=P001" class="text-decoration-none text-dark">
                 <div class="collection-card card h-100">
-                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/h43/h21/8830676697118.jpg"
+                    <img src="${pageContext.request.contextPath}/images/miku1.jpg"
                          class="w-100" alt=""
                          onerror="this.src='https://placehold.co/300x300/e3f2fd/1565c0?text=Miku'">
                     <div class="p-3">
@@ -191,7 +192,7 @@
         <div class="col">
             <a href="productDetail.jsp?productId=P002" class="text-decoration-none text-dark">
                 <div class="collection-card card h-100">
-                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/hb5/h90/9570322350110.jpg"
+                    <img src="${pageContext.request.contextPath}/images/miku2.jpg"
                          class="w-100" alt=""
                          onerror="this.src='https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku'">
                     <div class="p-3">
@@ -209,7 +210,7 @@
         <div class="col">
             <a href="productDetail.jsp?productId=P003" class="text-decoration-none text-dark">
                 <div class="collection-card card h-100">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                    <img src="${pageContext.request.contextPath}/images/pikachu1.jpg"
                          class="w-100" alt=""
                          onerror="this.src='https://placehold.co/300x300/ffe066/e65100?text=Pikachu'">
                     <div class="p-3">
@@ -227,7 +228,7 @@
         <div class="col">
             <a href="productDetail.jsp?productId=P004" class="text-decoration-none text-dark">
                 <div class="collection-card card h-100">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"
+                    <img src="${pageContext.request.contextPath}/images/charmander.jpg"
                          class="w-100" alt=""
                          onerror="this.src='https://placehold.co/300x300/ffccbc/bf360c?text=Charmander'">
                     <div class="p-3">
@@ -245,6 +246,5 @@
     </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

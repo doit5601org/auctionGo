@@ -5,13 +5,32 @@
 <meta charset="UTF-8">
 <title>상품 등록</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// 이미지 선택 시 미리보기 표시
+function showPreview(input) {
+    const preview = document.getElementById('imgPreview');
+    preview.innerHTML = '';
+    const files = Array.from(input.files).slice(0, 5);
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #ddd';
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+</script>
 </head>
 <body>
 
 <%-- 네비바 --%>
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">🎌 FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
         <div class="d-flex gap-3 ms-4">
             <a href="auctionList.jsp" class="nav-link">경매</a>
             <a href="productList.jsp" class="nav-link">컬렉션</a>
@@ -143,24 +162,5 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-// 이미지 선택 시 미리보기 표시
-function showPreview(input) {
-    const preview = document.getElementById('imgPreview');
-    preview.innerHTML = '';
-    const files = Array.from(input.files).slice(0, 5);
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #ddd';
-            preview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    });
-}
-</script>
 </body>
 </html>

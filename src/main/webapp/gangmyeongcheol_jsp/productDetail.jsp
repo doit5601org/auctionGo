@@ -55,12 +55,27 @@
 <meta charset="UTF-8">
 <title><%= name %></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// 이미지 화살표 전환 기능
+const images = [
+    "<%= imgSrc %>",
+    "<%= img2 %>",
+    "<%= img3 %>"
+];
+let current = 0;
+
+function moveImg(direction) {
+    current = (current + direction + images.length) % images.length;
+    document.getElementById('mainImg').src = images[current];
+}
+</script>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">🎌 FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
         <div class="d-flex gap-3 ms-4">
             <a href="main.jsp" class="nav-link">경매</a>
             <a href="productList.jsp" class="nav-link">컬렉션</a>
@@ -129,20 +144,5 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-// 이미지 화살표 전환 기능
-const images = [
-    "<%= imgSrc %>",
-    "<%= img2 %>",
-    "<%= img3 %>"
-];
-let current = 0;
-
-function moveImg(direction) {
-    current = (current + direction + images.length) % images.length;
-    document.getElementById('mainImg').src = images[current];
-}
-</script>
 </body>
 </html>

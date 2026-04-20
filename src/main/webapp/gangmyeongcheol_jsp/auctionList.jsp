@@ -8,6 +8,23 @@
 <style>
     .auction-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// 정렬 기능: 등록순, 마감순(마감 임박), 높은가격순
+function sortAuctions() {
+    const sort = document.getElementById('sortSelect').value;
+    const grid = document.getElementById('auctionGrid');
+    const items = Array.from(grid.querySelectorAll('.col'));
+
+    items.sort((a, b) => {
+        if (sort === 'latest')   return b.dataset.date     - a.dataset.date;
+        if (sort === 'deadline') return a.dataset.deadline - b.dataset.deadline;
+        if (sort === 'price')    return b.dataset.price    - a.dataset.price;
+    });
+
+    items.forEach(item => grid.appendChild(item));
+}
+</script>
 </head>
 <body>
 
@@ -88,7 +105,7 @@
         <div class="col" data-date="20260415" data-deadline="20260419" data-price="35000">
             <a href="auctionDetail.jsp?auctionId=A001" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/h43/h21/8830676697118.jpg"
+                    <img src="${pageContext.request.contextPath}/images/miku1.jpg"
                          alt="미쿠 1/7"
                          onerror="this.src='https://placehold.co/300x300/e3f2fd/1565c0?text=Miku+1%2F7'">
                     <div class="card-body p-3">
@@ -111,7 +128,7 @@
         <div class="col" data-date="20260416" data-deadline="20260421" data-price="28000">
             <a href="auctionDetail.jsp?auctionId=A002" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="https://goodsmileshop.com/medias/sys_master/images/images/hb5/h90/9570322350110.jpg"
+                    <img src="${pageContext.request.contextPath}/images/miku2.jpg"
                          alt="Racing Miku 2023"
                          onerror="this.src='https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku'">
                     <div class="card-body p-3">
@@ -134,7 +151,7 @@
         <div class="col" data-date="20260417" data-deadline="20260418" data-price="62000">
             <a href="auctionDetail.jsp?auctionId=A003" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                    <img src="${pageContext.request.contextPath}/images/pikachu1.jpg"
                          alt="피카츄"
                          onerror="this.src='https://placehold.co/300x300/ffe066/e65100?text=Pikachu'">
                     <div class="card-body p-3">
@@ -157,7 +174,7 @@
         <div class="col" data-date="20260418" data-deadline="20260422" data-price="18000">
             <a href="auctionDetail.jsp?auctionId=A004" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png"
+                    <img src="${pageContext.request.contextPath}/images/charmander.jpg"
                          alt="파이리"
                          onerror="this.src='https://placehold.co/300x300/ffccbc/bf360c?text=Charmander'">
                     <div class="card-body p-3">
@@ -179,22 +196,5 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-// 정렬 기능: 등록순, 마감순(마감 임박), 높은가격순
-function sortAuctions() {
-    const sort = document.getElementById('sortSelect').value;
-    const grid = document.getElementById('auctionGrid');
-    const items = Array.from(grid.querySelectorAll('.col'));
-
-    items.sort((a, b) => {
-        if (sort === 'latest')   return b.dataset.date     - a.dataset.date;
-        if (sort === 'deadline') return a.dataset.deadline - b.dataset.deadline;
-        if (sort === 'price')    return b.dataset.price    - a.dataset.price;
-    });
-
-    items.forEach(item => grid.appendChild(item));
-}
-</script>
 </body>
 </html>
