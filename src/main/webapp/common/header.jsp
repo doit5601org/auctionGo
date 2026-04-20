@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,124 +11,94 @@
 	rel="stylesheet"
 	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
 	crossorigin="anonymous">
+	<style>
+/* 메뉴 호버 효과 */
+.hover-primary:hover {
+    color: #0d6efd !important;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+/* 드롭다운 메뉴 위치 조정 */
+.dropdown-menu {
+    margin-top: 10px !important;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 </head>
 <body>
-<%-- 	<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
-		<div class="container">
-			<a class="navbar-brand fw-bold text-secondary" href="${pageContext.request.contextPath }/common/main.jsp">
-				경매나라
-			</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<form action="productSearch.do" method="get" class="d-flex mx-auto col-lg-5 my-2 my-lg-0" >
-					<div class="input-group">
-						<input class="form-control" type="search" placeholder="상품명, 작품명으로 검색" aria-label="Search">
-						<button class="btn btn-outline-secondary" type="submit">
-							<i class="bi bi-search"> 검색 </i>
-						</button>
-					</div>
-				</form>
-
-				<ul class="navbar-nav ms-auto align-items-center">
-					로그인 상태에 따른 분기 처리 (JSTL 사용 권장)
-					 <%
-					if (session.getAttribute("userId") == null) {
-					%>
-					<li class="nav-item">
-						<a class="nav-link text-dark" href="${pageContext.request.contextPath}/user/auth/login.jsp">로그인</a>
-					</li>
-					<li class="nav-item ms-2">
-						<a class="btn btn-secondary btn-sm px-3" href="${pageContext.request.contextPath}/user/auth/signUp.jsp">회원가입</a>
-					</li>
-					<%
-					} else {
-					%>
-					<li class="nav-item me-3">
-						보유머니
-						<span class="badge bg-light text-primary border p-2">
-							<i class="bi bi-coin text-warning"></i> 
-							<span>50,000</span>원
-						</span>
-					</li>
-					<li>
-						<a href="#" class="btn btn-primary">충전</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="wishlist.do">
-							<i class="bi bi-heart"></i>
-						</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"> 
-							마이페이지 
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/my/mypage.jsp">내 활동 현황</a></li>
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/my/info/changeInfo.jsp">정보 수정</a></li>
-							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item text-danger" href="logout.do">로그아웃</a></li>
-						</ul></li>
-					<%
-					}
-					%> 
-				</ul>
-			</div>
-		</div>
-	</nav>
- --%>
-
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
-    <div class="container">
-        <a class="navbar-brand fw-bold text-secondary" href="${pageContext.request.contextPath}/common/main.jsp">
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand fw-bold text-secondary fs-3" href="${pageContext.request.contextPath}/common/main.jsp">
             경매나라
         </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <form action="productSearch.do" method="get" class="d-flex mx-auto col-lg-5 my-2 my-lg-0">
-                <div class="input-group">
-                    <input class="form-control" type="search" placeholder="상품명, 작품명으로 검색" aria-label="Search">
-                    <button class="btn btn-outline-secondary" type="submit">
-                        <i class="bi bi-search"></i> 검색
-                    </button>
-                </div>
-            </form>
-
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="${pageContext.request.contextPath}/user/auth/login.jsp">로그인</a>
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item px-3">
+                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="productList.do">일반상품</a>
                 </li>
-                <li class="nav-item ms-2">
-                    <a class="btn btn-secondary btn-sm px-3" href="${pageContext.request.contextPath}/user/auth/signUp.jsp">회원가입</a>
+                <li class="nav-item px-3">
+                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="auctionList.do">경매물품</a>
                 </li>
-
-                <li class="nav-item me-3">
-                    보유머니
-                    <span class="badge bg-light text-primary border p-2">
-                        <i class="bi bi-coin text-warning"></i> 
-                        <span>50,000</span>원
-                    </span>
-                </li>
-                <li class="me-2">
-                    <a href="#" class="btn btn-primary btn-sm">충전</a>
-                </li>
-                <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"> 
-        마이페이지 
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" id="userDropdownMenu">
-        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/my/mypage.jsp">내 활동 현황</a></li>
-        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/my/info/changeInfo.jsp">정보 수정</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item text-danger" href="logout.do">로그아웃</a></li>
-    </ul>
-</li>
             </ul>
+
+            <div class="d-flex align-items-center justify-content-end" style="flex-basis: 70%; min-width: 800px;">
+                
+                <form action="productSearch.do" method="get" class="flex-grow-1 me-4" style="max-width: 700px;">
+                    <div class="input-group input-group-lg"> 
+                    	<select class="form-select border-secondary-subtle" style=" width: 150px; flex: none; font-size: 1rem;">
+                            <option value="name" selected>상품명 검색</option>
+                            <option value="brand">제조사 검색</option>
+                            <option value="user">판매자 검색</option>
+                        </select>
+                        <input class="form-control border-secondary-subtle" type="search" placeholder="검색어를 입력하세요." aria-label="Search">
+                        <button class="btn btn-dark px-4" type="submit">
+                             검색
+                        </button>
+                    </div>
+                </form>
+
+                <ul class="navbar-nav align-items-center flex-row" style="gap: 20px; flex-shrink: 0;">
+                    <%-- <c:choose>
+                        <c:when test="${empty sessionScope.loginUser}">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark fw-semibold" href="${pageContext.request.contextPath}/user/auth/login.jsp">로그인</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-dark px-3" href="${pageContext.request.contextPath}/user/auth/signUp.jsp">회원가입</a>
+                            </li>
+                        </c:when>
+                        <c:otherwise> --%>
+                            <li class="nav-item text-end border-end pe-3">
+                                <div class="d-flex flex-column" style="line-height: 1.2;">
+                                    <span class="text-muted" style="font-size: 0.75rem;">보유머니</span>
+                                    <span class="text-primary fw-bold fs-5">50,000<small class="text-dark fw-normal ms-1" style="font-size: 0.9rem;">원</small></span>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-bold">충전</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold ms-2 fs-6" href="#" id="userDropdown" role="button">
+                                    마이페이지
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0" id="userDropdownMenu">
+                                    <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/user/my/mypage.jsp">내 활동 현황</a></li>
+                                    <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/user/my/info/changeInfo.jsp">정보 수정</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item py-2 text-danger" href="logout.do">로그아웃</a></li>
+                                </ul>
+                            </li>
+               <%--          </c:otherwise>
+                    </c:choose> --%>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>

@@ -7,6 +7,7 @@
 <title>회원정보수정 페이지</title>
 <link rel="stylesheet" href="css/common.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript">
 
@@ -48,6 +49,42 @@
 			}
 			
 		});
+		
+		$("#addrBtn").click(function(){
+			execDaumPostcode();
+			
+		});
+		function execDaumPostcode() {
+		    new daum.Postcode({
+		        oncomplete: function(data) {
+		            // 팝업에서 검색결과 항목을 클릭했을 때 실행할 코드를 작성하는 부분입니다.
+
+		            // 도로명 주소 변수
+		            var fullAddr = ''; 
+		            // 참고항목 변수
+		            var extraAddr = ''; 
+
+		            // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+		            if (data.userSelectedType === 'R') { // 도로명 주소
+		                fullAddr = data.roadAddress;
+		            } else { // 지번 주소
+		                fullAddr = data.jibunAddress;
+		            }
+
+		            // 제이쿼리를 사용하여 HTML 필드에 값 할당
+		            $("#zipcode").val(data.zonecode); // 우편번호
+		            $("#addr1").val(fullAddr);       // 기본주소
+		            
+		            // 상세주소 필드로 포커스 이동
+		          	$("#addr2").val("");
+		            $("#addr2").focus();
+		        }
+		    }).open({
+		        left: (window.screen.width / 2) - (500 / 2),
+		        top: (window.screen.height / 2) - (600 / 2),
+		        popupName: 'postcodePopup' // 팝업 이름을 설정하면 새 탭 방지에 도움이 됩니다.
+		    });
+		}
 	});
 </script>
 <style type="text/css">
@@ -107,7 +144,7 @@
 					<label>주소 <span class="text-danger">*</span></label>
 					<div class="d-flex justify-content-start mb-2">
 						<input type="text" placeholder="우편번호" disabled="disabled" class="form-control w-50 me-2" id="zipcode" value="04001">
-						<button type="button" class="btn btn-outline-dark ms-2">주소검색</button>
+						<button type="button" class="btn btn-outline-dark ms-2" id="addrBtn">주소검색</button>
 					</div>	
 					<div class="mb-2">
 						<input type="text" class="form-control" placeholder="기본주소" disabled="disabled" id="addr1" value="서울시 마포구 월드컵북로 21"/>
