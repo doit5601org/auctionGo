@@ -67,17 +67,17 @@
 						<label class="form-check-label" for="checkDefault">아이디 저장</label>
 					</div>
 					<div class="small">
-						<a href="${pageContext.request.contextPath}/user/auth/find-id.jsp" class="text-decoration-none me-2 text-dark">아이디 찾기</a>
+						<a href="${pageContext.request.contextPath}/user/auth/findId.jsp" class="text-decoration-none me-2 text-dark">아이디 찾기</a>
 						<span class="text-muted">|</span>
-						<a href="${pageContext.request.contextPath}/user/auth/find-pw.jsp" class="text-decoration-none ms-2 text-dark">비밀번호 찾기</a>
+						<a href="${pageContext.request.contextPath}/user/auth/findPw.jsp" class="text-decoration-none ms-2 text-dark">비밀번호 찾기</a>
 					</div>
 				</div>
 				<div class="d-grid gap-2 col-6 mx-auto">
-					<button type="button" class="btn btn-outline-dark loginBtn">로그인</button>
+					<button type="button" class="btn btn-dark loginBtn">로그인</button>
 				</div>
 				<div class="text-center mt-2">
 					아직 회원이 아니신가요?
-					<a href="${pageContext.request.contextPath }/user/auth/sign-up.jsp" class="text-dark fw-bold">회원 가입</a> 
+					<a href="${pageContext.request.contextPath }/user/auth/signUp.jsp" class="text-dark fw-bold">회원 가입</a> 
 				</div>
 			</form>
 		</div>

@@ -16,7 +16,7 @@
 				<jsp:include page="/common/mypage_layout.jsp" />
 			</aside>
 			<section class="col-md-9">
-    <div class="card shadow-sm border-0 bg-white">
+    <div class="card shadow-sm border-0 bg-white p-4">
         <div class="card-header bg-white py-3 border-bottom">
             <h5 class="mb-0 fw-bold">내 입찰 현황</h5>
         </div>
@@ -194,6 +194,6 @@
 	</div>
 
     <jsp:include page="/common/footer.jsp" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script> -->
 </body>
 </html>
