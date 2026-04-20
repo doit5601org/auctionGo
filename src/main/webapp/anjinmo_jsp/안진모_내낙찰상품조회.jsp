@@ -18,7 +18,10 @@
 </head>
 <body>
 	<div class="body">
+		<h1>낙찰 상품</h1>
+		<hr />
 		<div class="box">
+
 			<div class="tot">
 				<div class="bid">
 					<span>낙찰 상품</span>
@@ -38,7 +41,7 @@
 			</div>
 		</div>
 		<div class="box2">
-			<a href="">
+			<!-- <a href="">
 				<div class="categori">
 					<span>낙찰 상품</span>
 				</div>
@@ -46,16 +49,37 @@
 				<div class="categori">
 					<span>판매 상품</span>
 				</div>
-			</a>
+			</a> -->
+			<!-- <div class="btn-group" role="group"
+				aria-label="Basic radio toggle button group">
+				<input type="radio" class="btn-check" name="btnradio" id="btnradio1"
+					autocomplete="off" checked> <label
+					class="btn btn-outline-secondary" for="btnradio1">낙찰 상품</label> <input
+					type="radio" class="btn-check" name="btnradio" id="btnradio2"
+					autocomplete="off"> <label class="btn btn-outline-secondary"
+					for="btnradio2">등록 상품</label> <input type="radio" class="btn-check"
+					name="btnradio" id="btnradio3" autocomplete="off"> <label
+					class="btn btn-outline-secondary" for="btnradio3">판매 상품</label>
+			</div> -->
 		</div>
 		<div class="sel">
 
 			<select class="form-select" aria-label="Default select example">
 				<option selected>낙찰 상품</option>
-				<option value="1">결제완료</option>
-				<option value="2">미결제</option>
-				<option value="3">배송중</option>
-				<option value="4">배송완료</option>
+				<option value="1">결제 완료</option>
+				<option value="2">미 결제</option>
+				<option value="3">배송 중</option>
+				<option value="4">배송 완료</option>
+			</select>
+			<select class="form-select" aria-label="Default select example">
+				<option selected>등록 상품</option>
+			</select>
+			<select class="form-select" aria-label="Default select example">
+				<option selected>판매 상품</option>
+				<option value="1">경매 중</option>
+				<option value="2">유찰 완료</option>
+				<option value="3">낙찰 완료</option>
+				<option value="4">배송 완료</option>
 			</select>
 			<div class="row">
 				<div class="col">
@@ -70,6 +94,12 @@
 			</div>
 			<button type="button" class="btn btn-dark">검색</button>
 		</div>
+		<ul class="nav nav-tabs">
+
+			<li class="nav-item"><a class="nav-link" href="#">낙찰 상품</a></li>
+			<li class="nav-item"><a class="nav-link" href="#">등록 상품</a></li>
+			<li class="nav-item"><a class="nav-link" href="#">판매 상품</a></li>
+		</ul>
 		<div class="box3">
 
 			<a href="">
@@ -80,15 +110,17 @@
 							원</span> <a href="123"><div class="position">결제대기</div></a>
 					</div>
 				</div>
-			</a> <a href="">
+			</a> 
+			<a href="">
 				<div class="item">
 					<img src="" alt="" />
 					<div class="itemtext">
-						<span class="title">빨간피규어</span> <span class="bidcount">25000
+						<span class="title">빨간피규어빨간피규어빨간피규어빨간피규어</span> <span class="bidcount">25000
 							원</span> <a href=""><div class="position">배송완료</div></a>
 					</div>
 				</div>
-			</a> <a href="">
+			</a> 
+			<a href="">
 				<div class="item">
 					<img src="" alt="" />
 					<div class="itemtext">
@@ -96,18 +128,52 @@
 							원</span> <a href=""><div class="position">결제완료</div></a>
 					</div>
 				</div>
-
-
-				<div class="card">
-					<img src="..." class="card-img-top" alt="...">
-
-					<div class="card-body">
-						<h5 class="card-title">Card title</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn btn-primary">Go somewhere</a>
+			</a>
+			<a href="">
+				<div class="item">
+					<img src="" alt="" />
+					<div class="itemtext">
+						<span class="title">빨간피규어</span> <span class="bidcount">25000
+							원</span> <a href=""><div class="position">결제완료</div></a>
 					</div>
 				</div>
+			</a>
+			<a href="">
+				<div class="item">
+					<img src="" alt="" />
+					<div class="itemtext">
+						<span class="title">빨간피규어</span> <span class="bidcount">25000
+							원</span> <a href=""><div class="position">결제완료</div></a>
+					</div>
+				</div>
+			</a>
+			<a href="">
+				<div class="item">
+					<img src="" alt="" />
+					<div class="itemtext">
+						<span class="title">빨간피규어</span> <span class="bidcount">25000
+							원</span> <a href=""><div class="position">결제완료</div></a>
+					</div>
+				</div>
+			</a>
+			<a href="">
+				<div class="item">
+					<img src="" alt="" />
+					<div class="itemtext">
+						<span class="title">빨간피규어</span> <span class="bidcount">25000
+							원</span> <a href=""><div class="position">결제완료</div></a>
+					</div>
+				</div>
+			</a>
+			<a href="">
+				<div class="item">
+					<img src="" alt="" />
+					<div class="itemtext">
+						<span class="title">빨간피규어</span> <span class="bidcount">25000
+							원</span> <a href=""><div class="position">결제완료</div></a>
+					</div>
+				</div>
+			</a>
 		</div>
 	</div>
 
