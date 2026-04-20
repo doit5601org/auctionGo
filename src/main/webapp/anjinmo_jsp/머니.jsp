@@ -19,6 +19,7 @@
 </head>
 <body>
 	<div class="body">
+	<h1>머니 이력</h1>
 		<div class="tot">
 			<div class="bid">
 				<span>보증금</span>
@@ -41,9 +42,9 @@
 			</select>
 			
 			<select class="form-select" aria-label="Default select example">
-				<option selected>머니 구분</option>
-				<option value="1">보증금</option>
-				<option value="2">머니</option>
+				<option selected>입출금 구분</option>
+				<option value="1">입금</option>
+				<option value="2">출금</option>
 			</select>
 			
 			<div class="row">
@@ -57,7 +58,7 @@
 						aria-label="Last name">
 				</div>
 			</div>
-			<button type="button" class="btn btn-dark">검색</button>
+			<button type="button" class="btn bt btn-dark">검색</button>
 		</div>
 		
 		<table>

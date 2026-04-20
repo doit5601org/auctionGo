@@ -9,8 +9,7 @@
 	rel="stylesheet"
 	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
 	crossorigin="anonymous">
-<link rel="stylesheet type="
-	text/css" href="${pageContext.request.contextPath }/css/money.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/money.css">
 
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -20,11 +19,20 @@
 </head>
 <body>
 	<div class="body">
-		<div class="btn-group" role="group" aria-label="Basic example">
+		 <div class="btn-group" role="group" aria-label="Basic example">
 			<button type="button" class="btn btn-secondary">판매자패널티</button>
 			<button type="button" class="btn btn-secondary">구매자패널티</button>
-		</div>
-		<div class="sel">
+		
+		</div> 
+			<!-- <div class="btn-group" role="group"
+				aria-label="Basic radio toggle button group">
+				<input type="radio" class="btn-check" name="btnradio" id="btnradio1"
+					autocomplete="off" checked> <label
+					class="btn btn-outline-secondary" for="btnradio1">판매자 패널티</label> <input
+					type="radio" class="btn-check" name="btnradio" id="btnradio2"
+					autocomplete="off"> <label
+					class="btn btn-outline-secondary" for="btnradio2">구매자 패널티</label>
+		 --><div class="sel">
 
 			<select class="form-select" aria-label="Default select example">
 				<option selected>종류</option>
