@@ -35,3 +35,4 @@ WebContent/WEB-INF/classes/
 # mac
 .DS_Store
 */.DS_Store
+/bin/

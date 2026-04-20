@@ -33,14 +33,14 @@
 {
 	display: inline-block;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: 17px;
 	margin-bottom: 5px;
 }
 .termcontent
 {
-	border: 1px solid gray;
-	border-radius: 5px;
-	height: 300px;
+	border: 3px solid #f7f7f7;
+	border-radius: 7px;
+	height: auto;
 	padding: 20px;
 }
 .form-check
@@ -50,10 +50,49 @@
 }
 .moneycheck
 {
-	margin-top: 50px;
-	
+	margin-top: 70px;
+	margin-bottom: 50px;
 }
 .last
 {
 	font-size:15px;
+}
+.lm
+{
+	width: 100px;
+	
+}
+.lsm
+{
+	display: inline-block;
+	width: 100px;
+}
+.con
+{
+	display:inline-block;
+	margin-bottom: 20px;
+}
+.moneylist
+{
+	width: 210px;
+}
+.ownercheck
+{
+	margin: 100px 0 50px 0;
+}
+.lastbtn
+{
+	margin: 100px 0 200px 0;
+}
+.last
+{
+	margin-bottom:5px;
+}
+#inputPassword
+{
+	width: 150px;
+}
+.btn-secondary
+{
+	height: 45px;
 }

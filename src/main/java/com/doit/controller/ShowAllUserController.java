@@ -9,8 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/report/report-submit")
-public class ReportSubmitController extends HttpServlet
+@WebServlet("/admin/showuser")
+public class ShowAllUserController extends HttpServlet
 {
 
 	private static final long serialVersionUID = 1L;
@@ -18,7 +18,7 @@ public class ReportSubmitController extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/report/reportSubmit.jsp");
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/admin/showAllUser.jsp");
 		dispatcher.forward(req, resp);
 	}
 
