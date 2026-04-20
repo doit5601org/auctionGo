@@ -1,4 +1,102 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page import="java.sql.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String ctx = request.getContextPath();
+
+    String DB_URL  = "jdbc:mysql://localhost:3306/figureauction?characterEncoding=UTF-8";
+    String DB_USER = "root";
+    String DB_PASS = "1234";
+
+    // 필터 파라미터
+    String genreId  = request.getParameter("genreId");
+    String sizeId   = request.getParameter("sizeId");
+    String statusId = request.getParameter("statusId");
+    String keyword  = request.getParameter("keyword");
+    if (genreId  == null) genreId  = "";
+    if (sizeId   == null) sizeId   = "";
+    if (statusId == null) statusId = "";
+    if (keyword  == null) keyword  = "";
+
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    java.util.List<java.util.Map<String,String>> list = new java.util.ArrayList<>();
+    int totalCount = 0;
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+
+        StringBuilder sql = new StringBuilder(
+            "SELECT a.auction_id, a.auction_title, a.current_price, a.bid_count, " +
+            "       a.end_date, a.reg_date, a.status, " +
+            "       p.grade, p.img1, m.manufacturer_name " +
+            "FROM auction a " +
+            "JOIN product p ON a.product_id = p.product_id " +
+            "JOIN manufacturer m ON p.manufacturer_id = m.manufacturer_id " +
+            "WHERE 1=1 "
+        );
+        java.util.List<String> params = new java.util.ArrayList<>();
+
+        if (!genreId.isEmpty()) {
+            sql.append("AND p.genre_id = ? ");
+            params.add(genreId);
+        }
+        if (!sizeId.isEmpty()) {
+            sql.append("AND p.size_id = ? ");
+            params.add(sizeId);
+        }
+        if (statusId.equals("1")) {
+            sql.append("AND a.status = 'ACTIVE' ");
+        } else if (statusId.equals("2")) {
+            sql.append("AND a.status = 'CLOSED' ");
+        }
+        if (!keyword.isEmpty()) {
+            sql.append("AND a.auction_title LIKE ? ");
+            params.add("%" + keyword + "%");
+        }
+        sql.append("ORDER BY a.reg_date DESC");
+
+        ps = conn.prepareStatement(sql.toString());
+        for (int i = 0; i < params.size(); i++) {
+            ps.setString(i + 1, params.get(i));
+        }
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            java.util.Map<String,String> row = new java.util.HashMap<>();
+            row.put("auctionId",    rs.getString("auction_id"));
+            row.put("title",        rs.getString("auction_title"));
+            row.put("currentPrice", rs.getString("current_price"));
+            row.put("bidCount",     rs.getString("bid_count"));
+            row.put("endDate",      rs.getString("end_date"));
+            row.put("regDate",      rs.getString("reg_date").replaceAll("-",""));
+            row.put("status",       rs.getString("status"));
+            row.put("grade",        rs.getString("grade"));
+            row.put("img1",         rs.getString("img1"));
+            row.put("makerName",    rs.getString("manufacturer_name"));
+            list.add(row);
+            totalCount++;
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        if (rs   != null) try { rs.close();   } catch(Exception e){}
+        if (ps   != null) try { ps.close();   } catch(Exception e){}
+        if (conn != null) try { conn.close(); } catch(Exception e){}
+    }
+
+    request.setAttribute("auctionList", list);
+    request.setAttribute("totalCount", totalCount);
+    request.setAttribute("ctx", ctx);
+    request.setAttribute("pGenreId",  genreId);
+    request.setAttribute("pSizeId",   sizeId);
+    request.setAttribute("pStatusId", statusId);
+    request.setAttribute("pKeyword",  keyword);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,28 +108,24 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// 정렬 기능: 등록순, 마감순(마감 임박), 높은가격순
 function sortAuctions() {
     const sort = document.getElementById('sortSelect').value;
     const grid = document.getElementById('auctionGrid');
     const items = Array.from(grid.querySelectorAll('.col'));
-
     items.sort((a, b) => {
         if (sort === 'latest')   return b.dataset.date     - a.dataset.date;
         if (sort === 'deadline') return a.dataset.deadline - b.dataset.deadline;
         if (sort === 'price')    return b.dataset.price    - a.dataset.price;
     });
-
     items.forEach(item => grid.appendChild(item));
 }
 </script>
 </head>
 <body>
 
-<%-- 네비바 --%>
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">🎌 FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">쌍용피규어마켓</a>
         <div class="d-flex gap-3 ms-4">
             <a href="auctionList.jsp" class="nav-link active">경매</a>
             <a href="productList.jsp" class="nav-link">컬렉션</a>
@@ -41,45 +135,44 @@ function sortAuctions() {
 </nav>
 
 <div class="container mt-4 mb-5">
-
-    <%-- 페이지 헤더 --%>
     <div class="page-header">
         <h5 class="mb-0 fw-bold">경매 목록</h5>
         <p class="mb-0 small opacity-75 mt-1">현재 진행 중인 경매에 참여해보세요.</p>
     </div>
 
-    <%-- 필터 영역: 장르/사이즈/경매상태/키워드 조회 --%>
+    <%-- 필터 --%>
     <div class="filter-card">
         <form action="auctionList.jsp" method="get" class="row g-2 align-items-end">
             <div class="col-md-2">
                 <label class="form-label small fw-bold text-secondary mb-1">장르</label>
                 <select name="genreId" class="form-select form-select-sm">
                     <option value="">전체</option>
-                    <option value="1">VOCALOID</option>
-                    <option value="2">애니메이션</option>
-                    <option value="3">게임</option>
+                    <option value="1" <c:if test="${pGenreId == '1'}">selected</c:if>>VOCALOID</option>
+                    <option value="2" <c:if test="${pGenreId == '2'}">selected</c:if>>애니메이션</option>
+                    <option value="3" <c:if test="${pGenreId == '3'}">selected</c:if>>게임</option>
                 </select>
             </div>
             <div class="col-md-2">
                 <label class="form-label small fw-bold text-secondary mb-1">사이즈</label>
                 <select name="sizeId" class="form-select form-select-sm">
                     <option value="">전체</option>
-                    <option value="1">1/7</option>
-                    <option value="2">1/8</option>
-                    <option value="3">Nendoroid</option>
+                    <option value="1" <c:if test="${pSizeId == '1'}">selected</c:if>>1/7</option>
+                    <option value="2" <c:if test="${pSizeId == '2'}">selected</c:if>>1/8</option>
+                    <option value="3" <c:if test="${pSizeId == '3'}">selected</c:if>>Nendoroid</option>
                 </select>
             </div>
             <div class="col-md-2">
                 <label class="form-label small fw-bold text-secondary mb-1">경매 상태</label>
                 <select name="statusId" class="form-select form-select-sm">
                     <option value="">전체</option>
-                    <option value="1">진행중</option>
-                    <option value="2">종료</option>
+                    <option value="1" <c:if test="${pStatusId == '1'}">selected</c:if>>진행중</option>
+                    <option value="2" <c:if test="${pStatusId == '2'}">selected</c:if>>종료</option>
                 </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label small fw-bold text-secondary mb-1">경매명 검색</label>
-                <input type="text" name="keyword" class="form-control form-control-sm" placeholder="경매명을 입력하세요">
+                <input type="text" name="keyword" class="form-control form-control-sm"
+                       placeholder="경매명을 입력하세요" value="${pKeyword}">
             </div>
             <div class="col-md-2 d-flex gap-1">
                 <button type="submit" class="btn btn-primary btn-sm w-100">검색</button>
@@ -88,9 +181,8 @@ function sortAuctions() {
         </form>
     </div>
 
-    <%-- 총 개수 및 정렬: 등록순/마감순/높은가격순 정렬 조회 기능 --%>
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-muted small">총 <strong class="text-dark">4</strong>개</span>
+        <span class="text-muted small">총 <strong class="text-dark">${totalCount}</strong>개</span>
         <select class="form-select form-select-sm" style="width:90px" id="sortSelect" onchange="sortAuctions()">
             <option value="latest">등록순</option>
             <option value="deadline">마감순</option>
@@ -98,101 +190,40 @@ function sortAuctions() {
         </select>
     </div>
 
-    <%-- 경매 목록 --%>
     <div class="row row-cols-2 row-cols-md-4 g-3" id="auctionGrid">
-
-        <%-- 임시 데이터 A001 --%>
-        <div class="col" data-date="20260415" data-deadline="20260419" data-price="35000">
-            <a href="auctionDetail.jsp?auctionId=A001" class="text-decoration-none text-dark">
+        <c:forEach var="a" items="${auctionList}">
+        <div class="col" data-date="${a.regDate}" data-deadline="${a.endDate}" data-price="${a.currentPrice}">
+            <a href="auctionDetail.jsp?auctionId=${a.auctionId}" class="text-decoration-none text-dark">
                 <div class="auction-card card h-100">
-                    <img src="${pageContext.request.contextPath}/images/miku1.jpg"
-                         alt="미쿠 1/7"
-                         onerror="this.src='https://placehold.co/300x300/e3f2fd/1565c0?text=Miku+1%2F7'">
+                    <img src="${ctx}${a.img1}" alt="${a.title}"
+                         onerror="this.src='https://placehold.co/300x300/eee/999?text=No+Image'">
                     <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="badge bg-warning text-dark" style="font-size:11px">23:14:05</span>
-                            <span class="badge bg-success" style="font-size:11px">진행중</span>
+                            <span class="badge bg-warning text-dark" style="font-size:11px"
+                                  data-end="${a.endDate}">--:--:--</span>
+                            <c:choose>
+                                <c:when test="${a.status == 'ACTIVE'}">
+                                    <span class="badge bg-success" style="font-size:11px">진행중</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge bg-secondary" style="font-size:11px">종료</span>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
-                        <p class="fw-bold small mb-1">하츠네 미쿠 1/7 스케일 피규어</p>
-                        <p class="text-muted small mb-1">굿스마일컴퍼니 · S급</p>
+                        <p class="fw-bold small mb-1">${a.title}</p>
+                        <p class="text-muted small mb-1">${a.makerName} · ${a.grade}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="fw-bold text-primary small">35,000원</span>
-                            <span class="text-muted" style="font-size:11px">입찰 3회</span>
+                            <span class="fw-bold text-primary small">${a.currentPrice}원</span>
+                            <span class="text-muted" style="font-size:11px">입찰 ${a.bidCount}회</span>
                         </div>
                     </div>
                 </div>
             </a>
         </div>
-
-        <%-- 임시 데이터 A002 --%>
-        <div class="col" data-date="20260416" data-deadline="20260421" data-price="28000">
-            <a href="auctionDetail.jsp?auctionId=A002" class="text-decoration-none text-dark">
-                <div class="auction-card card h-100">
-                    <img src="${pageContext.request.contextPath}/images/miku2.jpg"
-                         alt="Racing Miku 2023"
-                         onerror="this.src='https://placehold.co/300x300/fce4ec/c62828?text=Racing+Miku'">
-                    <div class="card-body p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="badge bg-warning text-dark" style="font-size:11px">47:30:12</span>
-                            <span class="badge bg-success" style="font-size:11px">진행중</span>
-                        </div>
-                        <p class="fw-bold small mb-1">하츠네 미쿠 Racing Miku 2023</p>
-                        <p class="text-muted small mb-1">굿스마일컴퍼니 · A급</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="fw-bold text-primary small">28,000원</span>
-                            <span class="text-muted" style="font-size:11px">입찰 1회</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <%-- 임시 데이터 A003 --%>
-        <div class="col" data-date="20260417" data-deadline="20260418" data-price="62000">
-            <a href="auctionDetail.jsp?auctionId=A003" class="text-decoration-none text-dark">
-                <div class="auction-card card h-100">
-                    <img src="${pageContext.request.contextPath}/images/pikachu1.jpg"
-                         alt="피카츄"
-                         onerror="this.src='https://placehold.co/300x300/ffe066/e65100?text=Pikachu'">
-                    <div class="card-body p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="badge bg-danger" style="font-size:11px">01:22:44</span>
-                            <span class="badge bg-success" style="font-size:11px">진행중</span>
-                        </div>
-                        <p class="fw-bold small mb-1">피카츄 1/7 스케일 피규어</p>
-                        <p class="text-muted small mb-1">반다이 · S급</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="fw-bold text-primary small">62,000원</span>
-                            <span class="text-muted" style="font-size:11px">입찰 7회</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <%-- 임시 데이터 A004 --%>
-        <div class="col" data-date="20260418" data-deadline="20260422" data-price="18000">
-            <a href="auctionDetail.jsp?auctionId=A004" class="text-decoration-none text-dark">
-                <div class="auction-card card h-100">
-                    <img src="${pageContext.request.contextPath}/images/charmander.jpg"
-                         alt="파이리"
-                         onerror="this.src='https://placehold.co/300x300/ffccbc/bf360c?text=Charmander'">
-                    <div class="card-body p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="badge bg-warning text-dark" style="font-size:11px">71:05:30</span>
-                            <span class="badge bg-success" style="font-size:11px">진행중</span>
-                        </div>
-                        <p class="fw-bold small mb-1">파이리 넨도로이드 피규어</p>
-                        <p class="text-muted small mb-1">반다이 · A급</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="fw-bold text-primary small">18,000원</span>
-                            <span class="text-muted" style="font-size:11px">입찰 2회</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-
+        </c:forEach>
+        <c:if test="${empty auctionList}">
+        <div class="col-12 text-center text-muted py-5">검색 결과가 없습니다.</div>
+        </c:if>
     </div>
 </div>
 

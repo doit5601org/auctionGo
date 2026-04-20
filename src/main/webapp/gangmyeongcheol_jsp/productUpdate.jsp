@@ -1,134 +1,180 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
-<%
-    String productId = request.getParameter("productId");
-    if (productId == null) productId = "P001";
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>상품 수정</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FigureMarket - 상품 수정</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .navbar-brand { font-weight: 700; color: #4F46E5 !important; }
+        .form-card { background: #fff; border-radius: 14px; padding: 28px; box-shadow: 0 2px 8px rgba(0,0,0,.08); max-width: 640px; margin: 0 auto; }
+        .img-preview { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .img-preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb; }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function showPreview(input) {
+    const preview = document.getElementById('imgPreview');
+    preview.innerHTML = '';
+    Array.from(input.files).slice(0, 5).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+</script>    
 </head>
 <body>
 
-<%-- 네비바 --%>
-<nav class="navbar navbar-expand-lg">
+<%-- 네비게이션 바 --%>
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
-        <div class="d-flex gap-3 ms-4">
-            <a href="auctionList.jsp" class="nav-link">경매</a>
-            <a href="productList.jsp" class="nav-link">컬렉션</a>
-            <a href="productMyList.jsp" class="nav-link active">내 상품</a>
+        <a class="navbar-brand" href="main.jsp"><i class="bi bi-box-seam"></i>쌍용피규어마켓</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto ms-3">
+                <li class="nav-item"><a class="nav-link" href="productList.jsp">컬렉션</a></li>
+                <li class="nav-item"><a class="nav-link" href="auctionList.jsp">경매</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold text-primary" href="productMyList.jsp">내 상품</a></li>
+            </ul>
         </div>
     </div>
 </nav>
 
-<div class="container mt-4 mb-5" style="max-width:680px">
-    <div class="page-header">
-        <h5 class="mb-0 fw-bold">상품 수정</h5>
-        <p class="mb-0 small opacity-75 mt-1">상품 정보를 수정해주세요.</p>
+<%-- 에러 메시지 — Servlet에서 forward 시 request.setAttribute("errorMsg", msg) 전달 --%>
+<c:if test="${not empty errorMsg}">
+    <div class="container mt-3">
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>${errorMsg}
+        </div>
     </div>
+</c:if>
 
-    <div class="card p-4">
-        <form action="product_update_act.do" method="post">
-            <input type="hidden" name="productId" value="<%= productId %>">
+<%-- Servlet에서 request.setAttribute("product", productVO) 전달 --%>
+<div class="container py-4">
+    <div class="form-card">
+        <h5 class="fw-bold mb-4">상품 수정</h5>
 
-            <p class="fw-bold border-bottom pb-2 mb-3">기본 정보</p>
-            <div class="row g-3 mb-4">
-                <div class="col-12">
-                    <label class="form-label fw-bold small">상품명 <span class="text-danger">*</span></label>
-                    <input type="text" name="productName" class="form-control form-control-sm" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold small">제조사 <span class="text-danger">*</span></label>
-                    <select name="manufacturerId" class="form-select form-select-sm" required>
-                        <option value="">선택하세요</option>
-                        <option value="1">굿스마일컴퍼니</option>
-                        <option value="2">반다이</option>
-                        <option value="3">코토부키야</option>
-                        <option value="4">맥스팩토리</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold small">장르 <span class="text-danger">*</span></label>
-                    <select name="genreId" class="form-select form-select-sm" required>
-                        <option value="">선택하세요</option>
-                        <option value="1">VOCALOID</option>
-                        <option value="2">애니메이션</option>
-                        <option value="3">게임</option>
-                        <option value="4">오리지널</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold small">작품명</label>
-                    <input type="text" name="workName" class="form-control form-control-sm">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold small">캐릭터명</label>
-                    <input type="text" name="characterName" class="form-control form-control-sm">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold small">사이즈 <span class="text-danger">*</span></label>
-                    <select name="sizeId" class="form-select form-select-sm" required>
-                        <option value="">선택하세요</option>
-                        <option value="1">1/4</option>
-                        <option value="2">1/7</option>
-                        <option value="3">1/8</option>
-                        <option value="4">Nendoroid</option>
-                        <option value="5">기타</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold small">발매일</label>
-                    <input type="date" name="releaseDate" class="form-control form-control-sm">
+        <%-- Servlet: POST /product/update/act 로 전송 --%>
+        <form action="/product/update/act" method="post" enctype="multipart/form-data">
+            <%-- 상품 ID 히든 --%>
+            <input type="hidden" name="productId" value="${not empty product ? product.productId : param.productId}">
+
+            <%-- 기존 이미지 표시 --%>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">기존 이미지</label>
+                <div class="img-preview">
+                    <c:choose>
+                        <c:when test="${not empty product}">
+                            <img src="images/${product.mainImage}" alt="기존 이미지">
+                            <c:forEach var="img" items="${product.imageList}">
+                                <img src="images/${img}" alt="">
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <img src="images/miku2.jpg" alt="기존 이미지">
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
-            <p class="fw-bold border-bottom pb-2 mb-3">상품 상태</p>
-            <div class="row g-3 mb-4">
-                <div class="col-md-4">
-                    <label class="form-label fw-bold small">상태 등급 <span class="text-danger">*</span></label>
-                    <select name="gradeId" class="form-select form-select-sm" required>
-                        <option value="">선택하세요</option>
-                        <option value="1">S급 (최상)</option>
-                        <option value="2">A급 (상)</option>
-                        <option value="3">B급 (중)</option>
-                        <option value="4">C급 (하)</option>
-                    </select>
+            <%-- 새 이미지 업로드 --%>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">이미지 교체 <span class="text-muted fw-normal">(선택, 최대 5장)</span></label>
+                <input type="file" name="productImages" class="form-control" accept="image/jpeg,image/png" multiple onchange="showPreview(this)">
+                <div class="img-preview" id="imgPreview"></div>
+            </div>
+
+            <%-- 상품명 --%>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">상품명 <span class="text-danger">*</span></label>
+                <input type="text" name="productName" class="form-control" required maxlength="100"
+                       value="${not empty product ? product.productName : ''}">
+            </div>
+
+            <%-- 장르 --%>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">장르 <span class="text-danger">*</span></label>
+                <select name="genreId" class="form-select" required>
+                    <option value="">선택하세요</option>
+                    <c:forEach var="g" items="${genreList}">
+                        <option value="${g.genreId}" <c:if test="${not empty product and product.genreId eq g.genreId}">selected</c:if>>${g.genreName}</option>
+                    </c:forEach>
+                    <c:if test="${empty genreList}">
+                        <option value="1">애니메이션</option>
+                        <option value="2">게임</option>
+                    </c:if>
+                </select>
+            </div>
+
+            <%-- 사이즈 --%>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">사이즈 <span class="text-danger">*</span></label>
+                <select name="sizeId" class="form-select" required>
+                    <option value="">선택하세요</option>
+                    <c:forEach var="s" items="${sizeList}">
+                        <option value="${s.sizeId}" <c:if test="${not empty product and product.sizeId eq s.sizeId}">selected</c:if>>${s.sizeName}</option>
+                    </c:forEach>
+                    <c:if test="${empty sizeList}">
+                        <option value="1">1/7</option>
+                        <option value="2">1/4</option>
+                    </c:if>
+                </select>
+            </div>
+
+            <%-- 제조사 --%>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">제조사 <span class="text-danger">*</span></label>
+                <select name="makerId" class="form-select" required>
+                    <option value="">선택하세요</option>
+                    <c:forEach var="m" items="${makerList}">
+                        <option value="${m.makerId}" <c:if test="${not empty product and product.makerId eq m.makerId}">selected</c:if>>${m.makerName}</option>
+                    </c:forEach>
+                    <c:if test="${empty makerList}">
+                        <option value="1">Good Smile Company</option>
+                        <option value="2">Max Factory</option>
+                    </c:if>
+                </select>
+            </div>
+
+            <%-- 등급 --%>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">상품 등급 <span class="text-danger">*</span></label>
+                <div class="d-flex gap-3">
+                   <c:forEach var="g" items="S,A,B,C">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="grade" id="grade${g}" value="${g}"
+                                   <c:if test="${(not empty product and product.grade eq g) or (empty product and g eq 'S')}">checked</c:if>>
+                            <label class="form-check-label" for="grade${g}">${g}</label>
+                        </div>
+                    </c:forEach>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-bold small">개봉 여부 <span class="text-danger">*</span></label>
-                    <select name="openedYn" class="form-select form-select-sm" required>
-                        <option value="">선택하세요</option>
-                        <option value="N">미개봉</option>
-                        <option value="Y">개봉</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-bold small">파츠 누락 <span class="text-danger">*</span></label>
-                    <select name="missingParts" class="form-select form-select-sm" required>
-                        <option value="">선택하세요</option>
-                        <option value="N">없음</option>
-                        <option value="Y">있음</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold small">구매일</label>
-                    <input type="date" name="purchaseDate" class="form-control form-control-sm">
-                </div>
-                <div class="col-12">
-                    <label class="form-label fw-bold small">상품 설명</label>
-                    <textarea name="productDescription" class="form-control form-control-sm" rows="5"
-                              placeholder="상품 상태, 하자 여부 등 상세 설명을 입력하세요."></textarea>
-                </div>
+            </div>
+
+            <%-- 가격 --%>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">판매가 (원) <span class="text-danger">*</span></label>
+                <input type="number" name="price" class="form-control" required min="1000"
+                       value="${not empty product ? product.price : ''}">
+            </div>
+
+            <%-- 상품 설명 --%>
+            <div class="mb-4">
+                <label class="form-label fw-semibold">상품 설명</label>
+                <textarea name="description" class="form-control" rows="4" maxlength="1000">${not empty product ? product.description : ''}</textarea>
             </div>
 
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary w-50"
-                        onclick="location.href='productDetail.jsp?productId=<%= productId %>'">취소</button>
-                <button type="submit" class="btn btn-primary w-50">수정하기</button>
+                <a href="productMyList.jsp" class="btn btn-outline-secondary w-50">취소</a>
+                <button type="submit" class="btn btn-primary w-50">수정 완료</button>
             </div>
         </form>
     </div>

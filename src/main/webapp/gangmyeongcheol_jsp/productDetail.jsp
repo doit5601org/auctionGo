@@ -1,147 +1,135 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
-<%
-    String productId = request.getParameter("productId");
-    if (productId == null) productId = "P001";
-
-    String name = "", nameEn = "", maker = "", genre = "", size = "",
-           grade = "", opened = "", parts = "", purchaseDate = "", regDate = "",
-           imgSrc = "", img2 = "", img3 = "", description = "";
-
-    if (productId.equals("P001")) {
-        name = "하츠네 미쿠 1/7 스케일 피규어";
-        nameEn = "Hatsune Miku 1/7 Scale Figure (mebae Ver.)";
-        maker = "굿스마일컴퍼니"; genre = "VOCALOID"; size = "1/7 (전고 약 23cm)";
-        grade = "S급"; opened = "미개봉"; parts = "없음";
-        purchaseDate = "2025-12-01"; regDate = "2026-04-10";
-        imgSrc = "https://goodsmileshop.com/medias/sys_master/images/images/h43/h21/8830676697118.jpg";
-        img2   = "https://goodsmileshop.com/medias/sys_master/images/images/h0f/h98/8830676795422.jpg";
-        img3   = "https://goodsmileshop.com/medias/sys_master/images/images/h37/h05/8830676926494.jpg";
-        description = "정품 굿스마일컴퍼니 하츠네 미쿠 mebae Ver. 1/7 스케일 피규어입니다.\n미개봉 상태로 구입 후 보관만 하였습니다.\n박스 상태 양호하며 파츠 누락 없습니다.";
-    } else if (productId.equals("P002")) {
-        name = "하츠네 미쿠 Racing Miku 2023";
-        nameEn = "Racing Miku 2023 Ver. 1/7 Scale Figure";
-        maker = "굿스마일컴퍼니"; genre = "VOCALOID"; size = "1/7 (전고 약 24cm)";
-        grade = "A급"; opened = "개봉"; parts = "없음";
-        purchaseDate = "2025-10-15"; regDate = "2026-04-11";
-        imgSrc = "https://goodsmileshop.com/medias/sys_master/images/images/hb5/h90/9570322350110.jpg";
-        img2   = "https://goodsmileshop.com/medias/sys_master/images/images/h5a/h75/9570323005470.jpg";
-        img3   = "https://goodsmileshop.com/medias/sys_master/images/images/hbf/h66/9570323660830.jpg";
-        description = "2023 Racing Miku 1/7 스케일 피규어입니다.\n개봉 후 장식용으로만 사용하였습니다.\n파츠 누락 없으며 상태 양호합니다.";
-    } else if (productId.equals("P003")) {
-        name = "피카츄 1/7 스케일 피규어";
-        nameEn = "Pikachu 1/7 Scale Figure";
-        maker = "반다이"; genre = "게임"; size = "1/7 (전고 약 15cm)";
-        grade = "S급"; opened = "미개봉"; parts = "없음";
-        purchaseDate = "2026-01-20"; regDate = "2026-04-12";
-        imgSrc = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png";
-        img2   = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png";
-        img3   = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png";
-        description = "반다이 정품 피카츄 1/7 스케일 피규어입니다.\n미개봉 상태이며 박스 상태 양호합니다.\n포켓몬 팬이라면 놓치지 마세요!";
-    } else if (productId.equals("P004")) {
-        name = "파이리 넨도로이드 피규어";
-        nameEn = "Charmander Nendoroid Figure";
-        maker = "반다이"; genre = "게임"; size = "Nendoroid (전고 약 10cm)";
-        grade = "A급"; opened = "개봉"; parts = "없음";
-        purchaseDate = "2026-02-05"; regDate = "2026-04-13";
-        imgSrc = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png";
-        img2   = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png";
-        img3   = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png";
-        description = "반다이 정품 파이리 넨도로이드 피규어입니다.\n개봉 후 진열만 하였으며 파츠 누락 없습니다.\n상태 매우 양호합니다.";
-    }
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title><%= name %></title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FigureMarket - 상품 상세</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .navbar-brand { font-weight: 700; color: #4F46E5 !important; }
+        .main-img { width: 100%; height: 360px; object-fit: cover; border-radius: 12px; }
+        .thumb-img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
+        .thumb-img.active { border-color: #4F46E5; }
+        .info-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+        .grade-badge { font-size: .85rem; padding: 4px 12px; border-radius: 20px; }
+        .grade-S { background: #FEF3C7; color: #92400E; }
+        .grade-A { background: #DBEAFE; color: #1E40AF; }
+        .grade-B { background: #D1FAE5; color: #065F46; }
+        .grade-C { background: #F3F4F6; color: #374151; }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// 이미지 화살표 전환 기능
-const images = [
-    "<%= imgSrc %>",
-    "<%= img2 %>",
-    "<%= img3 %>"
-];
-let current = 0;
-
-function moveImg(direction) {
-    current = (current + direction + images.length) % images.length;
-    document.getElementById('mainImg').src = images[current];
+// 썸네일 클릭 시 메인 이미지 전환
+function changeImg(el) {
+    document.getElementById('mainImg').src = el.src;
+    document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
 }
-</script>
+</script>   
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg">
+<%-- 네비게이션 바 --%>
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
-        <div class="d-flex gap-3 ms-4">
-            <a href="main.jsp" class="nav-link">경매</a>
-            <a href="productList.jsp" class="nav-link">컬렉션</a>
-            <a href="productMyList.jsp" class="nav-link">내 상품</a>
+        <a class="navbar-brand" href="main.jsp"><i class="bi bi-box-seam"></i> FigureMarket</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto ms-3">
+                <li class="nav-item"><a class="nav-link" href="productList.jsp">컬렉션</a></li>
+                <li class="nav-item"><a class="nav-link" href="auctionList.jsp">경매</a></li>
+                <li class="nav-item"><a class="nav-link" href="productMyList.jsp">내 상품</a></li>
+            </ul>
         </div>
     </div>
 </nav>
 
-<div class="container mt-4 mb-5">
-
-    <a href="productList.jsp" class="btn btn-outline-primary btn-sm mb-3">← 컬렉션 목록</a>
+<%-- Servlet에서 request.setAttribute("product", productVO) 전달 --%>
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="main.jsp">홈</a></li>
+            <li class="breadcrumb-item"><a href="productList.jsp">컬렉션</a></li>
+            <li class="breadcrumb-item active">${not empty product ? product.productName : '하츠네 미쿠 1/7'}</li>
+        </ol>
+    </nav>
 
     <div class="row g-4">
         <%-- 이미지 영역 --%>
-        <div class="col-md-5">
-            <div class="card p-3">
-                <div class="position-relative mb-3">
-                    <img id="mainImg" src="<%= imgSrc %>"
-                         class="img-fluid rounded w-100" alt="<%= name %>"
-                         onerror="this.src='https://placehold.co/400x400/e3f2fd/1565c0?text=No+Image'">
-                    <button class="btn btn-light btn-sm position-absolute top-50 start-0 translate-middle-y ms-1"
-                            onclick="moveImg(-1)">&#8249;</button>
-                    <button class="btn btn-light btn-sm position-absolute top-50 end-0 translate-middle-y me-1"
-                            onclick="moveImg(1)">&#8250;</button>
-                </div>
-            </div>
+        <div class="col-md-6">
+            <c:choose>
+                <c:when test="${not empty product}">
+                    <img src="images/${product.mainImage}" class="main-img" id="mainImg" alt="${product.productName}">
+                    <div class="d-flex gap-2 mt-2">
+                        <img src="images/${product.mainImage}" class="thumb-img active" onclick="changeImg(this)" alt="">
+                        <c:forEach var="img" items="${product.imageList}">
+                            <img src="images/${img}" class="thumb-img" onclick="changeImg(this)" alt="">
+                        </c:forEach>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <%-- 더미 이미지 --%>
+                    <img src="images/miku2.jpg" class="main-img" id="mainImg" alt="하츠네 미쿠 1/7">
+                    <div class="d-flex gap-2 mt-2">
+                        <img src="images/miku2.jpg" class="thumb-img active" onclick="changeImg(this)" alt="">
+                        <img src="images/miku1.jpg" class="thumb-img" onclick="changeImg(this)" alt="">
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
 
-        <%-- 상품 정보 영역 --%>
-        <div class="col-md-7">
-            <div class="card p-4 h-100 d-flex flex-column">
-                <h5 class="fw-bold mb-1"><%= name %></h5>
-                <p class="text-muted small mb-3"><%= nameEn %></p>
-
-                <table class="table table-borderless table-sm mb-4">
-                    <tr><td class="text-muted" style="width:110px">제조사</td><td class="fw-bold"><%= maker %></td></tr>
-                    <tr><td class="text-muted">장르</td><td class="fw-bold"><%= genre %></td></tr>
-                    <tr><td class="text-muted">사이즈</td><td class="fw-bold"><%= size %></td></tr>
-                    <tr><td class="text-muted">상태 등급</td><td><span class="badge bg-secondary"><%= grade %></span></td></tr>
-                    <tr><td class="text-muted">개봉 여부</td><td><span class="badge bg-success"><%= opened %></span></td></tr>
-                    <tr><td class="text-muted">파츠 누락</td><td class="fw-bold"><%= parts %></td></tr>
-                    <tr><td class="text-muted">구매일</td><td class="fw-bold"><%= purchaseDate %></td></tr>
-                    <tr><td class="text-muted">등록일</td><td class="fw-bold"><%= regDate %></td></tr>
+        <%-- 상품 정보 --%>
+        <div class="col-md-6">
+            <div class="info-card">
+                <c:set var="p" value="${not empty product ? product : null}"/>
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="grade-badge grade-${not empty p ? p.grade : 'S'}">${not empty p ? p.grade : 'S'}등급</span>
+                    <span class="text-muted" style="font-size:.85rem;">${not empty p ? p.makerName : 'Good Smile Company'}</span>
+                </div>
+                <h4 class="fw-bold">${not empty p ? p.productName : '하츠네 미쿠 1/7 스케일 피규어'}</h4>
+                <p class="text-muted mb-3" style="font-size:.9rem;">${not empty p ? p.sizeName : '1/7 스케일'} · ${not empty p ? p.genreName : '애니메이션'}</p>
+                <h3 class="fw-bold text-primary">
+                    <fmt:formatNumber value="${not empty p ? p.price : 180000}" pattern="#,###"/>원
+                </h3>
+                <hr>
+                <table class="table table-sm table-borderless">
+                    <tr>
+                        <th class="text-muted fw-normal" style="width:100px">상품 상태</th>
+                        <td>${not empty p ? p.condition : '미개봉 (MISB)'}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted fw-normal">등록일</th>
+                        <td>${not empty p ? p.createdAt : '2025-04-10'}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted fw-normal">조회수</th>
+                        <td>${not empty p ? p.viewCount : '128'}회</td>
+                    </tr>
                 </table>
-
-                <%-- 본인 상품일 때 --%>
-                <div class="d-flex gap-2 mt-auto">
-                    <a href="productUpdate.jsp?productId=<%= productId %>" class="btn btn-outline-secondary flex-fill">수정</a>
-                    <a href="/user/mypage/auction?productId=<%= productId %>" class="btn btn-primary flex-fill">경매 등록</a>
-                </div>
-                <%-- 타인 상품일 때 (주석 해제)
-                <div class="d-flex gap-2 mt-auto">
-                    <button class="btn btn-outline-primary flex-fill">경매 요청</button>
-                    <a href="productReport.jsp?productId=<%= productId %>" class="btn btn-outline-danger flex-fill">신고</a>
-                </div>
-                --%>
+                <p style="font-size:.9rem; color: #374151; line-height: 1.7;">
+                    ${not empty p ? p.description : '굿스마일컴퍼니 하츠네 미쿠 1/7 스케일 피규어입니다. 미개봉 상태이며 박스도 깨끗합니다. 직거래 또는 택배 모두 가능합니다.'}
+                </p>
+                <hr>
+                <%-- 본인 상품이 아닐 때만 신고 버튼 표시 --%>
+                <c:if test="${not empty sessionScope.loginUser and (empty product or product.userId ne sessionScope.loginUser.userId)}">
+                    <a href="productReport.jsp?productId=${not empty p ? p.productId : 1}" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-flag"></i> 신고하기
+                    </a>
+                </c:if>
+                <%-- 본인 상품일 때 수정/삭제 버튼 표시 --%>
+                <c:if test="${not empty product and product.userId eq sessionScope.loginUser.userId}">
+                    <div class="d-flex gap-2">
+                        <a href="productUpdate.jsp?productId=${p.productId}" class="btn btn-outline-primary btn-sm flex-fill">수정</a>
+                        <a href="productDelete.jsp?productId=${p.productId}" class="btn btn-outline-danger btn-sm flex-fill">삭제</a>
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>
-
-    <%-- 상품 설명 --%>
-    <div class="card p-4 mt-4">
-        <p class="fw-bold border-bottom pb-2 mb-3">상품 설명</p>
-        <p class="text-secondary" style="white-space:pre-wrap"><%= description %></p>
-    </div>
-
 </div>
 
 </body>

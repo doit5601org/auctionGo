@@ -1,249 +1,175 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
-<%
-    String auctionId = request.getParameter("auctionId");
-    String ctx = request.getContextPath();
-    if (auctionId == null) auctionId = "A001";
-
-    String auctionTitle = "", seller = "", regDate = "", endDate = "",
-           currentPrice = "", startPrice = "", bidCount = "", topBidder = "",
-           minBid = "", maker = "", genre = "", size = "", grade = "", opened = "", parts = "",
-           desc = "", img1 = "", img2 = "", img3 = "";
-
-    
-
-    if (auctionId.equals("A001")) {
-        auctionTitle = "하츠네 미쿠 1/7 스케일 피규어 경매";
-        seller = "miku_seller"; regDate = "2026-04-15"; endDate = "2026-04-19 15:00";
-        currentPrice = "35,000원"; startPrice = "20,000원"; bidCount = "3"; topBidder = "m***u"; minBid = "36,000원";
-        maker = "굿스마일컴퍼니"; genre = "VOCALOID"; size = "1/7 (약 23cm)"; grade = "S급"; opened = "미개봉"; parts = "없음";
-        desc = "정품 굿스마일컴퍼니 제품으로 미개봉 상태입니다.\n박스 상태 양호하며 파츠 누락 없습니다.";
-        img1 = ctx + "/images/miku1.jpg";
-        img2 = ctx + "/images/miku1.jpg";
-        img3 = ctx + "/images/miku1.jpg";
-    } else if (auctionId.equals("A002")) {
-        auctionTitle = "하츠네 미쿠 Racing Miku 2023 경매";
-        seller = "racing_col"; regDate = "2026-04-16"; endDate = "2026-04-21 18:00";
-        currentPrice = "28,000원"; startPrice = "15,000원"; bidCount = "1"; topBidder = "fig***2"; minBid = "29,000원";
-        maker = "굿스마일컴퍼니"; genre = "VOCALOID"; size = "1/7 (약 24cm)"; grade = "A급"; opened = "개봉"; parts = "없음";
-        desc = "2023 Racing Miku 1/7 피규어입니다.\n개봉 후 진열만 하였으며 상태 양호합니다.";
-        img1 = ctx + "/images/miku2.jpg";
-        img2 = ctx + "/images/miku2.jpg";
-        img3 = ctx + "/images/miku2.jpg";
-    } else if (auctionId.equals("A003")) {
-        auctionTitle = "피카츄 1/7 스케일 피규어 경매";
-        seller = "poke_fan"; regDate = "2026-04-17"; endDate = "2026-04-18 20:00";
-        currentPrice = "62,000원"; startPrice = "30,000원"; bidCount = "7"; topBidder = "pika***3"; minBid = "63,000원";
-        maker = "반다이"; genre = "게임"; size = "1/7 (약 15cm)"; grade = "S급"; opened = "미개봉"; parts = "없음";
-        desc = "반다이 정품 피카츄 1/7 피규어입니다.\n미개봉 상태이며 상태 매우 양호합니다.";
-        img1 = ctx + "/images/pikachu1.jpg";
-        img2 = img1; img3 = img1;
-    } else if (auctionId.equals("A004")) {
-        auctionTitle = "파이리 넨도로이드 피규어 경매";
-        seller = "nendo_shop"; regDate = "2026-04-18"; endDate = "2026-04-22 12:00";
-        currentPrice = "18,000원"; startPrice = "10,000원"; bidCount = "2"; topBidder = "char***d"; minBid = "19,000원";
-        maker = "반다이"; genre = "게임"; size = "Nendoroid (약 10cm)"; grade = "A급"; opened = "개봉"; parts = "없음";
-        desc = "반다이 정품 파이리 넨도로이드 피규어입니다.\n개봉 후 진열만 하였으며 파츠 누락 없습니다.";
-        img1 = ctx + "/images/charmander.jpg";
-        img2 = img1; img3 = img1;
-    }
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title><%= auctionTitle %></title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FigureMarket - 경매 상세</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+        body { background: #f8f9fa; }
+        .navbar-brand { font-weight: 700; color: #4F46E5 !important; }
+        .main-img { width: 100%; height: 360px; object-fit: cover; border-radius: 12px; }
+        .thumb-img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
+        .thumb-img.active { border-color: #EF4444; }
+        .info-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+        .current-price { color: #EF4444; font-size: 1.6rem; font-weight: 700; }
+        .notice-box { background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 8px; padding: 12px 16px; font-size: .85rem; color: #7F1D1D; }
+        .countdown { font-size: 1.1rem; font-weight: 700; color: #4F46E5; font-variant-numeric: tabular-nums; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-const images = ["<%= img1 %>", "<%= img2 %>", "<%= img3 %>"];
-let current = 0;
-function moveImg(direction) {
-    current = (current + direction + images.length) % images.length;
-    document.getElementById('mainImg').src = images[current];
+function changeImg(el) {
+    document.getElementById('mainImg').src = el.src;
+    document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
 }
 
-function confirmBid() {
-    if (confirm("입찰 후 취소는 불가능하며, 보증금이 즉시 차감됩니다.\n정말 입찰하시겠습니까?")) {
-        alert("입찰이 완료되었습니다.");
-    }
+// 카운트다운 타이머 (남은 시간은 Servlet에서 초 단위로 전달)
+// 실제 연동 시: const totalSeconds = ${not empty auction ? auction.remainSeconds : 9251};
+const totalSeconds = ${not empty auction ? auction.remainSeconds : 9251};
+let remaining = totalSeconds;
+const el = document.getElementById('countdown');
+
+function updateTimer() {
+    if (remaining <= 0) { el.textContent = '마감'; return; }
+    const h = String(Math.floor(remaining / 3600)).padStart(2,'0');
+    const m = String(Math.floor((remaining % 3600) / 60)).padStart(2,'0');
+    const s = String(remaining % 60).padStart(2,'0');
+    el.textContent = h + ':' + m + ':' + s;
+    remaining--;
 }
-</script>	
+updateTimer();
+setInterval(updateTimer, 1000);
+</script>    
 </head>
 <body>
 
-	<%-- 네비바 --%>
-	<nav class="navbar navbar-expand-lg">
-		<div class="container">
-			<a class="navbar-brand" href="main.jsp">FigureAuction</a>
-			<div class="d-flex gap-3 ms-4">
-				<a href="auctionList.jsp" class="nav-link active">경매</a> <a
-					href="productList.jsp" class="nav-link">컬렉션</a> <a
-					href="productMyList.jsp" class="nav-link">내 상품</a>
-			</div>
-		</div>
-	</nav>
+<%-- 네비게이션 바 --%>
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="main.jsp"><i class="bi bi-box-seam"></i> 쌍용피규어마켓</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto ms-3">
+                <li class="nav-item"><a class="nav-link" href="productList.jsp">컬렉션</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold text-primary" href="auctionList.jsp">경매</a></li>
+                <li class="nav-item"><a class="nav-link" href="productMyList.jsp">내 상품</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-	<div class="container mt-4 mb-5">
+<%-- Servlet에서 request.setAttribute("auction", auctionVO) 전달 --%>
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="main.jsp">홈</a></li>
+            <li class="breadcrumb-item"><a href="auctionList.jsp">경매</a></li>
+            <li class="breadcrumb-item active">${not empty auction ? auction.auctionTitle : '하츠네 미쿠 한정판 경매'}</li>
+        </ol>
+    </nav>
 
-		<a href="auctionList.jsp" class="btn btn-outline-primary btn-sm mb-3">←
-			경매 목록</a>
+    <div class="row g-4">
+        <%-- 이미지 영역 --%>
+        <div class="col-md-6">
+            <c:choose>
+                <c:when test="${not empty auction}">
+                    <img src="images/${auction.mainImage}" class="main-img" id="mainImg" alt="${auction.auctionTitle}">
+                    <div class="d-flex gap-2 mt-2">
+                        <img src="images/${auction.mainImage}" class="thumb-img active" onclick="changeImg(this)" alt="">
+                        <c:forEach var="img" items="${auction.imageList}">
+                            <img src="images/${img}" class="thumb-img" onclick="changeImg(this)" alt="">
+                        </c:forEach>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <img src="images/miku2.jpg" class="main-img" id="mainImg" alt="하츠네 미쿠 한정판">
+                    <div class="d-flex gap-2 mt-2">
+                        <img src="images/miku2.jpg" class="thumb-img active" onclick="changeImg(this)" alt="">
+                        <img src="images/miku1.jpg" class="thumb-img" onclick="changeImg(this)" alt="">
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
 
-		<%-- 상단: 이미지 + 입찰 정보 --%>
-		<div class="row g-4">
+        <%-- 경매 정보 --%>
+        <div class="col-md-6">
+            <div class="info-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-danger">진행중</span>
+                    <span class="text-muted" style="font-size:.85rem;">
+                        마감 <span class="countdown" id="countdown">${not empty auction ? auction.remainTime : '02:34:11'}</span>
+                    </span>
+                </div>
 
-			<%-- 왼쪽: 이미지 (화살표로 전환) --%>
-			<div class="col-md-5">
-				<div class="card p-3">
-					<div class="position-relative mb-3">
-						<img id="mainImg" src="<%= img1 %>"
-							class="img-fluid rounded w-100" alt="<%= auctionTitle %>"
-							onerror="this.src='https://placehold.co/400x400/e3f2fd/1565c0?text=No+Image'">
-						<button
-							class="btn btn-light btn-sm position-absolute top-50 start-0 translate-middle-y ms-1"
-							onclick="moveImg(-1)">&#8249;</button>
-						<button
-							class="btn btn-light btn-sm position-absolute top-50 end-0 translate-middle-y me-1"
-							onclick="moveImg(1)">&#8250;</button>
-					</div>
-				</div>
-			</div>
+                <h4 class="fw-bold">${not empty auction ? auction.auctionTitle : '하츠네 미쿠 한정판 경매'}</h4>
+                <p class="text-muted mb-3" style="font-size:.9rem;">
+                    시작가: <fmt:formatNumber value="${not empty auction ? auction.startPrice : 100000}" pattern="#,###"/>원 ·
+                    입찰 단위: <fmt:formatNumber value="${not empty auction ? auction.bidUnit : 10000}" pattern="#,###"/>원
+                </p>
 
-			<%-- 오른쪽: 입찰 정보 --%>
-			<div class="col-md-7">
-				<div class="card p-4 h-100 d-flex flex-column gap-3">
+                <p class="text-muted mb-1" style="font-size:.85rem;">현재가 (비크리 방식)</p>
+                <p class="current-price mb-3">
+                    <fmt:formatNumber value="${not empty auction ? auction.currentPrice : 210000}" pattern="#,###"/>원
+                </p>
 
-					<%-- 제목 --%>
-					<div>
-						<span class="badge bg-success mb-2">진행중</span>
-						<h5 class="fw-bold mb-1"><%= auctionTitle %></h5>
-						<p class="text-muted small mb-0">
-							판매자:
-							<%= seller %>
-							· 등록일:
-							<%= regDate %></p>
-					</div>
+                <hr>
 
-					<%-- 타이머 --%>
-					<div class="border rounded p-3 text-center">
-						<div class="text-muted small mb-1">경매 종료까지</div>
-						<div class="fs-3 fw-bold text-danger" id="timer">23:14:05</div>
-						<div class="text-muted small mt-1"><%= endDate %>
-							종료
-						</div>
-					</div>
+                <%-- 입찰 고지사항 --%>
+                <div class="notice-box mb-3">
+                    <p class="fw-semibold mb-1"><i class="bi bi-exclamation-circle-fill me-1"></i> 입찰 전 꼭 확인하세요</p>
+                    <ul class="mb-0 ps-3" style="line-height: 1.8;">
+                        <li>입찰 시 보증금 <strong>30,000원</strong>이 차감됩니다.</li>
+                        <li>낙찰 후 <strong>24시간 이내</strong> 결제하지 않으면 보증금이 몰수됩니다.</li>
+                        <li>경매 개시 후 취소는 불가합니다.</li>
+                    </ul>
+                </div>
 
-					<%-- 현재 가격 --%>
-					<div class="border rounded p-3">
-						<div
-							class="d-flex justify-content-between align-items-center mb-2">
-							<div>
-								<div class="text-muted small">현재 입찰가 (차순위)</div>
-								<div class="fs-4 fw-bold text-primary"><%= currentPrice %></div>
-							</div>
-							<div class="text-end">
-								<div class="text-muted small">시작가</div>
-								<div class="fw-bold"><%= startPrice %></div>
-							</div>
-						</div>
-						<div class="text-muted small">
-							총 입찰:
-							<%= bidCount %>회 · 최고 입찰자:
-							<%= topBidder %></div>
-					</div>
+                <%-- 동시 입찰 10개 초과 시 비활성화 — Servlet에서 bidCount 전달 --%>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.loginUser}">
+                        <c:choose>
+                            <c:when test="${not empty bidCount and bidCount >= 10}">
+                                <div class="alert alert-warning py-2 mb-2" style="font-size:.85rem;">
+                                    <i class="bi bi-exclamation-triangle"></i> 동시 입찰 참여는 최대 10개입니다.
+                                </div>
+                                <button class="btn btn-secondary w-100" disabled>입찰 불가 (한도 초과)</button>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="/bid/form?auctionId=${not empty auction ? auction.auctionId : 1}" class="btn btn-danger w-100 btn-lg">
+                                    <i class="bi bi-hammer"></i> 입찰 참여
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="/user/login" class="btn btn-outline-danger w-100">로그인 후 입찰 가능</a>
+                    </c:otherwise>
+                </c:choose>
 
-					<%-- 입찰가 입력 --%>
-					<div>
-						<label class="form-label fw-bold small">입찰가 입력</label>
-						<div class="input-group">
-							<input type="number" class="form-control"
-								placeholder="<%= minBid %> 이상 입력" step="1000"> <span
-								class="input-group-text">원</span>
-						</div>
-						<div class="form-text">최소 입찰 단위: 1,000원</div>
-					</div>
+                <%-- 신고 버튼 --%>
+                <div class="text-end mt-2">
+                    <a href="auctionReport.jsp?auctionId=${not empty auction ? auction.auctionId : 1}"
+                       class="btn btn-link btn-sm text-muted p-0">
+                        <i class="bi bi-flag"></i> 신고하기
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-					<%-- 입찰 전 필독 고지사항 --%>
-					<div class="alert alert-warning small mb-0">
-						<strong>⚠ 입찰 전 필독 고지사항</strong>
-						<ul class="mb-0 mt-1 ps-3">
-							<li>입찰 시 <strong>낙찰가의 10%</strong>가 보증금으로 즉시 차감됩니다.
-							</li>
-							<li>입찰 후 <strong>취소는 불가능</strong>합니다.
-							</li>
-							<li>낙찰 후 미결제 시 보증금은 <strong>환불되지 않습니다.</strong></li>
-							<li>허위 입찰 시 서비스 이용이 <strong>제한될 수 있습니다.</strong></li>
-						</ul>
-					</div>
+    <%-- 경매 설명 --%>
+    <div class="bg-white rounded-3 p-4 mt-4 shadow-sm">
+        <h6 class="fw-bold mb-3">경매 상품 설명</h6>
+        <p style="font-size:.9rem; line-height: 1.8; color: #374151;">
+            ${not empty auction ? auction.description : '굿스마일컴퍼니 하츠네 미쿠 1/7 스케일 한정판입니다. 미개봉 상태이며 박스 상태도 매우 좋습니다. 경매 종료 후 24시간 이내 결제 부탁드립니다.'}
+        </p>
+    </div>
+</div>
 
-					<%-- 버튼 --%>
-					<div class="d-flex gap-2 mt-auto">
-						<button type="button" class="btn btn-primary flex-fill fw-bold"
-							onclick="confirmBid()">입찰하기</button>
-						<a href="auctionReport.jsp?auctionId=<%= auctionId %>"
-							class="btn btn-outline-danger">신고</a>
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-		<%-- 하단: 상품 정보 + 입찰 내역 --%>
-		<div class="row g-4 mt-1">
-			<div class="col-md-8">
-				<div class="card p-4">
-					<p class="fw-bold border-bottom pb-2 mb-3">상품 정보</p>
-					<table class="table table-borderless table-sm mb-3">
-						<tr>
-							<td class="text-muted" style="width: 110px">제조사</td>
-							<td class="fw-bold"><%= maker %></td>
-						</tr>
-						<tr>
-							<td class="text-muted">장르</td>
-							<td class="fw-bold"><%= genre %></td>
-						</tr>
-						<tr>
-							<td class="text-muted">사이즈</td>
-							<td class="fw-bold"><%= size %></td>
-						</tr>
-						<tr>
-							<td class="text-muted">상태 등급</td>
-							<td><span class="badge bg-secondary"><%= grade %></span></td>
-						</tr>
-						<tr>
-							<td class="text-muted">개봉 여부</td>
-							<td><span class="badge bg-success"><%= opened %></span></td>
-						</tr>
-						<tr>
-							<td class="text-muted">파츠 누락</td>
-							<td class="fw-bold"><%= parts %></td>
-						</tr>
-					</table>
-					<p class="fw-bold border-bottom pb-2 mb-3">경매 설명</p>
-					<p class="text-secondary small" style="white-space: pre-wrap"><%= desc %></p>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="card p-4">
-					<p class="fw-bold border-bottom pb-2 mb-3">입찰 내역</p>
-					<ul class="list-unstyled">
-						<li class="d-flex justify-content-between py-2 border-bottom">
-							<span class="text-muted small"><%= topBidder %></span> <span
-							class="fw-bold text-primary small"><%= currentPrice %></span>
-						</li>
-						<li class="d-flex justify-content-between py-2 border-bottom">
-							<span class="text-muted small">fig***2</span> <span
-							class="fw-bold small"><%= startPrice %></span>
-						</li>
-						<li class="d-flex justify-content-between py-2"><span
-							class="text-muted small">user***3</span> <span
-							class="fw-bold small">-</span></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-
-	</div>
 
 </body>
 </html>
