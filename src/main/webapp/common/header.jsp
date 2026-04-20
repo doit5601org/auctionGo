@@ -33,7 +33,7 @@
 
 				<ul class="navbar-nav ms-auto align-items-center">
 					<%-- 로그인 상태에 따른 분기 처리 (JSTL 사용 권장) --%>
-					<%-- <%
+					<%--  <%
 					if (session.getAttribute("userId") == null) {
 					%>
 					<li class="nav-item">
@@ -65,14 +65,14 @@
 							마이페이지 
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath }/user/my/mypage.jsp">내 활동 현황</a></li>
+							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/my/mypage.jsp">내 활동 현황</a></li>
 							<li><a class="dropdown-item" href="profileEdit.do">정보 수정</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item text-danger" href="logout.do">로그아웃</a></li>
 						</ul></li>
-					<%-- <%
+			<%-- 		<%
 					}
-					%> --%>
+					%>  --%>
 				</ul>
 			</div>
 		</div>
