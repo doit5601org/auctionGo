@@ -1,0 +1,15 @@
+@charset "UTF-8";
+@import url('//fonts.googleapis.com/earlyaccess/notosanskr.css');
+*{padding: 0; margin: 0; font-family:'본고딕'; color: #333;}
+li{list-style: none;}
+a{text-decoration: none; font-weight: normal;}
+img{border: none;}
+address{font-style: normal;}
+input[type=button], input[type=submit],input[type=image], input[type=reset], button{cursor: pointer;}
+label.away{position: absolute; left: -999em;}
+fieldset{border: none;}
+legend{position: absolute; left: -999em;}
+table{border-collapse: collapse; border-spacing: 0px;}
+body{
+	background-color: #f7f7f7 !important;
+}

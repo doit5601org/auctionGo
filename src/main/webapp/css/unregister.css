@@ -1,0 +1,59 @@
+@charset "UTF-8";
+
+.body
+{
+	margin: auto;
+	font-size: 16px;
+	color: black;
+	font-family: "맑은 고딕";
+	width: 700px;
+	margin-top: 50px;
+}
+.body2
+{
+	margin: auto;
+	width: 90%;
+}
+
+.big
+{
+	font-weight: bold;
+	font-size: 24px;
+}
+.top
+{
+	margin-bottom: 30px;
+	
+}
+.name
+{
+	font-weight: bold;
+}
+.term
+{
+	display: inline-block;
+	font-weight: bold;
+	font-size: 16px;
+	margin-bottom: 5px;
+}
+.termcontent
+{
+	border: 1px solid gray;
+	border-radius: 5px;
+	height: 300px;
+	padding: 20px;
+}
+.form-check
+{
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+.moneycheck
+{
+	margin-top: 50px;
+	
+}
+.last
+{
+	font-size:15px;
+}
