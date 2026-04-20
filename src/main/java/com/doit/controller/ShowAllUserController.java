@@ -20,7 +20,10 @@ public class ShowAllUserController extends HttpServlet
 	{
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/admin/showAllUser.jsp");
 		dispatcher.forward(req, resp);
+		
+	
 	}
+	
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -28,10 +31,6 @@ public class ShowAllUserController extends HttpServlet
 		// TODO : DB 액션 처리
 		resp.sendRedirect(req.getContextPath() + "/user/mypage/auctionList");
 	}
-
-
-
-
 
 
 }
