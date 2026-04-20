@@ -5,12 +5,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath }/css/buyauction.css">
 </head>
 <body>
 	<div class="body">
 		<div class="box">
-			<h1>낙찰 구매 상품</h1>
+
 			<div class="item">
+				<h1>낙찰 구매 상품</h1>
 				<div class="itemimg">
 					<img src="" alt="" />
 				</div>
@@ -22,22 +25,22 @@
 					</span>
 				</div>
 			</div>
-			
+
 			<div class="cash">
 				<h2>최종 결제 금액</h2>
 				<span>낙찰 가격</span><span>180000 원</span> <span>배송 비용</span><span>3000
 					원</span>
 				<hr />
 				<span>183000 원</span>
-				
+
+			</div>
+		</div>
+		<div class="box2">
+			<div class="adress">
+				<h2>배송지</h2>
+				<span>서울특별시 홍익로 211</span> <span>어딘가에있는 2층 빌딩 311호</span>
 			</div>
 
-			<div class="adress">
-				 <h2>배송지</h2>
-				 <span>서울특별시 홍익로 211</span>
-				 <span>어딘가에있는 2층 빌딩 311호</span>
-			</div>
-			
 			<div class="adressconfirm">
 				<h2>배송 요청사항</h2>
 				<select>
@@ -52,8 +55,7 @@
 				<h2>결제</h2>
 				<span>최종 결제 금액 183000 원</span>
 				<hr />
-				<span>보유금액 200000 원</span>
-				<span>결제 후 잔액 17000 원</span>
+				<span>보유금액 200000 원</span> <span>결제 후 잔액 17000 원</span>
 				<button>결제하기</button>
 			</div>
 		</div>

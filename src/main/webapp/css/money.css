@@ -1,0 +1,70 @@
+@charset "UTF-8";
+body
+{
+	margin-top: 50px;
+}
+.body
+{
+	margin: auto;
+	width: 80%;
+}
+.pagecontrol
+{
+	margin-top:30px;
+	align-items: center;
+}
+.sel
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	width: 700px;
+	display: flex;
+	
+}
+.form-select
+{
+	width: 150px;
+	/* display: inline-block; */
+	margin-left: 20px;
+	height: 38px;
+}
+.row
+{
+	/* display: inline-block; */
+	width: 350px;
+	margin-left: 20px;
+}
+.btn-dark
+{
+	margin-left: 20px;
+	width: 80px;
+}
+.tot
+{
+	
+	display: flex;
+}
+.bid
+{
+	padding: 10px;
+	/* border-right: 1px solid black; */
+	height: 100%;
+	width: 100%;
+}
+.bid>span
+{
+	display:block;
+}
+table
+{
+	width: 80%;
+	font-size: 16px;
+	text-align: center;
+	
+}
+th
+{
+	border:1px solid silver;
+	border-radius: 10px;
+	height: 40px;
+}
