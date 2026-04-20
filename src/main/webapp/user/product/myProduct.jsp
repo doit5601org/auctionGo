@@ -6,176 +6,174 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 
 </head>
-<body>
+<body class="bg-light">
 <jsp:include page="/common/header.jsp"></jsp:include>
 	<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
 		<div class="row">
 			<aside class="col-md-3">
 				<jsp:include page="/common/mypage_layout.jsp" />
 			</aside>
-			<section class="col-md-9">
-				<div class="card shadow-sm border-0">
-					<div
-						class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-						<h5 class="mb-0 fw-bold">
-							내 등록 상품 <span class="text-primary small">5</span>
-						</h5>
-						<button class="btn btn-primary btn-sm px-3"
-							onclick="location.href='/product/register'">
-							<i class="bi bi-plus-lg"></i> 새 상품 등록
-						</button>
-					</div>
-					<div class="card-body">
-						<ul class="nav nav-tabs mb-4" id="productTab" role="tablist">
-							<li class="nav-item" role="presentation">
-								<button class="nav-link active" data-bs-toggle="tab"
-									type="button">전체</button>
-							</li>
-							<li class="nav-item" role="presentation">
-								<button class="nav-link" data-bs-toggle="tab" type="button">공개</button>
-							</li>
-							<li class="nav-item" role="presentation">
-								<button class="nav-link" data-bs-toggle="tab" type="button">비공개</button>
-							</li>
-						</ul>
+<section class="col-md-9">
+    <div class="card shadow-sm border-0 bg-white">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+            <h5 class="mb-0 fw-bold">
+                내 등록 상품 <span class="text-primary small">45</span>
+            </h5>
+            <button class="btn btn-primary btn-sm px-3" onclick="location.href='/product/register'">
+                <i class="bi bi-plus-lg"></i> 새 상품 등록
+            </button>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs mb-4" id="productTab" role="tablist">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" id="tab-all" data-type="ALL">전체</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" id="tab-public" data-type="PUBLIC">공개</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" id="tab-private" data-type="PRIVATE">비공개</button></li>
+            </ul>
 
-						<div class="table-responsive">
-							<table class="table align-middle border-top">
-								<thead class="table-light">
-									<tr>
-										<th style="width: 15%">이미지</th>
-										<th style="width: 35%">상품 정보</th>
-										<th style="width: 15%">상태</th>
-										<th style="width: 15%">등록일</th>
-										<th style="width: 20%">관리</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<div class="bg-light rounded"
-												style="height: 60px; width: 60px;"></div>
-										</td>
-										<td>
-											<div class="fw-bold">아이언맨 피규어</div>
-											<div class="text-muted small">120,000원</div>
-										</td>
-										<td><span
-											class="badge bg-success-subtle text-success border border-success">공개</span></td>
-										<td class="text-muted small">2026-04-15</td>
-										<td>
-											<div class="d-flex gap-1">
-												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-outline-primary btn-sm fw-bold">경매
-													등록</button>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="bg-light rounded"
-												style="height: 60px; width: 60px;"></div>
-										</td>
-										<td>
-											<div class="fw-bold text-muted">도라에몽 피규어</div>
-											<div class="text-muted small">15,000원</div>
-										</td>
-										<td><span
-											class="badge bg-secondary-subtle text-secondary border border-secondary">비공개</span></td>
-										<td class="text-muted small">2026-04-18</td>
-										<td>
-											<div class="d-flex gap-1">
-												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-light btn-sm text-primary">공개
-													전환</button>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="bg-light rounded"
-												style="height: 60px; width: 60px;"></div>
-										</td>
-										<td>
-											<div class="fw-bold text-muted">도라에몽 피규어</div>
-											<div class="text-muted small">15,000원</div>
-										</td>
-										<td><span
-											class="badge bg-secondary-subtle text-secondary border border-secondary">비공개</span></td>
-										<td class="text-muted small">2026-04-18</td>
-										<td>
-											<div class="d-flex gap-1">
-												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-light btn-sm text-primary">공개
-													전환</button>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="bg-light rounded"
-												style="height: 60px; width: 60px;"></div>
-										</td>
-										<td>
-											<div class="fw-bold text-muted">도라에몽 피규어</div>
-											<div class="text-muted small">15,000원</div>
-										</td>
-										<td><span
-											class="badge bg-secondary-subtle text-secondary border border-secondary">비공개</span></td>
-										<td class="text-muted small">2026-04-18</td>
-										<td>
-											<div class="d-flex gap-1">
-												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-light btn-sm text-primary">공개
-													전환</button>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="bg-light rounded"
-												style="height: 60px; width: 60px;"></div>
-										</td>
-										<td>
-											<div class="fw-bold text-muted">도라에몽 피규어</div>
-											<div class="text-muted small">15,000원</div>
-										</td>
-										<td><span
-											class="badge bg-secondary-subtle text-secondary border border-secondary">비공개</span></td>
-										<td class="text-muted small">2026-04-18</td>
-										<td>
-											<div class="d-flex gap-1">
-												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-light btn-sm text-primary">공개
-													전환</button>
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<nav aria-label="Page navigation" class="mt-4">
-						<ul class="pagination justify-content-center">
-							<li class="page-item disabled"><a class="page-link" href="#"
-								aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-							</a></li>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th style="width: 12%">이미지</th>
+                            <th style="width: 38%" class="text-start ps-4">상품 정보</th>
+                            <th style="width: 15%">상태</th>
+                            <th style="width: 15%">등록일</th>
+                            <th style="width: 20%">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-list-body">
+                        <tr>
+                            <td class="text-center">
+                                <img src="https://picsum.photos/id/1/60/60" class="rounded shadow-sm" alt="상품">
+                            </td>
+                            <td class="ps-4">
+                                <div class="fw-bold">
+                                    <a href="/product/detail?product_id=101" class="text-decoration-none text-dark link-primary">아이언맨 마크 85 피규어</a>
+                                </div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-success-subtle text-success border border-success px-3">공개</span></td>
+                            <td class="text-center text-muted small">2026-04-20</td>
+                            <td class="text-center">
+                                <div class="d-flex gap-1 justify-content-center">
+                                    <button class="btn btn-outline-secondary btn-sm">수정</button>
+                                    <button class="btn btn-outline-primary btn-sm fw-bold">경매 등록</button>
+                                </div>
+                            </td>
+                        </tr>
 
-							<li class="page-item active"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="#">2</a></li>
-							<li class="page-item"><a class="page-link" href="#">3</a></li>
-							<li class="page-item"><a class="page-link" href="#">4</a></li>
-							<li class="page-item"><a class="page-link" href="#">5</a></li>
+                        <tr>
+                            <td class="text-center">
+                                <img src="https://picsum.photos/id/2/60/60" class="rounded shadow-sm" alt="상품">
+                            </td>
+                            <td class="ps-4">
+                                <div class="fw-bold">
+                                    <a href="/product/detail?product_id=102" class="text-decoration-none text-dark link-primary">도라에몽 한정판 세트</a>
+                                </div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-secondary-subtle text-secondary border border-secondary px-3">비공개</span></td>
+                            <td class="text-center text-muted small">2026-04-19</td>
+                            <td class="text-center">
+                                <div class="d-flex gap-1 justify-content-center">
+                                    <button class="btn btn-outline-secondary btn-sm">수정</button>
+                                    <button class="btn btn-light btn-sm text-primary border">공개 전환</button>
+                                </div>
+                            </td>
+                        </tr>
 
-							<li class="page-item"><a class="page-link" href="#"
-								aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-							</a></li>
-						</ul>
-					</nav>
-				</div>
-			</section>
+                        <tr>
+                            <td class="text-center"><img src="https://picsum.photos/id/3/60/60" class="rounded" alt="상품"></td>
+                            <td class="ps-4">
+                                <div class="fw-bold"><a href="#" class="text-decoration-none text-dark link-primary">해리포터 지팡이 (레플리카)</a></div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-success-subtle text-success border border-success px-3">공개</span></td>
+                            <td class="text-center text-muted small">2026-04-18</td>
+                            <td class="text-center"><div class="d-flex gap-1 justify-content-center"><button class="btn btn-outline-secondary btn-sm">수정</button><button class="btn btn-outline-primary btn-sm fw-bold">경매 등록</button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><img src="https://picsum.photos/id/4/60/60" class="rounded" alt="상품"></td>
+                            <td class="ps-4">
+                                <div class="fw-bold"><a href="#" class="text-decoration-none text-dark link-primary">원피스 루피 기어4</a></div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-success-subtle text-success border border-success px-3">공개</span></td>
+                            <td class="text-center text-muted small">2026-04-17</td>
+                            <td class="text-center"><div class="d-flex gap-1 justify-content-center"><button class="btn btn-outline-secondary btn-sm">수정</button><button class="btn btn-outline-primary btn-sm fw-bold">경매 등록</button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><img src="https://picsum.photos/id/5/60/60" class="rounded" alt="상품"></td>
+                            <td class="ps-4">
+                                <div class="fw-bold"><a href="#" class="text-decoration-none text-dark link-primary">포켓몬 센터 꼬부기 인형</a></div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-secondary-subtle text-secondary border border-secondary px-3">비공개</span></td>
+                            <td class="text-center text-muted small">2026-04-16</td>
+                            <td class="text-center"><div class="d-flex gap-1 justify-content-center"><button class="btn btn-outline-secondary btn-sm">수정</button><button class="btn btn-light btn-sm text-primary border">공개 전환</button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><img src="https://picsum.photos/id/10/60/60" class="rounded" alt="상품"></td>
+                            <td class="ps-4">
+                                <div class="fw-bold"><a href="#" class="text-decoration-none text-dark link-primary">슬램덩크 강백호 유니폼</a></div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-success-subtle text-success border border-success px-3">공개</span></td>
+                            <td class="text-center text-muted small">2026-04-15</td>
+                            <td class="text-center"><div class="d-flex gap-1 justify-content-center"><button class="btn btn-outline-secondary btn-sm">수정</button><button class="btn btn-outline-primary btn-sm fw-bold">경매 등록</button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><img src="https://picsum.photos/id/11/60/60" class="rounded" alt="상품"></td>
+                            <td class="ps-4">
+                                <div class="fw-bold"><a href="#" class="text-decoration-none text-dark link-primary">지브리 토토로 오르골</a></div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-secondary-subtle text-secondary border border-secondary px-3">비공개</span></td>
+                            <td class="text-center text-muted small">2026-04-14</td>
+                            <td class="text-center"><div class="d-flex gap-1 justify-content-center"><button class="btn btn-outline-secondary btn-sm">수정</button><button class="btn btn-light btn-sm text-primary border">공개 전환</button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><img src="https://picsum.photos/id/12/60/60" class="rounded" alt="상품"></td>
+                            <td class="ps-4">
+                                <div class="fw-bold"><a href="#" class="text-decoration-none text-dark link-primary">에반게리온 초호기</a></div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-success-subtle text-success border border-success px-3">공개</span></td>
+                            <td class="text-center text-muted small">2026-04-13</td>
+                            <td class="text-center"><div class="d-flex gap-1 justify-content-center"><button class="btn btn-outline-secondary btn-sm">수정</button><button class="btn btn-outline-primary btn-sm fw-bold">경매 등록</button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><img src="https://picsum.photos/id/13/60/60" class="rounded" alt="상품"></td>
+                            <td class="ps-4">
+                                <div class="fw-bold"><a href="#" class="text-decoration-none text-dark link-primary">진격의 거인 조사병단 망토</a></div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-success-subtle text-success border border-success px-3">공개</span></td>
+                            <td class="text-center text-muted small">2026-04-12</td>
+                            <td class="text-center"><div class="d-flex gap-1 justify-content-center"><button class="btn btn-outline-secondary btn-sm">수정</button><button class="btn btn-outline-primary btn-sm fw-bold">경매 등록</button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><img src="https://picsum.photos/id/14/60/60" class="rounded" alt="상품"></td>
+                            <td class="ps-4">
+                                <div class="fw-bold"><a href="#" class="text-decoration-none text-dark link-primary">드래곤볼 7성구 세트</a></div>
+                            </td>
+                            <td class="text-center"><span class="badge bg-secondary-subtle text-secondary border border-secondary px-3">비공개</span></td>
+                            <td class="text-center text-muted small">2026-04-11</td>
+                            <td class="text-center"><div class="d-flex gap-1 justify-content-center"><button class="btn btn-outline-secondary btn-sm">수정</button><button class="btn btn-light btn-sm text-primary border">공개 전환</button></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="mt-4">
+                <ul class="pagination pagination-sm justify-content-center">
+                    <li class="page-item disabled"><a class="page-link" href="#">&laquo;</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
 
 		</div>
 
@@ -183,9 +181,9 @@
 
 
 	<jsp:include page="/common/footer.jsp"></jsp:include>
-	<script
+<!-- 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-		crossorigin="anonymous"></script>
+		crossorigin="anonymous"></script> -->
 </body>
 </html>
