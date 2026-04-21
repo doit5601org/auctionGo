@@ -58,6 +58,10 @@ public class AdminController extends HttpServlet
 			{
 				viewPath = viewPath + "/admin/auctionDetail.jsp";
 			}
+			else if (uri.endsWith("/auction/history"))
+			{
+				viewPath = viewPath + "/admin/auctionHistory.jsp";
+			}
 			
 			//-- 신고 처리 --//
 			// 신고 접수 목록
@@ -92,6 +96,7 @@ public class AdminController extends HttpServlet
 			
 			
 			request.getRequestDispatcher(viewPath).forward(request, response);
+			return;
 		}
 		// POST 방식 요청 처리
 		else if (methodType.equalsIgnoreCase("POST"))
