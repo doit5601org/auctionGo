@@ -134,6 +134,10 @@ $(function() {
             <a href="${pageContext.request.contextPath}/user/bids/bidHistory.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 입찰 이력</a>
         </div>
     </div>
+    
+    <a href="${pageContext.request.contextPath}/user/my/penaltyHistory.jsp" class="list-group-item list-group-item-action py-3 menu-link">
+        <i class="bi bi-exclamation-octagon me-2"></i>내 패널티 내역
+    </a>
 
     <div class="list-group-item p-0 border-0">
         <a href="#infoSubmenu" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 main-menu collapsed">
@@ -194,6 +198,5 @@ $(function() {
     </div>
 </div> --%>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script> -->
 </body>
 </html>
