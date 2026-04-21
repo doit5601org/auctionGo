@@ -48,7 +48,7 @@
 <%-- [DB연결 후] href를 ${ctx}/main, ${ctx}/product/list, ${ctx}/product/myList 로 변경 --%>
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">경매나라</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
