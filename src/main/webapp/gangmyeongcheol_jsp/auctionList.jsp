@@ -32,7 +32,7 @@
 <%-- ${ctx}/main, ${ctx}/auction/list, ${ctx}/product/list, ${ctx}/product/myList --%>
 <nav class="navbar navbar-expand-lg ">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">FigureAuction</a>
+        <a class="navbar-brand" href="main.jsp">경매나라</a>
         <div class="d-flex gap-3 ms-4">
             <a href="main.jsp" class="nav-link active">경매</a>
             <a href="productList.jsp" class="nav-link">컬렉션</a>
@@ -44,7 +44,7 @@
 <div class="container mt-4 mb-5">
     <div class="page-header">
         <h5 class="mb-0 fw-bold">경매 목록</h5>
-        <p class="mb-0 small opacity-75 mt-1">현재 진행 중인 경매에 참여해보세요.</p>
+        <p class="mb-0 small opacity-75 mt-1">당신의 소장품을 뽐내고, 경매로 가치를 더하세요!!!</p>
     </div>
 
     <%-- form action="${ctx}/auction/list" --%>
@@ -73,14 +73,7 @@
                     <option value="2">1/8</option>
                 </select>
             </div>
-            <div class="col-md-2">
-                <label class="form-label small fw-bold text-secondary mb-1">경매 상태</label>
-                <select name="statusId" class="form-select form-select-sm">
-                    <option value="">전체</option>
-                    <option value="1">진행중</option>
-                    <option value="2">종료</option>
-                </select>
-            </div>
+
             <div class="col-md-4">
                 <label class="form-label small fw-bold text-secondary mb-1">경매명 검색</label>
                 <input type="text" name="keyword" class="form-control form-control-sm" placeholder="경매명을 입력하세요">

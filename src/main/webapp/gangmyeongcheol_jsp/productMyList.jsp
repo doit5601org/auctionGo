@@ -29,7 +29,7 @@
 <%-- [DB연결 후] href를 ${ctx}/main, ${ctx}/product/list, ${ctx}/product/myList 로 변경 --%>
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">쌍용피규어경매</a>
+        <a class="navbar-brand" href="main.jsp">경매나라</a>
         <div class="d-flex gap-3 ms-4">
             <a href="main.jsp" class="nav-link">경매</a>
             <a href="productList.jsp" class="nav-link">컬렉션</a>

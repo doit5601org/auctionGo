@@ -5,9 +5,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>쌍용피규어마켓 - 경매 신고</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+        .navbar-brand { font-weight: 700; color: #4F46E5 !important; }
+        .main-img { width: 100%; height: 360px; object-fit: cover; border-radius: 8px; }
+        .thumb-img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
+        .thumb-img.active { border-color: #0d6efd; }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function updateCount(el) {
@@ -20,7 +25,7 @@ function updateCount(el) {
 <%-- 네비게이션 바 --%>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="${ctx}/main">쌍용피규어마켓</a>
+        <a class="navbar-brand fw-bold" href="${ctx}/main">경매나라</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto ms-3">
                 <li class="nav-item"><a class="nav-link" href="${ctx}/product/list">컬렉션</a></li>
@@ -41,8 +46,7 @@ function updateCount(el) {
 <%-- Servlet에서 request.setAttribute("auction", auctionVO) 전달 --%>
 <div class="container py-4">
     <div class="bg-white rounded-3 p-4 shadow-sm" style="max-width: 520px; margin: 0 auto;">
-        <div class="d-flex align-items-center gap-2 mb-4">
-            <i class="bi bi-flag-fill text-danger" style="font-size:1.3rem;"></i>
+        <div class="d-flex align-items-center gap-2 mb-4">          
             <h5 class="fw-bold mb-0">경매 신고</h5>
         </div>
 
@@ -80,7 +84,7 @@ function updateCount(el) {
             <div class="d-flex gap-2">
                 <button type="button" onclick="history.back()" class="btn btn-outline-secondary w-50">취소</button>
                 <button type="submit" class="btn btn-danger w-50">
-                    <i class="bi bi-flag"></i> 신고 제출
+                   신고 제출
                 </button>
             </div>
         </form>
