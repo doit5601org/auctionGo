@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>전체 경매 목록</title>
+<title>종료된 경매 목록</title>
 <style type="text/css">
 
 	.auctionItem
@@ -23,7 +23,7 @@
 <body>
 
 <div>
-	<h1>전체 경매 목록</h1>
+	<h1>종료된 경매 목록</h1>
 </div>
 
 <div id="auctionList">
