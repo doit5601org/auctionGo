@@ -170,9 +170,6 @@ CREATE OR REPLACE TRIGGER TRG_PENALTY_CANCEL_AFTER_INS
 
 
 
-
-
-
     -- 해당 패널티 취소로 상태(계정 정지)에 변경이 발생했다면,
     -- 해당 패널티에 연관된 패널티 상테 레코드 삭제
     -- (별도의 상태 분류가 가능한 컬럼이나 테이블이 없어 삭제 처리)
