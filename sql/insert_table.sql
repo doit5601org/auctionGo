@@ -395,6 +395,21 @@ JOIN USER_PROFILE UP
 ON UA.USER_ID = UP.USER_ID;
 
 
+-- [추가] 1번 사용자에게 경매 보증금용 10만 원 충전 데이터 입력
+INSERT INTO MONEY_TRANSACTION_HISTORY (
+    MONEY_ID, USER_ID, MONEY_TYPE_ID, AMOUNT, CREATED_AT
+) VALUES (
+    MONEY_TRANSACTION_SEQ.NEXTVAL, 1, 1, 100000, SYSDATE
+);
+
+COMMIT;
+
+SELECT *
+FROM MONEY_TYPE;
+
+
+
+
 -- [2] 머니 충전 (2번 사용자가 경매 참여를 위해 50만 원 충전)
 INSERT INTO MONEY_CHARGE_HISTORY (MONEY_CHARGE_ID, USER_ID, MONEY_CHARGE_METHOD_ID, CHARGE_AMOUNT)
 VALUES (MONEY_CHARGE_SEQ.NEXTVAL, 2, 2, 500000); -- 신용카드로 50만 원 충전
@@ -414,6 +429,7 @@ INSERT INTO PRODUCT (
     1, 1, 1, '어벤져스: 엔드게임', '아이언맨', 
     1, 0, '단순 개봉 풀박스입니다. 상태 매우 좋습니다.', 'images/ironman_1.png', 'images/ironman_2.png', 'images/ironman_3.png', 1
 );
+
 
 
 
