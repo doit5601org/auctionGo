@@ -55,11 +55,11 @@ hr
 	padding: 20px 30px 30px 30px;
 	border: 2px solid silver;
 	border-radius: 7px;
-	width: 300px;
-	height: 500px;	
 	position:fixed;
 	transform:translate(30px,300px);
 	box-shadow: 0 0 3px rgba(0,0,0,0.4);
+	width: 300px;
+	height: 515px;	
 }
 .btn-outline-secondary
 {
@@ -111,18 +111,18 @@ hr
 	border: 2px solid silver;
 	border-radius: 7px;
 	width: 700px;
-	height: 210px;
+	height: 230px;
 	margin-bottom: 20px;
 	box-shadow: 0 0 3px rgba(0,0,0,0.4);
 }
-.cashtot
+/* .cashtot
 {
 	padding: 20px 30px 30px 30px;
 	border: 2px solid silver;
 	border-radius: 7px;
 	width: 200px;
 	height: 300px;
-}
+} */
 .title
 {
 	font-size: 20px;
@@ -151,4 +151,14 @@ hr
 .bt
 {
 	width: 100%;
+}
+.btn-light
+{
+	position: absolute;
+	margin-left: 45px;
+	font-family: small;
+}
+.errMsg
+{
+	display: none;
 }

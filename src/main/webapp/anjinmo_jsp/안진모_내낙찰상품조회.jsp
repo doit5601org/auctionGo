@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,12 +10,15 @@
 	rel="stylesheet"
 	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
 	crossorigin="anonymous">
-<link rel="stylesheet type="
-	text/css" href="${pageContext.request.contextPath }/css/biditem.css">
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
 	crossorigin="anonymous"></script>
+
+<link rel="stylesheet type="
+	text/css" href="${pageContext.request.contextPath }/css/biditem.css">
+
+
 </head>
 <body>
 	<div class="body">
@@ -70,11 +74,9 @@
 				<option value="2">미 결제</option>
 				<option value="3">배송 중</option>
 				<option value="4">배송 완료</option>
-			</select>
-			<select class="form-select" aria-label="Default select example">
+			</select> <select class="form-select" aria-label="Default select example">
 				<option selected>등록 상품</option>
-			</select>
-			<select class="form-select" aria-label="Default select example">
+			</select> <select class="form-select" aria-label="Default select example">
 				<option selected>판매 상품</option>
 				<option value="1">경매 중</option>
 				<option value="2">유찰 완료</option>
@@ -94,12 +96,13 @@
 			</div>
 			<button type="button" class="btn btn-dark">검색</button>
 		</div>
-		<ul class="nav nav-tabs">
 
+		<ul class="nav nav-tabs">
 			<li class="nav-item"><a class="nav-link" href="#">낙찰 상품</a></li>
 			<li class="nav-item"><a class="nav-link" href="#">등록 상품</a></li>
 			<li class="nav-item"><a class="nav-link" href="#">판매 상품</a></li>
 		</ul>
+
 		<div class="box3">
 
 			<a href="">
@@ -110,26 +113,16 @@
 							원</span> <a href="123"><div class="position">결제대기</div></a>
 					</div>
 				</div>
-			</a> 
-			<a href="">
+			</a> <a href="">
 				<div class="item">
 					<img src="" alt="" />
 					<div class="itemtext">
-						<span class="title">빨간피규어빨간피규어빨간피규어빨간피규어</span> <span class="bidcount">25000
-							원</span> <a href=""><div class="position">배송완료</div></a>
+						<span class="title">빨간피규어빨간피규어빨간피규어빨간피규어</span> <span
+							class="bidcount">25000 원</span> <a href=""><div
+								class="position">배송완료</div></a>
 					</div>
 				</div>
-			</a> 
-			<a href="">
-				<div class="item">
-					<img src="" alt="" />
-					<div class="itemtext">
-						<span class="title">빨간피규어</span> <span class="bidcount">25000
-							원</span> <a href=""><div class="position">결제완료</div></a>
-					</div>
-				</div>
-			</a>
-			<a href="">
+			</a> <a href="">
 				<div class="item">
 					<img src="" alt="" />
 					<div class="itemtext">
@@ -137,8 +130,7 @@
 							원</span> <a href=""><div class="position">결제완료</div></a>
 					</div>
 				</div>
-			</a>
-			<a href="">
+			</a> <a href="">
 				<div class="item">
 					<img src="" alt="" />
 					<div class="itemtext">
@@ -146,8 +138,7 @@
 							원</span> <a href=""><div class="position">결제완료</div></a>
 					</div>
 				</div>
-			</a>
-			<a href="">
+			</a> <a href="">
 				<div class="item">
 					<img src="" alt="" />
 					<div class="itemtext">
@@ -155,8 +146,7 @@
 							원</span> <a href=""><div class="position">결제완료</div></a>
 					</div>
 				</div>
-			</a>
-			<a href="">
+			</a> <a href="">
 				<div class="item">
 					<img src="" alt="" />
 					<div class="itemtext">
@@ -164,8 +154,15 @@
 							원</span> <a href=""><div class="position">결제완료</div></a>
 					</div>
 				</div>
-			</a>
-			<a href="">
+			</a> <a href="">
+				<div class="item">
+					<img src="" alt="" />
+					<div class="itemtext">
+						<span class="title">빨간피규어</span> <span class="bidcount">25000
+							원</span> <a href=""><div class="position">결제완료</div></a>
+					</div>
+				</div>
+			</a> <a href="">
 				<div class="item">
 					<img src="" alt="" />
 					<div class="itemtext">

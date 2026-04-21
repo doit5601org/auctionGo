@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,14 +66,14 @@
 
                 <ul class="navbar-nav align-items-center flex-row" style="gap: 20px; flex-shrink: 0;">
                     <%-- <c:choose>
-                        <c:when test="${empty sessionScope.loginUser}">
+                        <c:when test="${empty sessionScope.loginUser}">--%>
                             <li class="nav-item">
                                 <a class="nav-link text-dark fw-semibold" href="${pageContext.request.contextPath}/user/auth/login.jsp">로그인</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-outline-dark px-3" href="${pageContext.request.contextPath}/user/auth/signUp.jsp">회원가입</a>
                             </li>
-                        </c:when>
+                         <%-- </c:when>
                         <c:otherwise> --%>
                             <li class="nav-item text-end border-end pe-3">
                                 <div class="d-flex flex-column" style="line-height: 1.2;">
