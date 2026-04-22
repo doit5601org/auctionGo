@@ -2,7 +2,7 @@
 
 --●상품 등록 프로시저
 
-CREATE OR REPLACE PROCEDURE PRC_PRODUCT_INSERT
+CREATE OR REPLACE PROCEDURE PRC_PRODUCT_CREATE
 (
       P_USER_ID              IN PRODUCT.USER_ID%TYPE              -- 회원고유키 (NN)
     , P_PRODUCT_RELEASE_NAME IN PRODUCT.PRODUCT_RELEASE_NAME%TYPE -- 상품 발매명
@@ -65,10 +65,11 @@ BEGIN
         , P_IMAGE_PATH_2,       P_IMAGE_PATH_3,       P_IS_PUBLIC
         , SYSDATE
     );
-    
+       
     IF SQL%ROWCOUNT = 0 THEN
         RAISE_APPLICATION_ERROR(-20015, '상품등록이 실패하였습니다.');
     END IF;
+    
 
     COMMIT;
     
