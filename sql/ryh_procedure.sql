@@ -1,244 +1,318 @@
-SELECT USER
-FROM DUAL;
+select user
+  from dual;
 
 -- ○ 1. 회원가입 생성 프로시저
 -- 회원 가입 시 회원 고유키, 회원 계정, 회원 정보, 회원 계정이벤트 이력 등에 이력 추가
-CREATE OR REPLACE PROCEDURE PRC_USER_SIGNUP
-( P_USER_LOGIN_ID IN VARCHAR2
-, P_USER_PASSWORD IN VARCHAR2
-, P_USER_PASSWORD_CHECK IN VARCHAR2
-, P_USER_NAME IN VARCHAR2
-, P_USER_SSN IN CHAR
-, P_USER_EMAIL IN VARCHAR2
-, P_USER_PHONE IN CHAR
-, P_USER_ZIPCODE IN VARCHAR2
-, P_USER_ADDRESS IN VARCHAR2
-, P_USER_ADDRESS_DETAIL IN VARCHAR2
-)
-IS
-    V_HAS_ID NUMBER(1);
-    V_HAS_SSN NUMBER(1);
-    V_BIRTH DATE;
-    V_AGE NUMBER(3);
-    
-    
-    ERR_DUPLICATE_ID EXCEPTION;
-    ERR_DUPLICATE_SSN EXCEPTION;
-    ERR_INVALID_SSN EXCEPTION;
-    ERR_INVALID_FORMAT_LENGTH EXCEPTION;
-    ERR_UNDERAGE EXCEPTION;
-    ERR_WRONG_PWD EXCEPTION;
-    ERR_INVALID_EMAIL EXCEPTION;
-    ERR_NULL_VALUE EXCEPTION;
-
-BEGIN
+create or replace procedure prc_user_signup (
+   p_user_login_id       in varchar2,
+   p_user_password       in varchar2,
+   p_user_password_check in varchar2,
+   p_user_name           in varchar2,
+   p_user_ssn            in char,
+   p_user_email          in varchar2,
+   p_user_phone          in char,
+   p_user_zipcode        in varchar2,
+   p_user_address        in varchar2,
+   p_user_address_detail in varchar2
+) is
+   v_has_id  number(1);
+   v_has_ssn number(1);
+   v_birth   date;
+   v_age     number(3);
+   err_duplicate_id exception;
+   err_duplicate_ssn exception;
+   err_invalid_ssn exception;
+   err_invalid_format_length exception;
+   err_underage exception;
+   err_wrong_pwd exception;
+   err_invalid_email exception;
+   err_null_value exception;
+begin
 -- NULL 검사
-    IF (P_USER_LOGIN_ID IS NULL OR P_USER_PASSWORD IS NULL 
-        OR P_USER_PASSWORD IS NULL OR P_USER_NAME IS NULL OR P_USER_SSN IS NULL
-        OR P_USER_SSN IS NULL OR P_USER_EMAIL IS NULL OR P_USER_PHONE IS NULL
-        OR P_USER_ZIPCODE IS NULL OR P_USER_ADDRESS IS NULL OR P_USER_ADDRESS_DETAIL IS NULL)   THEN
-            RAISE ERR_NULL_VALUE;
-    END IF;
+   if ( p_user_login_id is null
+   or p_user_password is null
+   or p_user_password is null
+   or p_user_name is null
+   or p_user_ssn is null
+   or p_user_ssn is null
+   or p_user_email is null
+   or p_user_phone is null
+   or p_user_zipcode is null
+   or p_user_address is null
+   or p_user_address_detail is null ) then
+      raise err_null_value;
+   end if;
 
 -- 아이디 중복 검사
-    SELECT COUNT(*) INTO V_HAS_ID
-    FROM USER_ACCOUNT
-    WHERE USER_LOGIN_ID = P_USER_LOGIN_ID;
-    
-    IF(V_HAS_ID != 0) THEN
-        RAISE ERR_DUPLICATE_ID;
-    END IF;
+   select count(*)
+     into v_has_id
+     from user_account
+    where user_login_id = p_user_login_id;
+
+   if ( v_has_id != 0 ) then
+      raise err_duplicate_id;
+   end if;
     
 -- 아이디 조건 검사(4글자이상 12자이하)
-    IF(LENGTH(P_USER_LOGIN_ID)<4 OR LENGTH(P_USER_LOGIN_ID)>12) THEN
-        RAISE ERR_INVALID_FORMAT_LENGTH;
-    END IF;
+   if ( length(p_user_login_id) < 4
+   or length(p_user_login_id) > 12 ) then
+      raise err_invalid_format_length;
+   end if;
 
 -- 비밀번호 조건 검사(8자이상 16자이하)
-    IF(LENGTH(P_USER_PASSWORD)<8 OR LENGTH(P_USER_PASSWORD)>16) THEN
-        RAISE ERR_INVALID_FORMAT_LENGTH;
-    END IF;
+   if ( length(p_user_password) < 8
+   or length(p_user_password) > 16 ) then
+      raise err_invalid_format_length;
+   end if;
     
 -- 비밀번호 확인
-    IF(P_USER_PASSWORD != P_USER_PASSWORD_CHECK) THEN
-        RAISE ERR_WRONG_PWD;
-    END IF;
+   if ( p_user_password != p_user_password_check ) then
+      raise err_wrong_pwd;
+   end if;
     
 -- 주민번호 유효성 검사
-    IF NOT REGEXP_LIKE(P_USER_SSN, '^[0-9]{6}[1-4][0-9]{6}$') THEN
-        RAISE ERR_INVALID_SSN;
-    END IF;
+   if not regexp_like(
+      p_user_ssn,
+      '^[0-9]{6}[1-4][0-9]{6}$'
+   ) then
+      raise err_invalid_ssn;
+   end if;
     
 -- 주민번호 중복 검사
-    SELECT COUNT(*) INTO V_HAS_SSN
-    FROM USER_PROFILE
-    WHERE USER_SSN = P_USER_SSN;
-    
-    IF(V_HAS_SSN != 0) THEN
-        RAISE ERR_DUPLICATE_SSN;
-    END IF;
+   select count(*)
+     into v_has_ssn
+     from user_profile
+    where user_ssn = p_user_ssn;
+
+   if ( v_has_ssn != 0 ) then
+      raise err_duplicate_ssn;
+   end if;
 
 -- 주민번호 미성년자 제외 검사
-    V_BIRTH := TO_DATE(
-        CASE
-            WHEN SUBSTR(P_USER_SSN,7,1) IN ('3','4') THEN '20'
-            ELSE '19'
-        END || SUBSTR(P_USER_SSN,1,6), 'YYYYMMDD'
-    );
+   v_birth := to_date (
+      case
+         when substr(
+            p_user_ssn,
+            7,
+            1
+         ) in ( '3',
+                '4' ) then
+            '20'
+         else
+            '19'
+      end
+      || substr(
+      p_user_ssn,
+      1,
+      6
+   ),
+   'YYYYMMDD' );
 
-    V_AGE := TRUNC(MONTHS_BETWEEN(SYSDATE, V_BIRTH)/12);
-    
-    IF(V_AGE<19) THEN
-        RAISE ERR_UNDERAGE;
-    END IF;
+   v_age := trunc(months_between(
+      sysdate,
+      v_birth
+   ) / 12);
+   if ( v_age < 19 ) then
+      raise err_underage;
+   end if;
 
 -- 이메일 유효성 검사
     -- ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$
-     IF NOT REGEXP_LIKE(P_USER_EMAIL, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$') THEN
-        RAISE ERR_INVALID_EMAIL;
-    END IF;
+   if not regexp_like(
+      p_user_email,
+      '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+   ) then
+      raise err_invalid_email;
+   end if;
 
 -- 1. USERS INSERT
-    INSERT INTO USERS VALUES(USERS_SEQ.NEXTVAL);
+   insert into users values ( users_seq.nextval );
     
 -- 2. USER_ACCOUNT INSERT
-    INSERT INTO USER_ACCOUNT
-    VALUES(USERS_SEQ.CURRVAL, P_USER_LOGIN_ID, P_USER_PASSWORD);
+   insert into user_account values ( users_seq.currval,
+                                     p_user_login_id,
+                                     p_user_password );
 
 -- 3. USER_PROFILE INSERT
-    INSERT INTO USER_PROFILE
-    VALUES(USERS_SEQ.CURRVAL, P_USER_NAME, P_USER_SSN, P_USER_EMAIL, P_USER_PHONE
-    , P_USER_ZIPCODE, P_USER_ADDRESS, P_USER_ADDRESS_DETAIL);
+   insert into user_profile values ( users_seq.currval,
+                                     p_user_name,
+                                     p_user_ssn,
+                                     p_user_email,
+                                     p_user_phone,
+                                     p_user_zipcode,
+                                     p_user_address,
+                                     p_user_address_detail );
     
 
       
 -- 4. ACCOUNT_EVENT_HISTORY INSERT
-    INSERT INTO ACCOUNT_EVENT_HISTORY
-    VALUES(ACCOUNT_EVENT_HISTORY_SEQ.NEXTVAL, USERS_SEQ.CURRVAL, 1, SYSDATE);
+   insert into account_event_history values ( account_event_history_seq.nextval,
+                                              users_seq.currval,
+                                              1,
+                                              sysdate );
 
 -- 예외 처리
-    EXCEPTION 
-        WHEN ERR_DUPLICATE_ID THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20001, '이미 존재하는 아이디입니다.');
-        WHEN ERR_DUPLICATE_SSN THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20002, '이미 존재하는 주민등록번호입니다.');
-        WHEN ERR_INVALID_SSN THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20003, '유효하지 않은 주민등록번호입니다.');   
-        WHEN ERR_INVALID_FORMAT_LENGTH THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20005, '입력 범위가 맞지 않습니다.');
-        WHEN ERR_UNDERAGE THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20006, '미성년자입니다.'); 
-        WHEN ERR_WRONG_PWD THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20007, '비밀번호가 일치하지 않습니다.'); 
-        WHEN ERR_INVALID_EMAIL THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20008, '올바른 이메일 형식이 아닙니다.');
-        WHEN ERR_NULL_VALUE THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20014, '필수 입력 항목이 누락되었습니다.');
-END;
+exception
+   when err_duplicate_id then
+      rollback;
+      raise_application_error(
+         -20001,
+         '이미 존재하는 아이디입니다.'
+      );
+   when err_duplicate_ssn then
+      rollback;
+      raise_application_error(
+         -20002,
+         '이미 존재하는 주민등록번호입니다.'
+      );
+   when err_invalid_ssn then
+      rollback;
+      raise_application_error(
+         -20003,
+         '유효하지 않은 주민등록번호입니다.'
+      );
+   when err_invalid_format_length then
+      rollback;
+      raise_application_error(
+         -20005,
+         '입력 범위가 맞지 않습니다.'
+      );
+   when err_underage then
+      rollback;
+      raise_application_error(
+         -20006,
+         '미성년자입니다.'
+      );
+   when err_wrong_pwd then
+      rollback;
+      raise_application_error(
+         -20007,
+         '비밀번호가 일치하지 않습니다.'
+      );
+   when err_invalid_email then
+      rollback;
+      raise_application_error(
+         -20008,
+         '올바른 이메일 형식이 아닙니다.'
+      );
+   when err_null_value then
+      rollback;
+      raise_application_error(
+         -20014,
+         '필수 입력 항목이 누락되었습니다.'
+      );
+end;
 /
 -- Procedure PRC_USER_SIGNUP이(가) 컴파일되었습니다.
 
 
 -- ○ 3. 특정 경매코드에 대해 현재 마감기한이 지났는지 확인하는 함수
 --      진행중: 0, 마감: 1, 에러: -1
-CREATE OR REPLACE FUNCTION FN_IS_AUCTION_FINISHED
-(P_AUCTION_ID   IN AUCTION_REGISTRATION.AUCTION_ID%TYPE
-)
-RETURN NUMBER
-IS
-    V_START_DATE    DATE;
-    V_AUCTION_PERIOD NUMBER;
-    V_RESULT NUMBER;
-BEGIN
+create or replace function fn_is_auction_finished (
+   p_auction_id in auction_registration.auction_id%type
+) return number is
+   v_start_date     date;
+   v_auction_period number;
+   v_result         number;
+begin
     -- 경매 테이블에서 등록시간과 경매기간 조회
-    SELECT AR.CREATED_AT, TO_NUMBER(REGEXP_REPLACE(AP.AUCTION_PERIOD_NAME, '[^0-9]', '')) 
-            INTO V_START_DATE, V_AUCTION_PERIOD
-    FROM AUCTION_REGISTRATION AR 
-        JOIN AUCTION_PERIOD AP
-        ON AP.AUCTION_PERIOD_ID = AR.AUCTION_PERIOD_ID
-    WHERE AR.AUCTION_ID = P_AUCTION_ID;
-    
-    IF (SYSDATE < (V_START_DATE+V_AUCTION_PERIOD)) THEN
-        RETURN 0;   -- 경매 중
-    ELSE
-        RETURN 1;   -- 경매 종료
-    END IF;
-    
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            RETURN -1; --(경매 정보가 없는 경우에 대한 예외 처리)
-        WHEN OTHERS THEN
-            RETURN -1;
-END;
+   select ar.created_at,
+          to_number(regexp_replace(
+             ap.auction_period_name,
+             '[^0-9]',
+             ''
+          ))
+     into
+      v_start_date,
+      v_auction_period
+     from auction_registration ar
+     join auction_period ap
+   on ap.auction_period_id = ar.auction_period_id
+    where ar.auction_id = p_auction_id;
+
+   if ( sysdate < ( v_start_date + v_auction_period ) ) then
+      return 0;   -- 경매 중
+   else
+      return 1;   -- 경매 종료
+   end if;
+
+exception
+   when no_data_found then
+      return -1; --(경매 정보가 없는 경우에 대한 예외 처리)
+   when others then
+      return -1;
+end;
 /
 --Function FN_IS_AUCTION_FINISHED이(가) 컴파일되었습니다.
 
-
-
-CREATE OR REPLACE FUNCTION FN_GET_AUCTION_DUE_DATE
-(P_AUCTION_ID   IN AUCTION_REGISTRATION.AUCTION_ID%TYPE
-)
-RETURN VARCHAR2
-IS
-    V_START_DATE    DATE;
-    V_AUCTION_PERIOD NUMBER;
-BEGIN
+create or replace function fn_get_auction_due_date (
+   p_auction_id in auction_registration.auction_id%type
+) return varchar2 is
+   v_start_date     date;
+   v_auction_period number;
+begin
     -- 경매 테이블에서 등록시간과 경매기간 조회
-    SELECT AR.CREATED_AT, TO_NUMBER(REGEXP_REPLACE(AP.AUCTION_PERIOD_NAME, '[^0-9]', '')) 
-            INTO V_START_DATE, V_AUCTION_PERIOD
-    FROM AUCTION_REGISTRATION AR 
-        JOIN AUCTION_PERIOD AP
-        ON AP.AUCTION_PERIOD_ID = AR.AUCTION_PERIOD_ID
-    WHERE AR.AUCTION_ID = P_AUCTION_ID;
-    
-    
-    RETURN TO_CHAR(V_START_DATE+V_AUCTION_PERIOD, 'YYYY-MM-DD HH24:MI');
+   select ar.created_at,
+          to_number(regexp_replace(
+             ap.auction_period_name,
+             '[^0-9]',
+             ''
+          ))
+     into
+      v_start_date,
+      v_auction_period
+     from auction_registration ar
+     join auction_period ap
+   on ap.auction_period_id = ar.auction_period_id
+    where ar.auction_id = p_auction_id;
 
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            RETURN '-'; 
-        WHEN OTHERS THEN
-            RETURN '-';
-END;
+
+   return to_char(
+      v_start_date + v_auction_period,
+      'YYYY-MM-DD HH24:MI'
+   );
+exception
+   when no_data_found then
+      return '-';
+   when others then
+      return '-';
+end;
 /
 -- Function FN_GET_AUCTION_DUE_DATE이(가) 컴파일되었습니다.
 
 
 -- ○ 4. 회원 잔여 머니 조회 함수
-CREATE OR REPLACE FUNCTION FN_GET_USER_MONEY_BALANCE
-(P_USER_ID IN USERS.USER_ID%TYPE
-)
-RETURN NUMBER
-IS
-    V_MONEY1    NUMBER;
-    V_MONEY2    NUMBER;
-BEGIN
+create or replace function fn_get_user_money_balance (
+   p_user_id in users.user_id%type
+) return number is
+   v_money1 number;
+   v_money2 number;
+begin
 
 -- 머니입출금이력테이블에서 아이디로 조회해서 금액 계산한 값 +
 -- 머니 충전 이력 테이블에서 아이디로 조회해서 금액 계산한 값
 
-    SELECT NVL(SUM(AMOUNT), 0) INTO V_MONEY1
-    FROM MONEY_TRANSACTION_HISTORY
-    WHERE USER_ID = P_USER_ID;
-    
-    SELECT NVL(SUM(CHARGE_AMOUNT),0) INTO V_MONEY2
-    FROM MONEY_CHARGE_HISTORY
-    WHERE USER_ID = P_USER_ID;
-    
-    RETURN V_MONEY1+V_MONEY2;
-    
-    EXCEPTION 
-        WHEN OTHERS THEN
-            RETURN -1;
-END;
+   select nvl(
+      sum(amount),
+      0
+   )
+     into v_money1
+     from money_transaction_history
+    where user_id = p_user_id;
+
+   select nvl(
+      sum(charge_amount),
+      0
+   )
+     into v_money2
+     from money_charge_history
+    where user_id = p_user_id;
+
+   return v_money1 + v_money2;
+exception
+   when others then
+      return -1;
+end;
 --Function FN_GET_USER_MONEY_BALANCE이(가) 컴파일되었습니다.
 
 
@@ -251,205 +325,348 @@ END;
 -- 회원 탈퇴 클릭 시, 회원 상세 정보 테이블에 있는 정보를 회원 탈퇴 테이블에 INSERT, 회원 계정 이벤트 이력에 INSERT
 -- 진행 중인 경매가 있는지 확인, 진행 중인 입찰이 있는지 확인, 진행중인 낙찰이 있는지 확인, 잔여머니가 있는지 확인
 -- 
-CREATE OR REPLACE PROCEDURE PRC_USER_DELETE
-( P_USER_ID IN USERS.USER_ID%TYPE
-)
-IS
+create or replace procedure prc_user_delete (
+   p_user_id in users.user_id%type
+) is
      -- 커서 정의 (경매테이블)
-     CURSOR CUR_USER_AUCTION IS
-            SELECT AR.AUCTION_ID
-            FROM AUCTION_REGISTRATION AR
-                JOIN PRODUCT P 
-            ON AR.PRODUCT_ID = P.PRODUCT_ID
-            WHERE P.USER_ID = P_USER_ID;
-            
-    CURSOR CUR_USER_BID IS
-        SELECT AR.AUCTION_ID
-        FROM AUCTION_REGISTRATION AR
-            JOIN AUCTION_BID_PARTICIPATION ABP
-            ON ABP.AUCTION_ID = AR.AUCTION_ID
-        WHERE ABP.USER_ID = P_USER_ID;
+   cursor cur_user_auction is
+   select ar.auction_id
+     from auction_registration ar
+     join product p
+   on ar.product_id = p.product_id
+    where p.user_id = p_user_id;
 
-    V_AUCTION_ID AUCTION_REGISTRATION.AUCTION_ID%TYPE;
-    V_BID_RESULT_ID AUCTION_WINNING_RESULT.BID_RESULT_ID%TYPE;
-    V_HAS_BID NUMBER;
-    V_HAS_BID_2 NUMBER;
-    V_PENALTY_SCORE    NUMBER;
-    V_PENALTY_ID   PENALTY_HISTORY.PENALTY_ID%TYPE;
-    V_NAME USER_PROFILE.USER_NAME%TYPE;
-    V_SSN USER_PROFILE.USER_SSN%TYPE; 
-    V_PHONE USER_PROFILE.USER_PHONE%TYPE; 
-    V_EMAIL USER_PROFILE.USER_EMAIL%TYPE;
-    V_ZIPCODE USER_PROFILE.USER_ZIPCODE%TYPE; 
-    V_ADDRESS USER_PROFILE.USER_ADDRESS%TYPE;
-    V_DETAIL USER_PROFILE.USER_ADDRESS_DETAIL%TYPE;
-    
-    ERR_HAS_ACTIVE_AUCTION EXCEPTION;
-    ERR_HAS_ACTIVE_BID EXCEPTION;
-    ERR_HAS_ACTIVE_WINNING EXCEPTION;
-    ERR_HAS_MONEY EXCEPTION;
-    ERR_HAS_PENALTY EXCEPTION;
-    
-BEGIN
+   cursor cur_user_bid is
+   select ar.auction_id
+     from auction_registration ar
+     join auction_bid_participation abp
+   on abp.auction_id = ar.auction_id
+    where abp.user_id = p_user_id;
+
+   v_auction_id    auction_registration.auction_id%type;
+   v_bid_result_id auction_winning_result.bid_result_id%type;
+   v_has_bid       number;
+   v_has_bid_2     number;
+   v_penalty_score number;
+   v_penalty_id    penalty_history.penalty_id%type;
+   v_name          user_profile.user_name%type;
+   v_ssn           user_profile.user_ssn%type;
+   v_phone         user_profile.user_phone%type;
+   v_email         user_profile.user_email%type;
+   v_zipcode       user_profile.user_zipcode%type;
+   v_address       user_profile.user_address%type;
+   v_detail        user_profile.user_address_detail%type;
+   err_has_active_auction exception;
+   err_has_active_bid exception;
+   err_has_active_winning exception;
+   err_has_money exception;
+   err_has_penalty exception;
+begin
     -- 진행 중인 경매 검사
-    
-        OPEN CUR_USER_AUCTION;
-        LOOP
-            FETCH CUR_USER_AUCTION INTO V_AUCTION_ID;
-            EXIT WHEN CUR_USER_AUCTION%NOTFOUND;
-            
-            IF(FN_IS_AUCTION_FINISHED(V_AUCTION_ID) = 0) THEN
-                CLOSE CUR_USER_AUCTION;
-                RAISE ERR_HAS_ACTIVE_AUCTION;
-            END IF;
-        END LOOP;
-        CLOSE CUR_USER_AUCTION;
+
+   open cur_user_auction;
+   loop
+      fetch cur_user_auction into v_auction_id;
+      exit when cur_user_auction%notfound;
+      if ( fn_is_auction_finished(v_auction_id) = 0 ) then
+         close cur_user_auction;
+         raise err_has_active_auction;
+      end if;
+   end loop;
+   close cur_user_auction;
         
     -- 진행 중인 입찰 검사
         -- 입찰 참여 테이블에서 USER_ID로 조회해서 나온 경매코드들로
         -- 그 경매코드가 진행중인지 검사
-        
-        OPEN CUR_USER_BID;
-        LOOP
-            FETCH CUR_USER_BID INTO V_AUCTION_ID;
-            EXIT WHEN CUR_USER_BID%NOTFOUND;
-            
-            IF(FN_IS_AUCTION_FINISHED(V_AUCTION_ID) = 0) THEN
-                CLOSE CUR_USER_BID;
-                RAISE ERR_HAS_ACTIVE_BID;
-            END IF;
-        END LOOP;
-         CLOSE CUR_USER_BID;
+
+   open cur_user_bid;
+   loop
+      fetch cur_user_bid into v_auction_id;
+      exit when cur_user_bid%notfound;
+      if ( fn_is_auction_finished(v_auction_id) = 0 ) then
+         close cur_user_bid;
+         raise err_has_active_bid;
+      end if;
+   end loop;
+   close cur_user_bid;
 
         -- 진행 중인 낙찰 검사
-            SELECT COUNT(*) INTO V_HAS_BID
-            FROM AUCTION_WINNING_RESULT AWR
-            JOIN AUCTION_BID_PARTICIPATION ABP ON AWR.BID_ID = ABP.BID_ID
-            WHERE ABP.USER_ID = P_USER_ID
-            AND AWR.BID_RESULT_ID NOT IN (SELECT BID_RESULT_ID FROM BID_FAILURE_HISTORY) -- 실패 이력 없고
-            AND AWR.BID_RESULT_ID NOT IN ( -- 거래 완료 이력도 없는 것 카운트
-                SELECT BID_RESULT_ID FROM AUCTION_WINNING_PAYMENT AWP
-                JOIN DELIVERY_COMPLETED DC ON AWP.PAYMENT_ID = DC.PAYMENT_ID
-                JOIN PURCHASE_CONFIRM_HISTORY PCH ON DC.SHIPPING_ID = PCH.SHIPPING_ID
-                JOIN TRANSACTION_COMPLETED TC ON PCH.PURCHASE_CONFIRM_ID = TC.PURCHASE_CONFIRM_ID);
+   select count(*)
+     into v_has_bid
+     from auction_winning_result awr
+     join auction_bid_participation abp
+   on awr.bid_id = abp.bid_id
+    where abp.user_id = p_user_id
+      and awr.bid_result_id not in (
+      select bid_result_id
+        from bid_failure_history
+   ) -- 실패 이력 없고
+      and awr.bid_result_id not in ( -- 거래 완료 이력도 없는 것 카운트
+      select bid_result_id
+        from auction_winning_payment awp
+        join delivery_completed dc
+      on awp.payment_id = dc.payment_id
+        join purchase_confirm_history pch
+      on dc.shipping_id = pch.shipping_id
+        join transaction_completed tc
+      on pch.purchase_confirm_id = tc.purchase_confirm_id
+   );
 
-            IF V_HAS_BID > 0 THEN
-                RAISE ERR_HAS_ACTIVE_WINNING;
-            END IF;
+   if v_has_bid > 0 then
+      raise err_has_active_winning;
+   end if;
         
     -- 잔여머니가 있는지
-        IF (FN_GET_USER_MONEY_BALANCE(P_USER_ID)>0) THEN
-            RAISE ERR_HAS_MONEY;
-        END IF;
+   if ( fn_get_user_money_balance(p_user_id) > 0 ) then
+      raise err_has_money;
+   end if;
     
     -- 회원의 상태가 영구정지 상태인지
-        SELECT NVL(SUM(PENALTY_SCORE), 0) INTO V_PENALTY_SCORE
-        FROM PENALTY_HISTORY
-        WHERE USER_ID = P_USER_ID
-        AND PENALTY_ID NOT IN (SELECT PENALTY_ID FROM PENALTY_CANCEL);
+   select nvl(
+      sum(penalty_score),
+      0
+   )
+     into v_penalty_score
+     from penalty_history
+    where user_id = p_user_id
+      and penalty_id not in (
+      select penalty_id
+        from penalty_cancel
+   );
 
-        IF V_PENALTY_SCORE >= 4 THEN
-            RAISE ERR_HAS_PENALTY;
-        END IF;
+   if v_penalty_score >= 4 then
+      raise err_has_penalty;
+   end if;
 
     
     -- USER_PROFILE 조회
-        SELECT USER_NAME, USER_SSN, USER_EMAIL, USER_PHONE
-        , USER_ZIPCODE, USER_ADDRESS, USER_ADDRESS_DETAIL 
-        INTO V_NAME, V_SSN, V_EMAIL, V_PHONE, V_ZIPCODE, V_ADDRESS, V_DETAIL
-        FROM USER_PROFILE
-        WHERE USER_ID = P_USER_ID;
+   select user_name,
+          user_ssn,
+          user_email,
+          user_phone,
+          user_zipcode,
+          user_address,
+          user_address_detail
+     into
+      v_name,
+      v_ssn,
+      v_email,
+      v_phone,
+      v_zipcode,
+      v_address,
+      v_detail
+     from user_profile
+    where user_id = p_user_id;
 
     -- DELETED_USER INSERT
-        INSERT INTO DELETED_USER(USER_ID, USER_NAME, USER_SSN, USER_EMAIL, USER_PHONE, USER_ZIPCODE, USER_ADDRESS, USER_ADDRESS_DETAIL)
-        VALUES(P_USER_ID, V_NAME, V_SSN, V_EMAIL, V_PHONE, V_ZIPCODE, V_ADDRESS, V_DETAIL);
+   insert into deleted_user (
+      user_id,
+      user_name,
+      user_ssn,
+      user_email,
+      user_phone,
+      user_zipcode,
+      user_address,
+      user_address_detail
+   ) values ( p_user_id,
+              v_name,
+              v_ssn,
+              v_email,
+              v_phone,
+              v_zipcode,
+              v_address,
+              v_detail );
     
     -- USER_PROFILE DELETE
-        DELETE
-        FROM USER_PROFILE
-        WHERE USER_ID = P_USER_ID;
+   delete from user_profile
+    where user_id = p_user_id;
 
     -- ACCOUNT_EVENT_HISTORY INSERT
-        INSERT INTO ACCOUNT_EVENT_HISTORY
-        VALUES(ACCOUNT_EVENT_HISTORY_SEQ.NEXTVAL, P_USER_ID, 2, SYSDATE);
-    
-    EXCEPTION
-        WHEN ERR_HAS_ACTIVE_AUCTION THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20016, '진행 중인 경매가 존재합니다.');
-        WHEN ERR_HAS_ACTIVE_BID THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20026, '진행 중인 입찰이 존재합니다.');
-        WHEN ERR_HAS_ACTIVE_WINNING THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20027, '진행 중인 낙찰이 존재합니다.');
-        WHEN ERR_HAS_PENALTY THEN
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20028, '영구정지 회원은 탈퇴가 불가능합니다.');
-        WHEN ERR_HAS_MONEY THEN   
-            ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20029, '잔여머니가 존재합니다.');
-    
-END;
+   insert into account_event_history values ( account_event_history_seq.nextval,
+                                              p_user_id,
+                                              2,
+                                              sysdate );
+
+exception
+   when err_has_active_auction then
+      rollback;
+      raise_application_error(
+         -20016,
+         '진행 중인 경매가 존재합니다.'
+      );
+   when err_has_active_bid then
+      rollback;
+      raise_application_error(
+         -20026,
+         '진행 중인 입찰이 존재합니다.'
+      );
+   when err_has_active_winning then
+      rollback;
+      raise_application_error(
+         -20027,
+         '진행 중인 낙찰이 존재합니다.'
+      );
+   when err_has_penalty then
+      rollback;
+      raise_application_error(
+         -20028,
+         '영구정지 회원은 탈퇴가 불가능합니다.'
+      );
+   when err_has_money then
+      rollback;
+      raise_application_error(
+         -20029,
+         '잔여머니가 존재합니다.'
+      );
+end;
 /
 
 
 -- 뷰 목록 ======================================================================
 
 -- 1. 회원 정보 조회 뷰 VW_USER_INFO
-CREATE OR REPLACE VIEW VW_USER_INFO
-AS
-SELECT U.USER_ID, UA.USER_LOGIN_ID, UA.USER_PASSWORD
-, UP.USER_NAME, UP.USER_SSN, UP.USER_EMAIL, UP.USER_PHONE
-, UP.USER_ZIPCODE, UP.USER_ADDRESS, UP.USER_ADDRESS_DETAIL
-, FN_GET_USER_MONEY_BALANCE(U.USER_ID) AS TOTAL_MONEY
-FROM USERS U JOIN USER_ACCOUNT UA
-ON U.USER_ID = UA.USER_ID
-JOIN USER_PROFILE UP
-ON UA.USER_ID = UP.USER_ID;
 
-SELECT *
-FROM VW_USER_INFO;
+create or replace view vw_user_info as
+   select u.user_id,
+          ua.user_login_id,
+          ua.user_password,
+          up.user_name,
+          up.user_ssn,
+          up.user_email,
+          up.user_phone,
+          up.user_zipcode,
+          up.user_address,
+          up.user_address_detail,
+          fn_get_user_money_balance(u.user_id) as total_money
+     from users u
+     join user_account ua
+   on u.user_id = ua.user_id
+     join user_profile up
+   on ua.user_id = up.user_id;
+
+select *
+  from vw_user_info;
 /
 
 -- 2. 상품 통합 조회  VW_PRODUCT_LIST
-CREATE OR REPLACE VIEW VW_PRODUCT_LIST
-AS
-SELECT 
-    P.PRODUCT_ID, P.USER_ID, P.MANUFACTURER_ID, PM.MANUFACTURER_NAME, PM.PRODUCT_COUNTRY_ID, PC.PRODUCT_COUNTRY_NAME
-    , P.PRODUCT_GRADE_ID, PG.PRODUCT_GRADE_NAME, P.PRODUCT_GENRE_ID, PGR.PRODUCT_GENRE_NAME, P.PRODUCT_SIZE_ID, PS.PRODUCT_SIZE_NAME
-    , P.PRODUCT_RELEASE_NAME, P.PRODUCT_ALIAS, P.WORK_NAME, P.CHARACTER_NAME, P.PURCHASE_DATETIME
-    ,CASE WHEN P.IS_OPENED = 0 THEN '개봉' ELSE '미개봉' END AS IS_OPENED
-    ,CASE WHEN P.IS_PARTS_MISSING = 0 THEN '정상' ELSE '누락' END AS IS_PARTS_MISSING
-    ,P.DESCRIPTIONS
-    ,P.IMAGE_PATH_1
-    ,P.IMAGE_PATH_2
-    ,P.IMAGE_PATH_3
-    ,MAX(DECODE(PI.IMAGE_ORDER, 1, PI.FILE_PATH)) AS IMAGE_PATH_4
-    ,MAX(DECODE(PI.IMAGE_ORDER, 2, PI.FILE_PATH)) AS IMAGE_PATH_5
-    ,MAX(DECODE(PI.IMAGE_ORDER, 3, PI.FILE_PATH)) AS IMAGE_PATH_6
-    ,MAX(DECODE(PI.IMAGE_ORDER, 4, PI.FILE_PATH)) AS IMAGE_PATH_7
-    ,MAX(DECODE(PI.IMAGE_ORDER, 5, PI.FILE_PATH)) AS IMAGE_PATH_8
-    ,MAX(DECODE(PI.IMAGE_ORDER, 6, PI.FILE_PATH)) AS IMAGE_PATH_9
-    ,MAX(DECODE(PI.IMAGE_ORDER, 7, PI.FILE_PATH)) AS IMAGE_PATH_10
-    ,CASE WHEN P.IS_PUBLIC = 0 THEN '비공개' ELSE '공개' END AS IS_PUBLIC
-    ,TO_CHAR(P.CREATED_AT, 'YYYY-MM-DD') AS CREATED_AT
-FROM PRODUCT P
-    JOIN PRODUCT_MANUFACTURER PM ON P.MANUFACTURER_ID = PM.MANUFACTURER_ID
-    JOIN PRODUCT_COUNTRY PC      ON PM.PRODUCT_COUNTRY_ID = PC.PRODUCT_COUNTRY_ID
-    JOIN PRODUCT_GRADE PG        ON P.PRODUCT_GRADE_ID = PG.PRODUCT_GRADE_ID
-    JOIN PRODUCT_GENRE PGR       ON P.PRODUCT_GENRE_ID = PGR.PRODUCT_GENRE_ID
-    JOIN PRODUCT_SIZE PS         ON P.PRODUCT_SIZE_ID = PS.PRODUCT_SIZE_ID
-    LEFT JOIN PRODUCT_IMAGE PI   ON P.PRODUCT_ID = PI.PRODUCT_ID
-GROUP BY 
-    P.PRODUCT_ID, P.USER_ID,
-    P.MANUFACTURER_ID, PM.MANUFACTURER_NAME, PM.PRODUCT_COUNTRY_ID, PC.PRODUCT_COUNTRY_NAME, 
-    P.PRODUCT_GRADE_ID, PG.PRODUCT_GRADE_NAME,
-    P.PRODUCT_GENRE_ID, PGR.PRODUCT_GENRE_NAME, 
-    P.PRODUCT_SIZE_ID, PS.PRODUCT_SIZE_NAME, 
-    P.PRODUCT_RELEASE_NAME, P.PRODUCT_ALIAS, P.WORK_NAME, P.CHARACTER_NAME,
-    P.PURCHASE_DATETIME, P.IS_OPENED, P.IS_PARTS_MISSING, P.DESCRIPTIONS,
-    P.IMAGE_PATH_1, P.IMAGE_PATH_2, P.IMAGE_PATH_3, P.IS_PUBLIC, P.CREATED_AT;
+
+create or replace view vw_product_list as
+   select p.product_id,
+          p.user_id,
+          p.manufacturer_id,
+          pm.manufacturer_name,
+          pm.product_country_id,
+          pc.product_country_name,
+          p.product_grade_id,
+          pg.product_grade_name,
+          p.product_genre_id,
+          pgr.product_genre_name,
+          p.product_size_id,
+          ps.product_size_name,
+          p.product_release_name,
+          p.product_alias,
+          p.work_name,
+          p.character_name,
+          p.purchase_datetime,
+          case
+             when p.is_opened = 0 then
+                '개봉'
+             else
+                '미개봉'
+          end as is_opened,
+          case
+             when p.is_parts_missing = 0 then
+                '정상'
+             else
+                '누락'
+          end as is_parts_missing,
+          p.descriptions,
+          p.image_path_1,
+          p.image_path_2,
+          p.image_path_3,
+          max(decode(
+             pi.image_order,
+             1,
+             pi.file_path
+          )) as image_path_4,
+          max(decode(
+             pi.image_order,
+             2,
+             pi.file_path
+          )) as image_path_5,
+          max(decode(
+             pi.image_order,
+             3,
+             pi.file_path
+          )) as image_path_6,
+          max(decode(
+             pi.image_order,
+             4,
+             pi.file_path
+          )) as image_path_7,
+          max(decode(
+             pi.image_order,
+             5,
+             pi.file_path
+          )) as image_path_8,
+          max(decode(
+             pi.image_order,
+             6,
+             pi.file_path
+          )) as image_path_9,
+          max(decode(
+             pi.image_order,
+             7,
+             pi.file_path
+          )) as image_path_10,
+          case
+             when p.is_public = 0 then
+                '비공개'
+             else
+                '공개'
+          end as is_public,
+          to_char(
+             p.created_at,
+             'YYYY-MM-DD'
+          ) as created_at
+     from product p
+     join product_manufacturer pm
+   on p.manufacturer_id = pm.manufacturer_id
+     join product_country pc
+   on pm.product_country_id = pc.product_country_id
+     join product_grade pg
+   on p.product_grade_id = pg.product_grade_id
+     join product_genre pgr
+   on p.product_genre_id = pgr.product_genre_id
+     join product_size ps
+   on p.product_size_id = ps.product_size_id
+     left join product_image pi
+   on p.product_id = pi.product_id
+    group by p.product_id,
+             p.user_id,
+             p.manufacturer_id,
+             pm.manufacturer_name,
+             pm.product_country_id,
+             pc.product_country_name,
+             p.product_grade_id,
+             pg.product_grade_name,
+             p.product_genre_id,
+             pgr.product_genre_name,
+             p.product_size_id,
+             ps.product_size_name,
+             p.product_release_name,
+             p.product_alias,
+             p.work_name,
+             p.character_name,
+             p.purchase_datetime,
+             p.is_opened,
+             p.is_parts_missing,
+             p.descriptions,
+             p.image_path_1,
+             p.image_path_2,
+             p.image_path_3,
+             p.is_public,
+             p.created_at;
     
     
 
@@ -489,34 +706,68 @@ FROM AUCTION_REGISTRATION AR
 ;
 */
 
+create or replace view vw_auction_list as
+   with bid_rank as (
+      select auction_id,
+             bid_price,
+             row_number()
+             over(partition by auction_id
+                  order by bid_price desc,
+                           bid_time asc
+             ) as rk
+        from auction_bid_participation
+   )
+   select ar.auction_id,
+          ar.auction_title,
+          ar.auction_content,
+          ar.start_price,
+          ar.auction_period_id,
+          ap.auction_period_name,
+          to_char(
+             ar.created_at,
+             'YYYY-MM-DD HH24:MI'
+          ) as auction_start_date,
+          fn_get_auction_due_date(ar.auction_id) as auction_end_date,
+          case
+             when fn_is_auction_finished(ar.auction_id) = 0 then
+                '경매 진행중'
+             else
+                '경매 마감'
+          end as is_finished,
+          vpi.product_id,
+          vpi.product_release_name,
+          vpi.product_alias,
+          vpi.manufacturer_name,
+          vpi.product_grade_name,
+          vpi.image_path_1,
+          nvl(
+             (
+                select bid_price
+                  from bid_rank
+                 where auction_id = ar.auction_id
+                   and rk = 2
+             ),
+             ar.start_price
+          ) as bid_current_price,
+          (
+             select bid_price
+               from bid_rank
+              where auction_id = ar.auction_id
+                and rk = 1
+          ) as bid_max_price,
+          (
+             select count(*)
+               from bid_rank
+              where auction_id = ar.auction_id
+          ) as bid_count
+     from auction_registration ar
+     join vw_product_list vpi
+   on ar.product_id = vpi.product_id
+     join auction_period ap
+   on ar.auction_period_id = ap.auction_period_id;
 
-CREATE OR REPLACE VIEW VW_AUCTION_LIST
-AS
-WITH BID_RANK AS (
-    SELECT 
-        AUCTION_ID, BID_PRICE,
-        ROW_NUMBER() OVER (PARTITION BY AUCTION_ID ORDER BY BID_PRICE DESC, BID_TIME ASC) AS RK
-    FROM AUCTION_BID_PARTICIPATION
-)
-SELECT 
-    AR.AUCTION_ID, AR.AUCTION_TITLE, AR.AUCTION_CONTENT, AR.START_PRICE,
-    AR.AUCTION_PERIOD_ID, AP.AUCTION_PERIOD_NAME,
-    TO_CHAR(AR.CREATED_AT, 'YYYY-MM-DD HH24:MI') AS AUCTION_START_DATE,
-    FN_GET_AUCTION_DUE_DATE(AR.AUCTION_ID) AS AUCTION_END_DATE,
-    CASE WHEN FN_IS_AUCTION_FINISHED(AR.AUCTION_ID) = 0 THEN '경매 진행중'
-         ELSE '경매 마감' 
-    END AS IS_FINISHED,
-    VPI.PRODUCT_ID, VPI.PRODUCT_RELEASE_NAME, VPI.PRODUCT_ALIAS,
-    VPI.MANUFACTURER_NAME, VPI.PRODUCT_GRADE_NAME, VPI.IMAGE_PATH_1,
-    NVL((SELECT BID_PRICE FROM BID_RANK WHERE AUCTION_ID = AR.AUCTION_ID AND RK = 2), AR.START_PRICE) AS BID_CURRENT_PRICE,
-    (SELECT BID_PRICE FROM BID_RANK WHERE AUCTION_ID = AR.AUCTION_ID AND RK = 1) AS BID_MAX_PRICE,
-    (SELECT COUNT(*) FROM BID_RANK WHERE AUCTION_ID = AR.AUCTION_ID) AS BID_COUNT
-FROM AUCTION_REGISTRATION AR
-JOIN VW_PRODUCT_LIST VPI ON AR.PRODUCT_ID = VPI.PRODUCT_ID
-JOIN AUCTION_PERIOD AP   ON AR.AUCTION_PERIOD_ID = AP.AUCTION_PERIOD_ID;
-
-SELECT *
-FROM VW_AUCTION_LIST;
+select *
+  from vw_auction_list;
 
 
 
