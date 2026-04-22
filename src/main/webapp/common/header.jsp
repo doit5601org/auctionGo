@@ -14,7 +14,7 @@
 	<style>
 /* 메뉴 호버 효과 */
 .hover-primary:hover {
-    color: #0d6efd !important;
+    color: #120e63 !important;
     text-decoration: underline;
     text-underline-offset: 8px;
 }
@@ -24,15 +24,43 @@
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+.btn-primary{
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+.page-link{
+	color: #120e63 !important;
+}
+.page-item.active .page-link{
+	background-color: #120e63 !important;
+	color: #fff !important;
+	border-color: #120e63 !important;
+} 
+
+.bgColor{background-color: #120e63;}
+.txtColor{color: #120e63;}
+
+.btn-outline-primary{
+	color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+.btn-outline-primary:hover {
+background-color: #120e63 !important;
+color: #fff !important;
+}
+
+
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
     <div class="container-fluid px-lg-5">
-        <a class="navbar-brand fw-bold text-secondary fs-3" href="${pageContext.request.contextPath}/common/main.jsp">
-            경매나라
-        </a>
+    	<h1>
+	        <a class="navbar-brand fw-bold text-secondary fs-3" href="${pageContext.request.contextPath}/common/main.jsp">
+				<img src="${pageContext.request.contextPath}/images/logo.png" alt="로고이미지" style="width: 200px;" />
+	        </a>
+    	</h1>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -41,16 +69,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li class="nav-item px-3">
-                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="productList.do">일반상품</a>
+                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/productList.jsp">컬렉션</a>
                 </li>
                 <li class="nav-item px-3">
-                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="auctionList.do">경매물품</a>
+                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/auctionList.jsp">경매</a>
                 </li>
             </ul>
 
             <div class="d-flex align-items-center justify-content-end" style="flex-basis: 70%; min-width: 800px;">
                 
-                <form action="productSearch.do" method="get" class="flex-grow-1 me-4" style="max-width: 700px;">
+<!--                 <form action="productSearch.do" method="get" class="flex-grow-1 me-4" style="max-width: 700px;">
                     <div class="input-group input-group-lg"> 
                     	<select class="form-select border-secondary-subtle" style=" width: 150px; flex: none; font-size: 1rem;">
                             <option value="name" selected>상품명 검색</option>
@@ -62,7 +90,7 @@
                              검색
                         </button>
                     </div>
-                </form>
+                </form> -->
 
                 <ul class="navbar-nav align-items-center flex-row" style="gap: 20px; flex-shrink: 0;">
                     <%-- <c:choose>
@@ -78,7 +106,7 @@
                             <li class="nav-item text-end border-end pe-3">
                                 <div class="d-flex flex-column" style="line-height: 1.2;">
                                     <span class="text-muted" style="font-size: 0.75rem;">보유머니</span>
-                                    <span class="text-primary fw-bold fs-5">50,000<small class="text-dark fw-normal ms-1" style="font-size: 0.9rem;">원</small></span>
+                                    <span class="txtColor fw-bold fs-5">50,000<small class="text-dark fw-normal ms-1" style="font-size: 0.9rem;">원</small></span>
                                 </div>
                             </li>
                             <li class="nav-item">

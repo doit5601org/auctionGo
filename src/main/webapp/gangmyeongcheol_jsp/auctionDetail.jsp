@@ -23,7 +23,7 @@
 </style>
 </head>
 <body>
-
+<jsp:include page="/common/header.jsp"></jsp:include>
 <%-- 네비게이션 바 --%>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
@@ -185,7 +185,7 @@
         </div>
     </div>
 </div>
-
+<jsp:include page="/common/footer.jsp"></jsp:include>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function changeImg(el) {

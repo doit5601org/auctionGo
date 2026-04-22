@@ -20,7 +20,7 @@
 		.stat-card:hover {
 			transform: translateY(-5px);
 			box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
-			border-color: #0d6efd;
+			border-color: #120e63;
 		}
 		.icon-box {
 			width: 50px; height: 50px;
@@ -79,18 +79,18 @@
 
 				<div class="row g-3">
 					<div class="col-md-6" onclick="location.href='${pageContext.request.contextPath}/'">
-						<div class="card stat-card shadow-sm p-4 bg-white border-start border-4 border-primary">
+						<div class="card stat-card shadow-sm p-4 bg-white border-start border-2 border-primary" style="border-color: #120e63 !important;">
 							<div class="d-flex justify-content-between align-items-center">
 								<div>
 									<small class="text-muted d-block mb-1">사용 가능한 보유머니</small>
-									<h3 class="fw-bold text-primary mb-0">50,000원</h3>
+									<h3 class="fw-bold txtColor mb-0">50,000원</h3>
 								</div>
 								<div class="btn btn-primary rounded-pill px-3">충전</div>
 							</div>
 						</div>
 					</div>
 					<div class="col-md-6" onclick="location.href='${pageContext.request.contextPath}/user/my/penaltyHistory.jsp'">
-						<div class="card stat-card shadow-sm p-4 bg-white border-start border-4 border-danger">
+						<div class="card stat-card shadow-sm p-4 bg-white border-start border-2 border-danger">
 							<div class="d-flex justify-content-between align-items-center">
 								<div>
 									<small class="text-muted d-block mb-1">나의 패널티 점수</small>
