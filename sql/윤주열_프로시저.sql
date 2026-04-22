@@ -4,12 +4,12 @@ FROM TAB;
 
 -- 경매 등록 프로시저
 CREATE OR REPLACE PROCEDURE PRC_AUCTION_CREATE(
-    P_USER_ID           IN NUMBER,              --회원 고유키
-    P_PRODUCT_ID        IN NUMBER,              --상품코드
-    P_AUCTION_TITLE     IN VARCHAR2,            --경매제목
-    P_CONTENT           IN VARCHAR2,            --경매 글
-    P_START_PRICE       IN NUMBER,              --시작가
-    P_PERIOD_CODE       IN NUMBER               --경매기간
+    P_USER_ID           NUMBER,              --회원 고유키
+    P_PRODUCT_ID        NUMBER,              --상품코드
+    P_AUCTION_TITLE     VARCHAR2,            --경매제목
+    P_CONTENT           VARCHAR2,            --경매 글
+    P_START_PRICE       NUMBER,              --시작가
+    P_PERIOD_CODE       NUMBER               --경매기간
 )
 IS
     -- 에러 번호 변수 선언
@@ -55,6 +55,219 @@ EXCEPTION
             RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다');
         END IF;
 END;
+
+
+-- 경매 취소 프로시저
+CREATE OR REPLACE PROCEDURE PRC_AUCTION_CANCEL(
+    P_AUCTION_ID    NUMBER,
+    P_USER_ID       NUMBER,
+    P_CANCEL_REASON VARCHAR2
+)
+IS
+    V_PENALTY_ID      NUMBER;
+    V_TOTAL_SCORE     NUMBER := 0;
+    V_END_DATE        DATE;        -- 정지 종료일
+    
+    CURSOR BIDDER_LIST IS
+        SELECT DISTINCT USER_ID FROM AUCTION_BID_PARTICIPATION WHERE AUCTION_ID = P_AUCTION_ID;
+BEGIN
+    -- 1. 입찰자 전원 보증금 환급 
+    FOR R IN BIDDER_LIST LOOP
+        INSERT INTO MONEY_TRANSACTION_HISTORY (
+            MONEY_ID, USER_ID, MONEY_TYPE_ID, AUCTION_ID, AMOUNT, CREATED_AT
+        ) VALUES (
+            MONEY_TRANSACTION_SEQ.NEXTVAL, R.USER_ID, 5, P_AUCTION_ID, 30000, SYSDATE
+        );
+    END LOOP;
+
+    -- 2. 판매자 보증금 몰수 기록
+    INSERT INTO MONEY_TRANSACTION_HISTORY (
+        MONEY_ID, USER_ID, MONEY_TYPE_ID, AUCTION_ID, AMOUNT, CREATED_AT
+    ) VALUES (
+        MONEY_TRANSACTION_SEQ.NEXTVAL, P_USER_ID, 7, P_AUCTION_ID, 0, SYSDATE
+    );
+    
+    -- 3. 패널티 점수 계산 로직 (누적 점수 - 취소 점수)
+    SELECT (
+        (SELECT NVL(SUM(PENALTY_SCORE), 0) FROM PENALTY_HISTORY WHERE USER_ID = P_USER_ID) -
+        (SELECT NVL(SUM(PH.PENALTY_SCORE), 0) 
+         FROM PENALTY_CANCEL PC 
+         JOIN PENALTY_HISTORY PH ON PC.PENALTY_ID = PH.PENALTY_ID 
+         WHERE PH.USER_ID = P_USER_ID)
+    ) INTO V_TOTAL_SCORE FROM DUAL;
+
+    V_TOTAL_SCORE := V_TOTAL_SCORE + 1;
+
+    -- 4. 패널티 단계별 정지 종료일 설정
+    IF V_TOTAL_SCORE = 1 THEN
+        V_END_DATE := SYSDATE; 
+    ELSIF V_TOTAL_SCORE = 2 THEN
+        V_END_DATE := SYSDATE + 7;
+    ELSIF V_TOTAL_SCORE = 3 THEN
+        V_END_DATE := SYSDATE + 30;
+    ELSE
+        V_END_DATE := TO_DATE('9999-12-31', 'YYYY-MM-DD');
+    END IF;
+
+    -- 5. 패널티 이력 INSERT
+    V_PENALTY_ID := PENALTY_SEQ.NEXTVAL;
+    INSERT INTO PENALTY_HISTORY (
+        PENALTY_ID, USER_ID, PENALTY_TYPE_ID, ADMIN_ACCOUNT_ID, PENALTY_SCORE, CREATED_AT
+    ) VALUES (
+        V_PENALTY_ID, P_USER_ID, 1, NULL, 1, SYSDATE 
+    );
+
+    -- 6. 패널티 상태 기록
+    INSERT INTO PENALTY_STATUS (
+        PENALTY_STATUS_ID, PENALTY_ID, PENALTY_START_DATE, PENALTY_END_DATE
+    ) VALUES (
+        PENALTY_STATUS_SEQ.NEXTVAL, V_PENALTY_ID, SYSDATE, V_END_DATE
+    );
+
+    -- 7. 경매 취소 이력 기록
+    INSERT INTO AUCTION_CANCEL_HISTORY (
+        AUCTION_CANCEL_ID, AUCTION_ID, CANCEL_REASON, CANCEL_AT
+    ) VALUES (
+        AUCTION_CANCEL_SEQ.NEXTVAL, P_AUCTION_ID, P_CANCEL_REASON, SYSDATE
+    );
+
+    -- COMMIT; 
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        
+        IF SQLCODE BETWEEN -20999 AND -20000 THEN
+            RAISE; -- 이미 정의된 커스텀 에러는 그대로 통과
+        ELSE
+            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다');
+        END IF;
+END;
+
+
+
+
+
+
+--회원 패널티 누적 점수 조회 함수
+CREATE OR REPLACE FUNCTION FN_GET_USER_PENALTY_SCORE (
+    P_USER_ID NUMBER
+) 
+RETURN NUMBER
+IS
+    -- 총 점수 0으로 초기화
+    V_TOTAL_SCORE       NUMBER := 0;            -- 총 패널티 누적 점수
+    ERR_UNKNOWN         CONSTANT NUMBER := -20009;
+    
+BEGIN
+
+    -- 전체 누적 점수에서 취소된 점수를 뺀 값을 계산
+    SELECT (
+        (SELECT NVL(SUM(PENALTY_SCORE), 0) 
+         FROM PENALTY_HISTORY 
+         WHERE USER_ID = P_USER_ID) 
+        - 
+        (SELECT NVL(SUM(PH.PENALTY_SCORE), 0) 
+         FROM PENALTY_CANCEL PC 
+         JOIN PENALTY_HISTORY PH ON PC.PENALTY_ID = PH.PENALTY_ID 
+         WHERE PH.USER_ID = P_USER_ID)
+    ) INTO V_TOTAL_SCORE
+    FROM DUAL;
+
+    -- 패널티 누적 점수 반환
+    RETURN V_TOTAL_SCORE;
+EXCEPTION
+     WHEN OTHERS THEN
+        RETURN 0;
+        
+        IF SQLCODE BETWEEN -20999 AND -20000 THEN
+            RAISE; -- 이미 정의된 커스텀 에러는 그대로 통과
+        ELSE
+            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다');
+        END IF; 
+END;
+
+
+-- 회원 패널티 활성 상태 조회 함수
+CREATE OR REPLACE FUNCTION FN_GET_USER_PENALTY_STATUS (
+    P_USER_ID NUMBER
+)
+RETURN NUMBER
+IS
+    V_STATUS    NUMBER;        -- 0이면 활성, 1이면 비활성
+    ERR_UNKNOWN  CONSTANT NUMBER := -20009;
+
+BEGIN
+    IF FN_GET_USER_PENALTY_SCORE(P_USER_ID) > 0
+    THEN V_STATUS := 0;
+    ELSE
+        V_STATUS := 1;
+    END IF;
+    
+    RETURN V_STATUS;
+EXCEPTION
+
+     WHEN OTHERS THEN     
+        IF SQLCODE BETWEEN -20999 AND -20000 THEN
+            RAISE; -- 이미 정의된 커스텀 에러는 그대로 통과
+        ELSE
+            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다');
+        END IF; 
+END;
+    
+    
+    
+-- 신고 등록 프로시저
+CREATE OR REPLACE PROCEDURE PRC_REPORT_CREATE (
+    P_USER_ID       NUMBER,         -- 신고자 ID
+    P_REPORT_TYPE   NUMBER,         -- 도배 광고 개인정보기재 기타 1 2 3 4
+    P_TARGET_ID     NUMBER,         -- 상품코드 혹은 경매코드
+    P_TARGET_TYPE   NUMBER,         -- 상품 OR 경매     
+    P_REPORT_REASON  VARCHAR2       -- 신고 사유
+)
+IS
+    V_NEW_REPORT_ID  NUMBER;    -- 새롭게 생성된 신고신청코드
+    ERR_UNKNOWN      CONSTANT NUMBER := -20009;
+BEGIN
+
+     V_NEW_REPORT_ID := REPORT_SEQ.NEXTVAL;
+    -- 1. 신고 신청(부모) INSERT
+    INSERT INTO REPORT_SUBMISSION(
+        REPORT_SUBMISSION_ID, USER_ID, REPORT_TARGET_ID, REPORT_TYPE_ID, REPORT_REASON, CREATED_AT)
+    VALUES(V_NEW_REPORT_ID, P_USER_ID, P_TARGET_ID, P_REPORT_TYPE, P_REPORT_REASON, SYSDATE);
+    
+    -- 2. 신고 대상(상품, 경매) 분기 처리 후 해당 테이블 INSERT
+    
+    IF P_TARGET_TYPE = 1 
+    THEN 
+        INSERT INTO PRODUCT_REPORT(
+          PRODUCT_REPORT_ID, REPORT_SUBMISSION_ID, PRODUCT_ID)
+        VALUES(
+          PRODUCT_REPORT_SEQ.NEXTVAL, V_NEW_REPORT_ID, P_TARGET_ID);
+    
+    ELSIF P_TARGET_TYPE = 2
+    THEN
+        INSERT INTO AUCTION_REPORT(
+          AUCTION_REPORT_ID, REPORT_SUBMISSION_ID, AUCTION_ID)
+        VALUES(
+          AUCTION_REPORT_SEQ.NEXTVAL, V_NEW_REPORT_ID, P_TARGET_ID);
+    END IF;
+    
+    EXCEPTION
+     WHEN OTHERS THEN     
+        ROLLBACK;
+        IF SQLCODE BETWEEN -20999 AND -20000 THEN
+            RAISE; -- 이미 정의된 커스텀 에러는 그대로 통과
+        ELSE
+            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다');
+        END IF; 
+END;
+
+    
+    
+
+    
+    
+    
 
 
 
