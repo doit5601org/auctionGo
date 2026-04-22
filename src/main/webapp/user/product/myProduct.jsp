@@ -41,18 +41,18 @@
 					<div
 						class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
 						<h5 class="mb-0 fw-bold">
-							내 등록 상품 <span class="text-primary small">45</span>
+							내 등록 상품 <span class="txtColor small">45</span>
 						</h5>
-						<button class="btn btn-primary btn-sm px-3"
-							onclick="location.href='/product/register'">
+						<a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/productRegister.jsp" class="btn btn-primary btn-sm px-3">
 							<i class="bi bi-plus-lg"></i> 새 상품 등록
-						</button>
+						</a>
+						<!-- </button> -->
 					</div>
 					<div class="card-body">
-						<ul class="nav nav-tabs mb-4" id="productTab" role="tablist">
+						<ul class="nav nav-tabs mb-4 txtColor" id="productTab" role="tablist">
 							<li class="nav-item"><button class="nav-link active"
 									data-bs-toggle="tab" id="tab-all" data-type="ALL">전체</button></li>
-							<li class="nav-item"><button class="nav-link"
+							<li class="nav-item"><button class="nav-link "
 									data-bs-toggle="tab" id="tab-public" data-type="PUBLIC">공개</button></li>
 							<li class="nav-item"><button class="nav-link"
 									data-bs-toggle="tab" id="tab-private" data-type="PRIVATE">비공개</button></li>
@@ -117,8 +117,8 @@
 										<td class="text-center">
 											<div class="d-flex gap-1 justify-content-center">
 												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-light btn-sm text-primary border">공개
-													전환</button>
+												<button class="btn btn-light btn-sm txtColor border" disabled="disabled">경매등록
+													</button>
 											</div>
 										</td>
 									</tr>
@@ -185,8 +185,8 @@
 										<td class="text-center"><div
 												class="d-flex gap-1 justify-content-center">
 												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-light btn-sm text-primary border">공개
-													전환</button>
+												<button class="btn btn-light btn-sm txtColor border " disabled="disabled">경매등록
+													</button>
 											</div></td>
 									</tr>
 									<tr>
@@ -229,8 +229,7 @@
 										<td class="text-center"><div
 												class="d-flex gap-1 justify-content-center">
 												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-light btn-sm text-primary border">공개
-													전환</button>
+												<button class="btn btn-light btn-sm txtColor border" disabled="disabled">경매등록</button>
 											</div></td>
 									</tr>
 									<tr>
@@ -295,8 +294,8 @@
 										<td class="text-center"><div
 												class="d-flex gap-1 justify-content-center">
 												<button class="btn btn-outline-secondary btn-sm">수정</button>
-												<button class="btn btn-light btn-sm text-primary border">공개
-													전환</button>
+												<button class="btn btn-light btn-sm txtColor border" disabled="disabled">경매등록
+													</button>
 											</div></td>
 									</tr>
 								</tbody>

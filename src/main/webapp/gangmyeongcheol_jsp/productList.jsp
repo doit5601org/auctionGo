@@ -18,6 +18,9 @@
 </head>
 <body class="bg-light">
 
+<jsp:include page="/common/header.jsp"></jsp:include>
+
+
 <%-- 네비게이션 바 --%>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
@@ -248,6 +251,9 @@
 </div>
 
 <%-- bootstrap JS는 body 끝에 위치해야 정상 동작 --%>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ -->
+<jsp:include page="/common/footer.jsp"></jsp:include>
+
 </body>
 </html>

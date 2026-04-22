@@ -58,6 +58,9 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+    .hero-section{
+    	background-image: url(${pageContext.request.contextPath}/images/main.jpeg) !important;
+    }
 </style>
 </head>
 <body class="bg-light">
@@ -67,11 +70,11 @@
 <main>
     <section class="hero-section text-center mb-5">
         <div class="container">
-            <h1 class="display-3 fw-bold mb-3">나만의 컬렉션, 특별한 경매</h1>
-            <p class="lead mb-5 opacity-75">비크리(Vickrey) 방식으로 제안하는 합리적인 가치 공유 시스템</p>
+            <h1 class="display-3 fw-bold mb-3 txtColor">나만의 컬렉션, 특별한 경매</h1>
+            <p class="lead mb-5 opacity-75 text-dark fw-bold">당신의 소장품을 뽐내고, 경매로 가치를 더하세요!</p>
             <div class="d-flex justify-content-center gap-3">
-                <a href="auctionList.do" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold">경매 입장</a>
-                <a href="productList.do" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold">갤러리 구경</a>
+                <a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/auctionList.jsp" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold">경매 입장</a>
+                <a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/productList.jsp" class="btn btn-outline-dark btn-lg px-5 py-3 rounded-pill fw-bold">컬렉션 구경</a>
             </div>
         </div>
     </section>
@@ -81,9 +84,9 @@
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <div>
                     <h2 class="fw-bold m-0"><i class="bi bi-fire text-danger me-2"></i>마감 임박 경매</h2>
-                    <p class="text-muted mb-0">현재 입찰 경쟁이 치열한 컬렉션입니다.</p>
+                    <p class="text-muted mb-0">시간이 얼마 남지 않았습니다 어서 서두르세요!</p>
                 </div>
-                <a href="auctionList.do" class="btn btn-outline-dark rounded-pill px-4">더보기</a>
+                <a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/auctionList.jsp"" class="btn btn-outline-dark rounded-pill px-4">더보기</a>
             </div>
             
             <div class="row g-4">
@@ -101,7 +104,7 @@
                                     <span class="fw-bold text-danger fs-5">155,000원</span>
                                 </div>
                             </div>
-                            <a href="auctionDetail.do?id=${i}" class="stretched-link"></a>
+                            <a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/auctionDetail.jsp?auctionId=A002" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -112,16 +115,17 @@
         <section class="mb-5 py-5 border-top">
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <div>
-                    <h2 class="fw-bold m-0"><i class="bi bi-box2-heart text-primary me-2"></i>새로운 소장품</h2>
+                    <h2 class="fw-bold m-0"><i class="bi bi-box2-heart me-3 txtColor"></i>새로운 소장품</h2>
                 </div>
-                <a href="productList.do" class="btn btn-outline-dark rounded-pill px-4">갤러리 전체보기</a>
+                <a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/productList.jsp" class="btn btn-outline-dark rounded-pill px-4">갤러리 전체보기</a>
             </div>
 
             <div class="row g-4">
                 <c:forEach var="i" begin="1" end="3">
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm custom-card">
-                        <button class="btn btn-wish shadow-sm border-0" onclick="event.preventDefault(); alert('관심 상품으로 등록되었습니다!');">
+
+                        <button class="btn btn-wish border-0" onclick="event.preventDefault();">
                             <i class="bi bi-heart-fill"></i>
                         </button>
                         
@@ -129,11 +133,11 @@
                         
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-secondary-subtle text-secondary px-2 py-1">Collector's Item</span>
+                                <span class="badge bg-warning-subtle text-danger px-2 py-1">new</span>
                                 <span class="text-muted small"><i class="bi bi-eye me-1"></i>124</span>
                             </div>
                             <h5 class="fw-bold">개인 소장용 피규어 시리즈 #${i}</h5>
-                            <a href="productDetail.do?id=${i}" class="stretched-link"></a>
+                            <a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/productDetail.jsp?productId=P001" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>

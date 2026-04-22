@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 <script>
 $(function() {
@@ -78,8 +79,8 @@ $(function() {
     #mypage-sidebar .main-menu.active, 
     #mypage-sidebar .menu-link.active {
         background-color: #e7f1ff !important;
-        color: #0d6efd !important;
-        border-left: 5px solid #0d6efd !important; /* 왼쪽 강조 바 */
+        color: #120e63 !important;
+        border-left: 5px solid #120e63 !important; /* 왼쪽 강조 바 */
         font-weight: bold !important;
     }
 
@@ -91,10 +92,10 @@ $(function() {
 
     /* 4. 소메뉴 활성화 스타일 (왼쪽 바 추가) */
     #mypage-sidebar .submenu-list .list-group-item.active {
-        color: #0d6efd !important;
+        color: #120e63 !important;
         font-weight: bold !important;
         background-color: #f8f9fa !important; /* 소메뉴는 아주 연한 회색 배경 */
-        border-left: 5px solid #0d6efd !important; /* 소메뉴에도 왼쪽 바 적용! */
+        border-left: 5px solid #120e63 !important; /* 소메뉴에도 왼쪽 바 적용! */
         text-decoration: none !important; /* 밑줄 대신 선으로 강조 */
     }
 
@@ -134,7 +135,8 @@ $(function() {
             <a href="${pageContext.request.contextPath}/user/bids/bidHistory.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 입찰 이력</a>
         </div>
     </div>
-    
+     <a href="${pageContext.request.contextPath}/user/product/wishlist.jsp" class="list-group-item list-group-item-action py-3 menu-link">
+        <i class="bi bi-heart-fill me-2"></i>내 관심 상품</a>
     <a href="${pageContext.request.contextPath}/user/my/penaltyHistory.jsp" class="list-group-item list-group-item-action py-3 menu-link">
         <i class="bi bi-exclamation-octagon me-2"></i>내 패널티 내역
     </a>
@@ -151,52 +153,6 @@ $(function() {
         </div>
     </div>
 </div>
-<%-- <div class="list-group shadow-sm mb-4">
-    <a href="${pageContext.request.contextPath }/user/my/mypage.jsp" class="list-group-item list-group-item-action fw-bold border-0 py-3 bg-light">
-        <i class="bi bi-person-badge me-2"></i>나의 활동 요약
-    </a>
-    <a href="${pageContext.request.contextPath }/user/product/myProduct.jsp" class="list-group-item list-group-item-action border-0 py-3">
-        <i class="bi bi-box-seam me-2"></i>내 등록 상품
-    </a>
-    <a href="${pageContext.request.contextPath }/user/product/wishlist.jsp" class="list-group-item list-group-item-action border-0 py-3">
-        <i class="bi bi-box-seam me-2"></i>내 관심 상품
-    </a>
-    <div class="list-group-item border-0 p-0">
-        <a href="#auctionSubmenu" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 border-0" 
-        data-bs-toggle="collapse">
-            <span><i class="bi bi-hammer me-2"></i>내 경매 내역</span>
-            <i class="bi bi-chevron-down small text-muted"></i>
-        </a>
-        <div class="collapse" id="auctionSubmenu">
-            <a href="${pageContext.request.contextPath }/user/auctions/auctionStatus.jsp" class="list-group-item list-group-item-action ps-5 py-2 border-0 small text-primary">• 경매 현황</a>
-            <a href="${pageContext.request.contextPath }/user/auctions/auctionHistory.jsp" class="list-group-item list-group-item-action ps-5 py-2 border-0 small">• 경매 이력</a>
-        </div>
-    </div>
-
-    <div class="list-group-item border-0 p-0">
-        <a href="#bidSubmenu" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 border-0"
-         data-bs-toggle="collapse">
-            <span><i class="bi bi-currency-exchange me-2"></i>내 입찰 내역</span>
-            <i class="bi bi-chevron-down small text-muted"></i>
-        </a>
-        <div class="collapse" id="bidSubmenu">
-            <a href="${pageContext.request.contextPath }/user/bids/bidStatus.jsp" class="list-group-item list-group-item-action ps-5 py-2 border-0 small">• 입찰 현황</a>
-            <a href="${pageContext.request.contextPath }/user/bids/bidHistory.jsp" class="list-group-item list-group-item-action ps-5 py-2 border-0 small">• 입찰 이력</a>
-        </div>
-    </div>
-    <div class="list-group-item border-0 p-0">
-        <a href="#auctionSubmenu" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 border-0" 
-        data-bs-toggle="collapse">
-            <span><i class="bi bi-hammer me-2"></i>내 정보 수정</span>
-            <i class="bi bi-chevron-down small text-muted"></i>
-        </a>
-        <div class="collapse" id="auctionSubmenu">
-            <a href="${pageContext.request.contextPath }/user/my/info/changeInfo.jsp" class="list-group-item list-group-item-action ps-5 py-2 border-0 small text-primary">• 회원 정보 변경</a>
-            <a href="${pageContext.request.contextPath }/user/my/info/changePwd.jsp" class="list-group-item list-group-item-action ps-5 py-2 border-0 small">• 비밀번호 변경</a>
-            <a href="${pageContext.request.contextPath }/user/my/.jsp" class="list-group-item list-group-item-action ps-5 py-2 border-0 small">• 회원 탈퇴</a>
-        </div>
-    </div>
-</div> --%>
 
 </body>
 </html>

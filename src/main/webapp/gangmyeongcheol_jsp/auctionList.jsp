@@ -28,7 +28,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
+<jsp:include page="/common/header.jsp"></jsp:include>
 <%-- ${ctx}/main, ${ctx}/auction/list, ${ctx}/product/list, ${ctx}/product/myList --%>
 <nav class="navbar navbar-expand-lg ">
     <div class="container">
@@ -160,5 +160,6 @@
 
     </div>
 </div>
+<jsp:include page="/common/footer.jsp"></jsp:include>
 </body>
 </html>
