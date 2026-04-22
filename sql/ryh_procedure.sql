@@ -397,8 +397,6 @@ END;
 -- 뷰 목록 ======================================================================
 
 -- 1. 회원 정보 조회 뷰 VW_USER_INFO
-
-
 CREATE OR REPLACE VIEW VW_USER_INFO
 AS
 SELECT U.USER_ID, UA.USER_LOGIN_ID, UA.USER_PASSWORD
@@ -415,7 +413,6 @@ FROM VW_USER_INFO;
 /
 
 -- 2. 상품 통합 조회  VW_PRODUCT_LIST
-
 CREATE OR REPLACE VIEW VW_PRODUCT_LIST
 AS
 SELECT 
@@ -455,9 +452,7 @@ GROUP BY
     P.IMAGE_PATH_1, P.IMAGE_PATH_2, P.IMAGE_PATH_3, P.IS_PUBLIC, P.CREATED_AT;
     
     
-SELECT *
-FROM VW_PRODUCT_LIST;
--- View VW_PRODUCT_LIST이(가) 생성되었습니다.
+
 
 
 
