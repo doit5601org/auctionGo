@@ -218,5 +218,140 @@ EXCEPTION
         RAISE;
 END;
 
+--------------------------------------------------------------------------------
 
+-- ●입찰 생성 프로시저
+
+CREATE OR REPLACE PROCEDURE PRC_AUCTION_BID_CREATE
+(
+    P_AUCTION_ID   IN NUMBER
+  , P_USER_ID      IN NUMBER  
+  , P_BID_PRICE    IN NUMBER
+  , P_RESULT       OUT VARCHAR2
+)
+IS
+    V_SELLER_ID      NUMBER;
+    V_CURRENT_PRICE  NUMBER;
+    V_USER_MONEY     NUMBER;
+    V_MY_BID_COUNT   NUMBER; -- 내 입찰 기록 확인용
+BEGIN
+
+    -- 본인 경매 입찰 방지
+    SELECT USER_ID INTO V_SELLER_ID 
+    FROM PRODUCT
+    WHERE PRODUCT_ID = (SELECT PRODUCT_ID
+                        FROM AUCTION_REGISTRATION 
+                        WHERE AUCTION_ID = P_AUCTION_ID);
+                        
+    IF V_SELLER_ID = P_USER_ID THEN
+        P_RESULT := '본인이 등록한 경매에는 입찰할 수 없습니다.';
+        RETURN;
+    END IF;
+
+    -- 현재 입찰가 조회 및 유효성 검사
+    V_CURRENT_PRICE := FN_GET_AUCTION_CURRENT_PRICE(P_AUCTION_ID);
+
+    IF P_BID_PRICE <= V_CURRENT_PRICE THEN
+        P_RESULT := '현재가(' || V_CURRENT_PRICE || '원)보다 높은 금액을 입력해야 합니다.';
+        RETURN; 
+    END IF;
+
+    -- 동시 입찰 제한 체크 (최대 10회)
+    IF FN_GET_ACTIVE_BID_COUNT(P_USER_ID) >= 10 THEN 
+        P_RESULT := '동시에 참여 가능한 경매 횟수 10회를 초과했습니다.';
+        RETURN;
+    END IF;
+
+    -- 해당 경매 신규 참여 여부 확인 (보증금 로직)
+    SELECT COUNT(*) INTO V_MY_BID_COUNT
+    FROM AUCTION_BID_PARTICIPATION
+    WHERE AUCTION_ID = P_AUCTION_ID AND USER_ID = P_USER_ID;
+
+    IF V_MY_BID_COUNT = 0 THEN
+        V_USER_MONEY := FN_GET_USER_MONEY_BALANCE(P_USER_ID);
+        
+        IF V_USER_MONEY < 30000 THEN
+           P_RESULT := '보증금(30,000원) 결제를 위한 머니가 부족합니다.';
+           RETURN;
+        END IF;
+
+    -- 보증금 차감 이력 삽입 (머니분류코드 EX) 3 = 보증금 차감)
+        INSERT INTO MONEY_TRANSACTION_HISTORY (MONEY_ID, USER_ID, MONEY_TYPE_ID, AUCTION_ID, AMOUNT, CREATED_AT)
+        VALUES (MONEY_TRANSACTION_SEQ.NEXTVAL, P_USER_ID, 3, P_AUCTION_ID, 30000, SYSDATE); 
+    END IF;
+
+    -- 입찰 기록 삽입
+    INSERT INTO AUCTION_BID_PARTICIPATION (BID_ID, AUCTION_ID, USER_ID, BID_TIME, BID_PRICE)
+    VALUES (BID_SEQ.NEXTVAL, P_AUCTION_ID, P_USER_ID, SYSTIMESTAMP, P_BID_PRICE);
+
+    P_RESULT := 'SUCCESS';
+    COMMIT;
+    
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        P_RESULT := '에러 발생'; 
+END;
+
+--------------------------------------------------------------------------------
+
+--●경매 마감 및 낙찰 처리 프로시저 
+
+CREATE OR REPLACE PROCEDURE PRC_AUCTION_CLOSE
+(
+    P_AUCTION_ID IN  NUMBER
+  , P_RESULT     OUT VARCHAR2
+)
+IS
+    V_BID_COUNT      NUMBER;
+    V_WINNER_BID_ID  NUMBER;
+BEGIN
+
+    -- 해당 경매의 입찰 참여 인원 확인
+    SELECT COUNT(*) INTO V_BID_COUNT
+    FROM AUCTION_BID_PARTICIPATION
+    WHERE AUCTION_ID = P_AUCTION_ID;
+
+    --  입찰자가 없는 경우 유찰
+    IF V_BID_COUNT = 0 THEN
+        P_RESULT := '해당 경매가 유찰되었습니다';
+        
+    -- 입찰자가 있는 경우(낙찰 처리)
+    ELSE
+    
+        -- 최고가 입찰자가 2명 이상일 경우 입찰 시간이 빠른 순서
+        SELECT BID_ID INTO V_WINNER_BID_ID
+        FROM (
+            SELECT BID_ID
+            FROM AUCTION_BID_PARTICIPATION
+            WHERE AUCTION_ID = P_AUCTION_ID
+            ORDER BY BID_PRICE DESC, BID_TIME ASC
+        )
+        WHERE ROWNUM = 1;
+
+        -- 낙찰 결과 테이블 삽입
+        INSERT INTO AUCTION_WINNING_RESULT 
+        (
+            BID_RESULT_ID
+           ,BID_ID
+           ,CREATED_AT
+        ) VALUES 
+        (
+            BID_RESULT_SEQ.NEXTVAL
+           ,V_WINNER_BID_ID
+           ,SYSDATE
+        );
+
+        P_RESULT := '낙찰 성공!!';
+    END IF;
+
+    COMMIT;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        P_RESULT := '존재하지 않는 경매입니다.';
+    WHEN OTHERS THEN
+        ROLLBACK;
+        P_RESULT := 'ERROR:';
+END;
 
