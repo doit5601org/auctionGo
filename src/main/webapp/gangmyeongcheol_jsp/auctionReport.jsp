@@ -25,7 +25,7 @@ function updateCount(el) {
 <%-- 네비게이션 바 --%>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="${ctx}/main">경매나라</a>
+        <a class="navbar-brand fw-bold" href="${ctx}/main/">경매나라</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto ms-3">
                 <li class="nav-item"><a class="nav-link" href="${ctx}/product/list">컬렉션</a></li>
