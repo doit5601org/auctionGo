@@ -107,10 +107,10 @@ $(function() {
 </head>
 <body>
 <div class="list-group shadow-sm mb-4" id="mypage-sidebar">
-    <a href="${pageContext.request.contextPath}/user/my/mypage.jsp" class="list-group-item list-group-item-action py-3 menu-link">
+    <a href="${pageContext.request.contextPath}/user/my" class="list-group-item list-group-item-action py-3 menu-link">
         <i class="bi bi-person-badge me-2"></i>나의 활동 요약
     </a>
-    <a href="${pageContext.request.contextPath}/user/product/myProduct.jsp" class="list-group-item list-group-item-action py-3 menu-link">
+    <a href="${pageContext.request.contextPath}/user/product" class="list-group-item list-group-item-action py-3 menu-link">
         <i class="bi bi-box-seam me-2"></i>내 등록 상품
     </a>
 
@@ -120,8 +120,8 @@ $(function() {
             <i class="bi bi-chevron-down small text-muted arrow-icon"></i>
         </a>
         <div class="collapse submenu-list" id="auctionSubmenu">
-            <a href="${pageContext.request.contextPath}/user/auctions/auctionStatus.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 경매 현황</a>
-            <a href="${pageContext.request.contextPath}/user/auctions/auctionHistory.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 경매 이력</a>
+            <a href="${pageContext.request.contextPath}/user/auctions/active" class="list-group-item list-group-item-action py-2 ps-5">• 경매 현황</a>
+            <a href="${pageContext.request.contextPath}/user/auctions/closed" class="list-group-item list-group-item-action py-2 ps-5">• 경매 이력</a>
         </div>
     </div>
 
@@ -131,13 +131,13 @@ $(function() {
             <i class="bi bi-chevron-down small text-muted arrow-icon"></i>
         </a>
         <div class="collapse submenu-list" id="bidSubmenu">
-            <a href="${pageContext.request.contextPath}/user/bids/bidStatus.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 입찰 현황</a>
-            <a href="${pageContext.request.contextPath}/user/bids/bidHistory.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 입찰 이력</a>
+            <a href="${pageContext.request.contextPath}/user/bids/active" class="list-group-item list-group-item-action py-2 ps-5">• 입찰 현황</a>
+            <a href="${pageContext.request.contextPath}/user/bids/closed" class="list-group-item list-group-item-action py-2 ps-5">• 입찰 이력</a>
         </div>
     </div>
-     <a href="${pageContext.request.contextPath}/user/product/wishlist.jsp" class="list-group-item list-group-item-action py-3 menu-link">
+     <a href="${pageContext.request.contextPath}/user/product/wishlist" class="list-group-item list-group-item-action py-3 menu-link">
         <i class="bi bi-heart-fill me-2"></i>내 관심 상품</a>
-    <a href="${pageContext.request.contextPath}/user/my/penaltyHistory.jsp" class="list-group-item list-group-item-action py-3 menu-link">
+    <a href="${pageContext.request.contextPath}/user/penalty" class="list-group-item list-group-item-action py-3 menu-link">
         <i class="bi bi-exclamation-octagon me-2"></i>내 패널티 내역
     </a>
 
@@ -147,8 +147,8 @@ $(function() {
             <i class="bi bi-chevron-down small text-muted arrow-icon"></i>
         </a>
         <div class="collapse submenu-list" id="infoSubmenu">
-            <a href="${pageContext.request.contextPath}/user/my/info/changeInfo.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 회원 정보 변경</a>
-            <a href="${pageContext.request.contextPath}/user/my/info/changePwd.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 비밀번호 변경</a>
+            <a href="${pageContext.request.contextPath}/user/my/change-info" class="list-group-item list-group-item-action py-2 ps-5">• 회원 정보 변경</a>
+            <a href="${pageContext.request.contextPath}/user/my/change-pw" class="list-group-item list-group-item-action py-2 ps-5">• 비밀번호 변경</a>
             <a href="${pageContext.request.contextPath}/user/my/withdraw.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 회원 탈퇴</a>
         </div>
     </div>

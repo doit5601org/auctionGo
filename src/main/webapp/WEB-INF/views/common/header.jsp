@@ -63,8 +63,8 @@
                                     마이페이지
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end shadow border-0" id="userDropdownMenu">
-                                    <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/user/my/mypage.jsp">내 활동 현황</a></li>
-                                    <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/user/my/info/changeInfo.jsp">정보 수정</a></li>
+                                    <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/user/my">내 활동 현황</a></li>
+                                    <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/user/my/change-info">정보 수정</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item py-2 text-danger" href="logout.do">로그아웃</a></li>
                                 </ul>

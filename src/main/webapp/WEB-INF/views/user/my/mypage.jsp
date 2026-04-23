@@ -31,12 +31,12 @@
 </head>
 <body class="bg-light">
 
-	<jsp:include page="/common/header.jsp" />
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 	<main class="container" style="margin-top: 50px; margin-bottom: 50px;">
 		<div class="row">
 			<aside class="col-md-3">
-				<jsp:include page="/common/mypage_layout.jsp" />
+				<%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
 			</aside>
 			
 			<section class="col-md-9">
@@ -44,11 +44,11 @@
 					<div>
 						<h3 class="fw-bold mb-1">반갑습니다, 사용자 님!</h3>
 					</div>
-					<a href="${pageContext.request.contextPath}/user/my/info/changeInfo.jsp" class="btn btn-outline-secondary btn-sm rounded-pill">정보 수정</a>
+					<a href="${pageContext.request.contextPath}/user/my/change-info" class="btn btn-outline-secondary btn-sm rounded-pill">정보 수정</a>
 				</div>
 
 				<div class="row g-3 mb-4">
-					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/auctions/auctionStatus.jsp'">
+					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/auctions/active'">
 						<div class="card stat-card shadow-sm p-3 bg-white text-center">
 							<div class="icon-box bg-primary-subtle text-primary mx-auto">
 								<i class="bi bi-hammer fs-4"></i>
@@ -57,7 +57,7 @@
 							<h4 class="mt-1 fw-bold">5<span class="fs-6 fw-normal ms-1">건</span></h4>
 						</div>
 					</div>
-					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/bids/bidStatus.jsp'">
+					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/bids/active'">
 						<div class="card stat-card shadow-sm p-3 bg-white text-center">
 							<div class="icon-box bg-success-subtle text-success mx-auto">
 								<i class="bi bi-clock-history fs-4"></i>
@@ -66,7 +66,7 @@
 							<h4 class="mt-1 fw-bold">3<span class="fs-6 fw-normal ms-1">건</span></h4>
 						</div>
 					</div>
-					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/product/wishlist.jsp'">
+					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/product/wishlist'">
 						<div class="card stat-card shadow-sm p-3 bg-white text-center">
 							<div class="icon-box bg-danger-subtle text-danger mx-auto">
 								<i class="bi bi-heart-fill fs-4"></i>
@@ -89,7 +89,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6" onclick="location.href='${pageContext.request.contextPath}/user/my/penaltyHistory.jsp'">
+					<div class="col-md-6" onclick="location.href='${pageContext.request.contextPath}/user/penalty'">
 						<div class="card stat-card shadow-sm p-4 bg-white border-start border-2 border-danger">
 							<div class="d-flex justify-content-between align-items-center">
 								<div>
@@ -105,7 +105,7 @@
 		</div>
 	</main>
 
-	<jsp:include page="/common/footer.jsp" />
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
 
