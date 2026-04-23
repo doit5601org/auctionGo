@@ -69,8 +69,13 @@ BEGIN
     INSERT INTO PENALTY_HISTORY (PENALTY_ID, USER_ID, PENALTY_TYPE_ID, ADMIN_ACCOUNT_ID, PENALTY_SCORE, CREATED_AT)
     VALUES (V_PENALTY_ID, P_USER_ID, P_PENALTY_TYPE_ID, P_ADMIN_ACCOUNT_ID, P_PENALTY_SCORE, SYSDATE);
     
-    -- 패널티 총점 재계산 (기존의 패널티 점수 + 추가로 부여한 패널티 점수)
-    V_TOTAL_PENALTY_SCORE := V_TOTAL_PENALTY_SCORE + P_PENALTY_SCORE;
+    
+    -- 패널티 부여 후, 패널티 총점 재계산
+    SELECT SUM(PH.PENALTY_SCORE) INTO V_TOTAL_PENALTY_SCORE
+    FROM PENALTY_HISTORY PH LEFT OUTER JOIN PENALTY_CANCEL PC
+         ON PH.PENALTY_ID = PC.PENALTY_ID
+    WHERE PH.USER_ID = P_USER_ID
+      AND PENALTY_CANCEL_ID IS NULL;
 
 
     -- 패널티 점수가 일정치 이상(1점 초과)이면 제재 발생
@@ -182,72 +187,76 @@ END;
 
 
 -- 패널티 취소 프로시저
--- 프로시저 1개로 모두 처리 (패널티 취소 + 계정 정지 레코드 삭제)
 CREATE OR REPLACE PROCEDURE PRC_PENALTY_CANCEL
 ( P_PENALTY_ID              IN          PENALTY_HISTORY.PENALTY_ID%TYPE
 , P_ADMIN_ACCOUNT_ID        IN          ADMIN_ACCOUNT.ADMIN_ACCOUNT_ID%TYPE
 , P_CANCEL_REASON           IN          PENALTY_CANCEL.CANCEL_REASON%TYPE
 )
 IS
-	V_LATEST_PENALTY_CANCEL_YN			CHAR(1);
+	V_USER_ID							USERS.USER_ID%TYPE;
+	V_TOTAL_PENALTY_SCORE				NUMBER;
 BEGIN
-    -- 패널티 취소 처리
+	-- 패널티 취소 처리
     INSERT INTO PENALTY_CANCEL(PENALTY_CANCEL_ID, PENALTY_ID, ADMIN_ACCOUNT_ID, CANCEL_REASON, CANCELED_AT)
     VALUES(PENALTY_CANCEL_SEQ.NEXTVAL, P_PENALTY_ID, P_ADMIN_ACCOUNT_ID, P_CANCEL_REASON, SYSDATE);
 
+	
+	-- 취소된 패널티의 유저ID 확인
+	SELECT USER_ID
+	INTO V_USER_ID
+	FROM PENALTY_HISTORY
+	WHERE PENALTY_ID = P_PENALTY_ID;
+	
+	
+	-- 해당 유저의 현재 패널티 총점 계산
+	SELECT NVL(SUM(PH.PENALTY_SCORE), 0)
+	INTO V_TOTAL_PENALTY_SCORE
+    FROM PENALTY_HISTORY PH LEFT OUTER JOIN PENALTY_CANCEL PC
+         ON PH.PENALTY_ID = PC.PENALTY_ID
+    WHERE PH.USER_ID = V_USER_ID
+      AND PENALTY_CANCEL_ID IS NULL;
+	
+	
+	-- IF) 패널티 총점이 1점 이하일 경우 → 모든 패널티 상태 해제
+	IF V_TOTAL_PENALTY_SCORE <= 1 THEN
+		UPDATE PENALTY_STATUS
+		SET PENALTY_END_DATE = SYSDATE
+		WHERE PENALTY_ID IN ( SELECT PENALTY_ID
+							  FROM PENALTY_HISTORY
+							  WHERE USER_ID = V_USER_ID )
+		  AND PENALTY_END_DATE > SYSDATE;
+	-- IF) 패널티 총점이 2점 이상일 경우 → 현재 적용중인 패널티 종료 날짜 재조정
+	ELSE
+		CASE
+            -- 4점 이상: 영구 정지
+            WHEN V_TOTAL_PENALTY_SCORE >= 4
+            THEN
+            	 UPDATE PENALTY_STATUS
+            	 SET PENALTY_END_DATE = TO_DATE('9999-12-31 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+            	 WHERE PENALTY_ID IN ( SELECT PENALTY_ID
+									   FROM PENALTY_HISTORY
+									   WHERE USER_ID = V_USER_ID )
+			  	   AND PENALTY_END_DATE > SYSDATE;
 
-	-- 가장 마지막(가장 최신의) 패널티가 취소된 것인지 확인
-	SELECT
-		CASE WHEN PENALTY_ID = P_PENALTY_ID
-			 THEN 'Y'
-			 
-			 ELSE 'N'
-		END INTO V_LATEST_PENALTY_CANCEL_YN
-	FROM (
-			SELECT PH.*
-				 , ROW_NUMBER() OVER(ORDER BY PENALTY_ID DESC) AS PENALTY_NUM
-			FROM PENALTY_HISTORY PH
-			WHERE USER_ID = (
-								SELECT USER_ID
-								FROM PENALTY_HISTORY
-								WHERE PENALTY_ID = P_PENALTY_ID
-							)
-		 )
-	WHERE PENALTY_NUM = 1;
-
-
-    -- 가장 최근의 패널티 취소인지 여부에 맞춰 계정의 패널티 상태(=정지 제재) 업데이트
-	-- 가장 최근의 패널티가 취소되었을 경우...
-	IF V_LATEST_PENALTY_CANCEL_YN = 'Y' THEN
-		-- 이 패널티로 발생했던 패널티 상태(=정지 제재) 해제 처리
-	    --  ㄴ 해당 패널티에 연관된 패널티 상태 레코드 삭제
-	    --  ㄴ (별도의 상태 분류가 가능한 컬럼이나 테이블이 없어 삭제로 처리)
-	    DELETE
-	    FROM PENALTY_STATUS
-	    WHERE PENALTY_ID = P_PENALTY_ID;
-    
-    -- 가장 최근의 패널티가 아닌, 그 이전의 패널티가 취소되었을 경우...
-    ELSE
-    	-- 현재의 총점에 맞춰 패널티 상태 업데이트 처리
-
-    	-- (로직 작성 영역...)
+            -- 3점 이상: 시작일부터 30일 정지
+            WHEN V_TOTAL_PENALTY_SCORE >= 3
+            THEN
+            	 UPDATE PENALTY_STATUS
+            	 SET PENALTY_END_DATE = TRUNC(PENALTY_START_DATE + 30) + (1 - 1/86400)
+            	 WHERE PENALTY_ID IN ( SELECT PENALTY_ID
+									   FROM PENALTY_HISTORY
+									   WHERE USER_ID = V_USER_ID )
+			  	   AND PENALTY_END_DATE > SYSDATE;
+            -- 그 외(2점 이상): 시작일부터 7일 정지
+            ELSE
+            	 UPDATE PENALTY_STATUS
+            	 SET PENALTY_END_DATE = TRUNC(PENALTY_START_DATE + 7) + (1 - 1/86400)
+            	 WHERE PENALTY_ID IN ( SELECT PENALTY_ID
+									   FROM PENALTY_HISTORY
+									   WHERE USER_ID = V_USER_ID )
+			  	   AND PENALTY_END_DATE > SYSDATE;
+        END CASE;
 	END IF;
-
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
 END;
 
 
