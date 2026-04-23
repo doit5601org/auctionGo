@@ -510,67 +510,55 @@ END;
 
 -- ○ 6. 경매 등록 프로시저
 CREATE OR REPLACE PROCEDURE PRC_AUCTION_CREATE(
-    P_USER_ID           IN NUMBER,
-    P_PRODUCT_ID        IN NUMBER,
-    P_AUCTION_TITLE     IN VARCHAR2,
-    P_CONTENT           IN VARCHAR2,
-    P_START_PRICE       IN NUMBER,
-    P_PERIOD_CODE       IN NUMBER
+    P_USER_ID           IN NUMBER,              --회원 고유키
+    P_PRODUCT_ID        IN NUMBER,              --상품코드
+    P_AUCTION_TITLE     IN VARCHAR2,            --경매제목
+    P_CONTENT           IN VARCHAR2,            --경매 글
+    P_START_PRICE       IN NUMBER,              --시작가
+    P_PERIOD_CODE       IN NUMBER               --경매기간
 )
 IS
+    -- 에러 번호 변수 선언
     ERR_LACK_MONEY      CONSTANT NUMBER := -20004;
-    ERR_DUPLICATE_AUC   CONSTANT NUMBER := -20017;
     ERR_UNKNOWN         CONSTANT NUMBER := -20009;
 
     V_CURRENT_MONEY     NUMBER := 0;
     V_AUCTION_ID        NUMBER;
-    V_EXIST_COUNT       NUMBER := 0;
 BEGIN
-    -- 1. 중복 상품 등록 체크
-    SELECT COUNT(*) INTO V_EXIST_COUNT
-    FROM AUCTION_REGISTRATION
-    WHERE PRODUCT_ID = P_PRODUCT_ID;
+    
+    -- 해당 유저의 보증금 확인
+    SELECT NVL(SUM(AMOUNT), 0) INTO v_current_money
+    FROM MONEY_TRANSACTION_HISTORY
+    WHERE USER_ID = P_USER_ID;
 
-    IF V_EXIST_COUNT > 0 THEN
-        RAISE_APPLICATION_ERROR(ERR_DUPLICATE_AUC, '해당 상품으로 진행 중인 경매가 이미 존재합니다.');
+    -- 보증금 부족할 시 RAISE
+    IF v_current_money < 30000 THEN
+        RAISE_APPLICATION_ERROR(ERR_LACK_MONEY, '보증금이 부족합니다.');
     END IF;
 
-    -- 2. 만들어둔 함수를 사용하여 잔액 확인 (가장 중요한 수정 부분!)
-    V_CURRENT_MONEY := FN_GET_USER_MONEY_BALANCE(P_USER_ID);
-
-    -- 함수 에러 발생 시 처리 (함수에서 EXCEPTION 시 -1 리턴하므로)
-    IF V_CURRENT_MONEY = -1 THEN
-         RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '잔액 조회 중 오류가 발생했습니다.');
-    END IF;
-
-    -- 보증금 부족 체크
-    IF V_CURRENT_MONEY < 30000 THEN
-        RAISE_APPLICATION_ERROR(ERR_LACK_MONEY, '보증금이 부족합니다. (현재 잔액: ' || V_CURRENT_MONEY || '원)');
-    END IF;
-
-    -- 3. 경매 등록 테이블 INSERT
+    -- 경매 등록 테이블 INSERT
     INSERT INTO AUCTION_REGISTRATION (
         AUCTION_ID, PRODUCT_ID, AUCTION_TITLE, AUCTION_CONTENT, 
         START_PRICE, CREATED_AT, AUCTION_PERIOD_ID
     ) VALUES (
         AUCTION_SEQ.NEXTVAL, P_PRODUCT_ID, P_AUCTION_TITLE, 
         P_CONTENT, P_START_PRICE, SYSDATE, P_PERIOD_CODE
-    ) RETURNING AUCTION_ID INTO V_AUCTION_ID;
+    ) RETURNING AUCTION_ID INTO V_AUCTION_ID;   -- 해당 AUCTION_ID를 바로 V변수에 담음
+    
 
-    -- 4. 머니 차감 기록 INSERT
+    -- 머니 차감 기록 INSERT
     INSERT INTO MONEY_TRANSACTION_HISTORY (
         MONEY_ID, USER_ID, MONEY_TYPE_ID, AUCTION_ID, AMOUNT, CREATED_AT
     ) VALUES (
         MONEY_TRANSACTION_SEQ.NEXTVAL, P_USER_ID, 2, V_AUCTION_ID, -30000, SYSDATE
     );
-
 EXCEPTION        
     WHEN OTHERS THEN
         ROLLBACK;
         IF SQLCODE BETWEEN -20999 AND -20000 THEN
-            RAISE; 
+            RAISE; -- 이미 정의된 커스텀 에러는 그대로 통과
         ELSE
-            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다: ' || SQLERRM);
+            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다');
         END IF;
 END;
 /
@@ -586,6 +574,7 @@ IS
     V_TOTAL_SCORE     NUMBER := 0;
     V_END_DATE        DATE;        -- 정지 종료일
     ERR_UNKNOWN       CONSTANT NUMBER := -20009;
+    
     
     CURSOR BIDDER_LIST IS
         SELECT DISTINCT USER_ID FROM AUCTION_BID_PARTICIPATION WHERE AUCTION_ID = P_AUCTION_ID;
@@ -663,9 +652,142 @@ EXCEPTION
 END;
 /
 
+
 -- ○ 8. 입찰 생성 프로시저
+CREATE OR REPLACE PROCEDURE PRC_AUCTION_BID_CREATE
+(
+    P_AUCTION_ID   IN NUMBER
+  , P_USER_ID      IN NUMBER  
+  , P_BID_PRICE    IN NUMBER
+  , P_RESULT       OUT VARCHAR2
+)
+IS
+    V_SELLER_ID      NUMBER;
+    V_CURRENT_PRICE  NUMBER;
+    V_USER_MONEY     NUMBER;
+    V_MY_BID_COUNT   NUMBER; -- 내 입찰 기록 확인용
+BEGIN
+
+    -- 본인 경매 입찰 방지
+    SELECT USER_ID INTO V_SELLER_ID 
+    FROM PRODUCT
+    WHERE PRODUCT_ID = (SELECT PRODUCT_ID
+                        FROM AUCTION_REGISTRATION 
+                        WHERE AUCTION_ID = P_AUCTION_ID);
+                        
+    IF V_SELLER_ID = P_USER_ID THEN
+        P_RESULT := '본인이 등록한 경매에는 입찰할 수 없습니다.';
+        RETURN;
+    END IF;
+
+    -- 현재 입찰가 조회 및 유효성 검사
+    V_CURRENT_PRICE := FN_GET_AUCTION_CURRENT_PRICE(P_AUCTION_ID);
+
+    IF P_BID_PRICE <= V_CURRENT_PRICE THEN
+        P_RESULT := '현재가(' || V_CURRENT_PRICE || '원)보다 높은 금액을 입력해야 합니다.';
+        RETURN; 
+    END IF;
+
+    -- 동시 입찰 제한 체크 (최대 10회)
+    IF FN_GET_ACTIVE_BID_COUNT(P_USER_ID) >= 10 THEN 
+        P_RESULT := '동시에 참여 가능한 경매 횟수 10회를 초과했습니다.';
+        RETURN;
+    END IF;
+
+    -- 해당 경매 신규 참여 여부 확인 (보증금 로직)
+    SELECT COUNT(*) INTO V_MY_BID_COUNT
+    FROM AUCTION_BID_PARTICIPATION
+    WHERE AUCTION_ID = P_AUCTION_ID AND USER_ID = P_USER_ID;
+
+    IF V_MY_BID_COUNT = 0 THEN
+        V_USER_MONEY := FN_GET_USER_MONEY_BALANCE(P_USER_ID);
+        
+        IF V_USER_MONEY < 30000 THEN
+           P_RESULT := '보증금(30,000원) 결제를 위한 머니가 부족합니다.';
+           RETURN;
+        END IF;
+
+    -- 보증금 차감 이력 삽입 (머니분류코드 EX) 3 = 보증금 차감)
+        INSERT INTO MONEY_TRANSACTION_HISTORY (MONEY_ID, USER_ID, MONEY_TYPE_ID, AUCTION_ID, AMOUNT, CREATED_AT)
+        VALUES (MONEY_TRANSACTION_SEQ.NEXTVAL, P_USER_ID, 3, P_AUCTION_ID, 30000, SYSDATE); 
+    END IF;
+
+    -- 입찰 기록 삽입
+    INSERT INTO AUCTION_BID_PARTICIPATION (BID_ID, AUCTION_ID, USER_ID, BID_TIME, BID_PRICE)
+    VALUES (BID_SEQ.NEXTVAL, P_AUCTION_ID, P_USER_ID, SYSTIMESTAMP, P_BID_PRICE);
+
+    P_RESULT := 'SUCCESS';
+    --COMMIT;
+    
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        P_RESULT := '에러 발생'; 
+END;
+/
+
 
 -- ○ 9. 경매 마감 및 낙찰 처리 프로시저
+CREATE OR REPLACE PROCEDURE PRC_AUCTION_CLOSE
+(
+    P_AUCTION_ID IN  NUMBER
+  , P_RESULT     OUT VARCHAR2
+)
+IS
+    V_BID_COUNT      NUMBER;
+    V_WINNER_BID_ID  NUMBER;
+BEGIN
+
+    -- 해당 경매의 입찰 참여 인원 확인
+    SELECT COUNT(*) INTO V_BID_COUNT
+    FROM AUCTION_BID_PARTICIPATION
+    WHERE AUCTION_ID = P_AUCTION_ID;
+
+    --  입찰자가 없는 경우 유찰
+    IF V_BID_COUNT = 0 THEN
+        P_RESULT := '해당 경매가 유찰되었습니다';
+        
+    -- 입찰자가 있는 경우(낙찰 처리)
+    ELSE
+    
+        -- 최고가 입찰자가 2명 이상일 경우 입찰 시간이 빠른 순서
+        SELECT BID_ID INTO V_WINNER_BID_ID
+        FROM (
+            SELECT BID_ID
+            FROM AUCTION_BID_PARTICIPATION
+            WHERE AUCTION_ID = P_AUCTION_ID
+            ORDER BY BID_PRICE DESC, BID_TIME ASC
+        )
+        WHERE ROWNUM = 1;
+
+        -- 낙찰 결과 테이블 삽입
+        INSERT INTO AUCTION_WINNING_RESULT 
+        (
+            BID_RESULT_ID
+           ,BID_ID
+           ,CREATED_AT
+        ) VALUES 
+        (
+            BID_RESULT_SEQ.NEXTVAL
+           ,V_WINNER_BID_ID
+           ,SYSDATE
+        );
+
+        P_RESULT := '낙찰 성공!!';
+    END IF;
+
+    COMMIT;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        P_RESULT := '존재하지 않는 경매입니다.';
+    WHEN OTHERS THEN
+        ROLLBACK;
+        P_RESULT := 'ERROR:';
+END;
+/
+
+
 
 -- ○ 10. 낙찰 결제 프로시저
 CREATE OR REPLACE PROCEDURE PRC_WINNING_PAYMENT_CREATE
@@ -855,13 +977,212 @@ BEGIN
 END;
 /
 
--- ○ 12. 낙찰 실패 처리 프로시저
 
 -- ○ 13. 신고 접수 프로시저
+CREATE OR REPLACE PROCEDURE PRC_REPORT_CREATE (
+    P_USER_ID        NUMBER,         -- 신고자 ID
+    P_REPORT_TYPE    NUMBER,         -- 도배 광고 개인정보기재 기타 1 2 3 4
+    P_TARGET_ID      NUMBER,         -- 상품코드 혹은 경매코드 (예: 6)
+    P_TARGET_TYPE    NUMBER,         -- 상품(1) OR 경매(2)     
+    P_REPORT_REASON  VARCHAR2        -- 신고 사유
+)
+IS
+    V_NEW_REPORT_ID  NUMBER;    -- 새롭게 생성된 신고신청코드
+    V_EXIST_COUNT    NUMBER := 0; -- 중복 신고 확인용
+    
+    ERR_DUPLICATE    CONSTANT NUMBER := -20020; -- 중복 신고 에러 코드
+    ERR_UNKNOWN      CONSTANT NUMBER := -20009;
+BEGIN
+    -- 1. 중복 신고 방지 로직 추가
+    IF P_TARGET_TYPE = 1 THEN
+        -- 동일 유저가 동일 상품을 신고했는지 확인
+        SELECT COUNT(*) INTO V_EXIST_COUNT
+        FROM REPORT_SUBMISSION RS
+        JOIN PRODUCT_REPORT PR ON RS.REPORT_SUBMISSION_ID = PR.REPORT_SUBMISSION_ID
+        WHERE RS.USER_ID = P_USER_ID 
+          AND PR.PRODUCT_ID = P_TARGET_ID;
+          
+    ELSIF P_TARGET_TYPE = 2 THEN
+        -- 동일 유저가 동일 경매를 신고했는지 확인
+        SELECT COUNT(*) INTO V_EXIST_COUNT
+        FROM REPORT_SUBMISSION RS
+        JOIN AUCTION_REPORT AR ON RS.REPORT_SUBMISSION_ID = AR.REPORT_SUBMISSION_ID
+        WHERE RS.USER_ID = P_USER_ID 
+          AND AR.AUCTION_ID = P_TARGET_ID;
+    END IF;
+
+    IF V_EXIST_COUNT > 0 THEN
+        RAISE_APPLICATION_ERROR(ERR_DUPLICATE, '이미 해당 대상에 대해 신고를 접수하셨습니다.');
+    END IF;
+
+    -- 2. 신고 신청(부모) INSERT
+    V_NEW_REPORT_ID := REPORT_SEQ.NEXTVAL;
+    
+    INSERT INTO REPORT_SUBMISSION(
+        REPORT_SUBMISSION_ID, USER_ID, REPORT_TARGET_ID, REPORT_TYPE_ID, REPORT_REASON, CREATED_AT)
+    VALUES(V_NEW_REPORT_ID, P_USER_ID, P_TARGET_TYPE, P_REPORT_TYPE, P_REPORT_REASON, SYSDATE);
+    
+    -- 3. 신고 대상(상품, 경매) 분기 처리 후 해당 테이블 INSERT
+    IF P_TARGET_TYPE = 1 THEN 
+        INSERT INTO PRODUCT_REPORT(
+          PRODUCT_REPORT_ID, REPORT_SUBMISSION_ID, PRODUCT_ID)
+        VALUES(
+          PRODUCT_REPORT_SEQ.NEXTVAL, V_NEW_REPORT_ID, P_TARGET_ID);
+    
+    ELSIF P_TARGET_TYPE = 2 THEN
+        INSERT INTO AUCTION_REPORT(
+          AUCTION_REPORT_ID, REPORT_SUBMISSION_ID, AUCTION_ID)
+        VALUES(
+          AUCTION_REPORT_SEQ.NEXTVAL, V_NEW_REPORT_ID, P_TARGET_ID);
+    END IF;
+    
+    COMMIT;
+
+EXCEPTION
+    WHEN OTHERS THEN     
+        ROLLBACK;
+        IF SQLCODE BETWEEN -20999 AND -20000 THEN
+            RAISE; 
+        ELSE
+            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다: ' || SQLERRM);
+        END IF; 
+END;
+/
+
 
 -- ○ 14. 신고 처리 프로시저
+CREATE OR REPLACE PROCEDURE PRC_REPORT_PROCESS
+(P_REPORT_SUBMISSION_ID IN REPORT_SUBMISSION.REPORT_SUBMISSION_ID%TYPE
+, P_ADMIN_ACCOUNT_ID    IN ADMIN_ACCOUNT.ADMIN_ACCOUNT_ID%TYPE
+, P_REPORT_RESULT_ID    IN REPORT_RESULT.REPORT_RESULT_ID%TYPE
+, P_PROCESSED_REASON    IN REPORT_PROCESS.PROCESS_REASON%TYPE
+)
+IS
+    V_TARGET_ID NUMBER;
+    V_PRODUCT_ID PRODUCT.PRODUCT_ID%TYPE;
+    V_AUCTION_ID AUCTION_REGISTRATION.AUCTION_ID%TYPE;
+    V_USER_ID USERS.USER_ID%TYPE;
+BEGIN
+  
+    IF (P_REPORT_RESULT_ID = 1) THEN
+    
+        SELECT REPORT_TARGET_ID INTO V_TARGET_ID
+        FROM REPORT_SUBMISSION
+        WHERE REPORT_SUBMISSION_ID = P_REPORT_SUBMISSION_ID;
+        
+        IF (V_TARGET_ID = 1) THEN
+            
+            SELECT PRODUCT_ID INTO V_PRODUCT_ID
+            FROM PRODUCT_REPORT
+            WHERE REPORT_SUBMISSION_ID = P_REPORT_SUBMISSION_ID;
+            
+            SELECT USER_ID INTO V_USER_ID
+            FROM PRODUCT
+            WHERE PRODUCT_ID = V_PRODUCT_ID;
+            
+        ELSIF (V_TARGET_ID = 2) THEN
+        
+            SELECT AUCTION_ID INTO V_AUCTION_ID
+            FROM AUCTION_REPORT
+            WHERE REPORT_SUBMISSION_ID = P_REPORT_SUBMISSION_ID;
+            
+            SELECT PRODUCT_ID INTO V_PRODUCT_ID
+            FROM AUCTION_REGISTRATION
+            WHERE AUCTION_ID = V_AUCTION_ID;
+            
+            SELECT USER_ID INTO V_USER_ID
+            FROM PRODUCT
+            WHERE PRODUCT_ID = V_PRODUCT_ID;
+        END IF;
+        
+        -- 패널티 부여
+        IF V_USER_ID IS NOT NULL THEN
+            PRC_PENALTY_ASSIGN(V_USER_ID, P_ADMIN_ACCOUNT_ID, 1, 1);
+        END IF;
+    END IF;
+    
+    INSERT INTO REPORT_PROCESS(REPORT_PROCESS_ID, REPORT_SUBMISSION_ID, ADMIN_ACCOUNT_ID, REPORT_RESULT_ID, PROCESS_REASON, PROCESSED_AT)
+    VALUES(REPORT_PROCESS_SEQ.NEXTVAL, P_REPORT_SUBMISSION_ID, P_ADMIN_ACCOUNT_ID, P_REPORT_RESULT_ID, P_PROCESSED_REASON, SYSDATE);
+    
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            ROLLBACK;
+            RAISE_APPLICATION_ERROR(-20030, '해당 신고 내역이나 대상자를 찾을 수 없습니다.');
+        WHEN OTHERS THEN
+            ROLLBACK;
+    
+END;
+
 
 -- ○ 15. 패널티 부여 프로시저
+CREATE OR REPLACE PROCEDURE PRC_PENALTY_ASSIGN
+( V_USER_ID             IN      USERS.USER_ID%TYPE
+, V_ADMIN_ACCOUNT_ID    IN      ADMIN_ACCOUNT.ADMIN_ACCOUNT_ID%TYPE
+, V_PENALTY_TYPE_ID     IN      PENALTY_HISTORY.PENALTY_SCORE%TYPE
+, V_PENALTY_SCORE       IN      PENALTY_HISTORY.PENALTY_SCORE%TYPE
+)
+IS
+	V_FLAG_ACTIVE_USER			CHAR(1);
+	V_FLAG_BANNED_USER			CHAR(1);
+
+	-- V_PENALTY_ID                PENALTY_HISTORY.PENALTY_ID%TYPE;
+    V_TOTAL_PENALTY_SCORE       PENALTY_HISTORY.PENALTY_SCORE%TYPE;
+    V_PENALTY_END_DATE          PENALTY_STATUS.PENALTY_END_DATE%TYPE;
+    
+    ERR_PENALTY_TO_DEACTIVATED_USER EXCEPTION;
+    ERR_PENALTY_TO_BANNED_USER EXCEPTION;
+    
+BEGIN
+	-- 회원 유효성 체크) 활동 회원인지 확인
+	SELECT
+		CASE WHEN EXISTS(SELECT 1 FROM USER_PROFILE WHERE USER_ID = V_USER_ID)
+		     THEN 'Y'
+		     
+		     ELSE 'N'
+		END INTO V_FLAG_ACTIVE_USER
+	FROM DUAL;
+
+	-- 활동하지 않는 회원이라면(=탈퇴한 회원이라면) 예외 발생 처리
+	IF V_FLAG_ACTIVE_USER = 'N' THEN
+		RAISE ERR_PENALTY_TO_DEACTIVATED_USER;
+	END IF;
+	
+
+	-- 회원 유효성 체크) 영구 정지 처리된 회원이지 확인
+	-- 유저의 현재 패널티 총점 확인
+    SELECT SUM(PH.PENALTY_SCORE) INTO V_TOTAL_PENALTY_SCORE
+    FROM PENALTY_HISTORY PH LEFT OUTER JOIN PENALTY_CANCEL PC
+         ON PH.PENALTY_ID = PC.PENALTY_ID
+    WHERE PH.USER_ID = V_USER_ID
+      AND PENALTY_CANCEL_ID IS NULL;
+
+	-- 영구 정지 점수(4점 이상)면 이미 영구 정지된 회원이므로 예외 발생
+	IF V_TOTAL_PENALTY_SCORE >= 4 THEN
+		RAISE ERR_PENALTY_TO_BANNED_USER;
+	END IF;
+	
+	
+	
+	-- 회원 유효성 검사 이후) 패널티 부여 로직 수행
+    -- 패널티 점수 부여
+	--  ㄴ 패널티 점수 부여 후 정지 처리는 트리거로 수행
+    INSERT INTO PENALTY_HISTORY (PENALTY_ID, USER_ID, PENALTY_TYPE_ID, ADMIN_ACCOUNT_ID, PENALTY_SCORE, CREATED_AT)
+    VALUES (PENALTY_SEQ.NEXTVAL, V_USER_ID, V_PENALTY_TYPE_ID, V_ADMIN_ACCOUNT_ID, V_PENALTY_SCORE, SYSDATE);
+
+	
+	EXCEPTION
+		-- 활동하지 않는 회원(=탈퇴 회원)에게 패널티 부여 시도
+		WHEN ERR_PENALTY_TO_DEACTIVATED_USER
+		THEN RAISE_APPLICATION_ERROR(-21000, '탈퇴한 회원에게는 패널티 부여가 불가능합니다.');
+		
+		-- 이미 영구정지된 회원에게 추가 패널티 부여 시도(=의미 없는 패널티 부여)
+		WHEN ERR_PENALTY_TO_BANNED_USER
+		THEN RAISE_APPLICATION_ERROR(-21001, '이미 영구 정지 처리된 회원에게는 추가 패널티 부여가 불가능합니다.');
+		
+		WHEN OTHERS
+		THEN RAISE; -- 에러 전파 (ROLLBACK 은 프로시저 호출단에서 컨트롤)
+END;
+/
 
 
 -- ○ 16. 패널티 취소 프로시저
@@ -933,9 +1254,7 @@ BEGIN
      ON C.AUCTION_ID = D.AUCTION_ID AND C.USER_ID = D.USER_ID
      AND D.MONEY_TYPE_ID = N_MONEY_TYPE_ID
      WHERE D.MONEY_ID IS NULL;
-     
-    COMMIT;
-    
+
     EXCEPTION
         WHEN NO_DATA_FOUND
         THEN RAISE_APPLICATION_ERROR(-20105,'낙찰실패타입 테이블에 "기한만료" 코드명이 존재하지 않습니다');
@@ -944,29 +1263,7 @@ END;
 /
 
 -- ○ 18. 구매 확정 자동 처리 스케줄러용 프로시저
-CREATE OR REPLACE PROCEDURE PRC_AUTO_PURCHASE_CONFIRM
-IS
-BEGIN
 
-    INSERT INTO PURCHASE_CONFIRM_HISTORY(PURCHASE_CONFIRM_ID,SHIPPING_ID)
-    SELECT PURCHASE_CONFIRM_SEQ.NEXTVAL,M.SHIPPING_ID
-    FROM
-        (
-            SELECT A.SHIPPING_ID
-            FROM DELIVERY_COMPLETED A LEFT JOIN PURCHASE_CONFIRM_HISTORY B
-            ON A.SHIPPING_ID = B.SHIPPING_ID
-            WHERE B.SHIPPING_ID IS NULL
-            AND A.CREATED_AT+3 < SYSDATE
-        )M
-    
-    SELECT
-    FROM PURCHASE_CONFIRM_HISTORY A LEFT JOIN TRANSACTION_COMPLETED B
-    ON A.SHIPPING_ID = B.SHIPPING_ID
-    WHERE B
-    
-    COMMIT;
-END;
-/
 
 
 -- ○ 19. 탈퇴 회원 정리 스케줄러용 프로시저
@@ -1000,8 +1297,6 @@ END;
 
 
 -- 함수 =========================================================================
-
-
 
 
 
@@ -1252,8 +1547,27 @@ END;
 
 
 -- ○ 9. 낙찰 입찰코드 조회 함수
+CREATE OR REPLACE FUNCTION FN_GET_WINNING_BID_ID
+( P_AUCTION_ID IN NUMBER
+)
+RETURN NUMBER
+IS
+    V_WINNIG_ID NUMBER;
+BEGIN
+    SELECT BID_ID INTO V_WINNIG_ID
+    FROM VW_BID_LIST
+    WHERE AUCTION_ID = P_AUCTION_ID AND BID_RANK = 1;
+    
+    RETURN V_WINNIG_ID;
+    
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN -1;
+        WHEN OTHERS THEN
+            RETURN -1;
 
-
+END;
+/
 
 
 -- ○ 10. 경매 마감여부 확인 함수
@@ -1320,6 +1634,7 @@ END;
 
 
 -- 트리거 ========================================================================
+
 -- ○ 1. 패널티 부여 후 상태 반영 트리거
 CREATE OR REPLACE TRIGGER TRG_PENALTY_AFTER_INS
 	AFTER INSERT ON PENALTY_HISTORY
@@ -1376,7 +1691,11 @@ END;
 
 -- 스케줄러 ======================================================================
 
--- 낙찰 결제 기한 확인 스케줄러
+-- ○ 1. 경매 종료 처리 스케줄러
+
+
+
+-- ○ 2. 낙찰 결제 기한 확인 스케줄러
 BEGIN
     DBMS_SCHEDULER.CREATE_JOB
     (
@@ -1389,7 +1708,9 @@ BEGIN
 END;
 /
 
--- 구매 확정 자동 처리 스케줄러
+
+
+-- ○ 3. 구매 확정 자동 처리 스케줄러
 BEGIN
     DBMS_SCHEDULER.CREATE_JOB
     (
@@ -1401,7 +1722,9 @@ BEGIN
     );
 END;
 /
--- 탈퇴 회원 정리 스케줄러
+
+
+-- ○ 4. 탈퇴 회원 정리 스케줄러
 BEGIN
     DBMS_SCHEDULER.CREATE_JOB
     (
