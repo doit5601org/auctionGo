@@ -5,219 +5,177 @@ import java.sql.Date;
 
 public class ProductDTO
 {
-	private int productId;         					 // 상품 코드 (PK)
-    private String productReleaseName;		// 상품 발매명
-    private String productAlias;   			    // 상품 별칭
-    private int userId;							   //회원고유키
-    private int manufacturerId;           		// 상품 제조사 ID
-    private int productGradeId;            // 상품 등급
-    private int productGenreId;           // 장르 코드
-    private int productSizeId;              // 사이즈/스케일 코드
-    private String workName;      			  // 작품명
-    private String characterName;  		  // 캐릭터명
-    private String purchaseDateTime;      // 구매 시기
-    private String isOpened;     			       // 개봉 여부
- 
-    private String isPartsMissing;    			// 파츠 누락 여부
-    private String description;        		   // 상세 설명
-    private String imgPath1;           		   // 이미지 파일명1
-    private String imgPath2;          	 		  // 이미지 파일명2
-    private String imgPath3;           	     // 이미지 파일명3
-    private String isPublic;    	 		          // 공개 여부
-    private Date createdAt;             // 등록일시
-    
-    public ProductDTO() {}
-
+	private int productId;              // PRODUCT_ID (PK)
+    private String productReleaseName;  // PRODUCT_RELEASE_NAME
+    private String productAlias;        // PRODUCT_ALIAS
+    private int userId;                 // USER_ID (FK)
+    private int manufacturerId;         // MANUFACTURER_ID (FK)
+    private int productGradeId;         // PRODUCT_GRADE_ID (FK)
+    private int productGenreId;         // PRODUCT_GENRE_ID (FK)
+    private int productSizeId;          // PRODUCT_SIZE_ID (FK)
+    private String workName;            // WORK_NAME
+    private String characterName;       // CHARACTER_NAME
+    private String purchaseDateTime;    // PURCHASE_DATETIME (Date 입력용 문자열)
+    private int isOpened;               // IS_OPENED (NUMBER 1)
+    private int isPartsMissing;         // IS_PARTS_MISSING (NUMBER 1)
+    private String descriptions;        // DESCRIPTIONS
+    private String imagePath1;          // IMAGE_PATH_1
+    private String imagePath2;          // IMAGE_PATH_2
+    private String imagePath3;          // IMAGE_PATH_3
+    private int isPublic;               // IS_PUBLIC (NUMBER 1)
+    private String createdAt;           // CREATED_AT
 	public int getProductId()
 	{
 		return productId;
 	}
-
 	public void setProductId(int productId)
 	{
 		this.productId = productId;
 	}
-
 	public String getProductReleaseName()
 	{
 		return productReleaseName;
 	}
-
 	public void setProductReleaseName(String productReleaseName)
 	{
 		this.productReleaseName = productReleaseName;
 	}
-
 	public String getProductAlias()
 	{
 		return productAlias;
 	}
-
 	public void setProductAlias(String productAlias)
 	{
 		this.productAlias = productAlias;
 	}
-
 	public int getUserId()
 	{
 		return userId;
 	}
-
 	public void setUserId(int userId)
 	{
 		this.userId = userId;
 	}
-
 	public int getManufacturerId()
 	{
 		return manufacturerId;
 	}
-
 	public void setManufacturerId(int manufacturerId)
 	{
 		this.manufacturerId = manufacturerId;
 	}
-
 	public int getProductGradeId()
 	{
 		return productGradeId;
 	}
-
 	public void setProductGradeId(int productGradeId)
 	{
 		this.productGradeId = productGradeId;
 	}
-
 	public int getProductGenreId()
 	{
 		return productGenreId;
 	}
-
 	public void setProductGenreId(int productGenreId)
 	{
 		this.productGenreId = productGenreId;
 	}
-
 	public int getProductSizeId()
 	{
 		return productSizeId;
 	}
-
 	public void setProductSizeId(int productSizeId)
 	{
 		this.productSizeId = productSizeId;
 	}
-
 	public String getWorkName()
 	{
 		return workName;
 	}
-
 	public void setWorkName(String workName)
 	{
 		this.workName = workName;
 	}
-
 	public String getCharacterName()
 	{
 		return characterName;
 	}
-
 	public void setCharacterName(String characterName)
 	{
 		this.characterName = characterName;
 	}
-
 	public String getPurchaseDateTime()
 	{
 		return purchaseDateTime;
 	}
-
 	public void setPurchaseDateTime(String purchaseDateTime)
 	{
 		this.purchaseDateTime = purchaseDateTime;
 	}
-
-	public String getIsOpened()
+	public int getIsOpened()
 	{
 		return isOpened;
 	}
-
-	public void setIsOpened(String isOpened)
+	public void setIsOpened(int isOpened)
 	{
 		this.isOpened = isOpened;
 	}
-
-	public String getIsPartsMissing()
+	public int getIsPartsMissing()
 	{
 		return isPartsMissing;
 	}
-
-	public void setIsPartsMissing(String isPartsMissing)
+	public void setIsPartsMissing(int isPartsMissing)
 	{
 		this.isPartsMissing = isPartsMissing;
 	}
-
-	public String getDescription()
+	public String getDescriptions()
 	{
-		return description;
+		return descriptions;
 	}
-
-	public void setDescription(String description)
+	public void setDescriptions(String descriptions)
 	{
-		this.description = description;
+		this.descriptions = descriptions;
 	}
-
-	public String getImgPath1()
+	public String getImagePath1()
 	{
-		return imgPath1;
+		return imagePath1;
 	}
-
-	public void setImgPath1(String imgPath1)
+	public void setImagePath1(String imagePath1)
 	{
-		this.imgPath1 = imgPath1;
+		this.imagePath1 = imagePath1;
 	}
-
-	public String getImgPath2()
+	public String getImagePath2()
 	{
-		return imgPath2;
+		return imagePath2;
 	}
-
-	public void setImgPath2(String imgPath2)
+	public void setImagePath2(String imagePath2)
 	{
-		this.imgPath2 = imgPath2;
+		this.imagePath2 = imagePath2;
 	}
-
-	public String getImgPath3()
+	public String getImagePath3()
 	{
-		return imgPath3;
+		return imagePath3;
 	}
-
-	public void setImgPath3(String imgPath3)
+	public void setImagePath3(String imagePath3)
 	{
-		this.imgPath3 = imgPath3;
+		this.imagePath3 = imagePath3;
 	}
-
-	public String getIsPublic()
+	public int getIsPublic()
 	{
 		return isPublic;
 	}
-
-	public void setIsPublic(String isPublic)
+	public void setIsPublic(int isPublic)
 	{
 		this.isPublic = isPublic;
 	}
-
-	public Date getCreatedAt()
+	public String getCreatedAt()
 	{
 		return createdAt;
 	}
-
-	public void setCreatedAt(Date createdAt)
+	public void setCreatedAt(String createdAt)
 	{
 		this.createdAt = createdAt;
 	}
 	
-	
-	
+    
 }

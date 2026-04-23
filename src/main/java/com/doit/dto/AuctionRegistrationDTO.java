@@ -8,7 +8,7 @@ public class AuctionRegistrationDTO
 	private int productId;                 // 상품 코드 (FK)
 	private String auctionTitle;           // 경매 제목
 	private String auctionContent;         // 경매 글
-	private long startPrice;               // 시작가
+	private int startPrice;               // 시작가
 	private Date createdAt;                // 등록 시간
 	private int auctionPeriodId;           // 경매 기간 코드 (FK)
 
@@ -54,12 +54,12 @@ public class AuctionRegistrationDTO
 		this.auctionContent = auctionContent;
 	}
 
-	public long getStartPrice()
+	public int getStartPrice()
 	{
 		return startPrice;
 	}
 
-	public void setStartPrice(long startPrice)
+	public void setStartPrice(int startPrice)
 	{
 		this.startPrice = startPrice;
 	}
