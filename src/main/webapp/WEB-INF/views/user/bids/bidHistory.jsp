@@ -46,12 +46,13 @@ $(function() {
 
 </head>
 <body class="bg-light">
-    <jsp:include page="/common/header.jsp" />
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
     <div class="container" style="margin-top: 50px; margin-bottom: 50px;">
         <div class="row">
             <aside class="col-md-3">
-                <jsp:include page="/common/mypage_layout.jsp" />
+                <%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
+			</aside>
             </aside>
             <section class="col-md-9">
                 <div class="card shadow-sm border-0 bg-white p-4">
@@ -313,6 +314,6 @@ $(function() {
         </div>
     </div>
 
-    <jsp:include page="/common/footer.jsp" />
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

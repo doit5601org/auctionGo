@@ -42,8 +42,6 @@
 </style>
 </head>
 <body class="bg-light">
-
-<%-- <jsp:include page="WEB-INF/views/common/header.jsp"></jsp:include> --%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 <main class="container">
@@ -68,9 +66,9 @@
 						<label class="form-check-label" for="checkDefault">아이디 저장</label>
 					</div>
 					<div class="small">
-						<a href="${pageContext.request.contextPath}/user/auth/findId.jsp" class="text-decoration-none me-2 text-dark">아이디 찾기</a>
+						<a href="${pageContext.request.contextPath}/user/auth/find-id" class="text-decoration-none me-2 text-dark">아이디 찾기</a>
 						<span class="text-muted">|</span>
-						<a href="${pageContext.request.contextPath}/user/auth/findPwd.jsp" class="text-decoration-none ms-2 text-dark">비밀번호 찾기</a>
+						<a href="${pageContext.request.contextPath}/user/auth/find-pw" class="text-decoration-none ms-2 text-dark">비밀번호 찾기</a>
 					</div>
 				</div>
 				<div class="d-grid gap-2 col-6 mx-auto">
@@ -78,7 +76,7 @@
 				</div>
 				<div class="text-center mt-2">
 					아직 회원이 아니신가요?
-					<a href="${pageContext.request.contextPath }/user/auth/signUp.jsp" class="text-dark fw-bold">회원 가입</a> 
+					<a href="${pageContext.request.contextPath }/user/auth/sign-up" class="text-dark fw-bold">회원 가입</a> 
 				</div>
 			</form>
 		</div>
@@ -87,9 +85,5 @@
 
 <%-- <jsp:include page="/common/footer.jsp"></jsp:include> --%>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-		crossorigin="anonymous"></script>
 </body>
 </html>

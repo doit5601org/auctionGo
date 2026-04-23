@@ -33,7 +33,9 @@
 </script>
 </head>
 <body class="bg-light">
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+
+ <%@ include file="/WEB-INF/views/common/header.jsp" %>
+
 <main class="container">
 	<section class="row justify-content-center mt-5 mb-5">
 		<div class="col-md-5 card p-4">		
@@ -59,9 +61,5 @@
 	</section>
 </main>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
-<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-		crossorigin="anonymous"></script>
 </body>
 </html>

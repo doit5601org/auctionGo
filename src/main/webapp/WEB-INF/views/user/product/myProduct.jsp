@@ -6,35 +6,15 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-   	<style type="text/css">
-   		/* 페이지 전체를 flex 박스로 만듭니다 */
-		body {
-		    display: flex;
-		    flex-direction: column;
-		    min-height: 100vh; /* 화면 높이의 100%를 최소 높이로 설정 */
-		    margin: 0;
-		}
-		
-		/* 메인 콘텐츠 영역이 남는 공간을 모두 차지하게 합니다 */
-		main.container, .container {
-		    flex: 1;
-		}
-		
-		/* 푸터는 자연스럽게 맨 아래로 밀려납니다 */
-		footer {
-		    flex-shrink: 0;
-		}
-   	</style>
-
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 
 </head>
 <body class="bg-light">
-<jsp:include page="/common/header.jsp"></jsp:include>
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
 	<main class="container" style="margin-top: 50px; margin-bottom: 50px;">
 		<div class="row">
 			<aside class="col-md-3">
-				<jsp:include page="/common/mypage_layout.jsp" />
+				<%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
 			</aside>
 			<section class="col-md-9">
 				<div class="card shadow-sm border-0 bg-white">
@@ -324,6 +304,6 @@
 	</main>
 
 
-	<jsp:include page="/common/footer.jsp"></jsp:include>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
