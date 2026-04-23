@@ -11,14 +11,14 @@
 	rel="stylesheet"
 	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
 	crossorigin="anonymous">
-<link rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
+<link rel="stylesheet" href="/css/common.css" />
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
     <div class="container-fluid px-lg-5">
     	<h1>
-	        <a class="navbar-brand fw-bold text-secondary fs-3" href="${pageContext.request.contextPath}/common/main.jsp">
+	        <a class="navbar-brand fw-bold text-secondary fs-3" href="${pageContext.request.contextPath}/main">
 				<img src="${pageContext.request.contextPath}/images/logo.png" alt="로고이미지" style="width: 200px;" />
 	        </a>
     	</h1>
@@ -42,10 +42,10 @@
                     <%-- <c:choose>
                         <c:when test="${empty sessionScope.loginUser}">--%>
                             <li class="nav-item">
-                                <a class="nav-link text-dark fw-semibold" href="${pageContext.request.contextPath}/user/auth/login.jsp">로그인</a>
+                                <a class="nav-link text-dark fw-semibold" href="${pageContext.request.contextPath}/user/auth/login">로그인</a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-outline-dark px-3" href="${pageContext.request.contextPath}/user/auth/signUp.jsp">회원가입</a>
+                                <a class="btn btn-outline-dark px-3" href="${pageContext.request.contextPath}/user/auth/sign-up">회원가입</a>
                             </li>
                          <%-- </c:when>
                         <c:otherwise> --%>
