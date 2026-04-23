@@ -21,17 +21,10 @@ function updateCount(el) {
 </script>    
 </head>
 <body class="bg-light">
-
 <%-- 네비게이션 바 --%>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="${ctx}/main/">경매나라</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto ms-3">
-                <li class="nav-item"><a class="nav-link" href="${ctx}/product/list">컬렉션</a></li>
-                <li class="nav-item"><a class="nav-link fw-semibold" href="${ctx}/auction/list">경매</a></li>
-                <li class="nav-item"><a class="nav-link" href="${ctx}/product/myList">내 상품</a></li>
-            </ul>
+        <a class="navbar-brand fw-bold" href="${ctx}/main/">AUCTION GO</a>
         </div>
     </div>
 </nav>
@@ -57,19 +50,29 @@ function updateCount(el) {
         </div>
 
         <%-- POST /auction/report 로 전송 (Servlet에서 처리) --%>
-        <form action="${ctx}/auction/report" method="post">
-            <input type="hidden" name="auctionId" value="${auction.auctionId}">
+<form action="${ctx}/auction/report" method="post">
+    <input type="hidden" name="auctionId" value="${auction.auctionId}">
 
-            <%-- 신고 유형 (Servlet에서 reportTypeList 전달) --%>
-            <div class="mb-3">
-                <label class="form-label fw-semibold">신고 유형 <span class="text-danger">*</span></label>
-                <select name="reportTypeId" class="form-select" required>
-                    <option value="">선택하세요</option>
-                    <c:forEach var="t" items="${reportTypeList}">
-                        <option value="${t.typeId}">${t.typeName}</option>
-                    </c:forEach>
-                </select>
-            </div>
+    <%-- 신고 유형 --%>
+    <div class="mb-3">
+        <label class="form-label fw-semibold">신고 유형 <span class="text-danger">*</span></label>
+        <select name="reportTypeId" class="form-select" required>
+            <option value="">선택하세요</option>
+            
+            <%-- [실제 운영 시] Servlet에서 데이터를 보내줄 때 활성화 --%>
+            <c:forEach var="t" items="${reportTypeList}">
+                <option value="${t.typeId}">${t.typeName}</option>
+            </c:forEach>
+
+            <%-- [테스트/수동 추가용] --%>
+            <c:if test="${empty reportTypeList}">
+                <option value="1">도배</option>
+                <option value="2">광고</option>
+                <option value="3">개인정보기재</option>
+                <option value="4">기타</option>
+            </c:if>
+        </select>
+    </div>
 
             <%-- 신고 사유 (최대 500자) --%>
             <div class="mb-4">
