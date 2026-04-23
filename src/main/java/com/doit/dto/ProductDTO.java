@@ -10,9 +10,9 @@ public class ProductDTO
     private String productAlias;   			    // 상품 별칭
     private int userId;							   //회원고유키
     private int manufacturerId;           		// 상품 제조사 ID
-    private String productGradeId;            // 상품 등급
-    private String productGenreId;           // 장르 코드
-    private String productSizeId;              // 사이즈/스케일 코드
+    private int productGradeId;            // 상품 등급
+    private int productGenreId;           // 장르 코드
+    private int productSizeId;              // 사이즈/스케일 코드
     private String workName;      			  // 작품명
     private String characterName;  		  // 캐릭터명
     private String purchaseDateTime;      // 구매 시기
@@ -27,8 +27,7 @@ public class ProductDTO
     private Date createdAt;             // 등록일시
     
     public ProductDTO() {}
-	
-	
+
 	public int getProductId()
 	{
 		return productId;
@@ -79,32 +78,32 @@ public class ProductDTO
 		this.manufacturerId = manufacturerId;
 	}
 
-	public String getProductGradeId()
+	public int getProductGradeId()
 	{
 		return productGradeId;
 	}
 
-	public void setProductGradeId(String productGradeId)
+	public void setProductGradeId(int productGradeId)
 	{
 		this.productGradeId = productGradeId;
 	}
 
-	public String getProductGenreId()
+	public int getProductGenreId()
 	{
 		return productGenreId;
 	}
 
-	public void setProductGenreId(String productGenreId)
+	public void setProductGenreId(int productGenreId)
 	{
 		this.productGenreId = productGenreId;
 	}
 
-	public String getProductSizeId()
+	public int getProductSizeId()
 	{
 		return productSizeId;
 	}
 
-	public void setProductSizeId(String productSizeId)
+	public void setProductSizeId(int productSizeId)
 	{
 		this.productSizeId = productSizeId;
 	}
@@ -218,6 +217,7 @@ public class ProductDTO
 	{
 		this.createdAt = createdAt;
 	}
-    
-    
+	
+	
+	
 }
