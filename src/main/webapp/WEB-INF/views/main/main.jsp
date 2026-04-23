@@ -59,17 +59,14 @@
         overflow: hidden;
     }
     .hero-section{
-    	background-image: url(${pageContext.request.contextPath}/images/main.jpeg) !important;
+    	background-image: url('${pageContext.request.contextPath}/images/main.jpeg') !important;
     }
 </style>
 </head>
 <body class="bg-light">
 
-<%--
-<jsp:include page="WEB-INF/views/common/header.jsp"></jsp:include>
---%>
-<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-
+<%-- <jsp:include page="WEB-INF/views/common/header.jsp"></jsp:include> --%>
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
 <main>
     <section class="hero-section text-center mb-5">
         <div class="container">
@@ -149,11 +146,7 @@
         </section>
     </div>
 </main>
-
-<%--
-<jsp:include page="footer.jsp"></jsp:include>
---%>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
-
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+<%-- <jsp:include page="footer.jsp"></jsp:include> --%>
 </body>
 </html>
