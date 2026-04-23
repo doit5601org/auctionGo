@@ -11,46 +11,7 @@
 	rel="stylesheet"
 	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
 	crossorigin="anonymous">
-	<style>
-/* 메뉴 호버 효과 */
-.hover-primary:hover {
-    color: #120e63 !important;
-    text-decoration: underline;
-    text-underline-offset: 8px;
-}
-/* 드롭다운 메뉴 위치 조정 */
-.dropdown-menu {
-    margin-top: 10px !important;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-.btn-primary{
-	background-color: #120e63 !important;
-	border-color: #120e63 !important;
-}
-.page-link{
-	color: #120e63 !important;
-}
-.page-item.active .page-link{
-	background-color: #120e63 !important;
-	color: #fff !important;
-	border-color: #120e63 !important;
-} 
-
-.bgColor{background-color: #120e63;}
-.txtColor{color: #120e63;}
-
-.btn-outline-primary{
-	color: #120e63 !important;
-	border-color: #120e63 !important;
-}
-.btn-outline-primary:hover {
-background-color: #120e63 !important;
-color: #fff !important;
-}
-
-
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath }/css/common.css" />
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 </head>
 <body>

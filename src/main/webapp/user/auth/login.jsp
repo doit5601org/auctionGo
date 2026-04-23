@@ -69,7 +69,7 @@
 					<div class="small">
 						<a href="${pageContext.request.contextPath}/user/auth/findId.jsp" class="text-decoration-none me-2 text-dark">아이디 찾기</a>
 						<span class="text-muted">|</span>
-						<a href="${pageContext.request.contextPath}/user/auth/findPw.jsp" class="text-decoration-none ms-2 text-dark">비밀번호 찾기</a>
+						<a href="${pageContext.request.contextPath}/user/auth/findPwd.jsp" class="text-decoration-none ms-2 text-dark">비밀번호 찾기</a>
 					</div>
 				</div>
 				<div class="d-grid gap-2 col-6 mx-auto">

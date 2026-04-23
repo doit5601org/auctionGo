@@ -62,7 +62,7 @@
 <div class="container mt-4 mb-5" style="max-width:720px">
     <div class="page-header text-center">
         <h4 class="mb-1 fw-bold">나의 컬렉션 자랑하기</h4>
-        <p class="mb-0 small opacity-90">당신의 소중한 피규어를 컬렉터들에게 소개해 보세요.</p>
+        <p class="mb-0 small opacity-90">당신의 소중한 피규어를 뽐내세요!!</p>
     </div>
 
     <div class="card p-4">
@@ -272,7 +272,7 @@
 
             <div class="d-flex gap-3 mt-5">
                 <button type="button" class="btn btn-light w-50 py-3 fw-bold" onclick="history.back()">돌아가기</button>
-                <button type="submit" class="btn btn-primary w-50 py-3 fw-bold shadow">나의 컬렉션 등록하기</button>
+                <button type="submit" class="btn btn-primary w-50 py-3 fw-bold shadow">등록하기</button>
             </div>
         </form>
     </div>

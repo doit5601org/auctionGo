@@ -20,20 +20,14 @@
 
 <jsp:include page="/common/header.jsp"></jsp:include>
 
-
-<%-- 네비게이션 바 --%>
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+<%-- 상단 헤더 --%>
+<div class="page-header text-center">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="main.jsp">경매나라</a><%-- ${ctx}/main --%>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto ms-3">
-                <li class="nav-item"><a class="nav-link fw-semibold" href="productList.jsp">컬렉션</a></li><%-- ${ctx}/product/list --%>
-                <li class="nav-item"><a class="nav-link" href="auctionList.jsp">경매</a></li><%-- ${ctx}/auction/list --%>
-                <li class="nav-item"><a class="nav-link" href="productMyList.jsp">내 상품</a></li><%-- ${ctx}/product/myList --%>
-            </ul>
-        </div>
+        <h2 class="header-title">실시간 경매</h2>
+        <p class="text-muted mb-0 small">지금 참여하고 최고의 컬렉션을 소유하세요!</p>
     </div>
-</nav>
+</div>
+
 
 <%-- 검색/필터 --%>
 <%-- [Controller 연결 후] GET /product/list 로 전송, genreList·sizeList·makerList setAttribute로 전달 --%>
