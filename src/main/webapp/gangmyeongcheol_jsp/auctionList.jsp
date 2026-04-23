@@ -14,9 +14,10 @@
     body { background-color: #f8fafd; font-family: 'Pretendard', sans-serif; }
     .navbar-brand { font-weight: 700; color: #1565c0 !important; }
     
-    /* 헤더 영역 (productList와 통일) */
-    .page-header { background: white; border-bottom: 1px solid #e3f2fd; padding: 25px 0; margin-bottom: 20px; }
-    .header-title { font-weight: 800; color: #222; margin-bottom: 5px; }
+    /* 헤더 영역  */
+    .page-header { background: #f8f9fa; /* 첫 번째 코드의 bg-light 색상 */
+    padding: 3rem 0 2rem 0; /* 적절한 상하 여백 */ }
+    .header-title { font-weight: 800; color: #222;}
     
     /* 필터 영역 */
     .filter-bar { background: white; border-bottom: 1px solid #e3f2fd; padding: 12px 0; margin-bottom: 30px; }

@@ -14,6 +14,12 @@
         .product-card { cursor: pointer; }
         .product-card img { height: 180px; object-fit: cover; }
         .navbar-brand { font-weight: 700; color: #4F46E5 !important; }
+       
+       /* 헤더 영역  */
+    .page-header { background: #f8f9fa; /* 첫 번째 코드의 bg-light 색상 */
+    padding: 3rem 0 2rem 0; /* 적절한 상하 여백 */ }
+    .header-title { font-weight: 800; color: #222;}
+        
     </style>
 </head>
 <body class="bg-light">
