@@ -65,7 +65,10 @@
 </head>
 <body class="bg-light">
 
+<%--
 <jsp:include page="WEB-INF/views/common/header.jsp"></jsp:include>
+--%>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 <main>
     <section class="hero-section text-center mb-5">
@@ -147,6 +150,10 @@
     </div>
 </main>
 
+<%--
 <jsp:include page="footer.jsp"></jsp:include>
+--%>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+
 </body>
 </html>
