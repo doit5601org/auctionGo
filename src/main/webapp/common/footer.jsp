@@ -11,8 +11,7 @@
 <body>
 	<footer class="py-5 bg-dark text-white mt-auto">
     <div class="container text-center">
-        <p class="mb-0">© 2026 Auction Project. All Rights Reserved.</p>
-        <small class="text-secondary">Designed by team1</small>
+        <p class="mb-0 text-white">© 2026 Auction Project. All Rights Reserved.</p>
     </div>
 </footer>
 

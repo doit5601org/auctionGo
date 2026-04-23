@@ -1957,6 +1957,14 @@ EXEC PRC_PENALTY_ASSIGN(1, 2, 1, 1);
 --)
 
 
+EXEC PRC_PENALTY_CANCEL(5, 1, '잘못누름');
+
+--CREATE OR REPLACE PROCEDURE PRC_PENALTY_CANCEL
+--( P_PENALTY_ID              IN          PENALTY_HISTORY.PENALTY_ID%TYPE
+--, P_ADMIN_ACCOUNT_ID        IN          ADMIN_ACCOUNT.ADMIN_ACCOUNT_ID%TYPE
+--, P_CANCEL_REASON           IN          PENALTY_CANCEL.CANCEL_REASON%TYPE
+--)
+
 
 SELECT *
 FROM VW_PENALTY_LIST;
@@ -1990,6 +1998,10 @@ VALUES(BID_FAIL_HISTORY_SEQ.NEXTVAL, 2, 2, SYSDATE);
 SELECT *
 FROM BID_FAILURE_HISTORY;
 
+UPDATE BID_FAILURE_HISTORY
+SET BID_FAIL_TYPE_ID = 1
+;
+
 SELECT *
 FROM BID_FAILURE_TYPE;
 /*
@@ -2012,15 +2024,48 @@ FROM VW_AUCTION_LIST;
 
 SELECT *
 FROM BID_FAILURE_HISTORY;
+/*
+
+BID_FAIL_HISTORY_ID BID_RESULT_ID BID_FAIL_TYPE_ID CREATED_AT
+------------------- ------------- ---------------- ----------
+                  1             2                2 2026-04-23
+
+*/
+
+
+    SELECT BID_FAIL_TYPE_ID 
+    FROM BID_FAILURE_TYPE
+    WHERE BID_FAIL_TYPE_NAME = '기한만료';
 
 
 
+BEGIN
+    DBMS_SCHEDULER.ENABLE('SCH_AUCTION_CLOSE');
+    DBMS_SCHEDULER.ENABLE('SCH_AUTO_PURCHASE_CONFIRM');
+END;
+/
+
+-- 스케줄러 실행 결과 확인 (성공/실패 여부와 에러 메시지 확인 가능)
+SELECT 
+    LOG_DATE, 
+    JOB_NAME, 
+    STATUS,              -- SUCCEEDED 또는 FAILED
+    ERROR#, 
+    ADDITIONAL_INFO      -- 에러 시 상세 내용이 여기에 찍힘
+FROM USER_SCHEDULER_JOB_RUN_DETAILS
+ORDER BY LOG_DATE DESC;
+
+SELECT 
+    JOB_NAME, 
+    STATE,               -- RUNNING, SCHEDULED, DISABLED 등
+    LAST_START_DATE, 
+    NEXT_RUN_DATE, 
+    FAILURE_COUNT        -- 실패 횟수가 올라가고 있다면 코드 수정 필요!
+FROM USER_SCHEDULER_JOBS;
 
 
 
-
-
-
+--==============================================================================
 
 
 
