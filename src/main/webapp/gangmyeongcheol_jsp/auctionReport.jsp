@@ -21,7 +21,6 @@ function updateCount(el) {
 </script>    
 </head>
 <body class="bg-light">
-
 <%-- 네비게이션 바 --%>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
