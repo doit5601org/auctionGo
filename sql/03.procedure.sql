@@ -1,9 +1,3 @@
-SELECT USER
-FROM DUAL;
-
-SELECT USER
-FROM DUAL;
-
 
 -- 프로시저 ======================================================================
 
@@ -982,51 +976,74 @@ END;
 
 -- ○ 13. 신고 접수 프로시저
 CREATE OR REPLACE PROCEDURE PRC_REPORT_CREATE (
-    P_USER_ID       NUMBER,         -- 신고자 ID
-    P_REPORT_TYPE   NUMBER,         -- 도배 광고 개인정보기재 기타 1 2 3 4
-    P_TARGET_ID     NUMBER,         -- 상품코드 혹은 경매코드
-    P_TARGET_TYPE   NUMBER,         -- 상품 OR 경매     
-    P_REPORT_REASON  VARCHAR2       -- 신고 사유
+    P_USER_ID        NUMBER,         -- 신고자 ID
+    P_REPORT_TYPE    NUMBER,         -- 도배 광고 개인정보기재 기타 1 2 3 4
+    P_TARGET_ID      NUMBER,         -- 상품코드 혹은 경매코드 (예: 6)
+    P_TARGET_TYPE    NUMBER,         -- 상품(1) OR 경매(2)     
+    P_REPORT_REASON  VARCHAR2        -- 신고 사유
 )
 IS
     V_NEW_REPORT_ID  NUMBER;    -- 새롭게 생성된 신고신청코드
+    V_EXIST_COUNT    NUMBER := 0; -- 중복 신고 확인용
+    
+    ERR_DUPLICATE    CONSTANT NUMBER := -20020; -- 중복 신고 에러 코드
     ERR_UNKNOWN      CONSTANT NUMBER := -20009;
 BEGIN
+    -- 1. 중복 신고 방지 로직 추가
+    IF P_TARGET_TYPE = 1 THEN
+        -- 동일 유저가 동일 상품을 신고했는지 확인
+        SELECT COUNT(*) INTO V_EXIST_COUNT
+        FROM REPORT_SUBMISSION RS
+        JOIN PRODUCT_REPORT PR ON RS.REPORT_SUBMISSION_ID = PR.REPORT_SUBMISSION_ID
+        WHERE RS.USER_ID = P_USER_ID 
+          AND PR.PRODUCT_ID = P_TARGET_ID;
+          
+    ELSIF P_TARGET_TYPE = 2 THEN
+        -- 동일 유저가 동일 경매를 신고했는지 확인
+        SELECT COUNT(*) INTO V_EXIST_COUNT
+        FROM REPORT_SUBMISSION RS
+        JOIN AUCTION_REPORT AR ON RS.REPORT_SUBMISSION_ID = AR.REPORT_SUBMISSION_ID
+        WHERE RS.USER_ID = P_USER_ID 
+          AND AR.AUCTION_ID = P_TARGET_ID;
+    END IF;
 
-     V_NEW_REPORT_ID := REPORT_SEQ.NEXTVAL;
-    -- 1. 신고 신청(부모) INSERT
+    IF V_EXIST_COUNT > 0 THEN
+        RAISE_APPLICATION_ERROR(ERR_DUPLICATE, '이미 해당 대상에 대해 신고를 접수하셨습니다.');
+    END IF;
+
+    -- 2. 신고 신청(부모) INSERT
+    V_NEW_REPORT_ID := REPORT_SEQ.NEXTVAL;
+    
     INSERT INTO REPORT_SUBMISSION(
         REPORT_SUBMISSION_ID, USER_ID, REPORT_TARGET_ID, REPORT_TYPE_ID, REPORT_REASON, CREATED_AT)
-    VALUES(V_NEW_REPORT_ID, P_USER_ID, P_TARGET_ID, P_REPORT_TYPE, P_REPORT_REASON, SYSDATE);
+    VALUES(V_NEW_REPORT_ID, P_USER_ID, P_TARGET_TYPE, P_REPORT_TYPE, P_REPORT_REASON, SYSDATE);
     
-    -- 2. 신고 대상(상품, 경매) 분기 처리 후 해당 테이블 INSERT
-    
-    IF P_TARGET_TYPE = 1 
-    THEN 
+    -- 3. 신고 대상(상품, 경매) 분기 처리 후 해당 테이블 INSERT
+    IF P_TARGET_TYPE = 1 THEN 
         INSERT INTO PRODUCT_REPORT(
           PRODUCT_REPORT_ID, REPORT_SUBMISSION_ID, PRODUCT_ID)
         VALUES(
           PRODUCT_REPORT_SEQ.NEXTVAL, V_NEW_REPORT_ID, P_TARGET_ID);
     
-    ELSIF P_TARGET_TYPE = 2
-    THEN
+    ELSIF P_TARGET_TYPE = 2 THEN
         INSERT INTO AUCTION_REPORT(
           AUCTION_REPORT_ID, REPORT_SUBMISSION_ID, AUCTION_ID)
         VALUES(
           AUCTION_REPORT_SEQ.NEXTVAL, V_NEW_REPORT_ID, P_TARGET_ID);
     END IF;
     
-    EXCEPTION
-     WHEN OTHERS THEN     
+    COMMIT;
+
+EXCEPTION
+    WHEN OTHERS THEN     
         ROLLBACK;
         IF SQLCODE BETWEEN -20999 AND -20000 THEN
-            RAISE; -- 이미 정의된 커스텀 에러는 그대로 통과
+            RAISE; 
         ELSE
-            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다');
+            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다: ' || SQLERRM);
         END IF; 
 END;
 /
-
 
 -- ○ 14. 신고 처리 프로시저
 CREATE OR REPLACE PROCEDURE PRC_REPORT_PROCESS
@@ -1544,7 +1561,6 @@ BEGIN
             RETURN -1;
         WHEN OTHERS THEN
             RETURN -1;
-
 END;
 /
 
