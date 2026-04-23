@@ -20,7 +20,13 @@
 
 <jsp:include page="/common/header.jsp"></jsp:include>
 
-
+<%-- 상단 헤더 --%>
+<div class="page-header text-center">
+    <div class="container">
+        <h2 class="header-title">실시간 경매</h2>
+        <p class="text-muted mb-0 small">지금 참여하고 최고의 컬렉션을 소유하세요!</p>
+    </div>
+</div>
 
 
 <%-- 검색/필터 --%>

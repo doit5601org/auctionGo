@@ -1,4 +1,4 @@
-package com.auction.product;
+package com.doit.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class ProductDAO {
 	
 	//private Connection conn = DBConn.getConnection();
 
-	// 1. 상품 등록 (프로시저 PRC_PRODUCT_CREATE 호출)
+	// 상품 등록 (프로시저 PRC_PRODUCT_CREATE 호출)
 	public void insertProduct(ProductDTO dto) throws SQLException {
 		CallableStatement cstmt = null;
 		String sql = "{CALL PRC_PRODUCT_CREATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
@@ -29,13 +29,13 @@ public class ProductDAO {
 			cstmt.setString(2, dto.getProductAlias());
 			cstmt.setLong(3, dto.getUserId());
 			cstmt.setInt(4, dto.getManufacturerId());
-			cstmt.setInt(5, dto.getProductGradeId());
-			cstmt.setInt(6, dto.getProductGenreId());
-			cstmt.setInt(7, dto.getProductSizeId());
-			cstmt.setString(8, dto.getDescriptions());
-			cstmt.setString(9, dto.getImagePath1());
-			cstmt.setString(10, dto.getImagePath2());
-			cstmt.setString(11, dto.getImagePath3());
+			cstmt.setInt(dto.getProductGradeId(), 5);
+			cstmt.setInt(dto.getProductGenreId(), 6);
+			cstmt.setInt(dto.getProductSizeId(), 7);
+			cstmt.setString(8, dto.getDescription());
+			cstmt.setString(9, dto.getImgPath1());
+			cstmt.setString(10, dto.getImgPath2());
+			cstmt.setString(11, dto.getImgPath3());
 			cstmt.setString(12, dto.getIsPublic());
 
 			cstmt.executeUpdate();
@@ -44,17 +44,17 @@ public class ProductDAO {
 			e.printStackTrace();
 			throw e;
 		} finally {
-			DBUtil.close(cstmt);
+			//DBUtil.close(cstmt);
 		}
 	}
 
-	// 2. 상품 수정 (프로시저 PRC_PRODUCT_UPDATE 호출)
+	// 상품 수정 (프로시저 PRC_PRODUCT_UPDATE 호출)
 	public void updateProduct(ProductDTO dto) throws SQLException {
 		CallableStatement cstmt = null;
 		String sql = "{CALL PRC_PRODUCT_UPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
 		try {
-			cstmt = conn.prepareCall(sql);
+		//cstmt = conn.prepareCall(sql);
 
 			cstmt.setLong(1, dto.getProductId());
 			cstmt.setString(2, dto.getProductReleaseName());
@@ -63,7 +63,7 @@ public class ProductDAO {
 			cstmt.setInt(5, dto.getProductGradeId());
 			cstmt.setInt(6, dto.getProductGenreId());
 			cstmt.setInt(7, dto.getProductSizeId());
-			cstmt.setString(8, dto.getDescriptions());
+			cstmt.setString(8, dto.getDescription());
 			cstmt.setString(9, dto.getIsOpened());
 			cstmt.setString(10, dto.getIsPartsMissing());
 			cstmt.setString(11, dto.getIsPublic());
@@ -74,11 +74,11 @@ public class ProductDAO {
 			e.printStackTrace();
 			throw e;
 		} finally {
-			DBUtil.close(cstmt);
+			//DBUtil.close(cstmt);
 		}
 	}
 
-	// 3. 내 상품 목록 조회 (Paging 처리 포함)
+	// 내 상품 목록 조회 (Paging 처리 포함)
 	public List<ProductDTO> listProduct(long userId, int offset, int size) {
 		List<ProductDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
@@ -87,15 +87,9 @@ public class ProductDAO {
 
 		try {
 			// 최신 등록순으로 페이징 조회
-			sql = """
-				SELECT PRODUCT_ID, PRODUCT_RELEASE_NAME, CREATED_AT, IMAGE_PATH_1
-				FROM PRODUCT_REGISTRATION
-				WHERE USER_ID = ?
-				ORDER BY CREATED_AT DESC
-				OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
-				""";
 
-			pstmt = conn.prepareStatement(sql);
+
+		//	pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, userId);
 			pstmt.setInt(2, offset);
 			pstmt.setInt(3, size);
@@ -104,23 +98,23 @@ public class ProductDAO {
 
 			while (rs.next()) {
 				ProductDTO dto = new ProductDTO();
-				dto.setProductId(rs.getLong("PRODUCT_ID"));
+				dto.setProductId(rs.getInt("PRODUCT_ID"));
 				dto.setProductReleaseName(rs.getString("PRODUCT_RELEASE_NAME"));
-				dto.setCreatedAt(rs.getTimestamp("CREATED_AT").toLocalDateTime()); // 시간 타입 처리
-				dto.setImagePath1(rs.getString("IMAGE_PATH_1"));
+				dto.setCreatedAt(rs.getDate("CREATED_AT")); 
+				dto.setImgPath1(rs.getString("IMAGE_PATH_1"));
 				
 				list.add(dto);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			DBUtil.close(rs);
-			DBUtil.close(pstmt);
+			//DBUtil.close(rs);
+			//DBUtil.close(pstmt);
 		}
 		return list;
 	}
 
-	// 4. 상품 상세 정보 조회 (수정 폼 로딩용)
+	// 상품 상세 정보 조회 (수정 폼 로딩용)
 	public ProductDTO findById(long productId) {
 		ProductDTO dto = null;
 		PreparedStatement pstmt = null;
@@ -129,21 +123,21 @@ public class ProductDAO {
 
 		try {
 			sql = "SELECT * FROM PRODUCT_REGISTRATION WHERE PRODUCT_ID = ?";
-			pstmt = conn.prepareStatement(sql);
+			//pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, productId);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
 				dto = new ProductDTO();
-				dto.setProductId(rs.getLong("PRODUCT_ID"));
+				dto.setProductId(rs.getInt("PRODUCT_ID"));
 				dto.setProductReleaseName(rs.getString("PRODUCT_RELEASE_NAME"));
 				dto.setProductAlias(rs.getString("PRODUCT_ALIAS"));
 				dto.setManufacturerId(rs.getInt("MANUFACTURER_ID"));
 				dto.setProductGradeId(rs.getInt("PRODUCT_GRADE_ID"));
 				dto.setProductGenreId(rs.getInt("PRODUCT_GENRE_ID"));
 				dto.setProductSizeId(rs.getInt("PRODUCT_SIZE_ID"));
-				dto.setDescriptions(rs.getString("DESCRIPTIONS"));
-				dto.setImagePath1(rs.getString("IMAGE_PATH_1"));
+				dto.setDescription(rs.getString("DESCRIPTIONS"));
+				dto.setImgPath1(rs.getString("IMAGE_PATH_1"));
 				dto.setIsOpened(rs.getString("IS_OPENED"));
 				dto.setIsPartsMissing(rs.getString("IS_PARTS_MISSING"));
 				dto.setIsPublic(rs.getString("IS_PUBLIC"));
@@ -151,26 +145,26 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			DBUtil.close(rs);
-			DBUtil.close(pstmt);
+			//DBUtil.close(rs);
+			//DBUtil.close(pstmt);
 		}
 		return dto;
 	}
 
-	// 5. 상품 삭제 (프로시저 호출)
+	// 상품 삭제 (프로시저 호출)
 	public void deleteProduct(long productId) throws SQLException {
 		CallableStatement cstmt = null;
 		String sql = "{CALL PRC_PRODUCT_DELETE(?)}";
 
 		try {
-			cstmt = conn.prepareCall(sql);
+			//cstmt = conn.prepareCall(sql);
 			cstmt.setLong(1, productId);
 			cstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
 		} finally {
-			DBUtil.close(cstmt);
+			//DBUtil.close(cstmt);
 		}
 	}
 }
