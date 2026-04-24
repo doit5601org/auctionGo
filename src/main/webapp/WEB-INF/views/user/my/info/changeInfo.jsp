@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -108,49 +109,49 @@
 					</div>
 			<div class="d-flex justify-content-center">
 			<div class="col-md-7 card p-4 pb-5 border-0 mt-4">
-			<form action="" method="get" id="changeInfoForm">
+			<form action="${pageContext.request.contextPath }/user/my/changeInfo-action" method="post" id="changeInfoForm">
 				<div class="mb-3">
 					<label for="userId" class="form-label ms-1">아이디 <span class="text-danger">*</span></label> 
 					<div class="d-flex ">
-						<input type="email" class="form-control w-50" id="userId" aria-describedby="emailHelp" value="superman" disabled="disabled">
+						<input type="email" class="form-control w-50" id="userId" aria-describedby="emailHelp" value="${user.userLoginId }" disabled="disabled">
 					</div>
 				</div>
 				<div class="mb-3">
 					<label for="userPwd" class="form-label ms-1">비밀번호 확인 <span class="text-danger">*</span></label> 
-					<input type="password" class="form-control w-75" id="userPwd">
+					<input type="password" class="form-control w-75" id="userPwd" name="userPwd">
 					<span class="text-danger ms-1 errMsg">비밀번호를 입력해주세요.</span>
 				</div>
 				<div class="mb-3">
 					<label for="userName" class="form-label ms-1">이름 <span class="text-danger">*</span></label> 
-					<input type="text" class="form-control w-50" id="userName" value="홍길동" disabled="disabled">
+					<input type="text" class="form-control w-50" id="userName" value="${user.userName }" disabled="disabled">
 				</div>
 				<div class="mb-3">
 					<label>이메일 <span class="text-danger">*</span></label>
-					<input type="email" class="form-control me-1 w-75" id="userEmail" value="superman@test.com">				
+					<input type="email" class="form-control me-1 w-75" id="userEmail" value="${user.userEmail }" name="userEmail">				
 				<span class="text-danger ms-1 errMsg">이메일을 입력해주세요.</span>
 				</div>
 				<div class="mb-3">
 					<label>전화번호 <span class="text-danger">*</span></label>
 					<div class="d-flex phoneBox">
-						<input type="text" class="form-control me-1 w-25" id="userPhone1" maxlength="3" value="010">
+						<input type="text" class="form-control me-1 w-25" id="userPhone1" maxlength="3" value="${fn:substring(user.userPhone, 0, 3)}" name="userPhone1">
 						<span class="mt-2 ms-2 me-2"> - </span>
-						<input type="text" class="form-control ms-1 w-25" id="userPhone2" maxlength="4" value="1234">
+						<input type="text" class="form-control ms-1 w-25" id="userPhone2" maxlength="4" value="${fn:substring(user.userPhone, 3, 7)}" name="userPhone2">
 						<span class="mt-2 ms-2 me-2"> - </span>
-						<input type="text" class="form-control ms-1 w-25" id="userPhone3" maxlength="4" value="5678">					
+						<input type="text" class="form-control ms-1 w-25" id="userPhone3" maxlength="4" value="${fn:substring(user.userPhone, 7, 11)}" name="userPhone3">					
 					</div>					
 					<span class="text-danger ms-1 errMsg">전화번호를 입력해주세요.</span>
 				</div>
 				<div class="mb-5">
 					<label>주소 <span class="text-danger">*</span></label>
 					<div class="d-flex justify-content-start mb-2">
-						<input type="text" placeholder="우편번호" disabled="disabled" class="form-control w-50 me-2" id="zipcode" value="04001">
+						<input type="text" placeholder="우편번호"  class="form-control w-50 me-2" id="zipcode" value="${user.userZipcode }" name="userZipcode">
 						<button type="button" class="btn btn-outline-dark ms-2" id="addrBtn">주소검색</button>
 					</div>	
 					<div class="mb-2">
-						<input type="text" class="form-control" placeholder="기본주소" disabled="disabled" id="addr1" value="서울시 마포구 월드컵북로 21"/>
+						<input type="text" class="form-control" placeholder="기본주소" readonly onfocus="this.blur();" tabindex="-1" id="addr1" value="${user.userAddress }" name="userAddr1"/>
 					</div>
 					<div class="mb-2">
-						<input type="text" class="form-control" placeholder="상세주소" id="addr2" value="풍성빌딩 2층 쌍용교육센터 D강의실" />
+						<input type="text" class="form-control" placeholder="상세주소" readonly onfocus="this.blur();" tabindex="-1" id="addr2" value="${user.userAddressDetail }" name="userAddr2" />
 					</div>
 					<span class="text-danger ms-1 errMsg addrMsg">주소를 입력해주세요.</span>
 				</div>
