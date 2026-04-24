@@ -30,7 +30,6 @@ public class DBCPConn
 			{
 				System.out.println(e.toString());
 			}
-			
 		}
 		
 		return conn;
