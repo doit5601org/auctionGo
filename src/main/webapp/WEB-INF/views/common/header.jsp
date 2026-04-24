@@ -11,7 +11,7 @@
 	rel="stylesheet"
 	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
 	crossorigin="anonymous">
-<link rel="stylesheet" href="/css/common.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 </head>
 <body>
@@ -39,17 +39,23 @@
 
             <div class="d-flex align-items-center justify-content-end" style="flex-basis: 70%; min-width: 800px;">
                 <ul class="navbar-nav align-items-center flex-row" style="gap: 20px; flex-shrink: 0;">
-                    <%-- <c:choose>
-                        <c:when test="${empty sessionScope.loginUser}">--%>
+                    <c:choose>
+                        <c:when test="${empty sessionScope.loginUser}">
                             <li class="nav-item">
                                 <a class="nav-link text-dark fw-semibold" href="${pageContext.request.contextPath}/user/auth/login">로그인</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-outline-dark px-3" href="${pageContext.request.contextPath}/user/auth/sign-up">회원가입</a>
                             </li>
-                         <%-- </c:when>
-                        <c:otherwise> --%>
-                            <li class="nav-item text-end border-end pe-3">
+                       </c:when>
+                        <c:otherwise>
+                        	<li class="nav-item text-end">
+                            	<div style="font-size: 18px;">
+	                            	<span class="fw-bold txtColor"> ${loginUser.userName} </span>
+	                            	님 환영합니다.
+                            	</div>
+                            </li>
+                            <li class="nav-item text-end border-end px-3">
                                 <div class="d-flex flex-column" style="line-height: 1.2;">
                                     <span class="text-muted" style="font-size: 0.75rem;">보유머니</span>
                                     <span class="txtColor fw-bold fs-5">50,000<small class="text-dark fw-normal ms-1" style="font-size: 0.9rem;">원</small></span>
@@ -66,11 +72,11 @@
                                     <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/user/my">내 활동 현황</a></li>
                                     <li><a class="dropdown-item py-2" href="${pageContext.request.contextPath}/user/my/change-info">정보 수정</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item py-2 text-danger" href="logout.do">로그아웃</a></li>
+                                    <li><a class="dropdown-item py-2 text-danger" href="${pageContext.request.contextPath}/user/auth/logout" onclick="return confirm('정말 로그아웃 하시겠습니까?');">로그아웃</a></li>
                                 </ul>
                             </li>
-               <%--          </c:otherwise>
-                    </c:choose> --%>
+                 </c:otherwise>
+                    </c:choose> 
                 </ul>
             </div>
         </div>
