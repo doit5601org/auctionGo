@@ -1,615 +1,626 @@
-SELECT USER
-FROM DUAL;
+select user
+  from dual;
 
-SELECT *
-FROM TAB;
+select *
+  from tab;
 
 -- 테이블 생성
 -- ○ 1. 회원 고유키 USER
-CREATE TABLE USERS
-( USER_ID   NUMBER  NOT NULL
-, CONSTRAINT USER_USER_ID_PK PRIMARY KEY (USER_ID)
+create table users (
+   user_id number not null,
+   constraint user_user_id_pk primary key ( user_id )
 );
 
 
 -- ○ 2. 회원 계정
-CREATE TABLE USER_ACCOUNT
-( USER_ID   NUMBER  NOT NULL
-, USER_LOGIN_ID VARCHAR2(50) NOT NULL
-, USER_PASSWORD VARCHAR2(100)   NOT NULL
-, CONSTRAINT USER_ACCOUNT_USER_ID_PK PRIMARY KEY (USER_ID)
-, CONSTRAINT USER_ACCOUNT_USER_ID_FK FOREIGN KEY (USER_ID)
-        REFERENCES USERS(USER_ID)
-, CONSTRAINT USER_ACCOUNT_ID_UK UNIQUE (USER_LOGIN_ID)
-, CONSTRAINT USER_ACCOUNT_ID_CK CHECK (LENGTH(USER_LOGIN_ID) BETWEEN 4 AND 12)
-, CONSTRAINT USER_ACCOUNT_PW_CK CHECK (LENGTH(USER_PASSWORD) BETWEEN 8 AND 16)
+create table user_account (
+   user_id       number not null,
+   user_login_id varchar2(50) not null,
+   user_password varchar2(100) not null,
+   constraint user_account_user_id_pk primary key ( user_id ),
+   constraint user_account_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint user_account_id_uk unique ( user_login_id ),
+   constraint user_account_id_ck
+      check ( length(user_login_id) between 4 and 12 ),
+   constraint user_account_pw_ck
+      check ( length(user_password) between 8 and 16 )
 );
 
 
 -- ○ 3. 회원 정보
-CREATE TABLE USER_PROFILE
-( USER_ID   NUMBER  NOT NULL    
-, USER_NAME VARCHAR2(50)    NOT NULL
-, USER_SSN  CHAR(13)    NOT NULL
-, USER_EMAIL VARCHAR2(100)  NOT NULL
-, USER_PHONE CHAR(11)   NOT NULL
-, USER_ZIPCODE VARCHAR2(7) NOT NULL
-, USER_ADDRESS VARCHAR2(300)    NOT NULL
-, USER_ADDRESS_DETAIL VARCHAR2(300) NOT NULL
-, CONSTRAINT USER_PROFILE_USER_ID_PK PRIMARY KEY(USER_ID)
-, CONSTRAINT USER_PROFILE_USER_ID_FK FOREIGN KEY (USER_ID)
-        REFERENCES USERS(USER_ID)
-, CONSTRAINT USER_PROFILE_SSN_UK UNIQUE (USER_SSN)
-, CONSTRAINT USER_PROFILE_EMAIL_UK UNIQUE (USER_EMAIL)
-, CONSTRAINT USER_PROFILE_SSN_CK CHECK(LENGTH(USER_SSN)=13)
-, CONSTRAINT USER_PROFILE_PHONE_CK CHECK(LENGTH(USER_PHONE)BETWEEN 10 AND 11) 
-, CONSTRAINT USER_PROFILE_ZIPCODE_CK CHECK(LENGTH(USER_ZIPCODE)BETWEEN 5 AND 7)
+create table user_profile (
+   user_id             number not null,
+   user_name           varchar2(50) not null,
+   user_ssn            char(13) not null,
+   user_email          varchar2(100) not null,
+   user_phone          char(11) not null,
+   user_zipcode        varchar2(7) not null,
+   user_address        varchar2(300) not null,
+   user_address_detail varchar2(300) not null,
+   constraint user_profile_user_id_pk primary key ( user_id ),
+   constraint user_profile_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint user_profile_ssn_uk unique ( user_ssn ),
+   constraint user_profile_email_uk unique ( user_email ),
+   constraint user_profile_ssn_ck check ( length(user_ssn) = 13 ),
+   constraint user_profile_phone_ck
+      check ( length(user_phone) between 10 and 11 ),
+   constraint user_profile_zipcode_ck
+      check ( length(user_zipcode) between 5 and 7 )
 );
 
 
 -- ○ 4. 탈퇴 회원
-CREATE TABLE DELETED_USER
-( USER_ID   NUMBER  NOT NULL    
-, USER_NAME VARCHAR2(50)    NOT NULL
-, USER_SSN  CHAR(13)    NOT NULL
-, USER_EMAIL VARCHAR2(100)  NOT NULL
-, USER_PHONE CHAR(11)   NOT NULL
-, USER_ZIPCODE VARCHAR2(7) NOT NULL
-, USER_ADDRESS VARCHAR2(300)    NOT NULL
-, USER_ADDRESS_DETAIL VARCHAR2(300) NOT NULL
-, CONSTRAINT DELETED_USER_USER_ID_PK PRIMARY KEY(USER_ID)
-, CONSTRAINT DELETED_USER_USER_ID_FK FOREIGN KEY (USER_ID)
-        REFERENCES USERS(USER_ID)
-, CONSTRAINT DELETED_USER_SSN_UK UNIQUE (USER_SSN)
-, CONSTRAINT DELETED_USER_EMAIL_UK UNIQUE (USER_EMAIL)
-, CONSTRAINT DELETED_USER_SSN_CK CHECK(LENGTH(USER_SSN)=13)
-, CONSTRAINT DELETED_USER_PHONE_CK CHECK(LENGTH(USER_PHONE)BETWEEN 10 AND 11) 
-, CONSTRAINT DELETED_USER_ZIPCODE_CK CHECK(LENGTH(USER_ZIPCODE)BETWEEN 5 AND 7)
+create table deleted_user (
+   user_id             number not null,
+   user_name           varchar2(50) not null,
+   user_ssn            char(13) not null,
+   user_email          varchar2(100) not null,
+   user_phone          char(11) not null,
+   user_zipcode        varchar2(7) not null,
+   user_address        varchar2(300) not null,
+   user_address_detail varchar2(300) not null,
+   constraint deleted_user_user_id_pk primary key ( user_id ),
+   constraint deleted_user_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint deleted_user_ssn_uk unique ( user_ssn ),
+   constraint deleted_user_email_uk unique ( user_email ),
+   constraint deleted_user_ssn_ck check ( length(user_ssn) = 13 ),
+   constraint deleted_user_phone_ck
+      check ( length(user_phone) between 10 and 11 ),
+   constraint deleted_user_zipcode_ck
+      check ( length(user_zipcode) between 5 and 7 )
 );
 
 
 -- ○ 5. 계정 이벤트 분류
-CREATE TABLE ACCOUNT_EVENT_TYPE
-( ACCOUNT_EVENT_TYPE_ID   NUMBER  NOT NULL
-, EVENT_NAME    VARCHAR2(50)    NOT NULL
-, CONSTRAINT ACCOUNT_EVENT_TYPE_ACCOUNT_EVENT_TYPE_ID_PK PRIMARY KEY(ACCOUNT_EVENT_TYPE_ID)
-, CONSTRAINT ACCOUNT_EVENT_TYPE_EVENT_NAME_UK UNIQUE(EVENT_NAME)
+create table account_event_type (
+   account_event_type_id number not null,
+   event_name            varchar2(50) not null,
+   constraint account_event_type_account_event_type_id_pk primary key ( account_event_type_id ),
+   constraint account_event_type_event_name_uk unique ( event_name )
 );
 
 
 -- ○ 6. 계정 이벤트 이력
-CREATE TABLE ACCOUNT_EVENT_HISTORY
-( ACCOUNT_EVENT_ID  NUMBER  NOT NULL
-, USER_ID   NUMBER  NOT NULL
-, ACCOUNT_EVENT_TYPE_ID NUMBER NOT NULL
-, CREATED_AT DATE DEFAULT SYSDATE NOT NULL
-, CONSTRAINT ACCOUNT_EVENT_HISTORY_ACCOUNT_EVENT_ID_PK PRIMARY KEY(ACCOUNT_EVENT_ID)
-, CONSTRAINT ACCOUNT_EVENT_HISTORY_USER_ID_FK FOREIGN KEY(USER_ID)
-            REFERENCES USERS(USER_ID)
-, CONSTRAINT ACCOUNT_EVENT_HISTORY_ACCOUNT_EVENT_TYPE_ID_FK FOREIGN KEY(ACCOUNT_EVENT_TYPE_ID)
-            REFERENCES ACCOUNT_EVENT_TYPE(ACCOUNT_EVENT_TYPE_ID)
-, CONSTRAINT ACCOUNT_EVENT_HISTORY_USER_ID_ACCOUNT_EVENT_TYPE_ID_UK UNIQUE (USER_ID, ACCOUNT_EVENT_TYPE_ID)
+create table account_event_history (
+   account_event_id      number not null,
+   user_id               number not null,
+   account_event_type_id number not null,
+   created_at            date default sysdate not null,
+   constraint account_event_history_account_event_id_pk primary key ( account_event_id ),
+   constraint account_event_history_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint account_event_history_account_event_type_id_fk foreign key ( account_event_type_id )
+      references account_event_type ( account_event_type_id ),
+   constraint account_event_history_user_id_account_event_type_id_uk unique ( user_id,
+                                                                              account_event_type_id )
 );
 
 
 -- ○ 7. 관리자 권한 코드
-CREATE TABLE ADMIN_ROLE
-( ADMIN_ROLE_ID   NUMBER  NOT NULL
-, ADMIN_ROLE_NAME   VARCHAR2(50)    NOT NULL
-, CONSTRAINT ADMIN_ROLE_ADMIN_ROLE_ID_PK PRIMARY KEY(ADMIN_ROLE_ID)
-, CONSTRAINT ADMIN_ROLE_ADMIN_ROLE_NAME_UK UNIQUE(ADMIN_ROLE_NAME)
+create table admin_role (
+   admin_role_id   number not null,
+   admin_role_name varchar2(50) not null,
+   constraint admin_role_admin_role_id_pk primary key ( admin_role_id ),
+   constraint admin_role_admin_role_name_uk unique ( admin_role_name )
 );
 
 
 -- ○ 8. 관리자 계정
-CREATE TABLE ADMIN_ACCOUNT
-( ADMIN_ACCOUNT_ID  NUMBER  NOT NULL
-, ADMIN_ROLE_ID   NUMBER  NOT NULL
-, ADMIN_LOGIN_ID    VARCHAR2(50)    NOT NULL
-, ADMIN_PASSWORD    VARCHAR2(100)   NOT NULL
-, CONSTRAINT ADMIN_ACCOUNT_ADMIN_ACCOUNT_ID_PK PRIMARY KEY(ADMIN_ACCOUNT_ID)
-, CONSTRAINT ADMIN_ACCOUNT_ADMIN_ROLE_ID_FK FOREIGN KEY(ADMIN_ROLE_ID)
-        REFERENCES ADMIN_ROLE(ADMIN_ROLE_ID)
-, CONSTRAINT ADMIN_LOGIN_ID_UK UNIQUE(ADMIN_LOGIN_ID)
-, CONSTRAINT ADMIN_ACCOUNT_ID_CK CHECK(LENGTH(ADMIN_LOGIN_ID) BETWEEN 4 AND 12)
-, CONSTRAINT ADMIN_ACCOUNT_PW_CK CHECK(LENGTH(ADMIN_PASSWORD) BETWEEN 8 AND 16)
+create table admin_account (
+   admin_account_id number not null,
+   admin_role_id    number not null,
+   admin_login_id   varchar2(50) not null,
+   admin_password   varchar2(100) not null,
+   constraint admin_account_admin_account_id_pk primary key ( admin_account_id ),
+   constraint admin_account_admin_role_id_fk foreign key ( admin_role_id )
+      references admin_role ( admin_role_id ),
+   constraint admin_login_id_uk unique ( admin_login_id ),
+   constraint admin_account_id_ck
+      check ( length(admin_login_id) between 4 and 12 ),
+   constraint admin_account_pw_ck
+      check ( length(admin_password) between 8 and 16 )
 );
 
 
 -- ○ 9. 관리자 정보
-CREATE TABLE ADMIN_PROFILE
-( EMPLOYEE_ID   NUMBER  NOT NULL
-, EMPLOYEE_NAME VARCHAR2(50)    NOT NULL
-, DEPARTMENT    VARCHAR2(50)    NOT NULL
-, CONSTRAINT ADMIN_PROFILE_EMPLOYEE_ID_PK PRIMARY KEY(EMPLOYEE_ID)
+create table admin_profile (
+   employee_id   number not null,
+   employee_name varchar2(50) not null,
+   department    varchar2(50) not null,
+   constraint admin_profile_employee_id_pk primary key ( employee_id )
 );
 
 
 -- ○ 10. 관리자 계정 이력
-CREATE TABLE ADMIN_ACCOUNT_HISTORY
-( ADMIN_HISTORY_ID  NUMBER  NOT NULL
-, ADMIN_ACCOUNT_ID  NUMBER  NOT NULL
-, EMPLOYEE_ID   NUMBER  NOT NULL
-, ACCOUNT_START_DATE    DATE    DEFAULT SYSDATE  NOT NULL
-, ACCOUNT_END_DATE  DATE     NULL
-, CONSTRAINT ADMIN_ACCOUNT_HISTORY_ADMIN_HISTORY_ID_PK PRIMARY KEY(ADMIN_HISTORY_ID)
-, CONSTRAINT ADMIN_ACCOUNT_HISTORY_ADMIN_ACCOUNT_ID_FK FOREIGN KEY(ADMIN_ACCOUNT_ID)
-            REFERENCES ADMIN_ACCOUNT(ADMIN_ACCOUNT_ID)
-, CONSTRAINT ADMIN_ACCOUNT_HISTORY_EMPLOYEE_ID_FK FOREIGN KEY(EMPLOYEE_ID)
-            REFERENCES ADMIN_PROFILE(EMPLOYEE_ID)
-, CONSTRAINT ADMIN_ACCOUNT_HISTORY_ADMIN_ACCOUNT_ID_ACCOUNT_START_DATE_UK 
-            UNIQUE(ADMIN_ACCOUNT_ID, ACCOUNT_START_DATE)
+create table admin_account_history (
+   admin_history_id   number not null,
+   admin_account_id   number not null,
+   employee_id        number not null,
+   account_start_date date default sysdate not null,
+   account_end_date   date null,
+   constraint admin_account_history_admin_history_id_pk primary key ( admin_history_id ),
+   constraint admin_account_history_admin_account_id_fk foreign key ( admin_account_id )
+      references admin_account ( admin_account_id ),
+   constraint admin_account_history_employee_id_fk foreign key ( employee_id )
+      references admin_profile ( employee_id ),
+   constraint admin_account_history_admin_account_id_account_start_date_uk unique ( admin_account_id,
+                                                                                    account_start_date )
 );
 
 
 -- 유니크인덱스: 사용중인 계정은 관리자당 하나여야 함
-CREATE UNIQUE INDEX UIX_ADMIN_CURRENT_ONLY
-ON ADMIN_ACCOUNT_HISTORY
-((CASE WHEN ACCOUNT_END_DATE IS NULL THEN ADMIN_ACCOUNT_ID
-ELSE NULL
-END));
+create unique index uix_admin_current_only on
+   admin_account_history ( (
+      case
+         when
+            account_end_date
+         is null then
+               admin_account_id
+         else
+            null
+      end
+   ) );
 
 
 
 -- ○ 11. 공통 여부 테이블
-CREATE TABLE COMMON
-( COMMON_YN_ID    NUMBER(1)   NOT NULL
-, COMMON_YN_NAME    CHAR(1) NOT NULL
-, CONSTRAINT COMMON_COMMON_YN_ID_PK PRIMARY KEY(COMMON_YN_ID)
-, CONSTRAINT COMMON_COMMON_YN_NAME_UK UNIQUE(COMMON_YN_NAME)
-, CONSTRAINT COMMON_COMMON_YN_NAME_CK CHECK(COMMON_YN_NAME IN ('Y','N'))
+create table common (
+   common_yn_id   number(1) not null,
+   common_yn_name char(1) not null,
+   constraint common_common_yn_id_pk primary key ( common_yn_id ),
+   constraint common_common_yn_name_uk unique ( common_yn_name ),
+   constraint common_common_yn_name_ck check ( common_yn_name in ( 'Y',
+                                                                   'N' ) )
 );
 
 
 
 -- ○ 12. 상품 제조국
-CREATE TABLE PRODUCT_COUNTRY
-( PRODUCT_COUNTRY_ID CHAR(2) NOT NULL
-, PRODUCT_COUNTRY_NAME VARCHAR2(50) NOT NULL
-, CONSTRAINT PRODUCT_COUNTRY_PRODUCT_COUNTRY_ID_PK PRIMARY KEY(PRODUCT_COUNTRY_ID)
-, CONSTRAINT PRODUCT_COUNTRY_NAME_UK UNIQUE(PRODUCT_COUNTRY_NAME)
-, CONSTRAINT PRODUCT_COUNTRY_ID_CK CHECK (LENGTH(PRODUCT_COUNTRY_ID)=2) 
+create table product_country (
+   product_country_id   char(2) not null,
+   product_country_name varchar2(50) not null,
+   constraint product_country_product_country_id_pk primary key ( product_country_id ),
+   constraint product_country_name_uk unique ( product_country_name ),
+   constraint product_country_id_ck check ( length(product_country_id) = 2 )
 );
 
 
 -- ○ 13. 상품 제조사
-CREATE TABLE PRODUCT_MANUFACTURER
-( MANUFACTURER_ID NUMBER NOT NULL
-, PRODUCT_COUNTRY_ID CHAR(2) NOT NULL
-, MANUFACTURER_NAME VARCHAR2(50) NOT NULL
-, CONSTRAINT PRODUCT_MANUFACTURER_MANUFACTURER_ID_PK PRIMARY KEY(MANUFACTURER_ID)
-, CONSTRAINT PRODUCT_MANUFACTURER_PRODUCT_COUNTRY_ID_FK FOREIGN KEY(PRODUCT_COUNTRY_ID)
-            REFERENCES PRODUCT_COUNTRY(PRODUCT_COUNTRY_ID)
-, CONSTRAINT PRODUCT_MANUFACTURER_PRODUCT_COUNTRY_ID_MANUFACTURER_NAME_UK UNIQUE(PRODUCT_COUNTRY_ID, MANUFACTURER_NAME)
+create table product_manufacturer (
+   manufacturer_id    number not null,
+   product_country_id char(2) not null,
+   manufacturer_name  varchar2(50) not null,
+   constraint product_manufacturer_manufacturer_id_pk primary key ( manufacturer_id ),
+   constraint product_manufacturer_product_country_id_fk foreign key ( product_country_id )
+      references product_country ( product_country_id ),
+   constraint product_manufacturer_product_country_id_manufacturer_name_uk unique ( product_country_id,
+                                                                                    manufacturer_name )
 );
 
 
 
 -- ○ 14. 상품 등급
-CREATE TABLE PRODUCT_GRADE
-( PRODUCT_GRADE_ID NUMBER NOT NULL
-, PRODUCT_GRADE_NAME VARCHAR2(50)   NOT NULL
-, CONSTRAINT PRODUCT_GRADE_PRODUCT_GRADE_ID_PK PRIMARY KEY(PRODUCT_GRADE_ID)
-, CONSTRAINT PRODUCT_GRADE_PRODUCT_GRADE_NAME_UK UNIQUE(PRODUCT_GRADE_NAME)
+create table product_grade (
+   product_grade_id   number not null,
+   product_grade_name varchar2(50) not null,
+   constraint product_grade_product_grade_id_pk primary key ( product_grade_id ),
+   constraint product_grade_product_grade_name_uk unique ( product_grade_name )
 );
 
 
 -- ○ 15. 상품 장르
-CREATE TABLE PRODUCT_GENRE
-( PRODUCT_GENRE_ID    NUMBER  NOT NULL
-, PRODUCT_GENRE_NAME    VARCHAR2(50)    NOT NULL
-, CONSTRAINT PRODUCT_GENRE_PRODUCT_GENRE_ID_PK PRIMARY KEY(PRODUCT_GENRE_ID)
-, CONSTRAINT PRODUCT_GENRE_PRODUCT_GENRE_NAME_UK UNIQUE(PRODUCT_GENRE_NAME)
+create table product_genre (
+   product_genre_id   number not null,
+   product_genre_name varchar2(50) not null,
+   constraint product_genre_product_genre_id_pk primary key ( product_genre_id ),
+   constraint product_genre_product_genre_name_uk unique ( product_genre_name )
 );
 
 
 -- ○ 16. 상품 사이즈
-CREATE TABLE PRODUCT_SIZE
-( PRODUCT_SIZE_ID NUMBER  NOT NULL
-, PRODUCT_SIZE_NAME VARCHAR2(10)    NOT NULL
-, CONSTRAINT PRODUCT_SIZE_PRODUCT_SIZE_ID_PK PRIMARY KEY(PRODUCT_SIZE_ID)
-, CONSTRAINT PRODUCT_SIZE_PRODUCT_SIZE_NAME_UK UNIQUE(PRODUCT_SIZE_NAME)
+create table product_size (
+   product_size_id   number not null,
+   product_size_name varchar2(10) not null,
+   constraint product_size_product_size_id_pk primary key ( product_size_id ),
+   constraint product_size_product_size_name_uk unique ( product_size_name )
 );
 
 
 -- ○ 17. 상품 등록/관리
-CREATE TABLE PRODUCT
-( PRODUCT_ID    NUMBER  NOT NULL
-, PRODUCT_RELEASE_NAME  VARCHAR2(500)
-, PRODUCT_ALIAS VARCHAR2(500)
-, USER_ID   NUMBER  NOT NULL
-, MANUFACTURER_ID NUMBER  NOT NULL
-, PRODUCT_GRADE_ID    NUMBER  NOT NULL
-, PRODUCT_GENRE_ID    NUMBER  NOT NULL
-, PRODUCT_SIZE_ID NUMBER  NOT NULL
-, WORK_NAME VARCHAR2(100)
-, CHARACTER_NAME    VARCHAR2(100)
-, PURCHASE_DATETIME DATE
-, IS_OPENED NUMBER(1) NOT NULL
-, IS_PARTS_MISSING NUMBER(1)  NOT NULL
-, DESCRIPTIONS  VARCHAR2(2000)
-, IMAGE_PATH_1  VARCHAR2(500)   NOT NULL
-, IMAGE_PATH_2  VARCHAR2(500)   NOT NULL
-, IMAGE_PATH_3  VARCHAR2(500)   NOT NULL
-, IS_PUBLIC NUMBER(1) NOT NULL
-, CREATED_AT    DATE  DEFAULT SYSDATE NOT NULL 
-, CONSTRAINT PRODUCT_PRODUCT_ID_PK PRIMARY KEY(PRODUCT_ID)
-, CONSTRAINT PRODUCT_USER_ID_FK FOREIGN KEY(USER_ID)
-        REFERENCES USERS(USER_ID)
-, CONSTRAINT  PRODUCT_MANUFACTURER_ID_FK FOREIGN KEY(MANUFACTURER_ID)
-        REFERENCES PRODUCT_MANUFACTURER(MANUFACTURER_ID)
-, CONSTRAINT PRODUCT_PRODUCT_GRADE_ID_FK FOREIGN KEY(PRODUCT_GRADE_ID)
-        REFERENCES PRODUCT_GRADE(PRODUCT_GRADE_ID)
-, CONSTRAINT PRODUCT_PRODUCT_GENRE_ID_FK FOREIGN KEY(PRODUCT_GENRE_ID)
-        REFERENCES PRODUCT_GENRE(PRODUCT_GENRE_ID)
-, CONSTRAINT PRODUCT_PRODUCT_SIZE_ID_FK FOREIGN KEY(PRODUCT_SIZE_ID)
-        REFERENCES PRODUCT_SIZE(PRODUCT_SIZE_ID)
-, CONSTRAINT PRODUCT_IS_OPENED_FK FOREIGN KEY(IS_OPENED)
-        REFERENCES COMMON(COMMON_YN_ID)
-, CONSTRAINT PRODUCT_IS_PARTS_MISSING_FK FOREIGN KEY(IS_PARTS_MISSING)
-        REFERENCES COMMON(COMMON_YN_ID)
-, CONSTRAINT PRODUCT_IS_PUBLIC_FK FOREIGN KEY(IS_PUBLIC)
-        REFERENCES COMMON(COMMON_YN_ID)
+create table product (
+   product_id           number not null,
+   product_release_name varchar2(500),
+   product_alias        varchar2(500),
+   user_id              number not null,
+   manufacturer_id      number not null,
+   product_grade_id     number not null,
+   product_genre_id     number not null,
+   product_size_id      number not null,
+   work_name            varchar2(100),
+   character_name       varchar2(100),
+   purchase_datetime    date,
+   is_opened            number(1) not null,
+   is_parts_missing     number(1) not null,
+   descriptions         varchar2(2000),
+   image_path_1         varchar2(500) not null,
+   image_path_2         varchar2(500) not null,
+   image_path_3         varchar2(500) not null,
+   is_public            number(1) not null,
+   created_at           date default sysdate not null,
+   constraint product_product_id_pk primary key ( product_id ),
+   constraint product_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint product_manufacturer_id_fk foreign key ( manufacturer_id )
+      references product_manufacturer ( manufacturer_id ),
+   constraint product_product_grade_id_fk foreign key ( product_grade_id )
+      references product_grade ( product_grade_id ),
+   constraint product_product_genre_id_fk foreign key ( product_genre_id )
+      references product_genre ( product_genre_id ),
+   constraint product_product_size_id_fk foreign key ( product_size_id )
+      references product_size ( product_size_id ),
+   constraint product_is_opened_fk foreign key ( is_opened )
+      references common ( common_yn_id ),
+   constraint product_is_parts_missing_fk foreign key ( is_parts_missing )
+      references common ( common_yn_id ),
+   constraint product_is_public_fk foreign key ( is_public )
+      references common ( common_yn_id )
 );
 
 
 
 
 -- ○ 18. 추가 이미지
-CREATE TABLE PRODUCT_IMAGE
-( PRODUCT_IMAGE_ID NUMBER NOT NULL
-, PRODUCT_ID    NUMBER  NOT NULL
-, IMAGE_ORDER   NUMBER(1)   NOT NULL
-, FILE_PATH VARCHAR2(500)   NOT NULL
-, CREATED_AT    DATE DEFAULT SYSDATE
-, CONSTRAINT PRODUCT_IMAGE_PRODUCT_IMAGE_ID_PK PRIMARY KEY(PRODUCT_IMAGE_ID)
-, CONSTRAINT PRODUCT_IMAGE_PRODUCT_ID_FK FOREIGN KEY(PRODUCT_ID)
-        REFERENCES PRODUCT(PRODUCT_ID)
-, CONSTRAINT PRODUCT_IMAGE_PRODUCT_ID_IMAGE_ORDER_UK UNIQUE (PRODUCT_ID, IMAGE_ORDER)
+create table product_image (
+   product_image_id number not null,
+   product_id       number not null,
+   image_order      number(1) not null,
+   file_path        varchar2(500) not null,
+   created_at       date default sysdate,
+   constraint product_image_product_image_id_pk primary key ( product_image_id ),
+   constraint product_image_product_id_fk foreign key ( product_id )
+      references product ( product_id ),
+   constraint product_image_product_id_image_order_uk unique ( product_id,
+                                                               image_order )
 );
 
 
 -- ○ 19. 관심 상품
-CREATE TABLE PRODUCT_WISHLIST
-( WISHLIST_ID NUMBER    NOT NULL
-, USER_ID   NUMBER  NOT NULL
-, PRODUCT_ID    NUMBER  NOT NULL
-, CREATED_AT    DATE    DEFAULT SYSDATE NOT NULL
-, CONSTRAINT PRODUCT_WISHLIST_WISHLIST_ID_PK PRIMARY KEY(WISHLIST_ID)
-, CONSTRAINT PRODUCT_WISHLIST_USER_ID_FK FOREIGN KEY(USER_ID)
-            REFERENCES USERS(USER_ID)
-, CONSTRAINT PRODUCT_WISHLIST_PRODUCT_ID_FK FOREIGN KEY(PRODUCT_ID)
-            REFERENCES PRODUCT(PRODUCT_ID)
-, CONSTRAINT PRODUCT_WISHLIST_USER_ID_PRODUCT_ID_UK UNIQUE(USER_ID, PRODUCT_ID)
-
+create table product_wishlist (
+   wishlist_id number not null,
+   user_id     number not null,
+   product_id  number not null,
+   created_at  date default sysdate not null,
+   constraint product_wishlist_wishlist_id_pk primary key ( wishlist_id ),
+   constraint product_wishlist_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint product_wishlist_product_id_fk foreign key ( product_id )
+      references product ( product_id ),
+   constraint product_wishlist_user_id_product_id_uk unique ( user_id,
+                                                              product_id )
 );
 
 
 -- ○ 20. 머니 분류
-CREATE TABLE MONEY_TYPE
-( MONEY_TYPE_ID NUMBER    NOT NULL
-, MONEY_TYPE_NAME VARCHAR2(50)  NOT NULL
-, CONSTRAINT MONEY_TYPE_MONEY_TYPE_ID_PK PRIMARY KEY(MONEY_TYPE_ID)
-, CONSTRAINT MONEY_TYPE_MONEY_TYPE_NAME_UK UNIQUE(MONEY_TYPE_NAME)
+create table money_type (
+   money_type_id   number not null,
+   money_type_name varchar2(50) not null,
+   constraint money_type_money_type_id_pk primary key ( money_type_id ),
+   constraint money_type_money_type_name_uk unique ( money_type_name )
 );
 
 
 -- ○ 21. 머니 충전 수단
-CREATE TABLE MONEY_CHARGE_METHOD 
-(
-      MONEY_CHARGE_METHOD_ID NUMBER
-    , MONEY_CHARGE_METHOD_NAME VARCHAR2(50) NOT NULL
-    , CONSTRAINT MONEY_CHARGE_METHOD_MONEY_CHARGE_METHOD_ID_PK PRIMARY KEY (MONEY_CHARGE_METHOD_ID)
-    , CONSTRAINT MONEY_CHARGE_METHOD_MONEY_CHARGE_METHOD_NAME_UK UNIQUE (MONEY_CHARGE_METHOD_NAME)
+create table money_charge_method (
+   money_charge_method_id   number,
+   money_charge_method_name varchar2(50) not null,
+   constraint money_charge_method_money_charge_method_id_pk primary key ( money_charge_method_id ),
+   constraint money_charge_method_money_charge_method_name_uk unique ( money_charge_method_name )
 );
 
 -- ○ 22. 머니 충전 이력
-CREATE TABLE MONEY_CHARGE_HISTORY 
-(
-      MONEY_CHARGE_ID          NUMBER
-    , USER_ID                  NUMBER NOT NULL
-    , MONEY_CHARGE_METHOD_ID NUMBER NOT NULL
-    , CHARGE_AMOUNT            NUMBER NOT NULL
-    , CHARGED_AT               DATE   DEFAULT SYSDATE NOT NULL
-    , CONSTRAINT MONEY_CHARGE_HISTORY_MONEY_CHARGE_ID_PK PRIMARY KEY (MONEY_CHARGE_ID)
-    , CONSTRAINT MONEY_CHARGE_HISTORY_USER_ID_FK FOREIGN KEY (USER_ID) REFERENCES USERS(USER_ID)
-    , CONSTRAINT MONEY_CHARGE_HISTORY_MONEY_CHARGE_METHOD_ID_FK FOREIGN KEY (MONEY_CHARGE_METHOD_ID) REFERENCES MONEY_CHARGE_METHOD(MONEY_CHARGE_METHOD_ID)
+create table money_charge_history (
+   money_charge_id        number,
+   user_id                number not null,
+   money_charge_method_id number not null,
+   charge_amount          number not null,
+   charged_at             date default sysdate not null,
+   constraint money_charge_history_money_charge_id_pk primary key ( money_charge_id ),
+   constraint money_charge_history_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint money_charge_history_money_charge_method_id_fk foreign key ( money_charge_method_id )
+      references money_charge_method ( money_charge_method_id )
 );
 
 -- ○ 23. 경매 기간
-CREATE TABLE AUCTION_PERIOD 
-(
-      AUCTION_PERIOD_ID NUMBER
-    , AUCTION_PERIOD_NAME VARCHAR2(10) NOT NULL
-    , CONSTRAINT AUCTION_PERIOD_AUCTION_PERIOD_ID_PK PRIMARY KEY (AUCTION_PERIOD_ID)
-    , CONSTRAINT AUCTION_PERIOD_AUCTION_PERIOD_NAME_UK UNIQUE (AUCTION_PERIOD_NAME)
+create table auction_period (
+   auction_period_id   number,
+   auction_period_name varchar2(10) not null,
+   constraint auction_period_auction_period_id_pk primary key ( auction_period_id ),
+   constraint auction_period_auction_period_name_uk unique ( auction_period_name )
 );
 
 -- ○ 24. 경매 등록
-CREATE TABLE AUCTION_REGISTRATION 
-(
-      AUCTION_ID          NUMBER
-    , PRODUCT_ID          NUMBER         NOT NULL
-    , AUCTION_TITLE       VARCHAR2(300)  NOT NULL
-    , AUCTION_CONTENT     VARCHAR2(2000) NOT NULL
-    , START_PRICE         NUMBER(12)     NOT NULL
-    , CREATED_AT          DATE           DEFAULT SYSDATE NOT NULL
-    , AUCTION_PERIOD_ID NUMBER
-    , CONSTRAINT AUCTION_REGISTRATION_AUCTION_ID_PK PRIMARY KEY (AUCTION_ID)
-    , CONSTRAINT AUCTION_REGISTRATION_PRODUCT_ID_FK FOREIGN KEY (PRODUCT_ID) REFERENCES PRODUCT(PRODUCT_ID)
-    , CONSTRAINT AUCTION_REGISTRATION_AUCTION_PERIOD_ID_FK FOREIGN KEY (AUCTION_PERIOD_ID) REFERENCES AUCTION_PERIOD(AUCTION_PERIOD_ID)
-    , CONSTRAINT AUCTION_REGISTRATION_START_PRICE_CK CHECK (START_PRICE > 0)
+create table auction_registration (
+   auction_id        number,
+   product_id        number not null,
+   auction_title     varchar2(300) not null,
+   auction_content   varchar2(2000) not null,
+   start_price       number(12) not null,
+   created_at        date default sysdate not null,
+   auction_period_id number,
+   constraint auction_registration_auction_id_pk primary key ( auction_id ),
+   constraint auction_registration_product_id_fk foreign key ( product_id )
+      references product ( product_id ),
+   constraint auction_registration_auction_period_id_fk foreign key ( auction_period_id )
+      references auction_period ( auction_period_id ),
+   constraint auction_registration_start_price_ck check ( start_price > 0 )
 );
 
 
 -- ○ 25. 머니 입출금 이력  ← AUCTION_REGISTRATION 이후에 생성
-CREATE TABLE MONEY_TRANSACTION_HISTORY 
-(
-      MONEY_ID        NUMBER
-    , USER_ID         NUMBER      NOT NULL
-    , MONEY_TYPE_ID NUMBER      NOT NULL
-    , AUCTION_ID      NUMBER      
-    , AMOUNT          NUMBER(12)  NOT NULL
-    , CREATED_AT      DATE        DEFAULT SYSDATE NOT NULL
-    , CONSTRAINT MONEY_TRANSACTION_HISTORY_MONEY_ID_PK PRIMARY KEY (MONEY_ID)
-    , CONSTRAINT MONEY_TRANSACTION_HISTORY_USER_ID_FK FOREIGN KEY (USER_ID) REFERENCES USERS(USER_ID)
-    , CONSTRAINT MONEY_TRANSACTION_HISTORY_MONEY_TYPE_ID_FK FOREIGN KEY (MONEY_TYPE_ID) REFERENCES MONEY_TYPE(MONEY_TYPE_ID)
-    , CONSTRAINT MONEY_TRANSACTION_HISTORY_AUCTION_ID_FK FOREIGN KEY (AUCTION_ID) REFERENCES AUCTION_REGISTRATION(AUCTION_ID)
+create table money_transaction_history (
+   money_id      number,
+   user_id       number not null,
+   money_type_id number not null,
+   auction_id    number,
+   amount        number(12) not null,
+   created_at    date default sysdate not null,
+   constraint money_transaction_history_money_id_pk primary key ( money_id ),
+   constraint money_transaction_history_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint money_transaction_history_money_type_id_fk foreign key ( money_type_id )
+      references money_type ( money_type_id ),
+   constraint money_transaction_history_auction_id_fk foreign key ( auction_id )
+      references auction_registration ( auction_id )
 );
 
 -- ○ 26. 경매 취소 이력
-CREATE TABLE AUCTION_CANCEL_HISTORY 
-(
-      AUCTION_CANCEL_ID NUMBER
-    , AUCTION_ID        NUMBER        NOT NULL
-    , CANCEL_REASON     VARCHAR2(500) NOT NULL
-    , CANCEL_AT         DATE          DEFAULT SYSDATE NOT NULL
-    , CONSTRAINT AUCTION_CANCEL_HISTORY_AUCTION_CANCEL_ID_PK PRIMARY KEY (AUCTION_CANCEL_ID)
-    , CONSTRAINT AUCTION_CANCEL_HISTORY_AUCTION_ID_FK FOREIGN KEY (AUCTION_ID) REFERENCES AUCTION_REGISTRATION(AUCTION_ID)
-    , CONSTRAINT AUCTION_CANCEL_HISTORY_AUCTION_ID_UK UNIQUE (AUCTION_ID)
+create table auction_cancel_history (
+   auction_cancel_id number,
+   auction_id        number not null,
+   cancel_reason     varchar2(500) not null,
+   cancel_at         date default sysdate not null,
+   constraint auction_cancel_history_auction_cancel_id_pk primary key ( auction_cancel_id ),
+   constraint auction_cancel_history_auction_id_fk foreign key ( auction_id )
+      references auction_registration ( auction_id ),
+   constraint auction_cancel_history_auction_id_uk unique ( auction_id )
 );
 
 -- ○ 27. 입찰 참여
-CREATE TABLE AUCTION_BID_PARTICIPATION 
-(
-      BID_ID     NUMBER
-    , AUCTION_ID NUMBER     NOT NULL
-    , USER_ID    NUMBER     NOT NULL
-    , BID_TIME   TIMESTAMP  DEFAULT SYSTIMESTAMP NOT NULL
-    , BID_PRICE  NUMBER(10) NOT NULL
-    , CONSTRAINT AUCTION_BID_PARTICIPATION_BID_ID_PK PRIMARY KEY (BID_ID)
-    , CONSTRAINT AUCTION_BID_PARTICIPATION_AUCTION_ID_FK FOREIGN KEY (AUCTION_ID) REFERENCES AUCTION_REGISTRATION(AUCTION_ID)
-    , CONSTRAINT AUCTION_BID_PARTICIPATION_USER_ID_FK FOREIGN KEY (USER_ID) REFERENCES USERS(USER_ID)
-    , CONSTRAINT AUCTION_BID_PARTICIPATION_AUCTION_ID_USER_ID_BID_TIME_UK UNIQUE (AUCTION_ID, USER_ID, BID_TIME)
+create table auction_bid_participation (
+   bid_id     number,
+   auction_id number not null,
+   user_id    number not null,
+   bid_time   timestamp default systimestamp not null,
+   bid_price  number(10) not null,
+   constraint auction_bid_participation_bid_id_pk primary key ( bid_id ),
+   constraint auction_bid_participation_auction_id_fk foreign key ( auction_id )
+      references auction_registration ( auction_id ),
+   constraint auction_bid_participation_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint auction_bid_participation_auction_id_user_id_bid_time_uk unique ( auction_id,
+                                                                                user_id,
+                                                                                bid_time )
 );
 
 -- ○ 28. 낙찰 결과
-CREATE TABLE AUCTION_WINNING_RESULT 
-(
-      BID_RESULT_ID NUMBER
-    , BID_ID        NUMBER NOT NULL
-    , CREATED_AT    DATE   DEFAULT SYSDATE NOT NULL
-    , CONSTRAINT AUCTION_WINNING_RESULT_BID_RESULT_ID_PK PRIMARY KEY (BID_RESULT_ID)
-    , CONSTRAINT AUCTION_WINNING_RESULT_BID_ID_FK FOREIGN KEY (BID_ID) REFERENCES AUCTION_BID_PARTICIPATION(BID_ID)
-    , CONSTRAINT AUCTION_WINNING_RESULT_BID_ID_UK UNIQUE (BID_ID)
+create table auction_winning_result (
+   bid_result_id number,
+   bid_id        number not null,
+   created_at    date default sysdate not null,
+   constraint auction_winning_result_bid_result_id_pk primary key ( bid_result_id ),
+   constraint auction_winning_result_bid_id_fk foreign key ( bid_id )
+      references auction_bid_participation ( bid_id ),
+   constraint auction_winning_result_bid_id_uk unique ( bid_id )
 );
 
 -- ○ 29. 낙찰 실패 유형
-CREATE TABLE BID_FAILURE_TYPE 
-(
-      BID_FAIL_TYPE_ID NUMBER
-    , BID_FAIL_TYPE_NAME VARCHAR2(50) NOT NULL
-    , CONSTRAINT BID_FAILURE_TYPE_BID_FAIL_TYPE_ID_PK PRIMARY KEY (BID_FAIL_TYPE_ID)
-    , CONSTRAINT BID_FAILURE_TYPE_BID_FAIL_TYPE_NAME_UK UNIQUE (BID_FAIL_TYPE_NAME)
+create table bid_failure_type (
+   bid_fail_type_id   number,
+   bid_fail_type_name varchar2(50) not null,
+   constraint bid_failure_type_bid_fail_type_id_pk primary key ( bid_fail_type_id ),
+   constraint bid_failure_type_bid_fail_type_name_uk unique ( bid_fail_type_name )
 );
 
 -- ○ 30. 낙찰 실패 이력
-CREATE TABLE BID_FAILURE_HISTORY 
-(
-      BID_FAIL_HISTORY_ID NUMBER
-    , BID_RESULT_ID       NUMBER NOT NULL
-    , BID_FAIL_TYPE_ID  NUMBER NOT NULL
-    , CREATED_AT          DATE   DEFAULT SYSDATE NOT NULL
-    , CONSTRAINT BID_FAILURE_HISTORY_BID_FAIL_HISTORY_ID_PK PRIMARY KEY (BID_FAIL_HISTORY_ID)
-    , CONSTRAINT BID_FAILURE_HISTORY_BID_RESULT_ID_FK FOREIGN KEY (BID_RESULT_ID) REFERENCES AUCTION_WINNING_RESULT(BID_RESULT_ID)
-    , CONSTRAINT BID_FAILURE_HISTORY_BID_FAIL_TYPE_ID_FK FOREIGN KEY (BID_FAIL_TYPE_ID) REFERENCES BID_FAILURE_TYPE(BID_FAIL_TYPE_ID)
-    , CONSTRAINT BID_FAILURE_HISTORY_BID_RESULT_ID_UK UNIQUE (BID_RESULT_ID)
+create table bid_failure_history (
+   bid_fail_history_id number,
+   bid_result_id       number not null,
+   bid_fail_type_id    number not null,
+   created_at          date default sysdate not null,
+   constraint bid_failure_history_bid_fail_history_id_pk primary key ( bid_fail_history_id ),
+   constraint bid_failure_history_bid_result_id_fk foreign key ( bid_result_id )
+      references auction_winning_result ( bid_result_id ),
+   constraint bid_failure_history_bid_fail_type_id_fk foreign key ( bid_fail_type_id )
+      references bid_failure_type ( bid_fail_type_id ),
+   constraint bid_failure_history_bid_result_id_uk unique ( bid_result_id )
 );
 
 -- ○ 31. 낙찰 입금
-CREATE TABLE AUCTION_WINNING_PAYMENT 
-(
-      PAYMENT_ID    NUMBER
-    , BID_RESULT_ID NUMBER NOT NULL
-    , MONEY_ID      NUMBER NOT NULL
-    , CREATED_AT    DATE   DEFAULT SYSDATE NOT NULL
-    , CONSTRAINT AUCTION_WINNING_PAYMENT_PAYMENT_ID_PK PRIMARY KEY (PAYMENT_ID)
-    , CONSTRAINT AUCTION_WINNING_PAYMENT_BID_RESULT_ID_FK FOREIGN KEY (BID_RESULT_ID) REFERENCES AUCTION_WINNING_RESULT(BID_RESULT_ID)
-    , CONSTRAINT AUCTION_WINNING_PAYMENT_MONEY_ID_FK FOREIGN KEY (MONEY_ID) REFERENCES MONEY_TRANSACTION_HISTORY(MONEY_ID)
-    , CONSTRAINT AUCTION_WINNING_PAYMENT_BID_RESULT_ID_UK UNIQUE (BID_RESULT_ID)
+create table auction_winning_payment (
+   payment_id    number,
+   bid_result_id number not null,
+   money_id      number not null,
+   created_at    date default sysdate not null,
+   constraint auction_winning_payment_payment_id_pk primary key ( payment_id ),
+   constraint auction_winning_payment_bid_result_id_fk foreign key ( bid_result_id )
+      references auction_winning_result ( bid_result_id ),
+   constraint auction_winning_payment_money_id_fk foreign key ( money_id )
+      references money_transaction_history ( money_id ),
+   constraint auction_winning_payment_bid_result_id_uk unique ( bid_result_id )
 );
 
 -- ○ 32. 발송 완료
-CREATE TABLE DELIVERY_COMPLETED 
-(
-      SHIPPING_ID NUMBER
-    , PAYMENT_ID  NUMBER NOT NULL
-    , CREATED_AT  DATE   DEFAULT SYSDATE NOT NULL
-    , CONSTRAINT DELIVERY_COMPLETED_SHIPPING_ID_PK PRIMARY KEY (SHIPPING_ID)
-    , CONSTRAINT DELIVERY_COMPLETED_PAYMENT_ID_FK FOREIGN KEY (PAYMENT_ID) REFERENCES AUCTION_WINNING_PAYMENT(PAYMENT_ID)
-    , CONSTRAINT DELIVERY_COMPLETED_PAYMENT_ID_UK UNIQUE (PAYMENT_ID)
+create table delivery_completed (
+   shipping_id number,
+   payment_id  number not null,
+   created_at  date default sysdate not null,
+   constraint delivery_completed_shipping_id_pk primary key ( shipping_id ),
+   constraint delivery_completed_payment_id_fk foreign key ( payment_id )
+      references auction_winning_payment ( payment_id ),
+   constraint delivery_completed_payment_id_uk unique ( payment_id )
 );
 
 
 
 -- ○ 33. 구매 확정 이력
-CREATE TABLE PURCHASE_CONFIRM_HISTORY
-(
-PURCHASE_CONFIRM_ID NUMBER
-,SHIPPING_ID NUMBER NOT NULL
-,CREATED_AT DATE DEFAULT SYSDATE NOT NULL
-,CONSTRAINT PURCHASE_CONFIRM_HISTORY_PURCHASE_CONFIRM_ID_PK PRIMARY KEY(PURCHASE_CONFIRM_ID)
-,CONSTRAINT PURCHASE_CONFIRM_HISTORY_SHIPPING_ID_FK FOREIGN KEY(SHIPPING_ID)
-                                                    REFERENCES DELIVERY_COMPLETED(SHIPPING_ID)                                             
+create table purchase_confirm_history (
+   purchase_confirm_id number,
+   shipping_id         number not null,
+   created_at          date default sysdate not null,
+   constraint purchase_confirm_history_purchase_confirm_id_pk primary key ( purchase_confirm_id ),
+   constraint purchase_confirm_history_shipping_id_fk foreign key ( shipping_id )
+      references delivery_completed ( shipping_id )
 );
 
 -- ○ 34. 거래 완료
-CREATE TABLE TRANSACTION_COMPLETED
-(
-TRANSACTION_ID NUMBER
-,PURCHASE_CONFIRM_ID NUMBER NOT NULL 
-,CREATED_AT DATE DEFAULT SYSDATE NOT NULL
-,CONSTRAINT TRANSACTION_COMPLETED_TRANSACTION_ID_PK PRIMARY KEY(TRANSACTION_ID)
-,CONSTRAINT TRANSACTION_COMPLETED_PURCHASE_CONFIRM_ID_FK FOREIGN KEY(PURCHASE_CONFIRM_ID)
-                                                         REFERENCES PURCHASE_CONFIRM_HISTORY(PURCHASE_CONFIRM_ID)
+create table transaction_completed (
+   transaction_id      number,
+   purchase_confirm_id number not null,
+   created_at          date default sysdate not null,
+   constraint transaction_completed_transaction_id_pk primary key ( transaction_id ),
+   constraint transaction_completed_purchase_confirm_id_fk foreign key ( purchase_confirm_id )
+      references purchase_confirm_history ( purchase_confirm_id )
 );
 
 -- ○ 35. 패널티 부여 구분
-CREATE TABLE PENALTY_ASSIGN_TYPE
-(
-PENALTY_TYPE_ID NUMBER
-,PENALTY_TYPE_NAME VARCHAR2(50) NOT NULL
-,CONSTRAINT PENALTY_ASSIGN_TYPE_PENALTY_ASSIGN_TYPE_ID_PK PRIMARY KEY(PENALTY_TYPE_ID)
-,CONSTRAINT PENALTY_ASSIGN_TYPE_PENALTY_TYPE_NAME_UK UNIQUE(PENALTY_TYPE_NAME)
+create table penalty_assign_type (
+   penalty_type_id   number,
+   penalty_type_name varchar2(50) not null,
+   constraint penalty_assign_type_penalty_assign_type_id_pk primary key ( penalty_type_id ),
+   constraint penalty_assign_type_penalty_type_name_uk unique ( penalty_type_name )
 );
 
 -- ○ 36. 패널티 이력
-CREATE TABLE PENALTY_HISTORY
-(
-PENALTY_ID NUMBER
-,USER_ID NUMBER NOT NULL
-,PENALTY_TYPE_ID NUMBER NOT NULL
-,ADMIN_ACCOUNT_ID NUMBER 
-,PENALTY_SCORE NUMBER NOT NULL
-,CREATED_AT DATE DEFAULT SYSDATE NOT NULL
-,CONSTRAINT PENALTY_HISTORY_PENALTY_HISTORY_ID_PK PRIMARY KEY(PENALTY_ID)
-,CONSTRAINT PENALTY_HISTORY_USER_ID_FK FOREIGN KEY(USER_ID)
-                                        REFERENCES USERS(USER_ID)
-,CONSTRAINT PENALTY_HISTORY_PENALTY_TYPE_ID_FK FOREIGN KEY(PENALTY_TYPE_ID)
-                                                  REFERENCES PENALTY_ASSIGN_TYPE(PENALTY_TYPE_ID)
-,CONSTRAINT PENALTY_HISTORY_ADMIN_ACCOUNT_ID_FK FOREIGN KEY(ADMIN_ACCOUNT_ID)
-                                             REFERENCES ADMIN_ACCOUNT(ADMIN_ACCOUNT_ID)
-,CONSTRAINT PENALTY_HISTORY_SCORE_CK CHECK(PENALTY_SCORE BETWEEN 1 AND 4)
+create table penalty_history (
+   penalty_id       number,
+   user_id          number not null,
+   penalty_type_id  number not null,
+   admin_account_id number,
+   penalty_score    number not null,
+   created_at       date default sysdate not null,
+   constraint penalty_history_penalty_history_id_pk primary key ( penalty_id ),
+   constraint penalty_history_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint penalty_history_penalty_type_id_fk foreign key ( penalty_type_id )
+      references penalty_assign_type ( penalty_type_id ),
+   constraint penalty_history_admin_account_id_fk foreign key ( admin_account_id )
+      references admin_account ( admin_account_id ),
+   constraint penalty_history_score_ck check ( penalty_score between 1 and 4 )
 );
 
 
 -- ○ 37. 패널티 상태
-CREATE TABLE PENALTY_STATUS
-(  
- PENALTY_STATUS_ID  NUMBER
-, PENALTY_ID    NUMBER  NOT NULL
-, PENALTY_START_DATE DATE   DEFAULT SYSDATE NOT NULL
-, PENALTY_END_DATE DATE NOT NULL
-, CONSTRAINT PENALTY_STATUS_PENALTY_STATUS_ID_PK PRIMARY KEY(PENALTY_STATUS_ID)
-, CONSTRAINT PENALTY_STATUS_PENALTY_ID_FK FOREIGN KEY(PENALTY_ID)
-        REFERENCES PENALTY_HISTORY(PENALTY_ID)
+create table penalty_status (
+   penalty_status_id  number,
+   penalty_id         number not null,
+   penalty_start_date date default sysdate not null,
+   penalty_end_date   date not null,
+   constraint penalty_status_penalty_status_id_pk primary key ( penalty_status_id ),
+   constraint penalty_status_penalty_id_fk foreign key ( penalty_id )
+      references penalty_history ( penalty_id )
 );
 
 -- ○ 38. 패널티 취소
-CREATE TABLE PENALTY_CANCEL
-(
-PENALTY_CANCEL_ID NUMBER
-,PENALTY_ID NUMBER NOT NULL
-,ADMIN_ACCOUNT_ID NUMBER NOT NULL
-,CANCEL_REASON VARCHAR2(500) NOT NULL
-,CANCELED_AT DATE DEFAULT SYSDATE NOT NULL
-,CONSTRAINT PENALTY_CANCEL_PENALTY_CANCEL_ID_PK PRIMARY KEY(PENALTY_CANCEL_ID)
-,CONSTRAINT PENALTY_CANCEL_PENALTY_ID_FK FOREIGN KEY(PENALTY_ID)
-                                        REFERENCES PENALTY_HISTORY(PENALTY_ID)
-,CONSTRAINT PENALTY_CANCEL_ADMIN_ACCOUNT_ID_FK FOREIGN KEY(ADMIN_ACCOUNT_ID)
-                                                REFERENCES ADMIN_ACCOUNT(ADMIN_ACCOUNT_ID)
-,CONSTRAINT PENALTY_CANCEL_PENALTY_ID_UK UNIQUE(PENALTY_ID)                                                                                          
+create table penalty_cancel (
+   penalty_cancel_id number,
+   penalty_id        number not null,
+   admin_account_id  number not null,
+   cancel_reason     varchar2(500) not null,
+   canceled_at       date default sysdate not null,
+   constraint penalty_cancel_penalty_cancel_id_pk primary key ( penalty_cancel_id ),
+   constraint penalty_cancel_penalty_id_fk foreign key ( penalty_id )
+      references penalty_history ( penalty_id ),
+   constraint penalty_cancel_admin_account_id_fk foreign key ( admin_account_id )
+      references admin_account ( admin_account_id ),
+   constraint penalty_cancel_penalty_id_uk unique ( penalty_id )
 );
 
 -- ○ 39. 신고 유형
-CREATE TABLE REPORT_TYPE
-(
-REPORT_TYPE_ID NUMBER
-,REPORT_TYPE_NAME VARCHAR2(50) NOT NULL
-,CONSTRAINT REPORT_TYPE_REPORT_TYPE_ID_PK PRIMARY KEY(REPORT_TYPE_ID)
-,CONSTRAINT REPORT_TYPE_REPORT_TYPE_NAME_UK UNIQUE(REPORT_TYPE_NAME)
+create table report_type (
+   report_type_id   number,
+   report_type_name varchar2(50) not null,
+   constraint report_type_report_type_id_pk primary key ( report_type_id ),
+   constraint report_type_report_type_name_uk unique ( report_type_name )
 );
 
 -- ○ 40. 신고 대상
-CREATE TABLE REPORT_TARGET
-(
-REPORT_TARGET_ID NUMBER
-,REPORT_TARGET_NAME VARCHAR2(50) NOT NULL
-,CONSTRAINT REPORT_TARGET_REPORT_TARGET_ID_PK PRIMARY KEY(REPORT_TARGET_ID)
-,CONSTRAINT REPORT_TARGET_REPORT_TARGET_NAME_UK UNIQUE(REPORT_TARGET_NAME)
+create table report_target (
+   report_target_id   number,
+   report_target_name varchar2(50) not null,
+   constraint report_target_report_target_id_pk primary key ( report_target_id ),
+   constraint report_target_report_target_name_uk unique ( report_target_name )
 );
 
 
 
 -- ○ 41. 신고 신청
-CREATE TABLE REPORT_SUBMISSION
-(
-REPORT_SUBMISSION_ID NUMBER
-,USER_ID NUMBER NOT NULL
-,REPORT_TARGET_ID NUMBER NOT NULL
-,REPORT_TYPE_ID NUMBER NOT NULL
-,REPORT_REASON VARCHAR2(500)
-,CREATED_AT DATE DEFAULT SYSDATE NOT NULL
-,CONSTRAINT REPORT_SUBMISSION_REPORT_SUBMISSION_ID_PK PRIMARY KEY(REPORT_SUBMISSION_ID)
-,CONSTRAINT REPORT_SUBMISSION_USER_ID_FK FOREIGN KEY(USER_ID)
-                                         REFERENCES USERS(USER_ID)
-,CONSTRAINT REPORT_SUBMISSION_REPORT_TARGET_ID_FK FOREIGN KEY(REPORT_TARGET_ID)
-                                                    REFERENCES REPORT_TARGET(REPORT_TARGET_ID)
-,CONSTRAINT REPORT_SUBMISSION_REPORT_TYPE_ID_FK FOREIGN KEY(REPORT_TYPE_ID)
-                                                   REFERENCES REPORT_TYPE(REPORT_TYPE_ID)
+create table report_submission (
+   report_submission_id number,
+   user_id              number not null,
+   report_target_id     number not null,
+   report_type_id       number not null,
+   report_reason        varchar2(500),
+   created_at           date default sysdate not null,
+   constraint report_submission_report_submission_id_pk primary key ( report_submission_id ),
+   constraint report_submission_user_id_fk foreign key ( user_id )
+      references users ( user_id ),
+   constraint report_submission_report_target_id_fk foreign key ( report_target_id )
+      references report_target ( report_target_id ),
+   constraint report_submission_report_type_id_fk foreign key ( report_type_id )
+      references report_type ( report_type_id )
 );
 
 -- ○ 42. 상품 신고
-CREATE TABLE PRODUCT_REPORT
-(
-PRODUCT_REPORT_ID NUMBER
-,REPORT_SUBMISSION_ID NUMBER NOT NULL
-,PRODUCT_ID NUMBER NOT NULL
-,CONSTRAINT PRODUCT_REPORT_PRODUCT_REPORT_ID_PK PRIMARY KEY(PRODUCT_REPORT_ID)
-,CONSTRAINT PRODUCT_REPORT_REPORT_ID_FK FOREIGN KEY(REPORT_SUBMISSION_ID)
-                                        REFERENCES REPORT_SUBMISSION(REPORT_SUBMISSION_ID)
-,CONSTRAINT PRODUCT_REPORT_PRODUCT_ID_FK FOREIGN KEY(PRODUCT_ID)
-                                         REFERENCES PRODUCT(PRODUCT_ID)
+create table product_report (
+   product_report_id    number,
+   report_submission_id number not null,
+   product_id           number not null,
+   constraint product_report_product_report_id_pk primary key ( product_report_id ),
+   constraint product_report_report_id_fk foreign key ( report_submission_id )
+      references report_submission ( report_submission_id ),
+   constraint product_report_product_id_fk foreign key ( product_id )
+      references product ( product_id )
 );
 
 -- ○ 43. 경매 신고
-CREATE TABLE AUCTION_REPORT
-(
-AUCTION_REPORT_ID NUMBER
-,REPORT_SUBMISSION_ID NUMBER NOT NULL
-,AUCTION_ID NUMBER NOT NULL
-,CONSTRAINT AUCTION_REPORT_AUCTION_REPORT_ID_PK PRIMARY KEY(AUCTION_REPORT_ID)
-,CONSTRAINT AUCTION_REPORT_REPORT_ID_FK FOREIGN KEY(REPORT_SUBMISSION_ID)
-                                        REFERENCES REPORT_SUBMISSION(REPORT_SUBMISSION_ID)
-,CONSTRAINT AUCTION_REPORT_AUCTION_ID_FK FOREIGN KEY(AUCTION_ID)
-                                          REFERENCES AUCTION_REGISTRATION(AUCTION_ID)
+create table auction_report (
+   auction_report_id    number,
+   report_submission_id number not null,
+   auction_id           number not null,
+   constraint auction_report_auction_report_id_pk primary key ( auction_report_id ),
+   constraint auction_report_report_id_fk foreign key ( report_submission_id )
+      references report_submission ( report_submission_id ),
+   constraint auction_report_auction_id_fk foreign key ( auction_id )
+      references auction_registration ( auction_id )
 );
 
 -- ○ 44. 신고 처리 결과
-CREATE TABLE REPORT_RESULT
-(
-REPORT_RESULT_ID NUMBER
-,REPORT_RESULT_NAME VARCHAR2(50) NOT NULL
-,CONSTRAINT REPORT_RESULT_REPORT_RESULT_ID_PK PRIMARY KEY(REPORT_RESULT_ID)
-,CONSTRAINT REPORT_RESULT_REPORT_RESULT_NAME_UK UNIQUE(REPORT_RESULT_NAME)
+create table report_result (
+   report_result_id   number,
+   report_result_name varchar2(50) not null,
+   constraint report_result_report_result_id_pk primary key ( report_result_id ),
+   constraint report_result_report_result_name_uk unique ( report_result_name )
 );
 
 -- ○ 45. 신고 처리
-CREATE TABLE REPORT_PROCESS
-(
-REPORT_PROCESS_ID NUMBER
-,REPORT_SUBMISSION_ID NUMBER NOT NULL
-,ADMIN_ACCOUNT_ID NUMBER NOT NULL
-,REPORT_RESULT_ID NUMBER NOT NULL
-,PROCESS_REASON VARCHAR2(500) NOT NULL
-,PROCESSED_AT DATE DEFAULT SYSDATE NOT NULL
-,CONSTRAINT REPORT_PROCESS_REPORT_PROCESS_ID_PK PRIMARY KEY(REPORT_PROCESS_ID)
-,CONSTRAINT REPORT_PROCESS_REPORT_ID_FK FOREIGN KEY(REPORT_SUBMISSION_ID)
-                                        REFERENCES REPORT_SUBMISSION(REPORT_SUBMISSION_ID)
-,CONSTRAINT REPORT_PROCESS_ADMIN_ACCOUNT_ID_FK FOREIGN KEY(ADMIN_ACCOUNT_ID)
-                                                REFERENCES ADMIN_ACCOUNT(ADMIN_ACCOUNT_ID)
-,CONSTRAINT REPORT_PROCESS_REPORT_RESULT_ID_FK FOREIGN KEY(REPORT_RESULT_ID)                                               
-                                                  REFERENCES REPORT_RESULT(REPORT_RESULT_ID)
+create table report_process (
+   report_process_id    number,
+   report_submission_id number not null,
+   admin_account_id     number not null,
+   report_result_id     number not null,
+   process_reason       varchar2(500) not null,
+   processed_at         date default sysdate not null,
+   constraint report_process_report_process_id_pk primary key ( report_process_id ),
+   constraint report_process_report_id_fk foreign key ( report_submission_id )
+      references report_submission ( report_submission_id ),
+   constraint report_process_admin_account_id_fk foreign key ( admin_account_id )
+      references admin_account ( admin_account_id ),
+   constraint report_process_report_result_id_fk foreign key ( report_result_id )
+      references report_result ( report_result_id )
 );
 
 
@@ -619,126 +630,125 @@ REPORT_PROCESS_ID NUMBER
 --CREATE SEQUENCE ==========================================================================
 
 -- 1. USERS 
-CREATE SEQUENCE USERS_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence users_seq start with 1 increment by 1 nocache;
 
 -- 5. ACCOUNT_EVENT_TYPE
-CREATE SEQUENCE ACCOUNT_EVENT_TYPE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence account_event_type_seq start with 1 increment by 1 nocache;
 
 -- 6. ACCOUNT_EVENT_HISTORY
-CREATE SEQUENCE ACCOUNT_EVENT_HISTORY_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence account_event_history_seq start with 1 increment by 1 nocache;
 
 -- 7. ADMIN_ROLE 
-CREATE SEQUENCE ADMIN_ROLE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence admin_role_seq start with 1 increment by 1 nocache;
 
 -- 8. ADMIN_ACCOUNT 
-CREATE SEQUENCE ADMIN_ACCOUNT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence admin_account_seq start with 1 increment by 1 nocache;
 
 -- 9. ADMIN_PROFILE 
-CREATE SEQUENCE ADMIN_PROFILE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence admin_profile_seq start with 1 increment by 1 nocache;
 
 -- 10. ADMIN_ACCOUNT_HISTORY 
-CREATE SEQUENCE ADMIN_HISTORY_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence admin_history_seq start with 1 increment by 1 nocache;
 
 -- 13. PRODUCT_MANUFACTURER 
-CREATE SEQUENCE MANUFACTURER_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence manufacturer_seq start with 1 increment by 1 nocache;
 
 -- 14. PRODUCT_GRADE 
-CREATE SEQUENCE PRODUCT_GRADE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence product_grade_seq start with 1 increment by 1 nocache;
 
 -- 15. PRODUCT_GENRE 
-CREATE SEQUENCE PRODUCT_GENRE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence product_genre_seq start with 1 increment by 1 nocache;
 
 -- 16. PRODUCT_SIZE 
-CREATE SEQUENCE PRODUCT_SIZE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence product_size_seq start with 1 increment by 1 nocache;
 
 -- 17. PRODUCT 
-CREATE SEQUENCE PRODUCT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence product_seq start with 1 increment by 1 nocache;
 
 -- 18. PRODUCT_IMAGE 
-CREATE SEQUENCE PRODUCT_IMAGE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence product_image_seq start with 1 increment by 1 nocache;
 
 -- 19. PRODUCT_WISHLIST 
-CREATE SEQUENCE WISHLIST_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence wishlist_seq start with 1 increment by 1 nocache;
 
 -- 20. MONEY_TYPE 
-CREATE SEQUENCE MONEY_TYPE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence money_type_seq start with 1 increment by 1 nocache;
 
 -- 21. MONEY_CHARGE_METHOD 
-CREATE SEQUENCE MONEY_CHARGE_METHOD_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence money_charge_method_seq start with 1 increment by 1 nocache;
 
 -- 22. MONEY_CHARGE_HISTORY 
-CREATE SEQUENCE MONEY_CHARGE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence money_charge_seq start with 1 increment by 1 nocache;
 
 -- 25. MONEY_TRANSACTION_HISTORY 
-CREATE SEQUENCE MONEY_TRANSACTION_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence money_transaction_seq start with 1 increment by 1 nocache;
 
 -- 23. AUCTION_PERIOD 
-CREATE SEQUENCE AUCTION_PERIOD_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence auction_period_seq start with 1 increment by 1 nocache;
 
 -- 24. AUCTION_REGISTRATION 
-CREATE SEQUENCE AUCTION_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence auction_seq start with 1 increment by 1 nocache;
 
 -- 26. AUCTION_CANCEL_HISTORY 
-CREATE SEQUENCE AUCTION_CANCEL_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence auction_cancel_seq start with 1 increment by 1 nocache;
 
 -- 27. AUCTION_BID_PARTICIPATION 
-CREATE SEQUENCE BID_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence bid_seq start with 1 increment by 1 nocache;
 
 -- 28. AUCTION_WINNING_RESULT 
-CREATE SEQUENCE BID_RESULT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence bid_result_seq start with 1 increment by 1 nocache;
 
 -- 31. AUCTION_WINNING_PAYMENT 
-CREATE SEQUENCE PAYMENT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence payment_seq start with 1 increment by 1 nocache;
 
 
 -- 29. BID_FAILURE_TYPE 
-CREATE SEQUENCE BID_FAIL_TYPE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence bid_fail_type_seq start with 1 increment by 1 nocache;
 
 -- 30. BID_FAILURE_HISTORY 
-CREATE SEQUENCE BID_FAIL_HISTORY_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence bid_fail_history_seq start with 1 increment by 1 nocache;
 
 -- 32. DELIVERY_COMPLETED 
-CREATE SEQUENCE SHIPPING_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence shipping_seq start with 1 increment by 1 nocache;
 
 -- 33. PURCHASE_CONFIRM_HISTORY 
-CREATE SEQUENCE PURCHASE_CONFIRM_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence purchase_confirm_seq start with 1 increment by 1 nocache;
 
 -- 34. TRANSACTION_COMPLETED 
-CREATE SEQUENCE TRANSACTION_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence transaction_seq start with 1 increment by 1 nocache;
 
 -- 35. PENALTY_ASSIGN_TYPE 
-CREATE SEQUENCE PENALTY_TYPE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence penalty_type_seq start with 1 increment by 1 nocache;
 
 -- 36. PENALTY_HISTORY 
-CREATE SEQUENCE PENALTY_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence penalty_seq start with 1 increment by 1 nocache;
 
 -- 37. PENALTY_STATUS 
-CREATE SEQUENCE PENALTY_STATUS_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence penalty_status_seq start with 1 increment by 1 nocache;
 
 -- 38. PENALTY_CANCEL 
-CREATE SEQUENCE PENALTY_CANCEL_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence penalty_cancel_seq start with 1 increment by 1 nocache;
 
 -- 39. REPORT_TYPE 
-CREATE SEQUENCE REPORT_TYPE_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence report_type_seq start with 1 increment by 1 nocache;
 
 -- 40. REPORT_TARGET 
-CREATE SEQUENCE REPORT_TARGET_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence report_target_seq start with 1 increment by 1 nocache;
 
 -- 41. REPORT_SUBMISSION 
-CREATE SEQUENCE REPORT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence report_seq start with 1 increment by 1 nocache;
 
 -- 42. PRODUCT_REPORT 
-CREATE SEQUENCE PRODUCT_REPORT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence product_report_seq start with 1 increment by 1 nocache;
 
 -- 43. AUCTION_REPORT 
-CREATE SEQUENCE AUCTION_REPORT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence auction_report_seq start with 1 increment by 1 nocache;
 
 -- 44. REPORT_RESULT 
-CREATE SEQUENCE REPORT_RESULT_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
+create sequence report_result_seq start with 1 increment by 1 nocache;
 
 -- 45. REPORT_PROCESS 
-CREATE SEQUENCE REPORT_PROCESS_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
-
+create sequence report_process_seq start with 1 increment by 1 nocache;
 
 --CREATE SEQUENCE ==========================================================================
 
@@ -748,46 +758,46 @@ CREATE SEQUENCE REPORT_PROCESS_SEQ START WITH 1 INCREMENT BY 1 NOCACHE;
 
 
 --DROP SEQUENCE ==========================================================================
-DROP SEQUENCE USERS_SEQ;
-DROP SEQUENCE ACCOUNT_EVENT_TYPE_SEQ;
-DROP SEQUENCE ACCOUNT_EVENT_HISTORY_SEQ;
-DROP SEQUENCE ADMIN_ROLE_SEQ;
-DROP SEQUENCE ADMIN_ACCOUNT_SEQ;
-DROP SEQUENCE ADMIN_PROFILE_SEQ;
-DROP SEQUENCE ADMIN_HISTORY_SEQ;
-DROP SEQUENCE MANUFACTURER_SEQ;
-DROP SEQUENCE PRODUCT_GRADE_SEQ;
-DROP SEQUENCE PRODUCT_GENRE_SEQ;
-DROP SEQUENCE PRODUCT_SIZE_SEQ;
-DROP SEQUENCE PRODUCT_SEQ;
-DROP SEQUENCE PRODUCT_IMAGE_SEQ;
-DROP SEQUENCE WISHLIST_SEQ;
-DROP SEQUENCE MONEY_TYPE_SEQ;
-DROP SEQUENCE MONEY_CHARGE_METHOD_SEQ;
-DROP SEQUENCE MONEY_CHARGE_SEQ;
-DROP SEQUENCE MONEY_TRANSACTION_SEQ;
-DROP SEQUENCE AUCTION_PERIOD_SEQ;
-DROP SEQUENCE AUCTION_SEQ;
-DROP SEQUENCE AUCTION_CANCEL_SEQ;
-DROP SEQUENCE BID_SEQ;
-DROP SEQUENCE BID_RESULT_SEQ;
-DROP SEQUENCE PAYMENT_SEQ;
-DROP SEQUENCE BID_FAIL_TYPE_SEQ;
-DROP SEQUENCE BID_FAIL_HISTORY_SEQ;
-DROP SEQUENCE SHIPPING_SEQ;
-DROP SEQUENCE PURCHASE_CONFIRM_SEQ;
-DROP SEQUENCE TRANSACTION_SEQ;
-DROP SEQUENCE PENALTY_TYPE_SEQ;
-DROP SEQUENCE PENALTY_SEQ;
-DROP SEQUENCE PENALTY_STATUS_SEQ;
-DROP SEQUENCE PENALTY_CANCEL_SEQ;
-DROP SEQUENCE REPORT_TYPE_SEQ;
-DROP SEQUENCE REPORT_TARGET_SEQ;
-DROP SEQUENCE REPORT_SEQ;
-DROP SEQUENCE PRODUCT_REPORT_SEQ;
-DROP SEQUENCE AUCTION_REPORT_SEQ;
-DROP SEQUENCE REPORT_RESULT_SEQ;
-DROP SEQUENCE REPORT_PROCESS_SEQ;
+drop sequence users_seq;
+drop sequence account_event_type_seq;
+drop sequence account_event_history_seq;
+drop sequence admin_role_seq;
+drop sequence admin_account_seq;
+drop sequence admin_profile_seq;
+drop sequence admin_history_seq;
+drop sequence manufacturer_seq;
+drop sequence product_grade_seq;
+drop sequence product_genre_seq;
+drop sequence product_size_seq;
+drop sequence product_seq;
+drop sequence product_image_seq;
+drop sequence wishlist_seq;
+drop sequence money_type_seq;
+drop sequence money_charge_method_seq;
+drop sequence money_charge_seq;
+drop sequence money_transaction_seq;
+drop sequence auction_period_seq;
+drop sequence auction_seq;
+drop sequence auction_cancel_seq;
+drop sequence bid_seq;
+drop sequence bid_result_seq;
+drop sequence payment_seq;
+drop sequence bid_fail_type_seq;
+drop sequence bid_fail_history_seq;
+drop sequence shipping_seq;
+drop sequence purchase_confirm_seq;
+drop sequence transaction_seq;
+drop sequence penalty_type_seq;
+drop sequence penalty_seq;
+drop sequence penalty_status_seq;
+drop sequence penalty_cancel_seq;
+drop sequence report_type_seq;
+drop sequence report_target_seq;
+drop sequence report_seq;
+drop sequence product_report_seq;
+drop sequence auction_report_seq;
+drop sequence report_result_seq;
+drop sequence report_process_seq;
 
 --DROP SEQUENCE ==========================================================================
 
@@ -799,50 +809,50 @@ DROP SEQUENCE REPORT_PROCESS_SEQ;
 
 --DROP TABLE ==========================================================================
 
-DROP TABLE REPORT_PROCESS;
-DROP TABLE REPORT_RESULT;
-DROP TABLE AUCTION_REPORT;
-DROP TABLE PRODUCT_REPORT;
-DROP TABLE REPORT_SUBMISSION;
-DROP TABLE REPORT_TARGET;
-DROP TABLE REPORT_TYPE;
-DROP TABLE PENALTY_CANCEL;
-DROP TABLE PENALTY_STATUS;
-DROP TABLE PENALTY_HISTORY;
-DROP TABLE PENALTY_ASSIGN_TYPE;
-DROP TABLE TRANSACTION_COMPLETED;
-DROP TABLE PURCHASE_CONFIRM_HISTORY;
-DROP TABLE DELIVERY_COMPLETED;
-DROP TABLE AUCTION_WINNING_PAYMENT;
-DROP TABLE BID_FAILURE_HISTORY;
-DROP TABLE BID_FAILURE_TYPE;
-DROP TABLE AUCTION_WINNING_RESULT;
-DROP TABLE AUCTION_BID_PARTICIPATION;
-DROP TABLE AUCTION_CANCEL_HISTORY;
-DROP TABLE MONEY_TRANSACTION_HISTORY;
-DROP TABLE AUCTION_REGISTRATION;
-DROP TABLE AUCTION_PERIOD;
-DROP TABLE MONEY_CHARGE_HISTORY;
-DROP TABLE MONEY_CHARGE_METHOD;
-DROP TABLE MONEY_TYPE;
-DROP TABLE PRODUCT_WISHLIST;
-DROP TABLE PRODUCT_IMAGE;
-DROP TABLE PRODUCT;
-DROP TABLE PRODUCT_SIZE;
-DROP TABLE PRODUCT_GENRE;
-DROP TABLE PRODUCT_GRADE;
-DROP TABLE PRODUCT_MANUFACTURER;
-DROP TABLE PRODUCT_COUNTRY;
-DROP TABLE COMMON;
-DROP TABLE ADMIN_ACCOUNT_HISTORY;
-DROP TABLE ADMIN_PROFILE;
-DROP TABLE ADMIN_ACCOUNT;
-DROP TABLE ADMIN_ROLE;
-DROP TABLE ACCOUNT_EVENT_HISTORY;
-DROP TABLE ACCOUNT_EVENT_TYPE;
-DROP TABLE DELETED_USER;
-DROP TABLE USER_PROFILE;
-DROP TABLE USER_ACCOUNT;
-DROP TABLE USERS;
+drop table report_process;
+drop table report_result;
+drop table auction_report;
+drop table product_report;
+drop table report_submission;
+drop table report_target;
+drop table report_type;
+drop table penalty_cancel;
+drop table penalty_status;
+drop table penalty_history;
+drop table penalty_assign_type;
+drop table transaction_completed;
+drop table purchase_confirm_history;
+drop table delivery_completed;
+drop table auction_winning_payment;
+drop table bid_failure_history;
+drop table bid_failure_type;
+drop table auction_winning_result;
+drop table auction_bid_participation;
+drop table auction_cancel_history;
+drop table money_transaction_history;
+drop table auction_registration;
+drop table auction_period;
+drop table money_charge_history;
+drop table money_charge_method;
+drop table money_type;
+drop table product_wishlist;
+drop table product_image;
+drop table product;
+drop table product_size;
+drop table product_genre;
+drop table product_grade;
+drop table product_manufacturer;
+drop table product_country;
+drop table common;
+drop table admin_account_history;
+drop table admin_profile;
+drop table admin_account;
+drop table admin_role;
+drop table account_event_history;
+drop table account_event_type;
+drop table deleted_user;
+drop table user_profile;
+drop table user_account;
+drop table users;
 
 --DROP TABLE ==========================================================================
