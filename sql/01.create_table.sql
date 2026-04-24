@@ -555,6 +555,8 @@ create table report_target (
    constraint report_target_report_target_name_uk unique ( report_target_name )
 );
 
+
+
 -- ○ 41. 신고 신청
 create table report_submission (
    report_submission_id number,

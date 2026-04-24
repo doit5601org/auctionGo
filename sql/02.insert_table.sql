@@ -729,8 +729,14 @@ insert into money_charge_history (
            100000,
            sysdate );
 
+<<<<<<< HEAD
 select *
   from money_charge_history;
+=======
+
+SELECT *
+FROM MONEY_CHARGE_HISTORY;
+>>>>>>> 02706d13cfda250fcb449d8a7307b6f65bbc423a
 
 select *
   from money_charge_method;
