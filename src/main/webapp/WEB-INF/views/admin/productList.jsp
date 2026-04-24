@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -62,6 +63,26 @@
 	    color: #212529;
 	    border-color: #212529;
 	}
+	
+	
+	/* 관리 버튼 공통 스타일: 크기와 패딩을 강제로 고정 */
+	.btn-admin-custom {
+	    width: 80px !important;      /* 버튼 전체 너비 고정 */
+	    padding: 4px 0 !important;   /* 상하 패딩은 유지, 좌우는 너비에 맞게 0 */
+	    font-size: 0.85rem !important;
+	    text-align: center;
+	    display: inline-block;
+	}
+	
+	/* 비활성화 버튼: 공통 스타일을 상속받으면서 색상과 커서만 변경 */
+	.btn-action-disabled {
+	    opacity: 0.6;							/* 불투명도 조절로 흐릿하게 표현 */
+	    cursor: not-allowed !important;			/* 마우스 커서를 금지 모양으로 변경 */
+	    pointer-events: none;					/* 클릭 이벤트 자체를 차단 */
+	    background-color: #e9ecef !important;	/* 연한 회색 배경 */
+	    border: 1px solid #dee2e6 !important;
+	    color: #6c757d !important;
+	}
 </style>
 </head>
 <body class="bg-light">
@@ -85,7 +106,7 @@
 		    </div>
 		    
 		    <div class="text-muted">
-		        총 <span class="fw-bold text-dark">156</span>개의 상품
+		        총 <span class="fw-bold text-dark">${ productCount }</span>개의 상품
 		    </div>
 		</div>
         
@@ -102,14 +123,74 @@
                     </tr>
                 </thead>
                 <tbody>
+                
+                <c:forEach var="productDto" items="${ productList }">
+                <tr>
+                	<td><img src="${ pageContext.request.contextPath }/${ productDto.imagePath1 }" class="product-thumb"></td>
+                	
+                	
+                	
+                	<!-- 이하 추가 개발 필요.... -->
+                	
+                	
+
+                       <td>회원1</td>
+                       <td>
+						<%--
+					    <c:choose>
+					        <c:when test="${product.status == '공개'}">
+					            <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">
+					                <i class="bi bi-eye-fill me-0"></i> 공개
+					            </span>
+					        </c:when>
+					        <c:otherwise>
+					            <span class="badge rounded-pill bg-secondary-subtle text-secondary border border-secondary-subtle">
+					                <i class="bi bi-eye-slash-fill me-0"></i> 비공개
+					            </span>
+					        </c:otherwise>
+					    </c:choose>
+						--%>
+						<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">
+			                <i class="bi bi-eye-fill me-0"></i> 공개
+			            </span>
+					</td>
+                       <td class="text-start">하츠네 미쿠 피규어 <br><small class="text-muted">한정판</small></td>
+					<td>
+						<%-- 공개 상품에 대한 비공개 버튼 --%>
+                           <button type="button" class="btn btn-sm btn-outline-dark btn-admin-custom" 
+		                        onclick="hideProduct('${product.pId}')">
+		                    비공개
+		                </button>
+                           
+                           <button class="btn btn-sm btn-outline-danger btn-admin-custom">패널티</button>
+                       </td>
+                </tr>
+                </c:forEach>
+                	
+                	
+                	
+                	
+                    
                     <tr>
-                        <td><img src="${ pageContext.request.contextPath }/images/tempFigureImage.png" class="product-thumb"></td>
+                        <td><img src="${ pageContext.request.contextPath }/images/miku3.png" class="product-thumb"></td>
                         <td>회원1</td>
-                        <td><span class="badge bg-success">공개</span></td>
+                        <td>
+                        	<%--
+                        		분기 처리 로직
+							--%>
+                        	<span class="badge rounded-pill bg-secondary-subtle text-secondary border border-secondary-subtle">
+				                <i class="bi bi-eye-slash-fill me-0"></i> 비공개
+				            </span>
+                        </td>
                         <td class="text-start">하츠네 미쿠 피규어 <br><small class="text-muted">한정판</small></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-dark me-1">비공개</button>
-                            <button class="btn btn-sm btn-outline-danger">패널티</button>
+                            <%-- 이미 비공개 상태인 상품에 대해선 비공개 버튼 비활성화 --%>
+                            <button type="button" class="btn btn-sm btn-action-disabled btn-admin-custom"
+                            	 tabindex="-1" aria-disabled="true">
+			                    비공개
+			                </button>
+                            
+                            <button class="btn btn-sm btn-outline-danger btn-admin-custom">패널티</button>
                         </td>
                     </tr>
                 </tbody>
