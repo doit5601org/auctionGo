@@ -21,6 +21,29 @@
     .btn-wf-sm { padding: 5px 15px; font-size: 0.85rem; border: 1px solid #ced4da; background-color: #fff; font-weight: bold; }
     .price-text { color: #0d6efd; font-weight: bold; font-size: 1.2rem; }
     .finished-price { color: #495057; font-weight: bold; font-size: 1.1rem; }
+
+	/* 페이지네이션 디자인 통일 */
+	.pagination .page-link {
+	    color: #212529;             /* 기본 글자색: 검정 */
+	    border-color: #dee2e6;
+	    padding: 8px 16px;
+	}
+	
+	.pagination .page-item.active .page-link {
+	    background-color: #212529 !important; /* 활성 페이지: 검정 배경 */
+	    border-color: #212529 !important;
+	    color: #ffffff !important;            /* 활성 페이지: 흰색 글자 */
+	}
+	
+	.pagination .page-link:hover {
+	    background-color: #f1f3f5;  /* 마우스 호버 시 연한 회색 */
+	    color: #212529;
+	}
+	
+	/* 처음으로/마지막으로 버튼 너비 조정 */
+	.page-item .page-link span {
+	    font-size: 0.9rem;
+	}
 </style>
 </head>
 <body class="bg-light">
@@ -56,6 +79,40 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-4 mb-5">
+		    <div class="col-12 d-flex justify-content-center">
+		        <nav aria-label="Page navigation">
+		            <ul class="pagination">
+		                <li class="page-item">
+		                    <a class="page-link" href="#" aria-label="First">
+		                        <span aria-hidden="true">처음으로</span>
+		                    </a>
+		                </li>
+		                
+		                <li class="page-item"><a class="page-link" href="#">11</a></li>
+		                <li class="page-item"><a class="page-link" href="#">12</a></li>
+		                
+		                <li class="page-item active" aria-current="page">
+		                    <span class="page-link">13</span>
+		                </li>
+		                
+		                <li class="page-item"><a class="page-link" href="#">14</a></li>
+		                <li class="page-item"><a class="page-link" href="#">15</a></li>
+		                <li class="page-item"><a class="page-link" href="#">16</a></li>
+		                <li class="page-item"><a class="page-link" href="#">17</a></li>
+		                <li class="page-item"><a class="page-link" href="#">18</a></li>
+		                <li class="page-item"><a class="page-link" href="#">19</a></li>
+		                <li class="page-item"><a class="page-link" href="#">20</a></li>
+		
+		                <li class="page-item">
+		                    <a class="page-link" href="#" aria-label="Last">
+		                        <span aria-hidden="true">마지막으로</span>
+		                    </a>
+		                </li>
+		            </ul>
+		        </nav>
+		    </div>
+		</div>
 
         <div>
             <h5 class="section-title text-secondary">종료된 경매 <span class="badge bg-secondary ms-2">12</span></h5>
@@ -86,6 +143,45 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-4 mb-3">
+            <div class="col-12 d-flex justify-content-center">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="First">
+                                <span aria-hidden="true">처음으로</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">11</a></li>
+
+                        <li class="page-item active" aria-current="page">
+		                    <span class="page-link">12</span>
+		                </li>
+
+                        <li class="page-item"><a class="page-link" href="#">13</a></li>
+                        <li class="page-item"><a class="page-link" href="#">14</a></li>
+		                <li class="page-item"><a class="page-link" href="#">15</a></li>
+		                <li class="page-item"><a class="page-link" href="#">16</a></li>
+		                <li class="page-item"><a class="page-link" href="#">17</a></li>
+		                <li class="page-item"><a class="page-link" href="#">18</a></li>
+		                <li class="page-item"><a class="page-link" href="#">19</a></li>
+		                <li class="page-item"><a class="page-link" href="#">20</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Last">
+                                <span aria-hidden="true">마지막으로</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-0 py-5">
+            <button type="button" class="btn btn-secondary px-5 fw-bold" onclick="location.href='mainDashBoard.jsp'">
+                대시보드로 돌아가기
+            </button>
+        </div>
+
     </div>
 </body>
 </html>

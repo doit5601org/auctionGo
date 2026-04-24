@@ -38,23 +38,11 @@ public class AdminController extends HttpServlet
 		// GET 방식 요청 처리 (=화면 이동)
 		if (methodType.equalsIgnoreCase("GET"))
 		{
-			//-- 경매 --//
-			// 경매 전체 조회
-			if (path.equalsIgnoreCase("/admin/show-all-auctions"))
-			{
-				viewPath = viewPath + "/admin/auctionList.jsp";
-			}
-			// 경매 상세 조회
-			else if (path.equalsIgnoreCase("/admin/auction/detail"))
-			{
-				viewPath = viewPath + "/admin/auctionDetail.jsp";
-			}
-			
 			//-- 상품 --//
 			// 상품 전체 조회
-			else if (path.equalsIgnoreCase("/admin/show-all-products"))
+			if (path.equalsIgnoreCase("/admin/show-all-products"))
 			{
-				viewPath = viewPath + "/admin/productList.jsp";
+				viewPath = viewPath + "/admin/showAllProducts.jsp";
 			}
 			// 상품 상세 조회
 			else if (path.equalsIgnoreCase("/admin/product/detail"))
@@ -62,21 +50,28 @@ public class AdminController extends HttpServlet
 				viewPath = viewPath + "/admin/productDetail.jsp";
 			}
 			
-			//-- 신고 --//
-			// 신고 접수 목록
+			//-- 경매 --//
+			// 경매 전체 조회
 			else if (path.equalsIgnoreCase("/admin/show-all-auctions"))
 			{
-				viewPath = viewPath + "/admin/reportsList.jsp";
+				viewPath = viewPath + "/admin/showAllAuctions.jsp";
+			}
+			// 경매 상세 조회
+			else if (path.equalsIgnoreCase("/admin/auction/detail"))
+			{
+				viewPath = viewPath + "/admin/auctionDetail.jsp";
+			}
+						
+			//-- 신고 --//
+			// 전체 신고 목록
+			else if (path.equalsIgnoreCase("/admin/show-all-reports"))
+			{
+				viewPath = viewPath + "/admin/showAllReports.jsp";
 			}
 			// 접수 신고건 처리
 			else if (path.equalsIgnoreCase("/admin/report/process"))
 			{
 				viewPath = viewPath + "/admin/reportsProcess.jsp";
-			}
-			// 신고 처리 이력
-			else if (path.equalsIgnoreCase("/admin/show-history-reports"))
-			{
-				viewPath = viewPath + "/admin/reportsHistory.jsp";
 			}
 
 			//-- 패널티 처리 --//
@@ -95,14 +90,8 @@ public class AdminController extends HttpServlet
 			{
 				viewPath = viewPath + "/admin/penaltyCancel.jsp";
 			}
-			
-			
-						
-			
-			
-			
-			
-			
+
+
 			request.getRequestDispatcher(viewPath).forward(request, response);
 			return;
 		}
