@@ -2,6 +2,7 @@ package com.doit.controller;
 
 import java.io.IOException;
 
+import com.doit.dao.AuthenticDAO;
 import com.doit.service.AuthenticService;
 
 import jakarta.servlet.ServletException;
@@ -31,7 +32,7 @@ public class FindIdActionController extends HttpServlet{
 		String findEmail = request.getParameter("findIdEmail");
 		
 		
-		String findId  = AuthenticService.findId(findName, findEmail);
+		String findId  = AuthenticDAO.findId(findName, findEmail);
 		
 		if(findId!=null) {
 			request.setAttribute("findId", findId);

@@ -1,4 +1,4 @@
-package com.doit.service;
+package com.doit.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,7 @@ import java.sql.ResultSet;
 import com.doit.dto.UserInfoDTO;
 import com.doit.util.DBCPConn;
 
-public class AuthenticService {
-
+public class AuthenticDAO {
 
 	// 로그인 인증 메소드
 	public static UserInfoDTO authenticateUser(String userId, String userPwd) {
@@ -94,8 +93,8 @@ public class AuthenticService {
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				
 				pstmt.setString(1, userId);
-				pstmt.setString(1, userName);
-				pstmt.setString(2, userEmail);
+				pstmt.setString(2, userName);
+				pstmt.setString(3, userEmail);
 				
 				try(ResultSet rs = pstmt.executeQuery()){
 					if(rs.next()) {
@@ -106,7 +105,7 @@ public class AuthenticService {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+			
 		return findPw;
 	}
 	
