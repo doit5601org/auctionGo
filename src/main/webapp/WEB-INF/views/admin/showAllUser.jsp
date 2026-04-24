@@ -28,7 +28,7 @@
     .table-container {
         border: 1px solid #ced4da;
         background-color: #ffffff;
-        min-height: 600px; /* 20명 출력 시 적당한 높이 */
+        min-height: 600px;
     }
 
     th, td {
@@ -36,29 +36,12 @@
         vertical-align: middle;
     }
 
-    /* 제재 유무 상태 스타일 */
-    .status-normal { color: #0d6efd; font-weight: bold; }
-    .status-penalty { color: #dc3545; font-weight: bold; }
-
-    /* 페이징 스타일 커스텀 */
-    .pagination {
-        margin-bottom: 0;
-    }
-    .page-link {
-        color: #333;
-        border-color: #ced4da;
-    }
-    .page-item.active .page-link {
-        background-color: #6c757d;
-        border-color: #6c757d;
-        color: white;
-    }
     .btn-wf {
         background-color: #e9ecef;
         border: 1px solid #ced4da;
         padding: 8px 30px;
         font-weight: bold;
-        color: #212529; /* 글자색 명시 */
+        color: #212529;
         text-decoration: none;
         display: inline-block;
         transition: all 0.2s;
@@ -77,7 +60,8 @@
     <div class="row mb-4 align-items-end">
         <div class="col-md-6">
             <h1 class="fw-bold">전체 회원 목록</h1>
-            <p class="text-muted">총 회원 수: <span class="text-primary fw-bold">128</span>명 (20명씩 보기)</p>
+            <%-- 컨트롤러에서 보낸 리스트 크기를 동적으로 출력 --%>
+            <p class="text-muted">총 회원 수: <span class="text-primary fw-bold">${userList.size()}</span>명 (현재 페이지 기준)</p>
         </div>
         <div class="col-md-6">
             <div class="input-group">
@@ -103,32 +87,43 @@
                     <th>상태</th>
                 </tr>
             </thead>
+            
             <tbody>
-                <%-- 실제 구현 시에는 c:forEach를 사용하세요 --%>
-                <%-- 예시 데이터: 제재 유저 --%>
-                <tr class="user-row" onclick="location.href='userDetail.do?key=128'">
-                    <td>128</td>
-                    <td>user01</td>
-                    <td>홍길동</td>
-                    <td>010-1234-5678</td>
-                    <td>2026-04-20</td>
-                    <td><span class="badge rounded-pill bg-danger">제재중</span></td>
-                </tr>
-                <%-- 예시 데이터: 정상 유저 --%>
-                <c:forEach var="i" begin="2" end="20">
-                <tr class="user-row" onclick="location.href='userDetail.do?key=${128-i}'">
-                    <td>${128-i}</td>
-                    <td>auction_user${i}</td>
-                    <td>사용자${i}</td>
-                    <td>010-0000-00${i}</td>
-                    <td>2026-04-19</td>
-                    <td><span class="badge rounded-pill bg-primary">정상</span></td>
-                </tr>
+                <%-- 1. 데이터가 있는 경우 반복문 실행 --%>
+                <c:forEach var="user" items="${userList}">
+                    <tr class="user-row" onclick="location.href='userDetail.do?key=${user.userKey}'">
+                        <td>${user.userKey}</td>
+                        <td>${user.userId}</td>
+                        <td>${user.userName}</td>
+                        <td>${user.userTel}</td>
+                        <td>${user.userCreated}</td>
+                        <td>
+                            <%-- 2. 상태값에 따른 배지 색상 분기 처리 --%>
+                            <c:choose>
+                                <c:when test="${user.userStatus == '제재중'}">
+                                    <span class="badge rounded-pill bg-danger">제재중</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge rounded-pill bg-primary">정상</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
                 </c:forEach>
+
+                <%-- 3. 데이터가 하나도 없을 경우의 예외 처리 --%>
+                <c:if test="${empty userList}">
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            조회된 회원 정보가 없습니다.
+                        </td>
+                    </tr>
+                </c:if>
             </tbody>
         </table>
     </div>
 
+    <%-- 페이징 영역 (나중에 로직 연결 필요) --%>
     <div class="row mt-4">
         <div class="col-12 d-flex justify-content-center">
             <nav aria-label="Page navigation">
@@ -139,10 +134,10 @@
                         </a>
                     </li>
                     <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <%-- 
+                        추후 페이징 처리가 완료되면 이 부분을 
+                        c:forEach를 이용해 동적으로 생성하게 됩니다.
+                    --%>
                     <li class="page-item">
                         <a class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
@@ -153,7 +148,7 @@
         </div>
     </div>
     
-<div class="d-flex justify-content-end mb-5">
+    <div class="d-flex justify-content-end mb-5">
         <button type="button" class="btn btn-wf" onclick="history.back();">돌아가기</button>
     </div>
 </div>

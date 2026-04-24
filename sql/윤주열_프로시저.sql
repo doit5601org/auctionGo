@@ -32,12 +32,13 @@ FROM USER_PROFILE;
 
 
 
-EXEC PRC_USER_SIGNUP('user03', '0123456789', '0123456789', '윤주열', 9709231234567, 'wnduf0923@test.com', '01012345678', '06035','서울 강남구 가로수길','102호');
+EXEC PRC_USER_SIGNUP('user05', '0123456789', '0123456789', '테스트5', 9709231234568, 'wnduf0924@test.com', '01012345678', '06035','서울 강남구 가로수길','102호');
 --==>> 세 개 테이블 INSERT 확인 완료
-
 
 -- 스케쥴러 생성 권한 부여
 GRANT CREATE JOB TO mytest
+
+commit;
 
 
 -- 유저 DELETE 프로시저
