@@ -1,10 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%--
-    [DB연결 후 상단에 추가]
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-    <c:set var="ctx" value="${pageContext.request.contextPath}" />
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,18 +17,16 @@
     .icon-circle { width: 56px; height: 56px; border-radius: 50%; background-color: #ffebee; color: #c62828; font-size: 26px; font-weight: bold; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
 </head>
 <body>
 
-<%-- [DB연결 후] href를 ${ctx}/main, ${ctx}/product/list, ${ctx}/product/myList 로  --%>
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">경매나라</a>
+        <a class="navbar-brand" href="${ctx}/main">경매나라</a>
         <div class="d-flex gap-3 ms-4">
-            <a href="main.jsp" class="nav-link">경매</a>
-            <a href="productList.jsp" class="nav-link">컬렉션</a>
-            <a href="productMyList.jsp" class="nav-link active">내 상품</a>
+            <a href="${ctx}/auction/list" class="nav-link">경매</a>
+            <a href="${ctx}/product/list" class="nav-link">컬렉션</a>
+            <a href="${ctx}/product/myList" class="nav-link active">내 상품</a>
         </div>
     </div>
 </nav>
@@ -46,19 +40,16 @@
             현재 경매 진행 중인 상품인 경우, 취소 시 <strong>보증금 몰수 등의 패널티</strong>가 발생할 수 있습니다.
         </div>
 
-        <%-- [DB연결 후] ${product.productName}, ${product.regDate} 로 교체 --%>
         <div class="border rounded p-3 mb-4 text-start bg-light">
-            <p class="fw-bold mb-1">하츠네 미쿠 1/7 스케일 피규어</p>
-            <p class="text-muted small mb-0">등록일: 2026-04-10</p>
+            <p class="fw-bold mb-1">${product.productReleaseName}</p>
+            <p class="text-muted small mb-0">등록일: ${product.createdAt}</p>
         </div>
 
-        <%-- [DB연결 후] form action="${ctx}/product/delete" --%>
-        <form action="product_delete_act.do" method="post">
-            <%-- [DB연결 후] value="${product.productId}" --%>
-            <input type="hidden" name="productId" value="P001">
+        <form action="${ctx}/product/delete" method="post">
+            <input type="hidden" name="productId" value="${product.productId}">
             <div class="d-flex gap-2">
-                <%-- [DB연결 후] href="${ctx}/product/detail?productId=${product.productId}" --%>
-                <button type="button" class="btn btn-outline-secondary w-50" onclick="location.href='productDetail.jsp?productId=P001'">취소</button>
+                <button type="button" class="btn btn-outline-secondary w-50"
+                        onclick="location.href='${ctx}/product/detail?productId=${product.productId}'">취소</button>
                 <button type="submit" class="btn btn-danger w-50">삭제하기</button>
             </div>
         </form>

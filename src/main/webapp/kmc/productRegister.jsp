@@ -5,6 +5,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <title>상품 등록</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -40,24 +41,22 @@
 
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="main.jsp">경매나라</a><%-- ${ctx}/main --%>
+        <a class="navbar-brand" href="${ctx}/main">경매나라</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-4">
-                <li class="nav-item"><a href="auctionList.jsp" class="nav-link">경매</a></li><%-- ${ctx}/auction/list --%>
-                <li class="nav-item"><a href="productList.jsp" class="nav-link">컬렉션</a></li><%-- ${ctx}/product/list --%>
-                <li class="nav-item"><a href="productMyList.jsp" class="nav-link fw-bold" style="color:#1976d2;">내 상품</a></li><%-- ${ctx}/product/myList --%>
+                <li class="nav-item"><a href="${ctx}/auction/list" class="nav-link">경매</a></li>
+                <li class="nav-item"><a href="${ctx}/product/list" class="nav-link">컬렉션</a></li>
+                <li class="nav-item"><a href="${ctx}/product/myList" class="nav-link fw-bold" style="color:#1976d2;">내 상품</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<%-- [Controller 연결 후] request.setAttribute("errorMsg", msg) 전달 시 표시
 <c:if test="${not empty errorMsg}">
     <div class="container mt-3">
         <div class="alert alert-danger">${errorMsg}</div>
     </div>
 </c:if>
---%>
 
 <div class="container mt-4 mb-5" style="max-width:720px">
     <div class="page-header text-center">
@@ -66,8 +65,7 @@
     </div>
 
     <div class="card p-4">
-        <%-- [Controller 연결 후] action을 ${ctx}/product/register 로 변경 --%>
-        <form action="productMyList.jsp" method="post" enctype="multipart/form-data">
+        <form action="${ctx}/product/register" method="post" enctype="multipart/form-data">
 
             <%-- ======================== 사진 섹션 (최대 3장) ======================== --%>
             <p class="section-title">컬렉션 사진 (최고의 각도로 찍어주세요!)</p>
@@ -101,135 +99,101 @@
                         <div id="preview3" class="img-preview justify-content-center"></div>
                     </div>
                 </div>
+                <p class="small text-muted mt-2">
+                    ※ 실제 파일 업로드 처리는 미구현 상태입니다. 임시로 파일명만 DB에 저장합니다.
+                </p>
             </div>
 
-            <%-- ======================== 피규어 정보 섹션 ======================== --%>
+            <%-- 피규어 정보 섹션 --%>
             <p class="section-title">피규어 정보</p>
             <div class="row g-3 mb-4">
 
-                <%-- 상품 발매명 --%>
                 <div class="col-12">
                     <label class="form-label fw-bold">상품 발매명 <span class="text-danger">*</span></label>
                     <input type="text" name="productName" class="form-control"
                            placeholder="예: 하츠네 미쿠 15th Anniversary 1/7 Scale" required>
                 </div>
 
-                <%-- 상품 별칭 --%>
                 <div class="col-12">
                     <label class="form-label fw-bold">상품 별칭 <span class="text-muted fw-normal">(나만의 이름)</span></label>
                     <input type="text" name="productAlias" class="form-control"
                            placeholder="예: 미쿠 15주년 버전">
                 </div>
 
-                <%-- 제조사 --%>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">제조사 <span class="text-danger">*</span></label>
                     <select name="makerId" class="form-select" required>
                         <option value="">선택하세요</option>
-                        <%-- [Controller 연결 후 활성화]
                         <c:forEach var="m" items="${makerList}">
-                            <option value="${m.makerId}">${m.makerName}</option>
+                            <option value="${m.manufacturerId}">${m.manufacturerName}</option>
                         </c:forEach>
-                        --%>
-                        <option value="1">굿스마일컴퍼니</option>
-                        <option value="2">알터</option>
-                        <option value="3">맥스팩토리</option>
-                        <option value="4">코토부키야</option>
                     </select>
                 </div>
 
-                <%-- 등급 --%>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">상품 등급 <span class="text-danger">*</span></label>
                     <select name="gradeCode" class="form-select" required>
                         <option value="">선택하세요</option>
-                        <%-- [Controller 연결 후 활성화]
                         <c:forEach var="g" items="${gradeList}">
-                            <option value="${g.gradeCode}">${g.gradeName}</option>
+                            <option value="${g.productGradeId}">${g.productGradeName}</option>
                         </c:forEach>
-                        --%>
-                        <option value="S">S (최상)</option>
-                        <option value="A">A (상)</option>
-                        <option value="B">B (중)</option>
-                        <option value="C">C (하)</option>
                     </select>
                 </div>
 
-                <%-- 장르 --%>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">장르 <span class="text-danger">*</span></label>
                     <select name="genreCode" class="form-select" required>
                         <option value="">선택하세요</option>
-                        <%-- [Controller 연결 후 활성화]
                         <c:forEach var="g" items="${genreList}">
-                            <option value="${g.genreCode}">${g.genreName}</option>
+                            <option value="${g.productGenreId}">${g.productGenreName}</option>
                         </c:forEach>
-                        --%>
-                        <option value="1">애니메이션</option>
-                        <option value="2">게임</option>
-                        <option value="3">SF/로봇</option>
-                        <option value="4">판타지</option>
                     </select>
                 </div>
 
-                <%-- 사이즈 --%>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">사이즈/스케일 <span class="text-danger">*</span></label>
                     <select name="sizeCode" class="form-select" required>
                         <option value="">선택하세요</option>
-                        <%-- [Controller 연결 후 활성화]
                         <c:forEach var="s" items="${sizeList}">
-                            <option value="${s.sizeCode}">${s.sizeName}</option>
+                            <option value="${s.productSizeId}">${s.productSizeName}</option>
                         </c:forEach>
-                        --%>
-                        <option value="1">1/4 Scale</option>
-                        <option value="2">1/7 Scale</option>
-                        <option value="3">1/8 Scale</option>
-                        <option value="4">Nendoroid</option>
-                        <option value="5">Pop Up Parade</option>
                     </select>
                 </div>
 
-                <%-- 작품명 --%>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">작품명</label>
                     <input type="text" name="workName" class="form-control" placeholder="애니메이션/게임 제목">
                 </div>
 
-                <%-- 캐릭터명 --%>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">캐릭터명</label>
                     <input type="text" name="characterName" class="form-control" placeholder="캐릭터 이름">
                 </div>
             </div>
 
-            <%-- ======================== 컬렉션 노트 섹션 ======================== --%>
+            <%-- 컬렉션 노트 --%>
             <p class="section-title">컬렉션 노트</p>
             <div class="row g-3 mb-4">
 
-                <%-- 구매일시 --%>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold">구매 시기</label>
+                    <label class="form-label fw-bold">구매 연도</label>
                     <select name="purchaseDate" class="form-select">
                         <option value="">선택하세요</option>
-                        <option value="1">1년 이내</option>
-                        <option value="2">1년 ~ 3년</option>
-                        <option value="3">3년 이상</option>
+                        <c:set var="nowYear"><%= java.time.Year.now().getValue() %></c:set>
+                        <c:forEach var="y" begin="0" end="10">
+                            <c:set var="year" value="${nowYear - y}" />
+                            <option value="${year}">${year}년</option>
+                        </c:forEach>
                     </select>
                 </div>
 
-                <%-- 개봉여부 --%>
+                <%-- 개봉 여부: DB는 NUMBER(1) FK (COMMON). 0/1 로 전송 --%>
                 <div class="col-md-3">
                     <label class="form-label fw-bold">개봉 여부 <span class="text-danger">*</span></label>
                     <select name="openedCode" class="form-select" required>
                         <option value="">선택</option>
-                        <%-- [Controller 연결 후 활성화]
-                        <c:forEach var="o" items="${openedList}">
-                            <option value="${o.code}">${o.name}</option>
-                        </c:forEach>
-                        --%>
-                        <option value="N">미개봉</option>
-                        <option value="Y">개봉</option>
+                        <option value="1">미개봉</option>
+                        <option value="0">개봉</option>
                     </select>
                 </div>
 
@@ -238,13 +202,8 @@
                     <label class="form-label fw-bold">파츠 누락 <span class="text-danger">*</span></label>
                     <select name="missingCode" class="form-select" required>
                         <option value="">선택</option>
-                        <%-- [Controller 연결 후 활성화]
-                        <c:forEach var="m" items="${missingList}">
-                            <option value="${m.code}">${m.name}</option>
-                        </c:forEach>
-                        --%>
-                        <option value="N">없음</option>
-                        <option value="Y">있음</option>
+                        <option value="0">없음</option>
+                        <option value="1">있음</option>
                     </select>
                 </div>
 
@@ -252,17 +211,11 @@
                 <div class="col-md-6">
                     <label class="form-label fw-bold">공개 여부 <span class="text-danger">*</span></label>
                     <select name="publicCode" class="form-select" required>
-                        <%-- [Controller 연결 후 활성화]
-                        <c:forEach var="p" items="${publicList}">
-                            <option value="${p.code}">${p.name}</option>
-                        </c:forEach>
-                        --%>
-                        <option value="Y">공개</option>
-                        <option value="N">비공개</option>
+                        <option value="1">공개</option>
+                        <option value="0">비공개</option>
                     </select>
                 </div>
 
-                <%-- 상세 설명 --%>
                 <div class="col-12">
                     <label class="form-label fw-bold">상세 설명</label>
                     <textarea name="description" class="form-control" rows="4"
@@ -280,7 +233,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// 이미지 1장씩 미리보기
 function showSinglePreview(input, previewId) {
     var preview = document.getElementById(previewId);
     preview.innerHTML = '';

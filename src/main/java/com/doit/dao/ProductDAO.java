@@ -14,10 +14,13 @@ import com.doit.dto.ProductGradeDTO;
 import com.doit.dto.ProductManufacturerDTO;
 import com.doit.dto.ProductSizeDTO;
 import com.doit.dto.ReportDTO;
+import com.doit.dto.ReportTypeDTO;
 import com.doit.util.DBCPConn;
 
 public class ProductDAO
 {
+	public static final int ERR_DUPLICATE_REPORT = 20020;
+
 	// 상품 등록 - PRC_PRODUCT_CREATE 프로시저 호출
 	public void insertProduct(ProductDTO dto) throws SQLException
 	{
@@ -26,7 +29,7 @@ public class ProductDAO
 
 		try
 		{
-			String sql = "{CALL PRC_PRODUCT_CREATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+			String sql = "{CALL PRC_PRODUCT_INSERT(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 			cstmt = conn.prepareCall(sql);
 
 			cstmt.setInt(1, dto.getUserId());
@@ -48,7 +51,6 @@ public class ProductDAO
 			cstmt.setInt(17, dto.getIsPublic());
 
 			cstmt.executeUpdate();
-
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
@@ -97,7 +99,6 @@ public class ProductDAO
 			cstmt.setInt(18, dto.getIsPublic());
 
 			cstmt.executeUpdate();
-
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
@@ -129,7 +130,6 @@ public class ProductDAO
 			cstmt.setInt(2, userId);
 
 			cstmt.executeUpdate();
-
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
@@ -147,28 +147,66 @@ public class ProductDAO
 		}
 	}
 
-	// 공개 상품 목록 조회 (컬렉션 페이지) - 페이징 + 키워드 검색
-	public List<ProductDTO> selectProductList(int start, int end, String searchKeyword) throws SQLException
+	// ─────────────────────────────────────────────────────────────
+	// 공개 상품 목록 조회 - 페이징 + 키워드 + 필터(장르/등급/사이즈/제조사) + 정렬
+	
+	// sort
+	// "newest" (기본) : PRODUCT_ID DESC
+	// "grade" : PRODUCT_GRADE_ID ASC (S > A > B > C 가정, DB 순서에 맞게 조정 가능)
+	// ─────────────────────────────────────────────────────────────
+	public List<ProductDTO> selectProductList(int start, int end, String searchKeyword, Integer genreId,
+			Integer gradeId, Integer sizeId, Integer manufacturerId, String sort) throws SQLException
 	{
 		List<ProductDTO> list = new ArrayList<>();
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT * FROM (" + "    SELECT ROWNUM rnum, p.* FROM ("
-				+ "        SELECT PRODUCT_ID, PRODUCT_RELEASE_NAME, PRODUCT_ALIAS,"
-				+ "               MANUFACTURER_NAME, PRODUCT_GRADE_NAME, IMAGE_PATH_1, IS_PUBLIC"
-				+ "        FROM VW_PRODUCT_LIST" + "        WHERE IS_PUBLIC = '공개'"
-				+ "        AND PRODUCT_RELEASE_NAME LIKE ?" + "        ORDER BY PRODUCT_ID DESC" + "    ) p"
+		// 동적 WHERE + ORDER BY 구성
+		StringBuilder where = new StringBuilder(" WHERE IS_PUBLIC = '공개' ");
+		where.append(" AND PRODUCT_RELEASE_NAME LIKE ? ");
+		if (genreId != null)
+			where.append(" AND PRODUCT_GENRE_ID = ? ");
+		if (gradeId != null)
+			where.append(" AND PRODUCT_GRADE_ID = ? ");
+		if (sizeId != null)
+			where.append(" AND PRODUCT_SIZE_ID = ? ");
+		if (manufacturerId != null)
+			where.append(" AND MANUFACTURER_ID = ? ");
+
+		String orderBy;
+		if ("grade".equals(sort))
+			orderBy = " ORDER BY PRODUCT_GRADE_ID ASC, PRODUCT_ID DESC ";
+		else if ("popular".equals(sort))
+			orderBy = " ORDER BY PRODUCT_ID DESC "; // TODO: 찜/조회수 기준으로 교체
+		else
+			orderBy = " ORDER BY PRODUCT_ID DESC ";
+
+		String sql = "SELECT * FROM ( " + "   SELECT ROWNUM rnum, p.* FROM ( "
+				+ "       SELECT PRODUCT_ID, PRODUCT_RELEASE_NAME, PRODUCT_ALIAS, "
+				+ "              MANUFACTURER_ID, MANUFACTURER_NAME, "
+				+ "              PRODUCT_GRADE_ID, PRODUCT_GRADE_NAME, "
+				+ "              PRODUCT_GENRE_ID, PRODUCT_GENRE_NAME, "
+				+ "              PRODUCT_SIZE_ID, PRODUCT_SIZE_NAME, " + "              IMAGE_PATH_1, IS_PUBLIC "
+				+ "       FROM VW_PRODUCT_LIST " + where.toString() + orderBy + "   ) p "
 				+ ") WHERE rnum BETWEEN ? AND ?";
 
 		try
 		{
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1,
-					searchKeyword == null || searchKeyword.trim().isEmpty() ? "%" : "%" + searchKeyword + "%");
-			pstmt.setInt(2, start);
-			pstmt.setInt(3, end);
+			int idx = 1;
+			pstmt.setString(idx++,
+					(searchKeyword == null || searchKeyword.trim().isEmpty()) ? "%" : "%" + searchKeyword.trim() + "%");
+			if (genreId != null)
+				pstmt.setInt(idx++, genreId);
+			if (gradeId != null)
+				pstmt.setInt(idx++, gradeId);
+			if (sizeId != null)
+				pstmt.setInt(idx++, sizeId);
+			if (manufacturerId != null)
+				pstmt.setInt(idx++, manufacturerId);
+			pstmt.setInt(idx++, start);
+			pstmt.setInt(idx++, end);
 
 			rs = pstmt.executeQuery();
 
@@ -178,8 +216,14 @@ public class ProductDAO
 				dto.setProductId(rs.getInt("PRODUCT_ID"));
 				dto.setProductReleaseName(rs.getString("PRODUCT_RELEASE_NAME"));
 				dto.setProductAlias(rs.getString("PRODUCT_ALIAS"));
+				dto.setManufacturerId(rs.getInt("MANUFACTURER_ID"));
 				dto.setManufacturerName(rs.getString("MANUFACTURER_NAME"));
+				dto.setProductGradeId(rs.getInt("PRODUCT_GRADE_ID"));
 				dto.setProductGradeName(rs.getString("PRODUCT_GRADE_NAME"));
+				dto.setProductGenreId(rs.getInt("PRODUCT_GENRE_ID"));
+				dto.setProductGenreName(rs.getString("PRODUCT_GENRE_NAME"));
+				dto.setProductSizeId(rs.getInt("PRODUCT_SIZE_ID"));
+				dto.setProductSizeName(rs.getString("PRODUCT_SIZE_NAME"));
 				dto.setImagePath1(rs.getString("IMAGE_PATH_1"));
 				dto.setIsPublicName(rs.getString("IS_PUBLIC"));
 				list.add(dto);
@@ -205,21 +249,42 @@ public class ProductDAO
 		return list;
 	}
 
-	// 공개 상품 전체 건수 조회 (페이징 계산용)
-	public int selectProductCount(String searchKeyword) throws SQLException
+	// 공개 상품 전체 건수 조회 (페이징 계산용) - 필터 포함
+	public int selectProductCount(String searchKeyword, Integer genreId, Integer gradeId, Integer sizeId,
+			Integer manufacturerId) throws SQLException
 	{
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int count = 0;
 
-		String sql = "SELECT COUNT(*) FROM VW_PRODUCT_LIST" + " WHERE IS_PUBLIC = '공개'"
-				+ " AND PRODUCT_RELEASE_NAME LIKE ?";
+		StringBuilder where = new StringBuilder(" WHERE IS_PUBLIC = '공개' ");
+		where.append(" AND PRODUCT_RELEASE_NAME LIKE ? ");
+		if (genreId != null)
+			where.append(" AND PRODUCT_GENRE_ID = ? ");
+		if (gradeId != null)
+			where.append(" AND PRODUCT_GRADE_ID = ? ");
+		if (sizeId != null)
+			where.append(" AND PRODUCT_SIZE_ID = ? ");
+		if (manufacturerId != null)
+			where.append(" AND MANUFACTURER_ID = ? ");
+
+		String sql = "SELECT COUNT(*) FROM VW_PRODUCT_LIST" + where.toString();
 
 		try
 		{
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, searchKeyword == null ? "%" : "%" + searchKeyword + "%");
+			int idx = 1;
+			pstmt.setString(idx++,
+					(searchKeyword == null || searchKeyword.trim().isEmpty()) ? "%" : "%" + searchKeyword.trim() + "%");
+			if (genreId != null)
+				pstmt.setInt(idx++, genreId);
+			if (gradeId != null)
+				pstmt.setInt(idx++, gradeId);
+			if (sizeId != null)
+				pstmt.setInt(idx++, sizeId);
+			if (manufacturerId != null)
+				pstmt.setInt(idx++, manufacturerId);
 
 			rs = pstmt.executeQuery();
 			if (rs.next())
@@ -255,9 +320,10 @@ public class ProductDAO
 
 		String sql = "SELECT * FROM (" + "    SELECT ROWNUM rnum, p.* FROM ("
 				+ "        SELECT PRODUCT_ID, PRODUCT_RELEASE_NAME, PRODUCT_ALIAS,"
-				+ "               MANUFACTURER_NAME, PRODUCT_GRADE_NAME, IMAGE_PATH_1, IS_PUBLIC, CREATED_AT"
-				+ "        FROM VW_PRODUCT_LIST" + "        WHERE USER_ID = ?" + "        ORDER BY PRODUCT_ID DESC"
-				+ "    ) p" + ") WHERE rnum BETWEEN ? AND ?";
+				+ "               MANUFACTURER_NAME, PRODUCT_GRADE_NAME, PRODUCT_GENRE_NAME,"
+				+ "               IMAGE_PATH_1, IS_OPENED, IS_PUBLIC, CREATED_AT" + "        FROM VW_PRODUCT_LIST"
+				+ "        WHERE USER_ID = ?" + "        ORDER BY PRODUCT_ID DESC" + "    ) p"
+				+ ") WHERE rnum BETWEEN ? AND ?";
 
 		try
 		{
@@ -276,7 +342,9 @@ public class ProductDAO
 				dto.setProductAlias(rs.getString("PRODUCT_ALIAS"));
 				dto.setManufacturerName(rs.getString("MANUFACTURER_NAME"));
 				dto.setProductGradeName(rs.getString("PRODUCT_GRADE_NAME"));
+				dto.setProductGenreName(rs.getString("PRODUCT_GENRE_NAME"));
 				dto.setImagePath1(rs.getString("IMAGE_PATH_1"));
+				dto.setIsOpenedName(rs.getString("IS_OPENED"));
 				dto.setIsPublicName(rs.getString("IS_PUBLIC"));
 				dto.setCreatedAt(rs.getString("CREATED_AT"));
 				list.add(dto);
@@ -363,7 +431,6 @@ public class ProductDAO
 		{
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, productId);
-
 			rs = pstmt.executeQuery();
 
 			if (rs.next())
@@ -390,12 +457,11 @@ public class ProductDAO
 				dto.setCharacterName(rs.getString("CHARACTER_NAME"));
 				dto.setPurchaseDateTime(rs.getString("PURCHASE_DATETIME"));
 
-				// 뷰에서 문자열로 나와야해서 string으로 변환
+				// 뷰에서 문자열로 나옴
 				dto.setIsOpenedName(rs.getString("IS_OPENED"));
 				dto.setIsPartsMissingName(rs.getString("IS_PARTS_MISSING"));
 				dto.setDescriptions(rs.getString("DESCRIPTIONS"));
 
-				// 대표 이미지 + 추가 이미지
 				dto.setImagePath1(rs.getString("IMAGE_PATH_1"));
 				dto.setImagePath2(rs.getString("IMAGE_PATH_2"));
 				dto.setImagePath3(rs.getString("IMAGE_PATH_3"));
@@ -449,7 +515,6 @@ public class ProductDAO
 			cstmt.setString(5, dto.getReportReason()); // P_REPORT_REASON
 
 			cstmt.executeUpdate();
-
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
@@ -475,8 +540,8 @@ public class ProductDAO
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT MANUFACTURER_ID, PRODUCT_COUNTRY_ID, MANUFACTURER_NAME" + " FROM PRODUCT_MANUFACTURER"
-				+ " ORDER BY MANUFACTURER_ID ASC";
+		String sql = "SELECT MANUFACTURER_ID, PRODUCT_COUNTRY_ID, MANUFACTURER_NAME"
+				+ " FROM PRODUCT_MANUFACTURER ORDER BY MANUFACTURER_ID ASC";
 
 		try
 		{
@@ -520,8 +585,8 @@ public class ProductDAO
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT PRODUCT_GENRE_ID, PRODUCT_GENRE_NAME" + " FROM PRODUCT_GENRE"
-				+ " ORDER BY PRODUCT_GENRE_ID ASC";
+		String sql = "SELECT PRODUCT_GENRE_ID, PRODUCT_GENRE_NAME"
+				+ " FROM PRODUCT_GENRE ORDER BY PRODUCT_GENRE_ID ASC";
 
 		try
 		{
@@ -564,8 +629,8 @@ public class ProductDAO
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT PRODUCT_GRADE_ID, PRODUCT_GRADE_NAME" + " FROM PRODUCT_GRADE"
-				+ " ORDER BY PRODUCT_GRADE_ID ASC";
+		String sql = "SELECT PRODUCT_GRADE_ID, PRODUCT_GRADE_NAME"
+				+ " FROM PRODUCT_GRADE ORDER BY PRODUCT_GRADE_ID ASC";
 
 		try
 		{
@@ -608,8 +673,7 @@ public class ProductDAO
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT PRODUCT_SIZE_ID, PRODUCT_SIZE_NAME" + " FROM PRODUCT_SIZE"
-				+ " ORDER BY PRODUCT_SIZE_ID ASC";
+		String sql = "SELECT PRODUCT_SIZE_ID, PRODUCT_SIZE_NAME" + " FROM PRODUCT_SIZE ORDER BY PRODUCT_SIZE_ID ASC";
 
 		try
 		{
@@ -621,6 +685,49 @@ public class ProductDAO
 				ProductSizeDTO dto = new ProductSizeDTO();
 				dto.setProductSizeId(rs.getInt("PRODUCT_SIZE_ID"));
 				dto.setProductSizeName(rs.getString("PRODUCT_SIZE_NAME"));
+				list.add(dto);
+			}
+		} finally
+		{
+			if (rs != null)
+				try
+				{
+					rs.close();
+				} catch (Exception e)
+				{
+				}
+			if (pstmt != null)
+				try
+				{
+					pstmt.close();
+				} catch (Exception e)
+				{
+				}
+			DBCPConn.close(conn);
+		}
+		return list;
+	}
+
+	// 신고 유형 목록 조회 (productReport.jsp 드롭다운용)
+	public List<ReportTypeDTO> selectReportTypeList() throws SQLException
+	{
+		List<ReportTypeDTO> list = new ArrayList<>();
+		Connection conn = DBCPConn.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		String sql = "SELECT REPORT_TYPE_ID, REPORT_TYPE_NAME" + " FROM REPORT_TYPE ORDER BY REPORT_TYPE_ID ASC";
+
+		try
+		{
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while (rs.next())
+			{
+				ReportTypeDTO dto = new ReportTypeDTO();
+				dto.setReportTypeId(rs.getInt("REPORT_TYPE_ID"));
+				dto.setReportTypeName(rs.getString("REPORT_TYPE_NAME"));
 				list.add(dto);
 			}
 		} finally

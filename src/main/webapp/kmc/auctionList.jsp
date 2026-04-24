@@ -39,7 +39,7 @@
 </head>
 <body>
 
-<jsp:include page="/common/header.jsp"></jsp:include>
+<%-- <jsp:include page="/common/header.jsp"></jsp:include> --%>
 
 <%-- 상단 헤더 --%>
 <div class="page-header text-center">
@@ -137,6 +137,6 @@
     </div>
 </div>
 
-<jsp:include page="/common/footer.jsp"></jsp:include>
+<%-- <jsp:include page="/common/footer.jsp"></jsp:include> --%>
 </body>
 </html>
