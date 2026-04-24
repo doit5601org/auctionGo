@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/admin/*")
-public class AdminController extends HttpServlet
+@WebServlet("/admin")
+public class AdminMainController extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
@@ -29,21 +29,23 @@ public class AdminController extends HttpServlet
 	
 	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		String methodType = request.getMethod();
-		String uri = request.getRequestURI();
-		String path = uri.substring(request.getContextPath().length());
 		
-		String viewPath = "/WEB-INF/views";
+		String viewPath = "/WEB-INF/views/admin/mainDashBoard";
+		
+		//----------
+		// 개발용) 임시 경로
+		viewPath = "/JY/mainDashBoard.jsp";
+		//----------
+		
+		request.getRequestDispatcher(viewPath).forward(request, response);
+		return;
 
-		// GET 방식 요청 처리 (=화면 이동)
-		if (methodType.equalsIgnoreCase("GET"))
-		{
-			//-- 상품 --//
-			// 상품 전체 조회
-			if (path.equalsIgnoreCase("/admin/show-all-products"))
-			{
-				viewPath = viewPath + "/admin/showAllProducts.jsp";
-			}
+		
+		/*
+			
+			
+			
+			
 			// 상품 상세 조회
 			else if (path.equalsIgnoreCase("/admin/product/detail"))
 			{
@@ -95,11 +97,8 @@ public class AdminController extends HttpServlet
 			request.getRequestDispatcher(viewPath).forward(request, response);
 			return;
 		}
-		// POST 방식 요청 처리
-		else if (methodType.equalsIgnoreCase("POST"))
-		{
-			
-		}
+		
+		*/
 	}// process(...) END
 	
 }// class AdminController END
