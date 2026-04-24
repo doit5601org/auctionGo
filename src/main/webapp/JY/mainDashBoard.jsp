@@ -89,9 +89,13 @@
         </div>
         <div class="nav flex-column">
             <a href="mainDashBoard.jsp" class="nav-link active"><i class="bi bi-grid-1x2-fill me-2"></i> 대시보드</a>
-            <a href="showAllUser.jsp" class="nav-link"><i class="bi bi-people me-2"></i> 회원 관리</a>
-            <a href="showPenaltyUser.jsp" class="nav-link"><i class="bi bi-person-x me-2"></i> 패널티 관리</a>
-            <hr class="mx-3 my-2 opacity-10">
+            
+            <a href="${pageContext.request.contextPath}/admin/show-all-users" class="nav-link">
+        	<i class="bi bi-people me-2"></i> 회원 관리</a>
+            
+            <a href="${pageContext.request.contextPath}/admin/show-penalty-user" class="nav-link">
+            <i class="bi bi-person-x me-2"></i> 패널티 관리</a>
+            
             <a href="productList.jsp" class="nav-link"><i class="bi bi-box-seam me-2"></i> 상품 관리</a>
             <a href="auctionList.jsp" class="nav-link"><i class="bi bi-hammer me-2"></i> 경매 관리</a>
             <hr class="mx-3 my-2 opacity-10">
