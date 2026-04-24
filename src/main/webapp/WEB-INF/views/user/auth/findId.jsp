@@ -30,7 +30,22 @@
 			}
 		});	
 	});
+	
+	const findId = "${findId}";
+	const errMessage = "${errMsg}";
+	
+	if(errMessage && errMessage.length>0){
+		alert(errMessage);
+	}else if(findId && findId.length>0){
+		alert("회원님의 아이디는 "+findId+"입니다.");
+	}
+	
 </script>
+<style type="text/css">
+	.errMsg{
+		display: none;
+	}
+</style>
 </head>
 <body class="bg-light">
 
@@ -41,15 +56,15 @@
 		<div class="col-md-5 card p-4">		
 			<h2>아이디 찾기</h2>
 			<p>회원가입 시 등록한 정보를 입력해주세요.</p>
-			<form action="#" method="get" id="findIdForm">
+			<form action="${pageContext.request.contextPath }/user/auth/find-id-action" method="post" id="findIdForm">
 				<div class="mb-3">
 					<label for="findIdName" class="form-label">이름  <span class="text-danger">*</span></label>
-					<input type="text" id="findIdName" class="form-control" />
+					<input type="text" id="findIdName" class="form-control" name="findIdName"/>
 					<span class="text-danger ms-1 errMsg">이름을 입력해주세요.</span>
 				</div>
 				<div class="mb-3">
 					<label for="findIdEmail" class="form-label">이메일 <span class="text-danger">*</span></label>
-					<input type="email" class="form-control me-1" id="findIdEmail">				
+					<input type="email" class="form-control me-1" id="findIdEmail" name="findIdEmail">				
 					<span class="text-danger ms-1 errMsg">이메일을 입력해주세요.</span>
 				</div>
 				<div class="mb-3">

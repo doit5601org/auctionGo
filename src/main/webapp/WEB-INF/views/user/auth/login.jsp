@@ -1,5 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+	Cookie[] cookieArr = request.getCookies();
+
+	String loginId = "";
+	if(cookieArr != null){
+		for(Cookie c :  cookieArr){
+			if(c.getName().equals("loginId"))
+				loginId = c.getValue();
+		}
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,10 +41,25 @@
 					$("#loginForm").submit();
 				}
 			}
+
+			$("#checkDefault").checked(function(){
+				
+			});
+			
+		
 		});
 		
 		
+	
+		const errMessage = "${errMsg}";
+		
+		if(errMessage && errMessage.length>0){
+				alert(errMessage);
+		}
+		
 	});
+	
+	
 </script>
 <style type="text/css">
 	.errMsg{
@@ -48,21 +74,21 @@
 	<section class="row justify-content-center mt-5 mb-5">
 		<div class="shadow-sm col-md-5 card p-4">
 			<h2 class="text-center">로그인</h2>
-			<form action="" method="get" id="">
+			<form action="${pageContext.request.contextPath}/user/auth/loginAction" method="post" id="loginForm">
 				<div class="mb-3">
 					<label for="userId" class="form-label ms-1">아이디</label> 
-					<input type="email" class="form-control" id="userId" aria-describedby="emailHelp">
+					<input type="email" class="form-control" id="userId" aria-describedby="emailHelp" name="userId" value="<%=loginId%>">
 					<span class="text-danger ms-1 errMsg">아이디를 입력해주세요.</span>
 						
 				</div>
 				<div class="mb-3">
 					<label for="userPwd" class="form-label ms-1">비밀번호</label> 
-					<input type="password" class="form-control" id="userPwd">
+					<input type="password" class="form-control" id="userPwd" name="userPwd">
 					<span class="text-danger ms-1 errMsg">비밀번호를 입력해주세요.</span>
 				</div>
 				<div class="mb-3 d-flex justify-content-between align-items-center">
 					<div class="form-check mb-0">
-						<input class="form-check-input" type="checkbox" id="checkDefault">
+						<input class="form-check-input" type="checkbox" id="checkDefault" name="check">
 						<label class="form-check-label" for="checkDefault">아이디 저장</label>
 					</div>
 					<div class="small">
