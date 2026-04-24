@@ -2,6 +2,7 @@ package com.doit.controller;
 
 import java.io.IOException;
 
+import com.doit.dao.AuthenticDAO;
 import com.doit.service.AuthenticService;
 
 import jakarta.servlet.ServletException;
@@ -32,7 +33,7 @@ public class FindPwActionController extends HttpServlet{
 		String findEmail = request.getParameter("findpwEmail");
 		String findId = request.getParameter("findpwId");
 		
-		AuthenticService.findPw(findName, findEmail, findId);
+		AuthenticDAO.findPw(findName, findEmail, findId);
 		request.getRequestDispatcher("/WEB-INF/views/user/auth/findPw.jsp").forward(request, response);
 		
 	}

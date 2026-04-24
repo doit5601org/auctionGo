@@ -2,6 +2,7 @@ package com.doit.controller;
 
 import java.io.IOException;
 
+import com.doit.dao.AuthenticDAO;
 import com.doit.dto.UserInfoDTO;
 import com.doit.service.AuthenticService;
 
@@ -39,7 +40,7 @@ public class LoginActionController extends HttpServlet{
 		
 		UserInfoDTO loginUser = new UserInfoDTO();
 		
-		loginUser = AuthenticService.authenticateUser(loginId, loginPw);
+		loginUser = AuthenticDAO.authenticateUser(loginId, loginPw);
 		
 		if(loginUser !=null) {
 			// 성공 -> 세션에 담기
