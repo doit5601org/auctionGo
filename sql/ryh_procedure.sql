@@ -1198,13 +1198,86 @@ END;
 
 
 
+select *
+from VW_USER_INFO;
+
+SELECT *
+FROM USER_PROFILE;
 
 
+SELECT COUNT(*) AS COUNT
+FROM USER_ACCOUNT
+WHERE USER_LOGIN_ID = ? AND USER_PASSWORD;
+
+UPDATE USER_PROFILE
+SET USER_EMAIL = ? , USER_PHONE = ?, USER_ZIPCODE = ?, USER_ADDRESS =?, USER_ADDRESS_DETAIL = ?
+WHERE USER_ID = ?
+;
+
+UPDATE USER_ACCOUNT
+SET USER_PASSWORD = ?
+WHERE USER_LOGIN_ID = ?
+;
+
+SELECT *
+FROM USER_ACCOUNT;
+
+SELECT *
+FROM VW_PRODUCT_LIST;
 
 
+SELECT COUNT(*) AS COUNT
+FROM PRODUCT
+WHERE USER_ID = ?
+;
 
+SELECT NUM, NAME, SUBJECT, HITCOUNT
+					     , TO_CHAR(REG_DATE, 'YYYY-MM-DD') REG_DATE
+					FROM BBS
+					ORDER BY NUM DESC
+					OFFSET ? ROWS FETCH FIRST ? ROWS ONLY
+                    
+                    
+SELECT PRODUCT_ID, PRODUCT_RELEASE_NAME, PRODUCT_ALIAS, IMAGE_PATH_1, IS_PUBLIC, CREATED_AT   
+FROM PRODUCT
+WHERE USER_ID = ?
+ORDER BY PRODUCT_ID DESC
+OFFSET ? ROWS FETCH FIRST ? ROWS ONLY
 
+select *
+from product;
+--0 비공개 1 공개 number
 
+select *
+from common;
 
+select *
+from product;
 
+desc product;
+
+/*
+CREATE OR REPLACE PROCEDURE PRC_PRODUCT_INSERT
+(
+      P_USER_ID              IN PRODUCT.USER_ID%TYPE              -- 회원고유키 (NN)
+    , P_PRODUCT_RELEASE_NAME IN PRODUCT.PRODUCT_RELEASE_NAME%TYPE -- 상품 발매명
+    , P_PRODUCT_ALIAS        IN PRODUCT.PRODUCT_ALIAS%TYPE        -- 상품 별칭
+    , P_MANUFACTURER_ID      IN PRODUCT.MANUFACTURER_ID%TYPE      -- 제조사 코드
+    , P_PRODUCT_GRADE_ID     IN PRODUCT.PRODUCT_GRADE_ID%TYPE     -- 등급 코드 (NN)
+    , P_PRODUCT_GENRE_ID     IN PRODUCT.PRODUCT_GENRE_ID%TYPE     -- 장르 코드 (NN)
+    , P_PRODUCT_SIZE_ID      IN PRODUCT.PRODUCT_SIZE_ID%TYPE      -- 사이즈 코드 (NN)
+    , P_WORK_NAME            IN PRODUCT.WORK_NAME%TYPE            -- 작품명
+    , P_CHARACTER_NAME       IN PRODUCT.CHARACTER_NAME%TYPE       -- 캐릭터명
+    , P_PURCHASE_DATETIME    IN PRODUCT.PURCHASE_DATETIME%TYPE    -- 구매일시
+    , P_IS_OPENED            IN PRODUCT.IS_OPENED%TYPE            -- 개봉여부 (NN)
+    , P_IS_PARTS_MISSING     IN PRODUCT.IS_PARTS_MISSING%TYPE     -- 파츠 누락 여부 (NN)
+    , P_DESCRIPTIONS         IN PRODUCT.DESCRIPTIONS%TYPE         -- 상세설명
+    , P_IMAGE_PATH_1         IN PRODUCT.IMAGE_PATH_1%TYPE         -- 이미지 1 (NN)
+    , P_IMAGE_PATH_2         IN PRODUCT.IMAGE_PATH_2%TYPE         -- 이미지 2 (NN)
+    , P_IMAGE_PATH_3         IN PRODUCT.IMAGE_PATH_3%TYPE         -- 이미지 3 (NN)
+    , P_IS_PUBLIC            IN PRODUCT.IS_PUBLIC%TYPE            -- 공개 여부 (NN)
+)
+*/
+
+exec prc_product_insert(1, '디즈니 주토피아:새로운 모험 시리즈', '주토피아랜덤피규어', 4, 1,2,3,'주토피아','닉', '2026-01-01', 0, 0, '귀여운 주토피아 피규어입니다.','images/nick1.jpg','images/nick2.jpg','images/judy1.jpg',0);
 
