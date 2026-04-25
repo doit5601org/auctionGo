@@ -1,17 +1,7 @@
-<<<<<<< HEAD
-SELECT USER
-FROM DUAL;
-
-
--- 뷰 ===========================================================================
-
--- 1. 회원 정보 조회 뷰 VW_USER_INFO
-=======
 
 -- 뷰 ===========================================================================
 
 -- ○ 1. 회원 통합 정보 조회 뷰
->>>>>>> 02706d13cfda250fcb449d8a7307b6f65bbc423a
 CREATE OR REPLACE VIEW VW_USER_INFO
 AS
 SELECT U.USER_ID, UA.USER_LOGIN_ID, UA.USER_PASSWORD
@@ -33,11 +23,7 @@ JOIN ACCOUNT_EVENT_HISTORY AEH ON UP.USER_ID = AEH.USER_ID
 ;
 
 
-<<<<<<< HEAD
--- 2. 상품 통합 조회  VW_PRODUCT_LIST
-=======
 -- ○ 2. 상품 통합 조회 뷰
->>>>>>> 02706d13cfda250fcb449d8a7307b6f65bbc423a
 CREATE OR REPLACE VIEW VW_PRODUCT_LIST
 AS
 SELECT 
@@ -75,8 +61,6 @@ GROUP BY
     P.PRODUCT_RELEASE_NAME, P.PRODUCT_ALIAS, P.WORK_NAME, P.CHARACTER_NAME,
     P.PURCHASE_DATETIME, P.IS_OPENED, P.IS_PARTS_MISSING, P.DESCRIPTIONS,
     P.IMAGE_PATH_1, P.IMAGE_PATH_2, P.IMAGE_PATH_3, P.IS_PUBLIC, P.CREATED_AT;
-<<<<<<< HEAD
-=======
 
 
 -- ○ 3. 경매 통합 조회 뷰
@@ -485,7 +469,3 @@ LEFT JOIN (
 
 
 
-
-
-
->>>>>>> 02706d13cfda250fcb449d8a7307b6f65bbc423a
