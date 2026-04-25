@@ -181,7 +181,7 @@ public class AuthController extends HttpServlet{
 		        out.print("DUPLICATED");
 		    }
 		    out.flush();
-		    return; // Ajax 응답 후 종료 (forward나 redirect 금지!)
+		    return; 
 		}
 	}
 }
