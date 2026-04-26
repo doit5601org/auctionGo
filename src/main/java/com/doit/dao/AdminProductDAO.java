@@ -11,10 +11,6 @@ import com.doit.util.DBCPConn;
 
 public class AdminProductDAO
 {
-//-- 속성 --//
-	private Connection conn;
-	
-
 //-- 메서드 --//
 	
 	// 상품 갯수 가져오기

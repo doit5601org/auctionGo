@@ -12,9 +12,9 @@ public class AdminProductService
 	private final AdminProductDAO apDao;
 	
 //-- 생성자 --//
-	public AdminProductService(AdminProductDAO dao)
+	public AdminProductService()
 	{
-		this.apDao = dao;
+		this.apDao = new AdminProductDAO();
 	}
 	
 //-- 메서드 --//

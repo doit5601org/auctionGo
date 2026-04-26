@@ -95,11 +95,11 @@ public class ProductBuyDAO
 	}
 
 	// 낙찰 결제 취소
-	public void failBid(BidActionDTO dto) throw SQLException
+	public void failBid(BidActionDTO dto) throws SQLException
 	{
 		Connection conn = DBCPConn.getConnection();
 		CallableStatement cstmt = null;
-		sql = "{CALL BID_FAILURE_HISTORY(?,?)";
+		String sql = "{CALL BID_FAILURE_HISTORY(?,?)";
 		
 		try
 		{
@@ -131,6 +131,8 @@ public class ProductBuyDAO
 	// 머니 이력
 	public ArrayList<MoneyTransactionListDTO> moneyTransectionList(int userId)
 	{
+		ArrayList<MoneyTransactionListDTO> result = new ArrayList<>();
+		
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet res = null;
@@ -178,6 +180,8 @@ public class ProductBuyDAO
 				System.out.println(e);
 			}
 		}
+		
+		return result;
 	}
 
 	// 머니 충전
@@ -221,6 +225,8 @@ public class ProductBuyDAO
 	// 낙찰 조회
 	public ArrayList<AuctionResultViewDTO> auctionResultList(int userId)
 	{
+		ArrayList<AuctionResultViewDTO> result = new ArrayList<>();
+		
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet res = null;
@@ -300,6 +306,7 @@ public class ProductBuyDAO
 			}
 		}
 		
+		return result;
 	}
 	
 	// 회원 머니 확인
@@ -323,7 +330,7 @@ public class ProductBuyDAO
 			
 			while(res.next())
 			{
-				result = res.getInt(result)
+				result = res.getInt(result);
 			}
 			
 			return result;
@@ -343,6 +350,8 @@ public class ProductBuyDAO
 				System.out.println(e);
 			}
 		}
+		
+		return result;
 	}
 	
 	// 결제 품목에대한 정보
@@ -355,7 +364,7 @@ public class ProductBuyDAO
 		
 		try
 		{
-			sql = 
+			sql = ""; 
 			
 		} catch (Exception e)
 		{
@@ -371,7 +380,6 @@ public class ProductBuyDAO
 				e.printStackTrace();
 				System.out.println(e);
 			}
-		}
 		}
 		
 	}

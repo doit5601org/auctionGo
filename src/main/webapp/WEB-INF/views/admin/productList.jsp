@@ -1,5 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%-- 시간 문제로 인해 스크립릿으로 개발 진행 --%>
+<%
+	// 페이징
+	int productTotalCount = (Integer)request.getAttribute("productTotalCount");
+	String productStatus = (String)request.getAttribute("productStatus");
+	int nowPage = Integer.parseInt((String)request.getAttribute("nowPage"));
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -84,6 +91,11 @@
 	    color: #6c757d !important;
 	}
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+</script>
 </head>
 <body class="bg-light">
     <div class="container-fluid py-4">
@@ -94,19 +106,44 @@
 		    <div class="d-flex align-items-center">
 		        <span class="fw-bold me-3"><i class="bi bi-funnel-fill"></i> 상태 필터</span>
 		        <div class="btn-group" role="group" aria-label="Product Status Filter">
-		            <input type="radio" class="btn-check" name="statusFilter" id="filterAll" checked>
-		            <label class="btn btn-outline-dark" for="filterAll">전체</label>
-		            
-		            <input type="radio" class="btn-check" name="statusFilter" id="filterPublic">
-		            <label class="btn btn-outline-dark" for="filterPublic">공개</label>
-		            
-		            <input type="radio" class="btn-check" name="statusFilter" id="filterPrivate">
-		            <label class="btn btn-outline-dark" for="filterPrivate">비공개</label>
+		        	<%-- 전체 상품 --%>
+			        <c:choose>
+			        	<c:when test="${ productStatus == 'all' }">
+			        		<input type="radio" class="btn-check" name="statusFilter" id="filterAll" checked>
+		            		<label class="btn btn-outline-dark" for="filterAll">전체</label>
+			        	</c:when>
+			        	<c:otherwise>
+			        		<input type="radio" class="btn-check" name="statusFilter" id="filterAll">
+		            		<label class="btn btn-outline-dark" for="filterAll">전체</label>
+			        	</c:otherwise>
+			        </c:choose>
+			        <%-- 공개 상품 --%>
+			        <c:choose>
+			        	<c:when test="${ productStatus == 'public' }">
+			        		<input type="radio" class="btn-check" name="statusFilter" id="filterPublic" checked>
+		            		<label class="btn btn-outline-dark" for="filterPublic">공개</label>
+			        	</c:when>
+			        	<c:otherwise>
+			        		<input type="radio" class="btn-check" name="statusFilter" id="filterPublic">
+		            		<label class="btn btn-outline-dark" for="filterPublic">공개</label>
+			        	</c:otherwise>
+			        </c:choose>
+			        <%-- 비공개 상품 --%>
+			        <c:choose>
+			        	<c:when test="${ productStatus == 'privete' }">
+			        		<input type="radio" class="btn-check" name="statusFilter" id="filterPrivate" checked>
+		            		<label class="btn btn-outline-dark" for="filterPrivate">비공개</label>
+			        	</c:when>
+			        	<c:otherwise>
+			        		<input type="radio" class="btn-check" name="statusFilter" id="filterPrivate">
+		            		<label class="btn btn-outline-dark" for="filterPrivate">비공개</label>
+			        	</c:otherwise>
+			        </c:choose>
 		        </div>
 		    </div>
 		    
 		    <div class="text-muted">
-		        총 <span class="fw-bold text-dark">${ productCount }</span>개의 상품
+		        총 <span class="fw-bold text-dark">${ productTotalCount }</span>개의 상품
 		    </div>
 		</div>
         
@@ -127,18 +164,10 @@
                 <c:forEach var="productDto" items="${ productList }">
                 <tr>
                 	<td><img src="${ pageContext.request.contextPath }/${ productDto.imagePath1 }" class="product-thumb"></td>
-                	
-                	
-                	
-                	<!-- 이하 추가 개발 필요.... -->
-                	
-                	
-
-                       <td>회원1</td>
-                       <td>
-						<%--
-					    <c:choose>
-					        <c:when test="${product.status == '공개'}">
+                	<td>${ productDto.userId }</td>
+                	<td>
+                		<c:choose>
+					        <c:when test="${productDto.isPublicName == '공개'}">
 					            <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">
 					                <i class="bi bi-eye-fill me-0"></i> 공개
 					            </span>
@@ -149,50 +178,30 @@
 					            </span>
 					        </c:otherwise>
 					    </c:choose>
-						--%>
-						<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">
-			                <i class="bi bi-eye-fill me-0"></i> 공개
-			            </span>
 					</td>
-                       <td class="text-start">하츠네 미쿠 피규어 <br><small class="text-muted">한정판</small></td>
+					<td class="text-start">${ productDto.productReleaseName }<br><small class="text-muted">${ productDto.productAlias }</small></td>
 					<td>
-						<%-- 공개 상품에 대한 비공개 버튼 --%>
-                           <button type="button" class="btn btn-sm btn-outline-dark btn-admin-custom" 
-		                        onclick="hideProduct('${product.pId}')">
-		                    비공개
-		                </button>
-                           
-                           <button class="btn btn-sm btn-outline-danger btn-admin-custom">패널티</button>
-                       </td>
+						<c:choose>
+					        <c:when test="${productDto.isPublicName == '공개'}">
+					        	<%-- 공개 상품에 대한 비공개 버튼 --%>
+					            <button type="button" class="btn btn-sm btn-outline-dark btn-admin-custom" 
+		                        	onclick="hideProduct('')">
+		                        	비공개
+		                        </button>
+					        </c:when>
+					        <c:otherwise>
+					            <%-- 이미 비공개 상태인 상품에 대해선 비공개 버튼 비활성화 --%>
+	                            <button type="button" class="btn btn-sm btn-action-disabled btn-admin-custom"
+	                            	 tabindex="-1" aria-disabled="true">
+				                    비공개
+				                </button>
+					        </c:otherwise>
+					    </c:choose>
+					    
+					    <button class="btn btn-sm btn-outline-danger btn-admin-custom">패널티</button>
+					</td>
                 </tr>
                 </c:forEach>
-                	
-                	
-                	
-                	
-                    
-                    <tr>
-                        <td><img src="${ pageContext.request.contextPath }/images/miku3.png" class="product-thumb"></td>
-                        <td>회원1</td>
-                        <td>
-                        	<%--
-                        		분기 처리 로직
-							--%>
-                        	<span class="badge rounded-pill bg-secondary-subtle text-secondary border border-secondary-subtle">
-				                <i class="bi bi-eye-slash-fill me-0"></i> 비공개
-				            </span>
-                        </td>
-                        <td class="text-start">하츠네 미쿠 피규어 <br><small class="text-muted">한정판</small></td>
-                        <td>
-                            <%-- 이미 비공개 상태인 상품에 대해선 비공개 버튼 비활성화 --%>
-                            <button type="button" class="btn btn-sm btn-action-disabled btn-admin-custom"
-                            	 tabindex="-1" aria-disabled="true">
-			                    비공개
-			                </button>
-                            
-                            <button class="btn btn-sm btn-outline-danger btn-admin-custom">패널티</button>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -201,6 +210,7 @@
 		<div class="row mt-4 mb-3">
             <div class="col-12 d-flex justify-content-center">
                 <nav aria-label="Page navigation">
+                	<%--
                     <ul class="pagination mb-0">
                         <li class="page-item">
                             <a class="page-link" href="#" aria-label="First">
@@ -227,6 +237,9 @@
                             </a>
                         </li>
                     </ul>
+                    --%>
+                    
+                    
                 </nav>
             </div>
         </div>

@@ -49,31 +49,43 @@ public class AdminProductController extends HttpServlet
 			if (path.equalsIgnoreCase("/admin/product/list"))
 			{
 				// 요청 파라미터 수신
+				//-- productStatus, nowPage
+				String productStatus = request.getParameter("productStatus");
 				//-- 전체: all
 				//   공개: public
 				//   비공개: privete
-				String productStatus = request.getParameter("productStatus");
+				String nowPage = request.getParameter("page");
 				
-				// null 처리
+				// 파라미터 null 처리
 				//-- null → 페이지 최초 진입 → 전체 리스트 출력
 				if (productStatus == null)
 				{
 					productStatus = "all";
 				}
+				if (nowPage == null)
+				{
+					nowPage = "1";
+				}
+
 				
+				// Service 객체 생성
+				AdminProductService apService = new AdminProductService();
 				
-				// DAO 객체, Service 객체 생성
-				AdminProductDAO apDao = new AdminProductDAO();
-				AdminProductService apService = new AdminProductService(apDao);
-				
-				// 전체 상품 갯수 가져와서 request 에 바인딩
-				int productCount = apService.getProductCount(productStatus);
-				request.setAttribute("productCount", productCount);
+				// 전체 상품 갯수 가져오기
+				int productTotalCount = apService.getProductCount(productStatus);
 				
 				// 상품 리스트 가져오기
 				List<ProductDTO> productList = apService.getProductList(productStatus);
-				request.setAttribute("productList", productList);
+				
 
+				
+				// 필요한 파라미터들 바인딩
+				request.setAttribute("productTotalCount", productTotalCount);
+				request.setAttribute("productList", productList);
+				request.setAttribute("productStatus", productStatus);
+				request.setAttribute("nowPage", nowPage);
+				
+				
 				// 포워드 할 경로 설정
 				viewPath = viewPath + "/admin/productList.jsp";
 			}
