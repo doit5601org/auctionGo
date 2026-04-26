@@ -113,7 +113,7 @@
 							</table>
 						</div>
 						<div class="d-flex justify-content-center mt-4">
-							${dataCount == 0? "등록된 게시물이 없습니다.": paging }
+							${actualCount == 0? "등록된 게시물이 없습니다.": paging }
 						</div>
 
 					</div>

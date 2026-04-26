@@ -79,7 +79,7 @@
         </div>
     </section>
 
-    <div class="container">
+<%--     <div class="container">
         <section class="mb-5">
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <div>
@@ -144,7 +144,7 @@
                 </c:forEach>
             </div>
         </section>
-    </div>
+    </div> --%>
 </main>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 <%-- <jsp:include page="footer.jsp"></jsp:include> --%>
