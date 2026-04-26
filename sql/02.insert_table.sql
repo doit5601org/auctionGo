@@ -1,5 +1,8 @@
 select user
   from dual;
+  
+select *
+from account_event_type;
 
 
 

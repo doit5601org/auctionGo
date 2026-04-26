@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,7 +56,6 @@ $(function() {
             <aside class="col-md-3">
                 <%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
 			</aside>
-            </aside>
             <section class="col-md-9">
                 <div class="card shadow-sm border-0 bg-white p-4">
                     <div class="card-header bg-white py-3 border-bottom text-dark">
@@ -80,235 +82,61 @@ $(function() {
                                			</td>
                                		</tr> -->
                                		<!-- 게시글이 있을 때  -->
+                               		<c:forEach var="dto" items="${list }" varStatus="status">
                                 	<tr>
-                                    	<td class="text-center">10</td>
+                                    	<td class="text-center">${status.count }</td>
                                         <td class="text-start">
                                             <a href="${pageContext.request.contextPath}/product/detail.do?id=102" class="fw-bold text-decoration-none product-link">
-                                                레고 스타워즈
+                                                ${dto.auctionTitle }
                                             </a>
                                         </td>
-                                        <td>300,000원</td>
-                                        <td>8회</td>
-                                        <td><span class="badge bg-danger">낙찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border text-danger detail-btn">사유</button></td>
+                                        <td>${dto.maxPrice }원</td>
+                                        <td>${dto.bidCount }회 </td>
+                                        
+                                        <td><span class="badge ${dto.maxRank==1?'bg-success':'bg-secondary' }">${dto.maxRank==1?'낙찰':'패찰' }</span></td>
+                                        <td><button type="button" class="btn btn-sm btn-light border text-primary detail-btn">상세</button></td>
                                     </tr>
                                     <tr class="collapse bg-light">
                                         <td colspan="6" class="p-3 text-start">
                                             <div class="ms-4 small">
-                                                <p class="mb-1 text-danger"><strong>취소 사유:</strong> 낙찰 후 24시간 내 미입금</p>
-                                                <p class="mb-0"><strong>취소 일시:</strong> 2026-03-17 09:00</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                	<tr>
-                                    	<td class="text-center">9</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=101" class="fw-bold text-decoration-none product-link">
-                                                도라에몽 피규어 세트
-                                            </a>
-                                        </td>
-                                        <td>120,000원</td>
-                                        <td>5회</td>
-                                        <td><span class="badge bg-success">낙찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border detail-btn">상세</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1"><strong>최종 낙찰 일시:</strong> 2026-03-15 18:00</p>
-                                                <p class="mb-0 text-success"><strong>상태:</strong> 거래완료 (정상 입금 확인)</p>
-                                            </div>
-                                        </td>
-                                    </tr>
+													<c:choose>
+														<c:when test="${dto.maxRank == 1}">
+															<h6 class="fw-bold text-success mb-2">
+																<i class="bi bi-trophy-fill me-2"></i>최종 낙찰
+															</h6>
+															<div class="small text-muted">
+																<p class="mb-1">
+																	<strong>최종 낙찰가:</strong> <span
+																		class="text-dark fw-bold"><fmt:formatNumber
+																			value="${dto.maxPrice}" type="number" />원</span>
+																</p>
+																<p class="mb-1">
+																	<strong>경매 마감일:</strong> ${dto.auctionEndDate}
+																</p>
+															</div>
+														</c:when>
 
-                                    <tr>
-                                    	<td class="text-center">8</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=102" class="fw-bold text-decoration-none product-link">
-                                                레고 스타워즈
-                                            </a>
-                                        </td>
-                                        <td>300,000원</td>
-                                        <td>8회</td>
-                                        <td><span class="badge bg-danger">낙찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border text-danger detail-btn">사유</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1 text-danger"><strong>취소 사유:</strong> 낙찰 후 24시간 내 미입금</p>
-                                                <p class="mb-0"><strong>취소 일시:</strong> 2026-03-17 09:00</p>
-                                            </div>
+														<c:otherwise>
+															<h6 class="fw-bold text-secondary mb-2">
+																<i class="bi bi-info-circle-fill me-2"></i>아쉽게도 낙찰되지
+																못했습니다.
+															</h6>
+															
+														</c:otherwise>
+													</c:choose>
+												</div>
                                         </td>
                                     </tr>
+                               		</c:forEach>
 
-                                    <tr>
-                                    	<td class="text-center">7</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=103" class="fw-bold text-decoration-none text-muted product-link">
-                                                해리포터 지팡이
-                                            </a>
-                                        </td>
-                                        <td>85,000원</td>
-                                        <td>2회</td>
-                                        <td><span class="badge bg-secondary">패찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border detail-btn">상세</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1"><strong>최종 낙찰가:</strong> 95,000원 (낙찰 실패)</p>
-                                                <p class="mb-0"><strong>경매 종료일:</strong> 2026-03-10</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                	<tr>
-                                    	<td class="text-center">6</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=101" class="fw-bold text-decoration-none product-link">
-                                                도라에몽 피규어 세트
-                                            </a>
-                                        </td>
-                                        <td>120,000원</td>
-                                        <td>5회</td>
-                                        <td><span class="badge bg-success">낙찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border detail-btn">상세</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1"><strong>최종 낙찰 일시:</strong> 2026-03-15 18:00</p>
-                                                <p class="mb-0 text-success"><strong>상태:</strong> 거래완료 (정상 입금 확인)</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                    	<td class="text-center">5</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=102" class="fw-bold text-decoration-none product-link">
-                                                레고 스타워즈
-                                            </a>
-                                        </td>
-                                        <td>300,000원</td>
-                                        <td>8회</td>
-                                        <td><span class="badge bg-danger">낙찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border text-danger detail-btn">사유</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1 text-danger"><strong>취소 사유:</strong> 낙찰 후 24시간 내 미입금</p>
-                                                <p class="mb-0"><strong>취소 일시:</strong> 2026-03-17 09:00</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                    	<td class="text-center">4</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=103" class="fw-bold text-decoration-none text-muted product-link">
-                                                해리포터 지팡이
-                                            </a>
-                                        </td>
-                                        <td>85,000원</td>
-                                        <td>2회</td>
-                                        <td><span class="badge bg-secondary">패찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border detail-btn">상세</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1"><strong>최종 낙찰가:</strong> 95,000원 (낙찰 실패)</p>
-                                                <p class="mb-0"><strong>경매 종료일:</strong> 2026-03-10</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                    	<td class="text-center">3</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=101" class="fw-bold text-decoration-none product-link">
-                                                도라에몽 피규어 세트
-                                            </a>
-                                        </td>
-                                        <td>120,000원</td>
-                                        <td>5회</td>
-                                        <td><span class="badge bg-success">낙찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border detail-btn">상세</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1"><strong>최종 낙찰 일시:</strong> 2026-03-15 18:00</p>
-                                                <p class="mb-0 text-success"><strong>상태:</strong> 거래완료 (정상 입금 확인)</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                    	<td class="text-center">2</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=102" class="fw-bold text-decoration-none product-link">
-                                                레고 스타워즈
-                                            </a>
-                                        </td>
-                                        <td>300,000원</td>
-                                        <td>8회</td>
-                                        <td><span class="badge bg-danger">낙찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border text-danger detail-btn">사유</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1 text-danger"><strong>취소 사유:</strong> 낙찰 후 24시간 내 미입금</p>
-                                                <p class="mb-0"><strong>취소 일시:</strong> 2026-03-17 09:00</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                    	<td class="text-center">1</td>
-                                        <td class="text-start">
-                                            <a href="${pageContext.request.contextPath}/product/detail.do?id=103" class="fw-bold text-decoration-none text-muted product-link">
-                                                해리포터 지팡이
-                                            </a>
-                                        </td>
-                                        <td>85,000원</td>
-                                        <td>2회</td>
-                                        <td><span class="badge bg-secondary">패찰</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border detail-btn">상세</button></td>
-                                    </tr>
-                                    <tr class="collapse bg-light">
-                                        <td colspan="6" class="p-3 text-start">
-                                            <div class="ms-4 small">
-                                                <p class="mb-1"><strong>최종 낙찰가:</strong> 95,000원 (낙찰 실패)</p>
-                                                <p class="mb-0"><strong>경매 종료일:</strong> 2026-03-10</p>
-                                            </div>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                             </div>
+                            <div class="d-flex justify-content-center mt-4">
+							${actualCount == 0? "등록된 게시물이 없습니다.": paging }
+						</div>
                     </div>
-                    <nav aria-label="Page navigation" class="mt-4">
-						<ul class="pagination justify-content-center">
-							<li class="page-item disabled">
-								<a class="page-link" href="#" aria-label="Previous"> 
-									<span aria-hidden="true">&laquo;</span>
-								</a>
-							</li>
-							<li class="page-item active"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="#">2</a></li>
-							<li class="page-item"><a class="page-link" href="#">3</a></li>
-							<li class="page-item"><a class="page-link" href="#">4</a></li>
-							<li class="page-item"><a class="page-link" href="#">5</a></li>
-							<li class="page-item">
-								<a class="page-link" href="#" aria-label="Next"> 
-									<span aria-hidden="true">&raquo;</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
+ 
                 </div>
             </section>
         </div>

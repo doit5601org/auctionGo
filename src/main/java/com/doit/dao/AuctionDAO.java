@@ -13,12 +13,10 @@ import com.doit.dto.ReportDTO;
 import com.doit.dto.ReportTypeDTO;
 import com.doit.util.DBCPConn;
 
-public class AuctionDAO
-{
+public class AuctionDAO {
 
 	// 경매 목록 조회 - 페이징 + 키워드
-	public List<AuctionDTO> selectAuctionList(int start, int end, String searchKeyword) throws SQLException
-	{
+	public List<AuctionDTO> selectAuctionList(int start, int end, String searchKeyword) throws SQLException {
 		List<AuctionDTO> list = new ArrayList<>();
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
@@ -33,8 +31,7 @@ public class AuctionDAO
 				+ "        WHERE IS_FINISHED = '진행중'" + "        AND AUCTION_TITLE LIKE ?"
 				+ "        ORDER BY AUCTION_ID DESC" + "    ) a" + ") WHERE rnum BETWEEN ? AND ?";
 
-		try
-		{
+		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1,
 					(searchKeyword == null || searchKeyword.trim().isEmpty()) ? "%" : "%" + searchKeyword.trim() + "%");
@@ -43,8 +40,7 @@ public class AuctionDAO
 
 			rs = pstmt.executeQuery();
 
-			while (rs.next())
-			{
+			while (rs.next()) {
 				AuctionDTO dto = new AuctionDTO();
 				dto.setAuctionId(rs.getInt("AUCTION_ID"));
 				dto.setAuctionTitle(rs.getString("AUCTION_TITLE"));
@@ -61,21 +57,16 @@ public class AuctionDAO
 				dto.setBidCount(rs.getInt("BID_COUNT"));
 				list.add(dto);
 			}
-		} finally
-		{
+		} finally {
 			if (rs != null)
-				try
-				{
+				try {
 					rs.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			if (pstmt != null)
-				try
-				{
+				try {
 					pstmt.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			DBCPConn.close(conn);
 		}
@@ -83,8 +74,7 @@ public class AuctionDAO
 	}
 
 	// 경매 전체 건수 (페이징 계산용)
-	public int selectAuctionCount(String searchKeyword) throws SQLException
-	{
+	public int selectAuctionCount(String searchKeyword) throws SQLException {
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -93,29 +83,23 @@ public class AuctionDAO
 		String sql = "SELECT COUNT(*) FROM VW_AUCTION_LIST" + " WHERE IS_FINISHED = '진행중'"
 				+ " AND AUCTION_TITLE LIKE ?";
 
-		try
-		{
+		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1,
 					(searchKeyword == null || searchKeyword.trim().isEmpty()) ? "%" : "%" + searchKeyword.trim() + "%");
 			rs = pstmt.executeQuery();
 			if (rs.next())
 				count = rs.getInt(1);
-		} finally
-		{
+		} finally {
 			if (rs != null)
-				try
-				{
+				try {
 					rs.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			if (pstmt != null)
-				try
-				{
+				try {
 					pstmt.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			DBCPConn.close(conn);
 		}
@@ -123,8 +107,7 @@ public class AuctionDAO
 	}
 
 	// 경매 상세 조회
-	public AuctionDTO selectAuctionDetail(int auctionId) throws SQLException
-	{
+	public AuctionDTO selectAuctionDetail(int auctionId) throws SQLException {
 		AuctionDTO dto = null;
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
@@ -138,14 +121,12 @@ public class AuctionDAO
 				+ "       BID_CURRENT_PRICE, BID_MAX_PRICE, BID_COUNT" + " FROM VW_AUCTION_LIST"
 				+ " WHERE AUCTION_ID = ?";
 
-		try
-		{
+		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, auctionId);
 			rs = pstmt.executeQuery();
 
-			if (rs.next())
-			{
+			if (rs.next()) {
 				dto = new AuctionDTO();
 				dto.setAuctionId(rs.getInt("AUCTION_ID"));
 				dto.setAuctionTitle(rs.getString("AUCTION_TITLE"));
@@ -169,21 +150,16 @@ public class AuctionDAO
 				int maxPrice = rs.getInt("BID_MAX_PRICE");
 				dto.setBidMaxPrice(rs.wasNull() ? null : maxPrice);
 			}
-		} finally
-		{
+		} finally {
 			if (rs != null)
-				try
-				{
+				try {
 					rs.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			if (pstmt != null)
-				try
-				{
+				try {
 					pstmt.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			DBCPConn.close(conn);
 		}
@@ -191,13 +167,11 @@ public class AuctionDAO
 	}
 
 	// 경매 신고 등록 - PRC_REPORT_CREATE 프로시저 호출
-	public void insertAuctionReport(ReportDTO dto) throws SQLException
-	{
+	public void insertAuctionReport(ReportDTO dto) throws SQLException {
 		Connection conn = DBCPConn.getConnection();
 		CallableStatement cstmt = null;
 
-		try
-		{
+		try {
 			String sql = "{CALL PRC_REPORT_CREATE(?, ?, ?, ?, ?)}";
 			cstmt = conn.prepareCall(sql);
 
@@ -208,26 +182,21 @@ public class AuctionDAO
 			cstmt.setString(5, dto.getReportReason()); // P_REPORT_REASON
 
 			cstmt.executeUpdate();
-		} catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
-		} finally
-		{
+		} finally {
 			if (cstmt != null)
-				try
-				{
+				try {
 					cstmt.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			DBCPConn.close(conn);
 		}
 	}
 
 	// 신고 유형 목록 조회 (auctionReport.jsp)
-	public List<ReportTypeDTO> selectReportTypeList() throws SQLException
-	{
+	public List<ReportTypeDTO> selectReportTypeList() throws SQLException {
 		List<ReportTypeDTO> list = new ArrayList<>();
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
@@ -235,33 +204,26 @@ public class AuctionDAO
 
 		String sql = "SELECT REPORT_TYPE_ID, REPORT_TYPE_NAME" + " FROM REPORT_TYPE ORDER BY REPORT_TYPE_ID ASC";
 
-		try
-		{
+		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
-			while (rs.next())
-			{
+			while (rs.next()) {
 				ReportTypeDTO dto = new ReportTypeDTO();
 				dto.setReportTypeId(rs.getInt("REPORT_TYPE_ID"));
 				dto.setReportTypeName(rs.getString("REPORT_TYPE_NAME"));
 				list.add(dto);
 			}
-		} finally
-		{
+		} finally {
 			if (rs != null)
-				try
-				{
+				try {
 					rs.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			if (pstmt != null)
-				try
-				{
+				try {
 					pstmt.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			DBCPConn.close(conn);
 		}
@@ -269,8 +231,7 @@ public class AuctionDAO
 	}
 
 	// 현재 유저의 진행중 입찰 참여 수 10개 이상이면 auctionDetail.jsp 에서 입찰 참여 불가 처리
-	public int selectActiveBidCount(int userId) throws SQLException
-	{
+	public int selectActiveBidCount(int userId) throws SQLException {
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -279,28 +240,22 @@ public class AuctionDAO
 		String sql = "SELECT COUNT(*) FROM AUCTION_BID_PARTICIPATION" + " WHERE USER_ID = ?"
 				+ " AND FN_IS_AUCTION_FINISHED(AUCTION_ID) = 0";
 
-		try
-		{
+		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, userId);
 			rs = pstmt.executeQuery();
 			if (rs.next())
 				count = rs.getInt(1);
-		} finally
-		{
+		} finally {
 			if (rs != null)
-				try
-				{
+				try {
 					rs.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			if (pstmt != null)
-				try
-				{
+				try {
 					pstmt.close();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 				}
 			DBCPConn.close(conn);
 		}
@@ -308,17 +263,14 @@ public class AuctionDAO
 	}
 
 	// 경매 현재가 조회
-	public int getAuctionCurrentPrice(int auctionId) throws SQLException
-	{
+	public int getAuctionCurrentPrice(int auctionId) throws SQLException {
 		int price = 0;
 		String sql = "SELECT FN_GET_AUCTION_CURRENT_PRICE(?) FROM DUAL";
 
-		try (Connection conn = DBCPConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql))
-		{
+		try (Connection conn = DBCPConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, auctionId);
-			try (ResultSet rs = pstmt.executeQuery())
-			{
+			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next())
 					price = rs.getInt(1);
 			}
@@ -327,17 +279,14 @@ public class AuctionDAO
 	}
 
 	// 입찰 단위 조회
-	public int getBidUnit(int startPrice) throws SQLException
-	{
+	public int getBidUnit(int startPrice) throws SQLException {
 		int unit = 0;
 		String sql = "SELECT FN_GET_BID_UNIT(?) FROM DUAL";
 
-		try (Connection conn = DBCPConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql))
-		{
+		try (Connection conn = DBCPConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, startPrice);
-			try (ResultSet rs = pstmt.executeQuery())
-			{
+			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next())
 					unit = rs.getInt(1);
 			}
@@ -346,22 +295,50 @@ public class AuctionDAO
 	}
 
 	// 최초 입찰 여부 확인 ('Y' 또는 'N')
-	public String isFirstBidder(int auctionId) throws SQLException
-	{
+	public String isFirstBidder(int auctionId) throws SQLException {
 		String result = "N";
 		String sql = "SELECT FN_IS_FIRST_BIDDER(?) FROM DUAL";
 
-		try (Connection conn = DBCPConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql))
-		{
+		try (Connection conn = DBCPConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, auctionId);
-			try (ResultSet rs = pstmt.executeQuery())
-			{
+			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next())
 					result = rs.getString(1);
 			}
 		}
 		return result;
+	}
+
+	// 해당 경매의 낙찰자인지 확인
+	public boolean isAuctionWinner(int auctionId, int userId) throws SQLException {
+		String sql = "SELECT COUNT(*) FROM AUCTION_WINNING_RESULT AWR"
+				+ " JOIN AUCTION_BID_PARTICIPATION ABP ON AWR.BID_ID = ABP.BID_ID"
+				+ " WHERE ABP.AUCTION_ID = ? AND ABP.USER_ID = ?";
+
+		try (Connection conn = DBCPConn.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, auctionId);
+			pstmt.setInt(2, userId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				return rs.next() && rs.getInt(1) > 0;
+			}
+		}
+	}
+
+	// 해당 경매에 입찰한 적 있는지 확인
+	public boolean hasUserBid(int auctionId, int userId) throws SQLException {
+		String sql = "SELECT COUNT(*) FROM AUCTION_BID_PARTICIPATION"
+				+ " WHERE AUCTION_ID = ? AND USER_ID = ?";
+
+		try (Connection conn = DBCPConn.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, auctionId);
+			pstmt.setInt(2, userId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				return rs.next() && rs.getInt(1) > 0;
+			}
+		}
 	}
 
 }

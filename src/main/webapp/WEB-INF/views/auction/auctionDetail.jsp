@@ -186,10 +186,8 @@
                             경매 취소
                         </button>
                     </c:if>
-                    <a href="${ctx}/auction/report?auctionId=${auction.auctionId}"
-                       class="btn btn-outline-danger ${viewStatus.startsWith('ongoing') ? 'w-50' : 'w-100'}">
-                        신고하기
-                    </a>
+                    <a href="${ctx}/auction/report?auctionId=${auction.auctionId}&type=auction&name=${auction.auctionTitle}"
+                            class="btn btn-outline-danger">신고하기</a>
                 </div>
             </div>
         </div>

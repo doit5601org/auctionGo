@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>경매 이력</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 <script>
@@ -59,257 +61,83 @@ $(function() {
             <h5 class="mb-0 fw-bold">경매 종료 이력</h5>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-<table class="table align-middle" id="auction-history-table">
-    <thead class="table-light">
-        <tr>
-            <th class="text-start" style="width: 5%;">번호</th>
-            <th class="text-center" style="width: 25%;">상품명</th>
-            <th style="width: 25%;">최종 낙찰가</th>
-            <th style="width: 20%;">종료일시</th>
-            <th style="width: 15%;">결과</th>
-            <th style="width: 10%;">비고</th>
-        </tr>
-    </thead>
-    <tbody>
-   		<!-- <tr>
+						<div class="table-responsive">
+							<table class="table align-middle" id="auction-history-table">
+								<thead class="table-light">
+									<tr>
+										<th class="text-start" style="width: 5%;">번호</th>
+										<th class="text-center" style="width: 25%;">상품명</th>
+										<th style="width: 25%;">최종 낙찰가</th>
+										<th style="width: 20%;">종료일시</th>
+										<th style="width: 15%;">결과</th>
+										<th style="width: 10%;">비고</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- <tr>
    			<td colspan="6" class="text-center">경매 이력이 존재하지 않습니다.</td>
+   			
    		</tr> -->
-        <tr>
-        	<td class="text-center">10</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
-                    도라에몽 피규어
-                </a>
-            </td>
-            <td>120,000원</td>
-            <td class="small text-muted">2026-03-15</td>
-            <td><span class="badge bg-success-subtle text-success border border-success">거래완료</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-outline-primary detail-btn">상세</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3">
-                <div class="text-start ms-4">
-                    <p class="mb-1 small"><strong>최종 거래 확정일:</strong> 2026-03-16 14:20</p>
-                    <p class="mb-0 small"><strong>배송 현황:</strong> 배송 완료</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        	<td class="text-center">9</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
-                    해리포터 지팡이
-                </a>
-            </td>
-            <td>-</td>
-            <td class="small text-muted">2026-03-10</td>
-            <td><span class="badge bg-danger-subtle text-danger border border-danger">유찰</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-light border detail-btn">사유</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3 text-start">
-                <div class="ms-4 text-danger">
-                    <p class="mb-1 small"><strong>유찰 사유:</strong> 결제 기한 만료 (미결제)</p>
-                    <p class="mb-0 small"><strong>최종 유찰 일시:</strong> 2026-03-11</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        	<td class="text-center">8</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
-                    도라에몽 피규어
-                </a>
-            </td>
-            <td>120,000원</td>
-            <td class="small text-muted">2026-03-15</td>
-            <td><span class="badge bg-success-subtle text-success border border-success">거래완료</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-outline-primary detail-btn">상세</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3">
-                <div class="text-start ms-4">
-                    <p class="mb-1 small"><strong>최종 거래 확정일:</strong> 2026-03-16 14:20</p>
-                    <p class="mb-0 small"><strong>배송 현황:</strong> 배송 완료</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        <td class="text-center">7</td>
-            <td class="text-start"> 
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary" >
-                    해리포터 지팡이
-                </a>
-            </td>
-            <td>-</td>
-            <td class="small text-muted">2026-03-10</td>
-            <td><span class="badge bg-danger-subtle text-danger border border-danger">유찰</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-light border detail-btn">사유</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3 text-start">
-                <div class="ms-4 text-danger">
-                    <p class="mb-1 small"><strong>유찰 사유:</strong> 결제 기한 만료 (미결제)</p>
-                    <p class="mb-0 small"><strong>최종 유찰 일시:</strong> 2026-03-11</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        <td class="text-center">6</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
-                    도라에몽 피규어
-                </a>
-            </td>
-            <td>120,000원</td>
-            <td class="small text-muted">2026-03-15</td>
-            <td><span class="badge bg-success-subtle text-success border border-success">거래완료</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-outline-primary detail-btn">상세</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3">
-                <div class="text-start ms-4">
-                    <p class="mb-1 small"><strong>최종 거래 확정일:</strong> 2026-03-16 14:20</p>
-                    <p class="mb-0 small"><strong>배송 현황:</strong> 배송 완료</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        <td class="text-center">5</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
-                    해리포터 지팡이
-                </a>
-            </td>
-            <td>-</td>
-            <td class="small text-muted">2026-03-10</td>
-            <td><span class="badge bg-danger-subtle text-danger border border-danger">유찰</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-light border detail-btn">사유</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3 text-start">
-                <div class="ms-4 text-danger">
-                    <p class="mb-1 small"><strong>유찰 사유:</strong> 결제 기한 만료 (미결제)</p>
-                    <p class="mb-0 small"><strong>최종 유찰 일시:</strong> 2026-03-11</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        <td class="text-center">4</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary" >
-                    도라에몽 피규어
-                </a>
-            </td>
-            <td>120,000원</td>
-            <td class="small text-muted">2026-03-15</td>
-            <td><span class="badge bg-success-subtle text-success border border-success">거래완료</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-outline-primary detail-btn">상세</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3">
-                <div class="text-start ms-4">
-                    <p class="mb-1 small"><strong>최종 거래 확정일:</strong> 2026-03-16 14:20</p>
-                    <p class="mb-0 small"><strong>배송 현황:</strong> 배송 완료</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        <td class="text-center">3</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
-                    해리포터 지팡이
-                </a>
-            </td>
-            <td>-</td>
-            <td class="small text-muted">2026-03-10</td>
-            <td><span class="badge bg-danger-subtle text-danger border border-danger">유찰</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-light border detail-btn">사유</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3 text-start">
-                <div class="ms-4 text-danger">
-                    <p class="mb-1 small"><strong>유찰 사유:</strong> 결제 기한 만료 (미결제)</p>
-                    <p class="mb-0 small"><strong>최종 유찰 일시:</strong> 2026-03-11</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        <td class="text-center">2</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=1" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
-                    도라에몽 피규어
-                </a>
-            </td>
-            <td>120,000원</td>
-            <td class="small text-muted">2026-03-15</td>
-            <td><span class="badge bg-success-subtle text-success border border-success">거래완료</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-outline-primary detail-btn">상세</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3">
-                <div class="text-start ms-4">
-                    <p class="mb-1 small"><strong>최종 거래 확정일:</strong> 2026-03-16 14:20</p>
-                    <p class="mb-0 small"><strong>배송 현황:</strong> 배송 완료</p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-        <td class="text-center">1</td>
-            <td class="text-start">
-                <a href="${pageContext.request.contextPath}/product/detail.do?id=2" class="fw-bold text-decoration-none text-dark ps-3 link-primary">
-                    해리포터 지팡이
-                </a>
-            </td>
-            <td>-</td>
-            <td class="small text-muted">2026-03-10</td>
-            <td><span class="badge bg-danger-subtle text-danger border border-danger">유찰</span></td>
-            <td>
-                <button type="button" class="btn btn-sm btn-light border detail-btn">사유</button>
-            </td>
-        </tr>
-        <tr class="collapse bg-light">
-            <td colspan="5" class="p-3 text-start">
-                <div class="ms-4 text-danger">
-                    <p class="mb-1 small"><strong>유찰 사유:</strong> 결제 기한 만료 (미결제)</p>
-                    <p class="mb-0 small"><strong>최종 유찰 일시:</strong> 2026-03-11</p>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<nav class="mt-4">
-								<ul class="pagination justify-content-center">
-									<li class="page-item disabled"><a class="page-link" href="#">&laquo;</a></li>
-									<li class="page-item active"><a class="page-link" href="#">1</a></li>
-									<li class="page-item "><a class="page-link" href="#">2</a></li>
-									<li class="page-item"><a class="page-link" href="#">3</a></li>
-									<li class="page-item"><a class="page-link" href="#">4</a></li>
-									<li class="page-item"><a class="page-link" href="#">5</a></li>
-									<li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-								</ul>
-							</nav>
-            </div>
-        </div>
+   									<c:forEach var="dto" items="${list }" varStatus="status">
+	   									<tr>
+										<td class="text-center">${status.count }</td>
+										<td class="text-start"><a
+											href="${pageContext.request.contextPath}/product/detail.do?id=1"
+											class="fw-bold text-decoration-none text-dark ps-3 link-primary">
+												${dto.auctionTitle }
+												</a></td>
+										<td>${dto.finalPrice }원</td>
+										<td class="small text-muted">${dto.auctionEndDate }</td>
+										<td><span
+											class="badge border ${dto.transactionStatus == '거래완료' ? 'bg-success-subtle text-success border-success' :
+											 dto.transactionStatus == '유찰'? 'bg-danger-subtle text-danger border-danger' : 'bg-warning-subtle text-warning border-warning' }">
+												${dto.transactionStatus }
+											</span></td>
+										<td>
+											<button type="button"
+												class="btn btn-sm btn-outline-primary detail-btn">${dto.transactionStatus == '유찰' ? '사유' : '상세'}</button>
+										</td>
+									</tr>
+									<tr class="collapse bg-light">
+										<td colspan="6" class="p-3">
+											<div class="text-start ms-4">
+											<c:choose>
+												<c:when test="${dto.transactionStatus=='거래완료' }">
+													<p class="mb-1 small">
+														<strong>최종 거래 확정일:</strong> 2026-03-16 14:20
+													</p>
+													<p class="mb-0 small">
+														<strong>배송 현황:</strong> 배송 완료
+													</p>
+												</c:when>
+												<c:when test="${dto.transactionStatus== '유찰' }">
+													<p class="mb-1 small">
+														<strong>유찰 사유:</strong> 
+														${dto.bidFailType }
+														
+													</p>
+													<p class="mb-0 small">
+														<strong>최종 처리 일시:</strong> ${dto.auctionEndDate }
+													</p>
+												</c:when>
+												<c:otherwise>
+												<p class="mb-1 small"><strong>현재 상태:</strong> 결제 대기 또는 배송 중</p>
+            
+												</c:otherwise>
+											</c:choose>
+											</div>
+										</td>
+									</tr>
+   									</c:forEach>
+
+								</tbody>
+							</table>
+								<div class="d-flex justify-content-center mt-4">
+							${actualCount == 0? "등록된 게시물이 없습니다.": paging }
+						</div>
+
+						</div>
+					</div>
         </div>
 </section>
 		</div>
