@@ -40,12 +40,14 @@ public class MyPageController extends HttpServlet{
 		
 		HttpSession session = request.getSession();
 		UserInfoDTO user = (UserInfoDTO) session.getAttribute("loginUser");
-		int userId = user.getUserId();
+
 		
 		if (user == null) { 
             response.sendRedirect(cp + "/user/auth/login");
             return;
         }
+		
+		int userId = user.getUserId();
 		
 		
 		// 마이페이지 이동
@@ -139,6 +141,7 @@ public class MyPageController extends HttpServlet{
 			request.setAttribute("size", result.get("size")); 
 			request.setAttribute("totalPage", result.get("totalPage")); 
 			request.setAttribute("query", result.get("query")); 
+			request.setAttribute("actualCount", result.get("actualCount"));
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/product/myProduct.jsp");
 			dispatcher.forward(request, response);
@@ -156,14 +159,105 @@ public class MyPageController extends HttpServlet{
 			request.setAttribute("size", result.get("size")); 
 			request.setAttribute("totalPage", result.get("totalPage")); 
 			request.setAttribute("query", result.get("query")); 
-			
-			
+			request.setAttribute("actualCount", result.get("actualCount"));
 			
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/auctions/auctionStatus.jsp");
 			dispatcher.forward(request, response);
 			
+		// 내 경매 이력 페이지 이동
+		}else if(uri.endsWith("/user/auctions/closed")) {
 			
+			
+			String page = request.getParameter("page");
+			Map<String, Object> result = service.myAuctionHistory(page, userId, cp);
+		
+			request.setAttribute("list", result.get("list"));
+			request.setAttribute("paging", result.get("paging"));
+			request.setAttribute("dataCount", result.get("dataCount"));
+			request.setAttribute("page", result.get("page")); 
+			request.setAttribute("size", result.get("size")); 
+			request.setAttribute("totalPage", result.get("totalPage")); 
+			request.setAttribute("query", result.get("query")); 
+			request.setAttribute("actualCount", result.get("actualCount"));
+			
+			
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/auctions/auctionHistory.jsp");
+			dispatcher.forward(request, response);
+			
+		
+			// 내 입찰 현황 페이지 이동
+		}else if(uri.endsWith("/user/bids/active")) {
+			
+			String page = request.getParameter("page");
+			Map<String, Object> result = service.myBidStatus(page, userId, cp);
+			
+			request.setAttribute("list", result.get("list"));
+			request.setAttribute("paging", result.get("paging"));
+			request.setAttribute("dataCount", result.get("dataCount"));
+			request.setAttribute("page", result.get("page")); 
+			request.setAttribute("size", result.get("size")); 
+			request.setAttribute("totalPage", result.get("totalPage")); 
+			request.setAttribute("query", result.get("query")); 
+			request.setAttribute("actualCount", result.get("actualCount"));
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/bids/bidStatus.jsp");
+			dispatcher.forward(request, response);
+			
+			
+			// 내 입찰 이력 페이지 이동
+		}else if(uri.endsWith("/user/bids/closed")) {
+			
+			String page = request.getParameter("page");
+			Map<String, Object> result = service.myBidHistory(page, userId, cp);
+			
+			request.setAttribute("list", result.get("list"));
+			request.setAttribute("paging", result.get("paging"));
+			request.setAttribute("dataCount", result.get("dataCount"));
+			request.setAttribute("page", result.get("page")); 
+			request.setAttribute("size", result.get("size")); 
+			request.setAttribute("totalPage", result.get("totalPage")); 
+			request.setAttribute("query", result.get("query")); 
+			request.setAttribute("actualCount", result.get("actualCount"));
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/bids/bidHistory.jsp");
+			dispatcher.forward(request, response);
+		
+			// 내 패널티 내역 페이지 이동
+		}else if(uri.endsWith("/user/penalty")){
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/penalties/penaltyHistory.jsp");
+			dispatcher.forward(request, response);
+		
+			// 내 관심 상품 페이지 이동
+		}else if(uri.endsWith("/user/product/wishlist")){
+			
+			String page = request.getParameter("page");
+			
+			Map<String, Object> result = service.myWishList(page, userId, cp);
+			
+			request.setAttribute("list", result.get("list"));
+			request.setAttribute("paging", result.get("paging"));
+			request.setAttribute("dataCount", result.get("dataCount"));
+			request.setAttribute("page", result.get("page")); 
+			request.setAttribute("size", result.get("size")); 
+			request.setAttribute("totalPage", result.get("totalPage")); 
+			request.setAttribute("query", result.get("query")); 
+			request.setAttribute("actualCount", result.get("actualCount"));
+			
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/product/wishlist.jsp");
+			dispatcher.forward(request, response);
+		
+		}else if(uri.endsWith("/user/product/wishlist/delete")) {
+			int wishId = Integer.parseInt(request.getParameter("wishId"));
+			
+			int result = dao.deleteWishlist(wishId);
+			
+			request.setAttribute("result", result);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/product/wishlist.jsp");
+			dispatcher.forward(request, response);
 			
 		}
 			
