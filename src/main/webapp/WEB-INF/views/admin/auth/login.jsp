@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,21 +62,31 @@
 	<section class="row justify-content-center login-section">
 		<div class="shadow-sm col-md-5 card p-4">
 			<h2 class="text-center mb-4">관리자 로그인</h2>
-			<form action="" method="get" id="loginForm">
-				<div class="mb-3">
-					<label for="userId" class="form-label ms-1">아이디</label> 
-					<input type="email" class="form-control" id="userId" aria-describedby="emailHelp">
-					<span class="text-danger ms-1 errMsg">아이디를 입력해주세요.</span>
-				</div>
-				<div class="mb-3">
-					<label for="userPwd" class="form-label ms-1">비밀번호</label> 
-					<input type="password" class="form-control" id="userPwd">
-					<span class="text-danger ms-1 errMsg">비밀번호를 입력해주세요.</span>
-				</div>
-				<div class="d-grid gap-2 col-6 mx-auto mt-4">
-					<button type="button" class="btn btn-outline-dark loginBtn">로그인</button>
-				</div>
-			</form>
+				<c:if test="${param.error == '1'}">
+        			<div class="alert alert-danger p-2 text-center" role="alert" style="font-size: 0.9rem;">
+            		아이디 또는 비밀번호가 일치하지 않습니다.
+        			</div>
+    			</c:if>
+			
+<form action="${pageContext.request.contextPath}/admin/auth/login" method="post" id="loginForm">
+    
+    <div class="mb-3">
+        <label for="userId" class="form-label ms-1">아이디</label> 
+        <input type="text" name="adminId" class="form-control" id="userId" aria-describedby="emailHelp">
+        <span class="text-danger ms-1 errMsg">아이디를 입력해주세요.</span>
+    </div>
+    
+    <div class="mb-3">
+        <label for="userPwd" class="form-label ms-1">비밀번호</label> 
+        <input type="password" name="adminPwd" class="form-control" id="userPwd">
+        <span class="text-danger ms-1 errMsg">비밀번호를 입력해주세요.</span>
+    </div>
+    
+    <div class="d-grid gap-2 col-6 mx-auto mt-4">
+        <button type="button" class="btn btn-outline-dark loginBtn">로그인</button>
+    </div>
+    
+</form>
 		</div>
 	</section>
 </main>
