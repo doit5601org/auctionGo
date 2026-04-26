@@ -10,8 +10,7 @@ import com.doit.dto.ProductGenreDTO;
 import com.doit.dto.ProductGradeDTO;
 import com.doit.dto.ProductManufacturerDTO;
 import com.doit.dto.ProductSizeDTO;
-import com.doit.dto.ReportDTO;
-import com.doit.dto.ReportTypeDTO;
+import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -35,6 +34,7 @@ public class ProductController extends HttpServlet {
 	private static final int PAGE_SIZE_MY_LIST = 10; // 내 상품
 
 	private ProductDAO productDAO = new ProductDAO();
+	private Pagination pagination = new Pagination();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -74,10 +74,7 @@ public class ProductController extends HttpServlet {
 				else
 					deleteFormAction(req, resp);
 			} else if (uri.endsWith("/product/report")) {
-				if ("POST".equalsIgnoreCase(method))
-					reportPostAction(req, resp, ct);
-				else
-					reportFormAction(req, resp);
+				reportFormAction(req, resp);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -106,7 +103,7 @@ public class ProductController extends HttpServlet {
 		int end = page * PAGE_SIZE_LIST;
 
 		int totalCount = productDAO.selectProductCount(keyword, genreId, gradeId, sizeId, manufacturerId);
-		int totalPage = (int) Math.ceil((double) totalCount / PAGE_SIZE_LIST);
+		int totalPage = pagination.pageCount(totalCount, PAGE_SIZE_LIST);
 		List<ProductDTO> list = productDAO.selectProductList(start, end, keyword, genreId, gradeId, sizeId,
 				manufacturerId, sort);
 
@@ -143,7 +140,7 @@ public class ProductController extends HttpServlet {
 		int end = page * PAGE_SIZE_MY_LIST;
 
 		int totalCount = productDAO.selectMyProductCount(userId);
-		int totalPage = (int) Math.ceil((double) totalCount / PAGE_SIZE_MY_LIST);
+		int totalPage = pagination.pageCount(totalCount, PAGE_SIZE_MY_LIST);
 		List<ProductDTO> list = productDAO.selectMyProductList(userId, start, end);
 
 		req.setAttribute("myProductList", list);
@@ -277,7 +274,7 @@ public class ProductController extends HttpServlet {
 		resp.sendRedirect(ct + "/product/myList");
 	}
 
-	// 상품 신고 (GET )
+	// 상품 신고 폼
 	private void reportFormAction(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException, SQLException {
 		Integer userId = getLoginUserId(req);
@@ -294,44 +291,8 @@ public class ProductController extends HttpServlet {
 			return;
 		}
 
-		List<ReportTypeDTO> reportTypeList = productDAO.selectReportTypeList();
-
 		req.setAttribute("product", product);
-		req.setAttribute("reportTypeList", reportTypeList);
-		req.getRequestDispatcher("/WEB-INF/views/product/productReport.jsp").forward(req, resp);
-	}
-
-	// 상품 신고 (POST )
-	private void reportPostAction(HttpServletRequest req, HttpServletResponse resp, String ct)
-			throws ServletException, IOException, SQLException {
-		Integer userId = getLoginUserId(req);
-		if (userId == null) {
-			resp.sendRedirect(ct + "/login");
-			return;
-		}
-
-		int productId = Integer.parseInt(req.getParameter("productId"));
-
-		ReportDTO dto = new ReportDTO();
-		dto.setUserId(userId);
-		dto.setReportTypeId(Integer.parseInt(req.getParameter("reportTypeId")));
-		dto.setProductId(productId);
-		dto.setReportReason(req.getParameter("reportContent"));
-
-		try {
-			productDAO.insertProductReport(dto);
-			resp.sendRedirect(ct + "/product/detail?productId=" + productId + "&reportOk=1");
-		} catch (SQLException e) {
-			if (e.getErrorCode() == ProductDAO.ERR_DUPLICATE_REPORT) {
-				// 중복 신고 → 폼으로 돌려보내고 에러 메시지 표시
-				req.setAttribute("errorMsg", "이미 신고하신 상품입니다.");
-				req.setAttribute("product", productDAO.selectProductDetail(productId));
-				req.setAttribute("reportTypeList", productDAO.selectReportTypeList());
-				req.getRequestDispatcher("/WEB-INF/views/product/productReport.jsp").forward(req, resp);
-			} else {
-				throw e;
-			}
-		}
+		req.getRequestDispatcher("/WEB-INF/views/report/reportSubmit.jsp").forward(req, resp);
 	}
 
 	// 세션에서 로그인 사용자 userId 가져오기. 없으면 null.
@@ -380,12 +341,11 @@ public class ProductController extends HttpServlet {
 		dto.setWorkName(req.getParameter("workName"));
 		dto.setCharacterName(req.getParameter("characterName"));
 
-		// purchaseDate 는 JSP 에서'YYYY-01-01' 변환
 		String purchaseYear = req.getParameter("purchaseDate");
 		if (purchaseYear != null && purchaseYear.matches("\\d{4}")) {
 			dto.setPurchaseDateTime(purchaseYear + "-01-01");
 		} else {
-			dto.setPurchaseDateTime(purchaseYear); // 이미 'YYYY-MM-DD' 로 왔을 수도 있음
+			dto.setPurchaseDateTime(null); // 미선택 시 null → DB에 NULL 저장
 		}
 
 		dto.setIsOpened(parseIntOrZero(req.getParameter("openedCode")));

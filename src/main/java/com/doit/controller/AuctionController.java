@@ -9,8 +9,7 @@ import java.util.List;
 
 import com.doit.dao.AuctionDAO;
 import com.doit.dto.AuctionDTO;
-import com.doit.dto.ReportDTO;
-import com.doit.dto.ReportTypeDTO;
+import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,6 +25,7 @@ public class AuctionController extends HttpServlet {
 	private static final int PAGE_SIZE = 12; // 한 페이지당 경매 수
 
 	private AuctionDAO auctionDAO = new AuctionDAO();
+	private Pagination pagination = new Pagination();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,8 +39,6 @@ public class AuctionController extends HttpServlet {
 
 	protected void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();
-		String method = req.getMethod();
-		String ct = req.getContextPath();
 
 		try {
 			if (uri.endsWith("/auction/list")) {
@@ -48,10 +46,7 @@ public class AuctionController extends HttpServlet {
 			} else if (uri.endsWith("/auction/detail")) {
 				detailAction(req, resp);
 			} else if (uri.endsWith("/auction/report")) {
-				if ("POST".equalsIgnoreCase(method))
-					reportPostAction(req, resp, ct);
-				else
-					reportFormAction(req, resp);
+				reportFormAction(req, resp);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -80,7 +75,7 @@ public class AuctionController extends HttpServlet {
 		int end = page * PAGE_SIZE;
 
 		int totalCount = auctionDAO.selectAuctionCount(keyword);
-		int totalPage = (totalCount <= 0) ? 1 : (totalCount - 1) / PAGE_SIZE + 1;
+		int totalPage = pagination.pageCount(totalCount, PAGE_SIZE);
 		List<AuctionDTO> list = auctionDAO.selectAuctionList(start, end, keyword);
 
 		req.setAttribute("auctionList", list);
@@ -163,7 +158,7 @@ public class AuctionController extends HttpServlet {
 		req.getRequestDispatcher("/WEB-INF/views/auction/auctionDetail.jsp").forward(req, resp);
 	}
 
-	// 경매 신고 (GET )
+	// 경매 신고 폼
 	private void reportFormAction(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException, SQLException {
 		Integer userId = getLoginUserId(req);
@@ -180,39 +175,8 @@ public class AuctionController extends HttpServlet {
 			return;
 		}
 
-		List<ReportTypeDTO> reportTypeList = auctionDAO.selectReportTypeList();
-
 		req.setAttribute("auction", auction);
-		req.setAttribute("reportTypeList", reportTypeList);
-		req.getRequestDispatcher("/WEB-INF/views/auction/auctionReport.jsp").forward(req, resp);
-	}
-
-	// 경매 신고 (POST )
-	private void reportPostAction(HttpServletRequest req, HttpServletResponse resp, String ct)
-			throws ServletException, IOException, SQLException {
-		Integer userId = getLoginUserId(req);
-		if (userId == null) {
-			resp.sendRedirect(ct + "/login");
-			return;
-		}
-
-		int auctionId = Integer.parseInt(req.getParameter("auctionId"));
-
-		ReportDTO dto = new ReportDTO();
-		dto.setUserId(userId);
-		dto.setReportTypeId(Integer.parseInt(req.getParameter("reportTypeId")));
-		dto.setAuctionId(auctionId);
-		dto.setReportReason(req.getParameter("reportContent"));
-
-		try {
-			auctionDAO.insertAuctionReport(dto);
-			resp.sendRedirect(ct + "/auction/detail?auctionId=" + auctionId + "&reportOk=1");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			{
-				throw e;
-			}
-		}
+		req.getRequestDispatcher("/WEB-INF/views/report/reportSubmit.jsp").forward(req, resp);
 	}
 
 	private Integer getLoginUserId(HttpServletRequest req) {
