@@ -98,22 +98,66 @@
 	});
 	
 	
+	// 상품 비공개로 전환
 	function hideProduct(productId) {
 		let formEl = document.createElement('form');
-		form.method = 'POST';
-		form.action = "/admin/product/hideProduct";
+		formEl.method = 'POST';
+		formEl.action = "${ pageContext.request.contextPath }/admin/product/hideProduct";
 		
-		let inputEl = document.createElement('input');
-		inputEl.type = 'hidden';
-		inputEl.name = "productId";
-		inputEl.value = productId;
+		let inputElProduct = document.createElement('input');
+		inputElProduct.type = 'hidden';
+		inputElProduct.name = "productId";
+		inputElProduct.value = productId;
+		formEl.appendChild(inputElProduct);
 		
-		formEl.appendChild(inputEl);
 		
-		// document.body.appendChild(form);
+		let inputElUrl = document.createElement('input');
+		inputElUrl.type = 'hidden';
+		inputElUrl.name = "url";
+		inputElUrl.value = location.href;
+		formEl.appendChild(inputElUrl);
+		
+		
+		document.body.appendChild(formEl);
 		formEl.submit();
 		
 	}// hideProduct(...) END
+	
+	
+	// 유저 패널티 부여
+	function penaltyToProductUser(userId)
+	{
+		/*
+		let url = "${ pageContext.request.contextPath }/admin/penalty/register";
+		url = url + "?" + "userId=" + userId;
+		url = url + "&" + "prevPageName=" + "productList"
+		url = url + "&" + "prevPageStatus=" + $("input[name='statusFilter']:checked").val();
+		url = url + "&" + "prevPageNum=" + ${ nowPage };
+		
+		location.href = url;
+		*/
+		
+		let formEl = document.createElement('form');
+		formEl.method = 'GET';
+		formEl.action = "${ pageContext.request.contextPath }/admin/penalty/register";
+		
+		let inputElUser = document.createElement('input');
+		inputElUser.type = 'hidden';
+		inputElUser.name = "userId";
+		inputElUser.value = userId;
+		formEl.appendChild(inputElUser);
+		
+		
+		let inputElUrl = document.createElement('input');
+		inputElUrl.type = 'hidden';
+		inputElUrl.name = "prevUrl";
+		inputElUrl.value = location.href;
+		formEl.appendChild(inputElUrl);
+		
+		
+		document.body.appendChild(formEl);
+		formEl.submit();
+	}// penaltyToProductUser(...) END
 </script>
 </head>
 <body class="bg-light">
@@ -217,7 +261,9 @@
 					        </c:otherwise>
 					    </c:choose>
 					    
-					    <button class="btn btn-sm btn-outline-danger btn-admin-custom">패널티</button>
+					    <button class="btn btn-sm btn-outline-danger btn-admin-custom" onclick="penaltyToProductUser(${ productDto.userId})">
+					    	패널티
+					    </button>
 					</td>
                 </tr>
                 </c:forEach>

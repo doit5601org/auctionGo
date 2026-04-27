@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import com.doit.jydto.AdminDTO;
+import com.doit.dto.AdminDTO;
 import com.doit.util.DBCPConn;
 
 public class AdminDAO {
