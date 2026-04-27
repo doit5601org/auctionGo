@@ -519,7 +519,7 @@ public class ProductController extends HttpServlet
 			if (dot >= 0)
 				ext = originalName.substring(dot);
 
-			String savedName = java.util.UUID.randomUUID().toString() + ext;
+			String savedName = originalName;
 
 			String uploadDir = req.getServletContext().getRealPath("/images");
 			java.io.File dir = new java.io.File(uploadDir);

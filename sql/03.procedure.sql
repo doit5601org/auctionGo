@@ -659,10 +659,22 @@ IS
     V_SELLER_ID      NUMBER;
     V_CURRENT_PRICE  NUMBER;
     V_USER_MONEY     NUMBER;
-    V_MY_BID_COUNT   NUMBER; -- 내 입찰 기록 확인용
+    V_MAX_PRICE      NUMBER; 
+    V_MY_BID_COUNT   NUMBER; 
+    V_CANCEL_COUNT   NUMBER; 
+    V_TOP_BIDDER_ID  NUMBER := 0; -- 최고가 입찰자 ID 담을 변수
 BEGIN
+    -- 1. 경매 취소 여부 확인
+    SELECT COUNT(*) INTO V_CANCEL_COUNT
+    FROM AUCTION_CANCEL_HISTORY
+    WHERE AUCTION_ID = P_AUCTION_ID;
 
-    -- 본인 경매 입찰 방지
+    IF V_CANCEL_COUNT > 0 THEN
+        P_RESULT := '이미 취소된 경매에는 입찰할 수 없습니다.';
+        RETURN;
+    END IF;
+
+    -- 2. 본인 경매 입찰 방지
     SELECT USER_ID INTO V_SELLER_ID 
     FROM PRODUCT
     WHERE PRODUCT_ID = (SELECT PRODUCT_ID
@@ -673,22 +685,48 @@ BEGIN
         P_RESULT := '본인이 등록한 경매에는 입찰할 수 없습니다.';
         RETURN;
     END IF;
+    
+    -- 3. 본인 연속 추가 입찰 방지 (수정된 부분)
+    BEGIN
+        SELECT USER_ID INTO V_TOP_BIDDER_ID
+        FROM (
+            SELECT USER_ID, RANK() OVER (ORDER BY BID_PRICE DESC, BID_TIME ASC) AS RK
+            FROM AUCTION_BID_PARTICIPATION
+            WHERE AUCTION_ID = P_AUCTION_ID
+        )
+        WHERE RK = 1;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN V_TOP_BIDDER_ID := 0; -- 첫 입찰인 경우
+    END;
 
-    -- 현재 입찰가 조회 및 유효성 검사
+    IF V_TOP_BIDDER_ID = P_USER_ID THEN
+       P_RESULT := '현재 귀하가 최고가 입찰자입니다. 연속 입찰은 불가능합니다.';
+       RETURN;
+    END IF;
+
+    -- 4. 현재 입찰가 조회 및 유효성 검사
     V_CURRENT_PRICE := FN_GET_AUCTION_CURRENT_PRICE(P_AUCTION_ID);
 
     IF P_BID_PRICE <= V_CURRENT_PRICE THEN
         P_RESULT := '현재가(' || V_CURRENT_PRICE || '원)보다 높은 금액을 입력해야 합니다.';
         RETURN; 
     END IF;
+    
+    -- 5. 경매 입찰 상한가 검사
+    V_MAX_PRICE := FN_GET_BID_MAX_LIMIT(P_AUCTION_ID); 
 
-    -- 동시 입찰 제한 체크 (최대 10회)
+    IF P_BID_PRICE > V_MAX_PRICE THEN
+        P_RESULT := '상한가(' || V_MAX_PRICE || '원)를 초과하여 입찰할 수 없습니다.';
+        RETURN;
+    END IF;
+
+    -- 6. 동시 입찰 제한 체크 (최대 10회)
     IF FN_GET_ACTIVE_BID_COUNT(P_USER_ID) >= 10 THEN 
         P_RESULT := '동시에 참여 가능한 경매 횟수 10회를 초과했습니다.';
         RETURN;
     END IF;
-
-    -- 해당 경매 신규 참여 여부 확인 (보증금 로직)
+    
+    -- 7. 신규 참여 여부 확인 및 보증금 차감
     SELECT COUNT(*) INTO V_MY_BID_COUNT
     FROM AUCTION_BID_PARTICIPATION
     WHERE AUCTION_ID = P_AUCTION_ID AND USER_ID = P_USER_ID;
@@ -701,24 +739,24 @@ BEGIN
            RETURN;
         END IF;
 
-    -- 보증금 차감 이력 삽입 (머니분류코드 EX) 3 = 보증금 차감)
         INSERT INTO MONEY_TRANSACTION_HISTORY (MONEY_ID, USER_ID, MONEY_TYPE_ID, AUCTION_ID, AMOUNT, CREATED_AT)
-        VALUES (MONEY_TRANSACTION_SEQ.NEXTVAL, P_USER_ID, 3, P_AUCTION_ID, 30000, SYSDATE); 
+        VALUES (MONEY_TRANSACTION_SEQ.NEXTVAL, P_USER_ID, 3, P_AUCTION_ID, -30000, SYSDATE); 
     END IF;
 
-    -- 입찰 기록 삽입
+    -- 8. 입찰 기록 삽입
     INSERT INTO AUCTION_BID_PARTICIPATION (BID_ID, AUCTION_ID, USER_ID, BID_TIME, BID_PRICE)
     VALUES (BID_SEQ.NEXTVAL, P_AUCTION_ID, P_USER_ID, SYSTIMESTAMP, P_BID_PRICE);
 
     P_RESULT := 'SUCCESS';
-    --COMMIT;
+    COMMIT;
     
 EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;
-        P_RESULT := '에러 발생'; 
+        P_RESULT := '에러 발생: ' || SQLERRM; -- 구체적인 에러 메시지 확인용
 END;
-/
+
+
 
 
 -- ○ 9. 경매 마감 및 낙찰 처리 프로시저

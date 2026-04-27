@@ -30,11 +30,11 @@ public class AdminPenaltyService
 	}
 	
 	// 전체 패널티 목록 조회
-	public List<PenaltyHistoryDTO> getPenaltyHistoryList()
+	public List<PenaltyHistoryDTO> getPenaltyHistoryList(int page, int sizePerPage)
 	{
 		List<PenaltyHistoryDTO> result = new ArrayList<>();
 		
-		result = apDao.selectPenaltyHistoryList();
+		result = apDao.selectPenaltyHistoryList(page, sizePerPage);
 		
 		return result;
 	}
@@ -45,6 +45,17 @@ public class AdminPenaltyService
 		int result = 0;
 		
 		result = apDao.selectPenaltyHistoryTotalCount();
+		
+		return result;
+	}
+	
+	
+	// 패널티 취소
+	public int cancelPenalty(int penaltyId, int adminAccountId, String cancelReason)
+	{
+		int result = 0;
+		
+		apDao.insertPenaltyCancel(penaltyId, adminAccountId, cancelReason);
 		
 		return result;
 	}

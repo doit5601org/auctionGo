@@ -7,6 +7,7 @@ public class AuctionDTO
 	// AUCTION_REGISTRATION 테이블 컬럼
 
 	private int auctionId; // AUCTION_ID (PK)
+	private int userId; // USER_ID (경매 등록자)
 	private int productId; // PRODUCT_ID (FK)
 	private String auctionTitle; // AUCTION_TITLE
 	private String auctionContent; // AUCTION_CONTENT
@@ -330,4 +331,8 @@ public class AuctionDTO
 		this.bidCount = bidCount;
 	}
 
+	public int getUserId() { return userId; }
+	public void setUserId(int userId) { this.userId = userId; }
+
 }
+

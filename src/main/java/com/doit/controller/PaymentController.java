@@ -114,9 +114,41 @@ public class PaymentController extends HttpServlet
 	
 	protected void success(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		Integer userId = Integer.parseInt(request.getParameter("user"));
-		Integer bid = Integer.parseInt(request.getParameter("bid"));
-		Integer amount = Integer.parseInt(request.getParameter("price"));
+		
+		String cp = request.getContextPath();
+		HttpSession session = request.getSession();
+		UserInfoDTO user = (UserInfoDTO) session.getAttribute("loginUser");
+
+		if (user == null) { 
+            response.sendRedirect(cp + "/user/auth/login");
+            return;
+        }
+		int userId = user.getUserId();
+		
+		String bidStr = request.getParameter("bid");
+		String amountStr = request.getParameter("price");
+		
+		int bid = 1; 
+
+		if (bidStr != null && !bidStr.trim().isEmpty()) {
+		    try {
+		    	bid = Integer.parseInt(request.getParameter("bid"));
+		    } catch (NumberFormatException e) {
+		       
+		    	bid = 1;
+		    }
+		}
+		
+		int amount = 1; 
+
+		if (amountStr != null && !amountStr.trim().isEmpty()) {
+		    try {
+		    	amount = Integer.parseInt(request.getParameter("price"));
+		    } catch (NumberFormatException e) {
+		       
+		    	amount = 1;
+		    }
+		}
 		
 		ProductBuyDAO dao = new ProductBuyDAO();
 		BidActionDTO dto = new BidActionDTO(userId, bid, amount);
@@ -124,6 +156,10 @@ public class PaymentController extends HttpServlet
 		request.setAttribute("today", new java.util.Date());
 		
 		int result = dao.paymentBid(dto);
+		System.out.println(dto.getAmount());
+		System.out.println(dto.getBidResultId());
+		System.out.println(dto.getUserId());
+		System.out.println(result);
 		
 		if(result > 0)
 		{

@@ -19,7 +19,7 @@
             <form method="POST" action="${ pageContext.request.contextPath }/admin/penalty/register">
             
             	<%-- 이전 페이지 URL --%>
-            	<input type="hidden" name="prevUrl" value="${ prevUrl }">
+            	<input type="hidden" name="url" value="${ url }">
             
                 <div class="mb-3">
                     <label class="wf-label">부여 대상 유저</label>

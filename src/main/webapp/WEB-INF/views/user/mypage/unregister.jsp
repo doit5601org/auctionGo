@@ -47,7 +47,7 @@ body
 {
 	background-color:#f7f7f7;
 }
-.body
+/* .body
 {
 	margin: auto;
 	font-size: 16px;
@@ -57,7 +57,7 @@ body
 	margin-top: 50px;
 	border-radius: 8px;
 	height: auto;
-}
+} */
 .body2
 {
 	margin: auto;
@@ -146,12 +146,21 @@ body
 {
 	height: 45px;
 }
+		.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
 </style>
 <title></title>
 </head>
-<body>
+<body class="bg-light">
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<main class="container" style="margin-top: 50px; margin-bottom: 50px;">
 	<div class="row">
-		<div class="col-md-9">
+	<aside class="col-md-3">
+				<%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
+			</aside>
+		<section class="col-md-9">
 			<div class="body shadow-sm border-0 bg-white p-4">
 
 
@@ -253,8 +262,9 @@ body
 					</form>
 				</div>
 			</div>
-		</div>
+		</section>
 	</div>
-
+	</main>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

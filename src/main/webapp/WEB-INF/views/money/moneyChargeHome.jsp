@@ -92,6 +92,10 @@ h1
 	margin-top:10px;
 	display:block;
 }
+		.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
 </style>
 </head>
 <script type="text/javascript">
@@ -149,8 +153,9 @@ h1
 		document.moneyForm.submit();
 	}
 </script>
-<body>
-	<div class="body shadow-sm">
+<body class="bg-light">
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
+	<div class="body shadow-sm" style="background-color: #fff;">
 		<h1>충전하기</h1>
 		<hr />
 		
@@ -197,5 +202,6 @@ h1
 		<button type="button" class="btn btn-outline-dark" onclick="trancheck()">충전 하기</button>
 		</form>
 	</div>
+	<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
