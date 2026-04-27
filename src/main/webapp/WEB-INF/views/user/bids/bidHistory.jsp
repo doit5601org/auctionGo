@@ -38,13 +38,29 @@ $(function() {
 </script>
 
 <style>
-    /* 상세 페이지 링크 스타일 */
-    .product-link { color: #212529; transition: color 0.2s; }
-    .product-link:hover { color: #0d6efd !important; }
-    
-    /* 아코디언 행 배경색 및 간격 */
-    #bid-history-table .collapse.bg-light { background-color: #f8f9fa !important; }
-    #bid-history-table tr.collapse td { border-top: none; }
+/* 상세 페이지 링크 스타일 */
+.product-link {
+	color: #212529;
+	transition: color 0.2s;
+}
+
+.product-link:hover {
+	color: #0d6efd !important;
+}
+
+/* 아코디언 행 배경색 및 간격 */
+#bid-history-table .collapse.bg-light {
+	background-color: #f8f9fa !important;
+}
+
+#bid-history-table tr.collapse td {
+	border-top: none;
+}
+
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
 </style>
 
 </head>

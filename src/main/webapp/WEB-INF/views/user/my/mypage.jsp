@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,6 +29,10 @@
 			display: flex; align-items: center; justify-content: center;
 			border-radius: 12px; margin-bottom: 15px;
 		}
+		.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
    	</style>
 </head>
 <body class="bg-light">

@@ -10,10 +10,8 @@ import com.doit.dto.ProductGenreDTO;
 import com.doit.dto.ProductGradeDTO;
 import com.doit.dto.ProductManufacturerDTO;
 import com.doit.dto.ProductSizeDTO;
-import com.doit.dto.UserInfoDTO;
 import com.doit.dto.ReportDTO;
 import com.doit.dto.ReportTypeDTO;
-import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -22,7 +20,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
 
 
 @WebServlet("/product/*")
@@ -40,7 +37,6 @@ public class ProductController extends HttpServlet
 	private static final int PAGE_SIZE_MY_LIST = 10; // 내 상품
 
 	private ProductDAO productDAO = new ProductDAO();
-	private Pagination pagination = new Pagination();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -91,14 +87,17 @@ public class ProductController extends HttpServlet
 					deleteFormAction(req, resp);
 			} else if (uri.endsWith("/product/report"))
 			{
-				reportFormAction(req, resp);
+				if ("POST".equalsIgnoreCase(method))
+					reportPostAction(req, resp, ct);
+				else
+					reportFormAction(req, resp);
 			}
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
-
-			resp.getWriter().print("SQL Error: " + e.getMessage());
-			return;
+			
+			resp.getWriter().print("SQL Error: " + e.getMessage()); 
+		    return; // 더 이상 진행 방지
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -382,23 +381,22 @@ public class ProductController extends HttpServlet
 
 	// 헬퍼 메서드
 	// 세션에서 로그인 사용자 userId 가져오기. 없으면 null.
+	/*
+	 * private Integer getLoginUserId(HttpServletRequest req) { HttpSession session
+	 * = req.getSession(false); if (session == null) return null;
+	 * 
+	 * Object obj = session.getAttribute("userId");
+	 * 
+	 * if (obj instanceof Integer) return (Integer) obj;
+	 * 
+	 * return null; }
+	 */
+
 	private Integer getLoginUserId(HttpServletRequest req)
 	{
-	    HttpSession session = req.getSession(false);
-	    if (session == null)
-	        return null;
+		return 1;
+	} // 테스트용 login }
 
-	    UserInfoDTO loginUser = (UserInfoDTO) session.getAttribute("loginUser");
-	    if (loginUser == null)
-	        return null;
-
-	    return loginUser.getUserId();
-	}
-
-	/*
-	 * private Integer getLoginUserId(HttpServletRequest req) { return 1; } // 테스트용
-	 * login }
-	 */
 	// 파라미터 → Integer 변환. 빈 값/숫자 아니면 null
 	private Integer parseInteger(String s)
 	{
@@ -441,7 +439,7 @@ public class ProductController extends HttpServlet
 			dto.setPurchaseDateTime(purchaseYear + "-01-01");
 		} else
 		{
-			dto.setPurchaseDateTime(null); // 미선택 시 null → DB에 NULL 저장
+			dto.setPurchaseDateTime(purchaseYear); // 이미 'YYYY-MM-DD' 로 왔을 수도 있음
 		}
 
 		dto.setIsOpened(parseIntOrZero(req.getParameter("openedCode")));

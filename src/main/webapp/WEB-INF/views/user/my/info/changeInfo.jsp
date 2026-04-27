@@ -99,6 +99,10 @@
 	.errMsg{
 		display: none;
 	}
+    .btn-primary{
+    	background-color: #120e63 !important;
+    	border-color: #120e63 !important;
+    }
 </style>
 </head>
 <body class="bg-light">
