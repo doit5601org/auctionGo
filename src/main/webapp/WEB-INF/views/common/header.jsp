@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,10 +31,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li class="nav-item px-3">
-                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/productList.jsp">컬렉션</a>
+                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/product/list">컬렉션</a>
                 </li>
                 <li class="nav-item px-3">
-                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/auctionList.jsp">경매</a>
+                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/auction/list">경매</a>
                 </li>
             </ul>
 
@@ -58,11 +59,13 @@
                             <li class="nav-item text-end border-end px-3">
                                 <div class="d-flex flex-column" style="line-height: 1.2;">
                                     <span class="text-muted" style="font-size: 0.75rem;">보유머니</span>
-                                    <span class="txtColor fw-bold fs-5">50,000<small class="text-dark fw-normal ms-1" style="font-size: 0.9rem;">원</small></span>
+                                    <span class="txtColor fw-bold fs-5 d-flex align-items-center">
+                                    <fmt:formatNumber value="${loginUser.totalMoney}" type="number" />
+                                    <small class="text-dark fw-normal ms-1" style="font-size: 0.9rem;">원</small></span>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-bold">충전</a>
+                                <a href="${pageContext.request.contextPath }/payment" class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-bold">충전</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle fw-bold ms-2 fs-6" href="#" id="userDropdown" role="button">

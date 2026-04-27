@@ -39,14 +39,16 @@
         border-bottom: 1px solid #eee;
         padding-bottom: 5px;
     }
-    
-
     .text-winning { color: #198754; font-weight: bold; }
     .text-outbid { color: #dc3545; }
-    
 
     .bid-detail-row { display: none; } 
     .bid-detail-row.is-visible { display: table-row; }
+    
+    .btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
 </style>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>

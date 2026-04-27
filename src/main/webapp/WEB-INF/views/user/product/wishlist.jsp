@@ -8,13 +8,13 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-<script type="text/javascript">
-	if(${result}>0){
-		alert("찜해제 되었습니다.");
-	}else{
-		alert("삭제되지 않았습니다.");
-	}
-</script>
+
+<style type="text/css">
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+</style>
 </head>
 <body class="bg-light">
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
@@ -53,7 +53,7 @@
 										<td>
 											<div class="d-flex align-items-center">
 												<img
-											src="${pageContext.request.contextPath}${dto.imagePath1 }"
+											src="${pageContext.request.contextPath}/${dto.imagePath1 }"
 											class="rounded shadow-sm" alt="상품" style="width: 60px; height: 60px; object-fit: cover;">
 												<div class="ms-3">
 													<div class="fw-bold">${dto.productReleaseName }</div>

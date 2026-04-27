@@ -3,8 +3,36 @@ package com.doit.dto;
 public class AuctionHistoryDTO {
 
 	private int auctionId, finalPrice;
-	private String auctionTitle, auctionEndDate, transactionStatus, purchaseConfirmDate, bidFailType;
+	private String auctionTitle, auctionEndDate, transactionStatus, purchaseConfirmDate, bidFailType, shippingYn, winningPaymentStatus;
 	
+	public String getShippingYn() {
+		return shippingYn;
+	}
+
+
+
+
+	public void setShippingYn(String shippingYn) {
+		this.shippingYn = shippingYn;
+	}
+
+
+
+
+	public String getWinningPaymentStatus() {
+		return winningPaymentStatus;
+	}
+
+
+
+
+	public void setWinningPaymentStatus(String winningPaymentStatus) {
+		this.winningPaymentStatus = winningPaymentStatus;
+	}
+
+
+
+
 	public AuctionHistoryDTO() {
 		this(0,0,"","","","","");
 	}

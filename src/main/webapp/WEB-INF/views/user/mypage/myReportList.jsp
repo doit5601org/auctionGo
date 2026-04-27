@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -77,104 +78,25 @@
                     <th>처리일자</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr class="report-row" onclick="location.href='reportDetail.jsp?id=101'">
-                    <td>상품</td>
-                    <td>광고</td>
-                    <td>개쩌는 블루투스 샤워기</td>
-                    <td>26/04/19</td>
-                    <td class="status-approve">승인</td>
-                    <td>26/04/21</td>
+           <tbody>
+    <c:choose>
+        <c:when test="${not empty reportList}">
+            <c:forEach var="report" items="${reportList}">
+                <tr class="report-row" onclick="location.href='${pageContext.request.contextPath}/user/mypage/myreport-detail?reportId=${report.reportId}'">
+                    <td>${report.reportType}</td> <td>${report.category}</td>   <td>${report.targetName}</td> <td>${report.createdAt}</td>  <td class="${report.status == '승인' ? 'status-approve' : 'status-wait'}">
+                        ${report.status}
+                    </td>
+                    <td>${empty report.processAt ? '-' : report.processAt}</td>
                 </tr>
-                <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                   <tr class="report-row" onclick="location.href='reportDetail.jsp?id=102'">
-                    <td>경매</td>
-                    <td>도배</td>
-                    <td>아이패드 프로 6세대</td>
-                    <td>26/04/18</td>
-                    <td class="status-wait">대기</td>
-                    <td>-</td>
-                </tr>
-                </tbody>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            <tr>
+                <td colspan="6" class="text-center p-5">신고 내역이 존재하지 않습니다.</td>
+            </tr>
+        </c:otherwise>
+    </c:choose>
+</tbody>
         </table>
     </div>
 

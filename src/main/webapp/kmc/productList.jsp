@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="ko">
@@ -23,7 +23,7 @@
 
 <%-- <jsp:include page="/common/header.jsp"></jsp:include> --%>
 
-<%-- 상단 헤더 --%>
+<%-- 상단 헤더 --%> 
 <div class="page-header text-center">
     <div class="container">
         <h2 class="header-title">컬렉션</h2>

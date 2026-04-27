@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -20,18 +21,7 @@ function updateCount(el) {
 </script>
 </head>
 <body class="bg-light">
-
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="${ctx}/main">경매나라</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto ms-3">
-                <li class="nav-item"><a class="nav-link" href="${ctx}/product/list">컬렉션</a></li>
-                <li class="nav-item"><a class="nav-link fw-semibold text-primary" href="${ctx}/auction/list">경매</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 <%-- 에러 메시지 (중복 신고 등) --%>
 <c:if test="${not empty errorMsg}">
@@ -84,6 +74,6 @@ function updateCount(el) {
         </form>
     </div>
 </div>
-
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

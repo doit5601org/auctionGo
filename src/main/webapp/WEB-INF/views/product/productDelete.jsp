@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -19,8 +20,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg sticky-top">
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%-- <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <a class="navbar-brand" href="${ctx}/main">경매나라</a>
         <div class="d-flex gap-3 ms-4">
@@ -29,7 +30,7 @@
             <a href="${ctx}/product/myList" class="nav-link active">내 상품</a>
         </div>
     </div>
-</nav>
+</nav> --%>
 
 <div class="container">
     <div class="card delete-card text-center">
@@ -55,5 +56,6 @@
         </form>
     </div>
 </div>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

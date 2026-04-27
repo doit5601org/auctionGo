@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/auction/detail") 
+//@WebServlet("/auction/detail") 
 public class AuctionDetailController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

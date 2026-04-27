@@ -12,9 +12,9 @@ public class AdminProductService
 	private final AdminProductDAO apDao;
 	
 //-- 생성자 --//
-	public AdminProductService(AdminProductDAO dao)
+	public AdminProductService()
 	{
-		this.apDao = dao;
+		this.apDao = new AdminProductDAO();
 	}
 	
 //-- 메서드 --//
@@ -31,11 +31,21 @@ public class AdminProductService
 	
 	
 	// 상품 리스트 가져오기
-	public List<ProductDTO> getProductList(String productStatus)
+	public List<ProductDTO> getProductList(String productStatus, int page, int sizePerPage)
 	{
 		List<ProductDTO> result = new ArrayList<>();
 		
-		result = apDao.selectProductList(productStatus);
+		result = apDao.selectProductList(productStatus, page, sizePerPage);
+		
+		return result;
+	}
+	
+	// 상품 공개 여부를 비공개로 변경
+	public int changProductHide(int productId)
+	{
+		int result = 0;
+		
+		result = apDao.updateProductHide(productId);
 		
 		return result;
 	}

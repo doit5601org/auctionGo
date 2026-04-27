@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>쌍용피규어마켓 - 컬렉션</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
@@ -20,7 +19,7 @@
     </style>
 </head>
 <body class="bg-light">
-
+ <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%-- <jsp:include page="/common/header.jsp"></jsp:include> --%>
 
 <%-- 상단 헤더 --%>
@@ -83,6 +82,11 @@
                        class="btn btn-outline-secondary ${param.sort eq 'grade' ? 'active' : ''}">등급순</a>
                 </div>
             </div>
+             <div class="col-auto">
+                <a href="${ctx}/product/register" class="btn btn-primary btn-sm px-3">
+                    <i class="bi bi-plus-lg"></i> 내 상품 등록하기
+                </a>
+            </div>
         </form>
     </div>
 </div>
@@ -98,7 +102,7 @@
                 <div class="card product-card h-100" onclick="location.href='${ctx}/product/detail?productId=${p.productId}'">
                     <c:choose>
                         <c:when test="${not empty p.imagePath1}">
-                            <img src="${ctx}/images/${p.imagePath1}" class="card-img-top" alt="${p.productReleaseName}">
+                            <img src="${ctx}/${p.imagePath1}" class="card-img-top" alt="${p.productReleaseName}">
                         </c:when>
                         <c:otherwise>
                             <img src="https://placehold.co/300x180/e9ecef/6c757d?text=No+Image" class="card-img-top" alt="">
@@ -136,7 +140,7 @@
 
 </div>
 
-<%-- <jsp:include page="/common/footer.jsp"></jsp:include> --%>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 
 </body>
 </html>

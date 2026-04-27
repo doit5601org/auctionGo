@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="ko">
@@ -32,7 +32,7 @@
 </head>
 <body>
 
-<%-- <jsp:include page="/common/header.jsp"></jsp:include> --%>
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 <div class="page-header text-center">
     <div class="container">
@@ -65,7 +65,7 @@
                      onclick="location.href='${ctx}/auction/detail?auctionId=${a.auctionId}'">
                     <c:choose>
                         <c:when test="${not empty a.imagePath1}">
-                            <img src="${ctx}/images/${a.imagePath1}" alt="${a.auctionTitle}">
+                            <img src="${ctx}/${a.imagePath1}" alt="${a.auctionTitle}">
                         </c:when>
                         <c:otherwise>
                             <img src="https://placehold.co/300x300/e3f2fd/1565c0?text=No+Image" alt="">
@@ -74,7 +74,8 @@
                     <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <%-- 마감 시간 표시 --%>
-                            <span class="timer-badge">
+                            <span class="timer-badge" id="timer-${a.auctionId}"
+                                  data-enddate="${a.auctionEndDate}">
                                 <i class="bi bi-clock me-1"></i>${a.auctionEndDate}
                             </span>
                             <span class="badge-grade">${a.productGradeName}</span>
@@ -114,6 +115,32 @@
     </c:if>
 </div>
 
-<%-- <jsp:include page="/common/footer.jsp"></jsp:include> --%>
+<script>
+function startTimers() {
+    document.querySelectorAll('[id^="timer-"]').forEach(function(el) {
+        var endDateStr = el.getAttribute('data-enddate');
+        if (!endDateStr || endDateStr === '-') return;
+        var parts = endDateStr.replace('T', ' ').split(/[\s:-]/);
+        var endDate = new Date(parts[0], parts[1]-1, parts[2], parts[3]||0, parts[4]||0, parts[5]||0);
+        function update() {
+            var now = new Date();
+            var diff = Math.floor((endDate - now) / 1000);
+            if (diff <= 0) {
+                el.innerHTML = '<i class="bi bi-clock me-1"></i>마감';
+                return;
+            }
+            var h = String(Math.floor(diff / 3600)).padStart(2, '0');
+            var m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+            var s = String(diff % 60).padStart(2, '0');
+            el.innerHTML = '<i class="bi bi-clock me-1"></i>' + h + ':' + m + ':' + s;
+        }
+        update();
+        setInterval(update, 1000);
+    });
+}
+startTimers();
+</script>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
+

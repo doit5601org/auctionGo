@@ -3,7 +3,7 @@ package com.doit.controller;
 import java.io.IOException;
 
 import com.doit.dao.AdminDAO;
-import com.doit.jydto.AdminDTO;
+import com.doit.dto.AdminDTO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,7 +23,7 @@ public class AdminLoginController extends HttpServlet {
     	String id = request.getParameter("adminId");
         String pw = request.getParameter("adminPwd");
 
-        // 2. DAO 호출해서 인증하기
+        // DAO 호출해서 인증하기
         AdminDAO dao = new AdminDAO();
         AdminDTO adminInfo = dao.getAdmin(id, pw);
 

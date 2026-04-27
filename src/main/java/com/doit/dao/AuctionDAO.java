@@ -113,7 +113,7 @@ public class AuctionDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT AUCTION_ID, AUCTION_TITLE, AUCTION_CONTENT, START_PRICE,"
+		String sql = "SELECT AUCTION_ID, USER_ID, AUCTION_TITLE, AUCTION_CONTENT, START_PRICE,"
 				+ "       AUCTION_PERIOD_ID, AUCTION_PERIOD_NAME,"
 				+ "       AUCTION_START_DATE, AUCTION_END_DATE, IS_FINISHED,"
 				+ "       PRODUCT_ID, PRODUCT_RELEASE_NAME, PRODUCT_ALIAS,"
@@ -341,4 +341,122 @@ public class AuctionDAO {
 		}
 	}
 
+			// 경매 등록 메소드
+			public int insertAuction(long userNo, String productId, String title, int startPrice, int period, String info) {
+	        int result = 0;
+	        Connection conn = null;
+	        CallableStatement cstmt = null;
+
+	        // DB에 작성하신 프로시저: PRC_AUCTION_CREATE(유저고유키, 상품코드, 제목, 내용, 시작가, 기간)
+	        String sql = "{call PRC_AUCTION_CREATE(?, ?, ?, ?, ?, ?)}";
+
+	        try {
+	            conn = DBCPConn.getConnection();
+	            cstmt = conn.prepareCall(sql);
+
+	            cstmt.setLong(1, userNo);                     // P_USER_ID
+	            cstmt.setLong(2, Long.parseLong(productId));  // P_PRODUCT_ID
+	            cstmt.setString(3, title);                    // P_AUCTION_TITLE
+	            cstmt.setString(4, info);                     // P_CONTENT (소개글)
+	            cstmt.setInt(5, startPrice);                  // P_START_PRICE
+	            cstmt.setInt(6, period);                      // P_PERIOD_CODE
+
+	            cstmt.executeUpdate();
+	            result = 1; // 성공 시 1 반환
+
+	        } catch (SQLException e) {
+	            // 보증금 부족(-20004) 등의 에러가 발생하면 콘솔에 출력
+	            System.err.println("경매 등록 프로시저 실행 오류: " + e.getMessage());
+	            e.printStackTrace();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                if (cstmt != null) cstmt.close();
+	                if (conn != null) conn.close();
+	            } catch (Exception e2) {
+	                e2.printStackTrace();
+	            }
+	        }
+	        return result;
+	    }
+			
+			
+			// 경매 취소 메소드
+			public int cancelAuction(int auctionId, int userNo, String reason) {
+				
+			    int result = 0;
+			    
+			    Connection conn = null;
+			    CallableStatement cstmt = null;
+
+			    String sql = "{call PRC_AUCTION_CANCEL(?, ?, ?)}";
+
+			    try {
+			        conn = DBCPConn.getConnection();
+			        cstmt = conn.prepareCall(sql);
+
+			        cstmt.setInt(1, auctionId);
+			        cstmt.setInt(2, userNo);
+			        cstmt.setString(3, reason);
+
+			        cstmt.executeUpdate();
+			        result = 1; 
+
+			    } catch (SQLException e) {
+			        System.err.println("경매 취소 프로시저 오류: " + e.getMessage());
+			        e.printStackTrace();
+			    } finally {
+			        try {
+			            if (cstmt != null) cstmt.close();
+			            if (conn != null) conn.close();
+			        } catch (Exception e2) {}
+			    }
+			    return result;
+			}
+
+			
+			// 입찰 메소드
+			public String insertBid(long auctionId, long userNo, int bidPrice) {
+			    String result = "";
+			    Connection conn = null;
+			    CallableStatement cstmt = null;
+
+			    String sql = "{call PRC_AUCTION_BID_CREATE(?, ?, ?, ?)}";
+
+			    try {
+			        conn = DBCPConn.getConnection();
+			        cstmt = conn.prepareCall(sql);
+
+			        cstmt.setLong(1, auctionId);
+			        cstmt.setLong(2, userNo);
+			        cstmt.setInt(3, bidPrice);
+
+			        // 2. OUT 파라미터 등록 (Oracle의 VARCHAR2는 Types.VARCHAR 매칭)
+			        cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
+
+			        cstmt.executeUpdate();
+
+			        result = cstmt.getString(4);
+
+			    } catch (Exception e) {
+			        System.err.println("입찰 프로시저 실행 중 예외 발생: " + e.getMessage());
+			        e.printStackTrace();
+			        result = "시스템 오류가 발생했습니다.";
+			    } finally {
+			        try {
+			            if (cstmt != null) cstmt.close();
+			            if (conn != null) conn.close();
+			        } catch (Exception e2) {}
+			    }
+
+			    return result;
+			}
+
+
 }
+
+	
+	
+
+

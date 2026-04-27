@@ -14,28 +14,22 @@
 $(function() {
 	
     $('#auction-status-table').on('click', '.detail-btn', function(e) {
-        e.preventDefault();
-        
-
-        // 2. 타겟 설정: 클릭한 버튼의 조상 tr 바로 다음에 오는 .collapse 행
-        const $targetRow = $(this).closest('tr').next('.collapse');
-        
-        // 3. 다른 상세창들만 찾기 (사이드바 메뉴는 절대 건드리지 않음)
-        // #auction-status-table 내부의 .collapse 중 현재 타겟이 아닌 것들만!
-        const $otherRows = $('#auction-status-table').find('.collapse').not($targetRow);
-
-        // 4. 다른 상세 행은 즉시 닫기
-        $otherRows.stop(true, true).hide().removeClass('show');
-
-        // 5. 내 타겟 행만 토글
-        $targetRow.stop(true, true).slideToggle(200, function() {
-            if ($(this).is(':visible')) {
-                $(this).addClass('show');
-            } else {
-                $(this).removeClass('show');
-            }
-        });
-        
+	        e.preventDefault();
+	
+	        let $targetRow = $(this).closest('tr').next('.collapse');
+	        
+	        let $otherRows = $('#auction-status-table').find('.collapse').not($targetRow);
+	
+	        $otherRows.stop(true, true).hide().removeClass('show');
+	
+	        $targetRow.stop(true, true).slideToggle(200, function() {
+	            if ($(this).is(':visible')) {
+	                $(this).addClass('show');
+	            } else {
+	                $(this).removeClass('show');
+	            }
+	        });
+	        
         	
         });
         
@@ -78,8 +72,56 @@ $(function() {
    	updateCountdown();
    	
 });
-</script>
 
+$(function() {
+    // 취소 버튼 클릭 시 모달의 hidden input에 auctionId 세팅
+    $('.cancel-modal-btn').on('click', function() {
+        const auctionId = $(this).data('id');
+        $('#modalAuctionId').val(auctionId);
+    });
+});
+</script>
+<style type="text/css">
+    .btn-primary{
+    	background-color: #120e63 !important;
+    	border-color: #120e63 !important;
+    }
+    .bg-primary{
+    background-color: #120e63 !important;
+    }
+   	i.text-primary{
+   		color: #120e63 !important;
+   	}
+    .btn-primary, .bg-primary, .btn-outline-primary:hover  {
+        background-color: #120e63 !important;
+        border-color: #120e63 !important;
+        color: #ffffff !important;
+    }
+        .btn-outline-primary{
+    	background-color: #fff !important;
+    	border-color: #120e63 !important;
+    	color: #120e63 !important;
+    }
+
+    .badge.bg-primary {
+        background-color: #5172a6 !important;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #5172a6 !important;
+        border-color: #5172a6 !important;
+        color: #ffffff !important;
+    }
+
+    .pagination .page-link:hover {
+        color: #5172a6;
+    }
+    
+    .page-link:focus {
+        box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
+    }
+    
+</style>
 </head>
 <body class="bg-light">
  <%@ include file="/WEB-INF/views/common/header.jsp" %>
@@ -102,10 +144,10 @@ $(function() {
 								<thead class="table-light">
 									<tr class="text-center">
 										<th style="width: 5%">번호</th>
-										<th style="width: 35%">경매 상품 정보</th>
-										<th style="width: 15%">남은 시간</th>
+										<th style="width: 45%">경매 상품 정보</th>
+										<th style="width: 10%">남은 시간</th>
 										<th style="width: 10%">참여 인원</th>
-										<th style="width: 15%">입찰 현황</th>
+										<th style="width: 10%">입찰 현황</th>
 										<th style="width: 10%">취소</th>
 									</tr>
 								</thead>
@@ -135,13 +177,16 @@ $(function() {
 											class="badge rounded-pill bg-primary px-3">${dto.bidCount } 명</span></td>
 										<td class="text-center">
 											<div class="small px-3">
-												<button type="button" class="btn btn-sm btn-dark detail-btn" data-id="${dto.auctionId }">상세</button>
+												<button type="button" class="btn btn-sm btn-outline-dark detail-btn" data-id="${dto.auctionId }">상세</button>
 												
 											</div>
 										</td>
-										<td>
-											<a type="button" class="btn btn-sm btn-outline-dark detail-btn" href="#">경매취소</a>
-										</td>
+									<td>
+									    <button type="button" class="btn btn-sm btn-outline-dark cancel-modal-btn" 
+									            data-id="${dto.auctionId}" 
+									            data-bs-toggle="modal" 
+									            data-bs-target="#cancelReasonModal">경매취소</button>
+									</td>
 									</tr>
 									<tr class="collapse bg-light">
 							            <td colspan="6" class="p-3 text-center">
@@ -174,7 +219,30 @@ $(function() {
 			</section>
 		</div>
 	</div>
-
+	<div class="modal fade" id="cancelReasonModal" tabindex="-1" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered">
+	        <div class="modal-content border-0 shadow">
+	            <div class="modal-header bg-dark text-white">
+	                <h5 class="modal-title fw-bold">경매 취소 사유 입력</h5>
+	                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+	            </div>
+	            <form action="${pageContext.request.contextPath}/user/mypage/auctionCancel" method="post">
+	                <input type="hidden" name="auctionId" id="modalAuctionId" value="">
+	                <div class="modal-body p-4">
+	                    <div class="alert alert-warning small mb-3">
+	                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+	                        경매 취소 시 패널티가 부여되며, 판매자 보증금은 반환되지 않습니다.
+	                    </div>
+	                    <textarea name="cancelReason" class="form-control" rows="4" placeholder="취소 사유를 구체적으로 입력해주세요" required></textarea>
+	                </div>
+	                <div class="modal-footer bg-light">
+	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                    <button type="submit" class="btn btn-danger px-4">최종 취소하기</button>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
+	</div>
 	<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

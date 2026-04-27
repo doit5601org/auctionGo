@@ -52,6 +52,16 @@ public class MyPageController extends HttpServlet{
 		
 		// 마이페이지 이동
 		if(uri.endsWith("/user/my")) {
+			
+			
+			int auctionCnt = dao.auctionDataCount(userId);
+			int bidCnt = dao.bidDataCount(userId);
+			int wishCnt = dao.wishlistDataCount(userId);
+			
+			request.setAttribute("auctionCnt", auctionCnt);
+			request.setAttribute("bidCnt", bidCnt);
+			request.setAttribute("wishCnt", wishCnt);
+			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/my/mypage.jsp");
 			dispatcher.forward(request, response);
 			
@@ -252,15 +262,29 @@ public class MyPageController extends HttpServlet{
 		
 		}else if(uri.endsWith("/user/product/wishlist/delete")) {
 			int wishId = Integer.parseInt(request.getParameter("wishId"));
+			dao.deleteWishlist(wishId);
+			response.sendRedirect(cp + "/user/product/wishlist");
+
+		}else if(uri.endsWith("/user/product/wishlist/add")) {
+		    int productId = Integer.parseInt(request.getParameter("productId"));
+
+		    int already = dao.checkWishlist(userId, productId);
+
+		    if (already > 0) {
+		        dao.deleteWishlistByProduct(userId, productId);
+		        response.sendRedirect(cp + "/product/detail?productId=" + productId + "&wish=cancel");
+		    } else {
+		        dao.insertWishlist(userId, productId);
+		        response.sendRedirect(cp + "/product/detail?productId=" + productId + "&wish=ok");
+		    }
+		}else if(uri.endsWith("/user/auctions/shipping")) {
 			
-			int result = dao.deleteWishlist(wishId);
 			
-			request.setAttribute("result", result);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/product/wishlist.jsp");
-			dispatcher.forward(request, response);
 			
+			response.sendRedirect(cp+"/user/auctions/closed");
 		}
-			
+		
+		
 		
 	}
 }

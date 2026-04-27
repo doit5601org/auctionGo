@@ -2,7 +2,8 @@ package com.doit.dto;
 
 public class MyWishlistDTO {
 
-	private int wishlistId, productId, auctionId;
+	private int wishlistId, productId;
+	private Integer auctionId;
 	private String productReleaseName, imagePath1, auctionEndDate, isFinished;
 	public int getWishlistId() {
 		return wishlistId;
@@ -16,10 +17,10 @@ public class MyWishlistDTO {
 	public void setProductId(int productId) {
 		this.productId = productId;
 	}
-	public int getAuctionId() {
+	public Integer getAuctionId() {
 		return auctionId;
 	}
-	public void setAuctionId(int auctionId) {
+	public void setAuctionId(Integer auctionId) {
 		this.auctionId = auctionId;
 	}
 	public String getProductReleaseName() {

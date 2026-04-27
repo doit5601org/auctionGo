@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -140,20 +140,50 @@
 
                 <hr>
 
+                <%-- 찜 버튼 (로그인 시 표시) --%>
+                <c:if test="${not empty loginUserId}">
+                    <c:choose>
+                        <c:when test="${isWishlisted > 0}">
+                            <a href="${ctx}/user/product/wishlist/add?productId=${product.productId}"
+                               class="btn w-100 mb-2 fw-bold"
+                               style="background-color:#fff;color:#dc3545;border:1px solid #dc3545;border-radius:8px;">
+                                ♥ 관심상품 해제
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${ctx}/user/product/wishlist/add?productId=${product.productId}"
+                               class="btn w-100 mb-2 fw-bold"
+                               style="background-color:#dc3545;color:#fff;border:none;border-radius:8px;">
+                                ♡ 관심상품 등록
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+
+                <%-- 찜 완료/해제 안내 --%>
+                <c:if test="${param.wish eq 'ok'}">
+                    <div class="alert alert-success py-2 small mb-2">관심상품에 등록되었습니다!</div>
+                </c:if>
+                <c:if test="${param.wish eq 'cancel'}">
+                    <div class="alert alert-secondary py-2 small mb-2">관심상품에서 해제되었습니다.</div>
+                </c:if>
+
                 <%-- 본인 상품이면 수정/삭제, 아니면 신고 버튼 --%>
                 <c:choose>
-                    <c:when test="${not empty sessionScope.userId and product.userId eq sessionScope.userId}">
+                    <c:when test="${not empty loginUserId and product.userId eq loginUserId}">
                         <div class="d-flex gap-2">
-                            <a href="${ctx}/product/update?productId=${product.productId}" class="btn btn-outline-primary w-50">수정</a>
-                            <a href="${ctx}/product/delete?productId=${product.productId}" class="btn btn-outline-danger w-50">삭제</a>
+                            <a href="${ctx}/product/update?productId=${product.productId}"
+                               class="btn w-50 py-2 fw-bold"
+                               style="background-color:#f1f1f1;color:#333;border:1px solid #ddd;border-radius:8px;">수정</a>
+                            <a href="${ctx}/product/delete?productId=${product.productId}"
+                               class="btn w-50 py-2 fw-bold"
+                               style="background-color:#212529;color:#fff;border:none;border-radius:8px;">삭제</a>
                         </div>
                     </c:when>
                     <c:otherwise>
                         <div class="text-end">
                             <a href="${ctx}/product/report?productId=${product.productId}"
-                               class="btn btn-link btn-sm text-muted p-0 small text-decoration-none">
-                                <i class="bi bi-flag"></i> 신고하기
-                            </a>
+                               class="btn btn-link btn-sm text-muted">신고하기</a>
                         </div>
                     </c:otherwise>
                 </c:choose>
