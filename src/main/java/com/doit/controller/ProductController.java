@@ -449,13 +449,17 @@ public class ProductController extends HttpServlet
 		dto.setDescriptions(req.getParameter("description"));
 		dto.setIsPublic(parseIntOrZero(req.getParameter("publicCode")));
 
-		// 실제 파일 업로드 처리는 @MultipartConfig + Part API 로 별도 구현.
-		// 현재는 hidden input 또는 수동 파일명 입력 기준.
-		/*
-		 * dto.setImagePath1(getFileName(req.getPart("productImage1")));
-		 * dto.setImagePath2(getFileName(req.getPart("productImage2")));
-		 * dto.setImagePath3(getFileName(req.getPart("productImage3")));
-		 */
+		String img1 = saveUploadedFile(req, "productImage1");
+		if (img1 == null) img1 = req.getParameter("existingImage1");
+		dto.setImagePath1(img1);
+
+		String img2 = saveUploadedFile(req, "productImage2");
+		if (img2 == null) img2 = req.getParameter("existingImage2");
+		dto.setImagePath2(img2);
+
+		String img3 = saveUploadedFile(req, "productImage3");
+		if (img3 == null) img3 = req.getParameter("existingImage3");
+		dto.setImagePath3(img3);
 		return dto;
 	}
 
