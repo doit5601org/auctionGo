@@ -59,7 +59,7 @@
 								<i class="bi bi-hammer fs-4"></i>
 							</div>
 							<small class="text-muted fw-semibold">진행중인 경매</small>
-							<h4 class="mt-1 fw-bold">5<span class="fs-6 fw-normal ms-1">건</span></h4>
+							<h4 class="mt-1 fw-bold">${auctionCnt }<span class="fs-6 fw-normal ms-1">건</span></h4>
 						</div>
 					</div>
 					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/bids/active'">
@@ -68,7 +68,7 @@
 								<i class="bi bi-clock-history fs-4"></i>
 							</div>
 							<small class="text-muted fw-semibold">진행중인 입찰</small>
-							<h4 class="mt-1 fw-bold">3<span class="fs-6 fw-normal ms-1">건</span></h4>
+							<h4 class="mt-1 fw-bold">${bidCnt }<span class="fs-6 fw-normal ms-1">건</span></h4>
 						</div>
 					</div>
 					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/product/wishlist'">
@@ -77,7 +77,7 @@
 								<i class="bi bi-heart-fill fs-4"></i>
 							</div>
 							<small class="text-muted fw-semibold">내 관심 상품</small>
-							<h4 class="mt-1 fw-bold">12<span class="fs-6 fw-normal ms-1">건</span></h4>
+							<h4 class="mt-1 fw-bold">${wishCnt }<span class="fs-6 fw-normal ms-1">건</span></h4>
 						</div>
 					</div>
 				</div>
