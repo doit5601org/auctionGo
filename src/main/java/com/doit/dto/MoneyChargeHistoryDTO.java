@@ -11,7 +11,7 @@ public class MoneyChargeHistoryDTO
 	private Date chargedAt;                // 충전 일자
 
 	public MoneyChargeHistoryDTO() {}
-
+	
 	public int getMoneyChargeId()
 	{
 		return moneyChargeId;
