@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 
 
 @WebServlet("/product/*")
@@ -489,13 +490,13 @@ public class ProductController extends HttpServlet
 
 			String savedName = java.util.UUID.randomUUID().toString() + ext;
 
-			String uploadDir = req.getServletContext().getRealPath("/upload/product");
+			String uploadDir = req.getServletContext().getRealPath("/images");
 			java.io.File dir = new java.io.File(uploadDir);
 			if (!dir.exists())
 				dir.mkdirs();
 
 			part.write(uploadDir + java.io.File.separator + savedName);
-			return "upload/product/" + savedName;
+			return "images/" + savedName;
 
 		} catch (Exception e)
 		{
