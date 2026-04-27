@@ -1,5 +1,7 @@
 package com.doit.dto;
 
+import java.util.List;
+
 public class AuctionDTO
 {
 	// AUCTION_REGISTRATION 테이블 컬럼
@@ -31,6 +33,17 @@ public class AuctionDTO
 	private int bidCount; // 입찰 건수
 
 	
+	// 추가
+	private List<BidRankDTO> bidRankList;
+	
+	public List<BidRankDTO> getBidRankList() {
+		return bidRankList;
+	}
+
+	public void setBidRankList(List<BidRankDTO> bidRankList) {
+		this.bidRankList = bidRankList;
+	}
+
 	public int getAuctionId()
 	{
 		return auctionId;

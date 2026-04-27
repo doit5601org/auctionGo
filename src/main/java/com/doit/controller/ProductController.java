@@ -37,6 +37,7 @@ public class ProductController extends HttpServlet
 	private static final int PAGE_SIZE_MY_LIST = 10; // 내 상품
 
 	private ProductDAO productDAO = new ProductDAO();
+	private Pagination pagination = new Pagination();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -287,8 +288,7 @@ public class ProductController extends HttpServlet
 		ProductDTO product = productDAO.selectProductDetail(productId);
 
 		Integer userId = getLoginUserId(req);
-		if (userId == null || product == null || product.getUserId() != userId)
-		{
+		if (userId == null || product == null || product.getUserId() != userId) {
 			resp.sendError(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}

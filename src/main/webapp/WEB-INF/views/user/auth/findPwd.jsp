@@ -37,6 +37,16 @@
 			}
 		});	
 	});
+	
+	const findPw = "${findPw}";
+	const errMessage = "${errMsg}";
+	
+	if(errMessage && errMessage.length>0){
+		alert(errMessage);
+	}else if(findPw && findPw.length>0){
+		alert("회원님의 비밀번호는 "+findPw+"입니다.");
+	}
+	
 </script>
 <style type="text/css">
 .errMsg{display: none;}

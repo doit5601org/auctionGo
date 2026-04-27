@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,11 +35,21 @@
 						
 					}else{
 						$("#changePwd2+.errMsg1").css("display","none");
-						$("#changePwdForm").submit();
+						if(changePwd!=changePwd2){
+							alert("변경할 비밀번호가 일치하지 않습니다.");
+							$("#changePwd").focus();
+						}else{
+							$("#changePwdForm").submit();
+						}
 					}
 				}
-			}			
+			}	
+			
 		});
+		
+		<c:if test="${not empty result}">
+        	alert("${result}");
+	    </c:if>
 	});
 </script>
 <style type="text/css">
@@ -62,22 +73,22 @@
 					</div>
 			<div class="d-flex justify-content-center">
 			<div class="col-md-7 card p-4 pb-5 border-0 mt-5">
-			<form action="" method="get" id="changePwdForm">
+			<form action="${pageContext.request.contextPath }/user/my/info/change-pw-action" method="post" id="changePwdForm">
 				<div class="mb-2">
 					<label for="userPwd" class="form-label ms-1">현재 비밀번호<span class="text-danger">*</span></label> 
-					<input type="password" class="form-control w-75" id="userPwd">
+					<input type="password" class="form-control w-75" id="userPwd" name="userPwd">
 					<span class="text-danger ms-1 errMsg errMsg1">비밀번호를 입력해주세요.</span>
 					<span class="text-danger ms-1 errMsg errMsg2">비밀번호를 확인해주세요.</span>
 				</div>
 				<div class="mb-2">
 					<label for="userPwd" class="form-label ms-1">변경할 비밀번호<span class="text-danger">*</span></label> 
-					<input type="password" class="form-control w-75" id="changePwd">
+					<input type="password" class="form-control w-75" id="changePwd" name="changePwd">
 					<span class="text-danger ms-1 errMsg errMsg1">비밀번호를 입력해주세요.</span>
 					<span class="text-danger ms-1 errMsg errMsg2">8~16글자 사이로 입력해주세요.</span>
 				</div>
 				<div class="mb-2">
 					<label for="userPwd" class="form-label ms-1">변경할 비밀번호 확인<span class="text-danger">*</span></label> 
-					<input type="password" class="form-control w-75" id="changePwd2">
+					<input type="password" class="form-control w-75" id="changePwd2" name="changePwd2">
 					<span class="text-danger ms-1 errMsg errMsg1">비밀번호를 입력해주세요.</span>
 					<span class="text-danger ms-1 errMsg errMsg2">비밀번호가 일치하지 않습니다.</span>
 				</div>

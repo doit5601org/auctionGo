@@ -56,6 +56,8 @@ GRANT CREATE JOB TO mytest
 
 commit;
 
+select * from VW_PENALTY_LIST;
+
 
 -- 유저 DELETE 프로시저
 -- EXEC PRC_USER_DELETE(2);
