@@ -31,11 +31,11 @@ public class AdminProductService
 	
 	
 	// 상품 리스트 가져오기
-	public List<ProductDTO> getProductList(String productStatus)
+	public List<ProductDTO> getProductList(String productStatus, int nowPage, int sizePerPage)
 	{
 		List<ProductDTO> result = new ArrayList<>();
 		
-		result = apDao.selectProductList(productStatus);
+		result = apDao.selectProductList(productStatus, nowPage, sizePerPage);
 		
 		return result;
 	}

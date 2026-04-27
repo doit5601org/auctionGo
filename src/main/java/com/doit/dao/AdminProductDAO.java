@@ -5,9 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.doit.dto.ProductDTO;
 import com.doit.util.DBCPConn;
+import com.doit.util.Pagination;
 
 public class AdminProductDAO
 {
@@ -57,10 +59,13 @@ public class AdminProductDAO
 	
 	
 	// 상품 리스트 가져오기
-	public List<ProductDTO> selectProductList(String productStatus)
+	public List<ProductDTO> selectProductList(String productStatus, int nowPage, int sizePerPage)
 	{
 		List<ProductDTO> result = new ArrayList<>();
 		
+		// 현재 페이지의 데이터 시작 번호, 끝 번호 구하기
+		int dataStartNum = (nowPage - 1) * sizePerPage + 1;
+		int dataEndNum = nowPage * sizePerPage;
 		
 		// 쿼리문 준비
 		String sql = "SELECT VPL.*, UA.USER_LOGIN_ID FROM VW_PRODUCT_LIST VPL JOIN USER_ACCOUNT UA ON VPL.USER_ID = UA.USER_ID";
