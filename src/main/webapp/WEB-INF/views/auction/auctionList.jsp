@@ -74,7 +74,8 @@
                     <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <%-- 마감 시간 표시 --%>
-                            <span class="timer-badge">
+                            <span class="timer-badge" id="timer-${a.auctionId}"
+                                  data-enddate="${a.auctionEndDate}">
                                 <i class="bi bi-clock me-1"></i>${a.auctionEndDate}
                             </span>
                             <span class="badge-grade">${a.productGradeName}</span>
@@ -114,6 +115,32 @@
     </c:if>
 </div>
 
+<script>
+function startTimers() {
+    document.querySelectorAll('[id^="timer-"]').forEach(function(el) {
+        var endDateStr = el.getAttribute('data-enddate');
+        if (!endDateStr || endDateStr === '-') return;
+        var parts = endDateStr.replace('T', ' ').split(/[\s:-]/);
+        var endDate = new Date(parts[0], parts[1]-1, parts[2], parts[3]||0, parts[4]||0, parts[5]||0);
+        function update() {
+            var now = new Date();
+            var diff = Math.floor((endDate - now) / 1000);
+            if (diff <= 0) {
+                el.innerHTML = '<i class="bi bi-clock me-1"></i>마감';
+                return;
+            }
+            var h = String(Math.floor(diff / 3600)).padStart(2, '0');
+            var m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+            var s = String(diff % 60).padStart(2, '0');
+            el.innerHTML = '<i class="bi bi-clock me-1"></i>' + h + ':' + m + ':' + s;
+        }
+        update();
+        setInterval(update, 1000);
+    });
+}
+startTimers();
+</script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
+

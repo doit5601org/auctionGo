@@ -113,7 +113,7 @@ public class AuctionDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT AUCTION_ID, AUCTION_TITLE, AUCTION_CONTENT, START_PRICE,"
+		String sql = "SELECT AUCTION_ID, USER_ID, AUCTION_TITLE, AUCTION_CONTENT, START_PRICE,"
 				+ "       AUCTION_PERIOD_ID, AUCTION_PERIOD_NAME,"
 				+ "       AUCTION_START_DATE, AUCTION_END_DATE, IS_FINISHED,"
 				+ "       PRODUCT_ID, PRODUCT_RELEASE_NAME, PRODUCT_ALIAS,"
@@ -422,4 +422,5 @@ public class AuctionDAO {
 
 	
 	
+
 
