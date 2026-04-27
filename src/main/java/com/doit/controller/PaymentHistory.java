@@ -7,6 +7,7 @@ import com.doit.dao.ProductBuyDAO;
 import com.doit.dto.AuctionResultViewDTO;
 import com.doit.dto.CountViewDTO;
 import com.doit.dto.MoneyTransactionListDTO;
+import com.doit.dto.UserInfoDTO;
 import com.doit.service.PageControl;
 
 import jakarta.servlet.RequestDispatcher;
@@ -34,19 +35,18 @@ public class PaymentHistory extends HttpServlet{
 
 	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		String cp = request.getContextPath();
+		
 		HttpSession session = request.getSession();
+		UserInfoDTO user = (UserInfoDTO) session.getAttribute("loginUser");
+
 		
-		Object user = session.getAttribute("loginUser");
+		if (user == null) { 
+            response.sendRedirect(cp + "/user/auth/login");
+            return;
+        }
 		
-		int userId = 0;
-		
-		if(user != null)
-		{
-			userId = (int)user;
-		}else
-		{
-			userId = 1;
-		}
+		int userId = user.getUserId();
 		
 		String pageParam = request.getParameter("page");
 	    int page = 1; 

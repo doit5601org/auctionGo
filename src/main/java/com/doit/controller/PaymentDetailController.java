@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.doit.dao.ProductBuyDAO;
 import com.doit.dto.PaymentDetailDTO;
+import com.doit.dto.UserInfoDTO;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/payment.detail")
 public class PaymentDetailController extends HttpServlet
@@ -32,22 +34,22 @@ public class PaymentDetailController extends HttpServlet
 	
 	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		String userStr = request.getParameter("loginUser");
 		String resultStr = request.getParameter("resultId");
-		 
-		int userId = 1;
+		String cp = request.getContextPath();
+		
+		HttpSession session = request.getSession();
+		UserInfoDTO user = (UserInfoDTO) session.getAttribute("loginUser");
+
+		
+		if (user == null) { 
+            response.sendRedirect(cp + "/user/auth/login");
+            return;
+        }
+		
+		int userId = user.getUserId();
 		
 		int resultId = 1;
 		
-
-		if (userStr != null && !userStr.trim().isEmpty()) {
-		    try {
-		    	userId = Integer.parseInt(request.getParameter("loginUser"));
-		    } catch (NumberFormatException e) {
-		       
-		    	userId = 1;
-		    }
-		}
 		
 		if (resultStr != null && !resultStr.trim().isEmpty()) {
 		    try {

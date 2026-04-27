@@ -6,6 +6,7 @@ import com.doit.dao.ProductBuyDAO;
 import com.doit.dto.BidActionDTO;
 import com.doit.dto.MoneyChargeHistoryDTO;
 import com.doit.dto.PaymentDetailDTO;
+import com.doit.dto.UserInfoDTO;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -53,25 +54,24 @@ public class PaymentController extends HttpServlet
 			takefail(request, response);
 		}
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/moneyChargeHome.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/money/moneyChargeHome.jsp");
 		dispatcher.forward(request, response);
 	}
 	
 	protected void charge(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		String cp = request.getContextPath();
+		
 		HttpSession session = request.getSession();
+		UserInfoDTO user = (UserInfoDTO) session.getAttribute("loginUser");
+
 		
-		Object user = session.getAttribute("loginUser");
+		if (user == null) { 
+            response.sendRedirect(cp + "/user/auth/login");
+            return;
+        }
 		
-		int userId = 0;
-		
-		if(user != null)
-		{
-			userId = (int)user;
-		}else
-		{
-			userId = 1;
-		}
+		int userId = user.getUserId();
 		
 		Integer paymentType = Integer.parseInt(request.getParameter("btnradio"));
 		Integer chargeMoney = Integer.parseInt(request.getParameter("chargeMoney"));
