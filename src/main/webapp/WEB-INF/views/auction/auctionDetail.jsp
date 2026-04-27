@@ -272,8 +272,7 @@
         if (!countdownEl) return;
         if (remaining <= 0) {
             countdownEl.textContent = '경매 마감';
-            if (remaining === 0) location.reload();
-            return;
+            return; // reload 제거
         }
         const h = String(Math.floor(remaining / 3600)).padStart(2, '0');
         const m = String(Math.floor((remaining % 3600) / 60)).padStart(2, '0');
