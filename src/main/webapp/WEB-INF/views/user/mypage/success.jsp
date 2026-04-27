@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -165,7 +166,7 @@ button
 				<div class="itemtext">
 					<span class="title"> ${param.title } </span> <br /> <span class="condition">
 						상태: ${param.grade } / 제조사: ${param.manudacturer} </span><br /> <br /> <span class="date"> <span
-						class="tt">결제일</span> ${today }<br /> <span class="tt">결제금액</span> <span style="font-weight:bold;">${param.price } 원</span><br />
+						class="tt">결제일</span> <span class="tt"><fmt:formatDate value="${today }"/></span><br /> <span class="tt">결제금액</span> <span style="font-weight:bold;">${param.price } 원</span><br />
 					</span>
 					<a href="${pageContext.request.contextPath }/user/products"><button type="button" class="btn btn-light">돌아가기</button></a>
 				</div>

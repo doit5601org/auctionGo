@@ -742,6 +742,10 @@ public class ProductBuyDAO
 				dto.setShippingDate(res.getString("배송일자"));
 				dto.setConfirm(res.getString("구매확정여부"));
 				dto.setConfirmDate(res.getString("구매확정일자"));
+				
+				System.out.println(dto.getConfirm());
+				System.out.println(dto.getAuctionId());
+				System.out.println(dto.getConfirm());
 				System.out.println(dto.getConfirm());
 				list.add(dto);
 			}
