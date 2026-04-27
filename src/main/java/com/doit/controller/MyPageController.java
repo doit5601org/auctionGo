@@ -263,7 +263,6 @@ public class MyPageController extends HttpServlet{
 			dispatcher.forward(request, response);
 			
 		}
-			
 		
 	}
 }

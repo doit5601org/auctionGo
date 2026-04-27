@@ -32,9 +32,33 @@ public class PaymentDetailController extends HttpServlet
 	
 	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		Integer userId = Integer.parseInt(request.getParameter("userId"));
-		Integer resultId = Integer.parseInt(request.getParameter("resultId"));
+		String userStr = request.getParameter("loginUser");
+		String resultStr = request.getParameter("resultId");
 		 
+		int userId = 1;
+		
+		int resultId = 1;
+		
+
+		if (userStr != null && !userStr.trim().isEmpty()) {
+		    try {
+		    	userId = Integer.parseInt(request.getParameter("loginUser"));
+		    } catch (NumberFormatException e) {
+		       
+		    	userId = 1;
+		    }
+		}
+		
+		if (resultStr != null && !resultStr.trim().isEmpty()) {
+		    try {
+		    	resultId = Integer.parseInt(request.getParameter("resultId"));
+		    } catch (NumberFormatException e) {
+		       
+		    	resultId = 1;
+		    }
+		}
+		
+		
 		ProductBuyDAO dao = new ProductBuyDAO();
 		
 		
@@ -46,7 +70,7 @@ public class PaymentDetailController extends HttpServlet
 		
 		request.setAttribute("money", money);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/낙찰구매.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/successBidBuy.jsp");
 		dispatcher.forward(request, response);
 	}
 	
