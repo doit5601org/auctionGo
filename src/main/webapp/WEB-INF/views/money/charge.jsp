@@ -104,9 +104,9 @@ a:visited ,a
 		<div class="bt">
 		<a href="${pageContext.request.contextPath }/payment/">
 			<button type="button" class="btn btn-light">추가충전</button>
-		</a> <a href="${pageContext.request.contextPath }"><button
+		</a> <a href="${pageContext.request.contextPath }/payment.history"/><button
 				type="button" class="btn btn-light">머니이력</button></a> <a
-			href="${pageContext.request.contextPath }/"><button type="button"
+			href="${pageContext.request.contextPath }/main"><button type="button"
 				class="btn btn-light">메인으로</button></a>
 		</div>
 	</div>
