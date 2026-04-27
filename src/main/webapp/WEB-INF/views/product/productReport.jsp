@@ -18,8 +18,8 @@
 </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg">
+ <%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%-- <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="${ctx}/main">경매나라</a>
         <div class="d-flex gap-3 ms-4">
@@ -28,7 +28,7 @@
             <a href="${ctx}/product/myList" class="nav-link">내 상품</a>
         </div>
     </div>
-</nav>
+</nav> --%>
 
 <div class="container mt-4 mb-5" style="max-width:600px">
     <div class="page-header">
@@ -97,5 +97,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

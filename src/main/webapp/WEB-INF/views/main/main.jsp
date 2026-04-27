@@ -69,6 +69,25 @@
 </style>
 </head>
 <body class="bg-light">
+<<<<<<< HEAD
+=======
+	<%@ include file="/WEB-INF/views/common/header.jsp"%>
+	<main>
+		<section class="hero-section text-center">
+			<div class="container">
+				<h1 class="display-3 fw-bold mb-3 txtColor" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">나만의 컬렉션, 특별한 경매</h1>
+				<p class="lead mb-5 opacity-75 text-dark fw-bold">당신의 소장품을 뽐내고,
+					경매로 가치를 더하세요!</p>
+				<div class="d-flex justify-content-center gap-3">
+					<a href="${pageContext.request.contextPath}/auction/list"
+						class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold">경매
+						입장</a> <a href="${pageContext.request.contextPath}/product/list"
+						class="btn btn-outline-dark btn-lg px-5 py-3 rounded-pill fw-bold">컬렉션
+						구경</a>
+				</div>
+			</div>
+		</section>
+>>>>>>> ac5d9f6242d9b838e907410f6afc82e8f7862a8c
 
 <%-- <jsp:include page="WEB-INF/views/common/header.jsp"></jsp:include> --%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>

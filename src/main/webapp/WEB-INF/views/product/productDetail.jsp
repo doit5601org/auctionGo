@@ -18,9 +18,8 @@
 </style>
 </head>
 <body class="bg-light">
-<%-- <jsp:include page="/common/header.jsp"></jsp:include> --%>
-
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%-- <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto ms-3">
@@ -30,7 +29,7 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav> --%>
 
 <div class="container py-4">
 
@@ -172,5 +171,6 @@
         el.classList.add('active');
     }
 </script>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
