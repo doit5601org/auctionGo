@@ -42,6 +42,111 @@
 		document.unregisterForm.submit();
 	}
 </script>
+<style type="text/css">
+body
+{
+	background-color:#f7f7f7;
+}
+.body
+{
+	margin: auto;
+	font-size: 16px;
+	color: black;
+	font-family: "맑은 고딕";
+	width: 700px;
+	margin-top: 50px;
+	border-radius: 8px;
+	height: auto;
+}
+.body2
+{
+	margin: auto;
+	width: 90%;
+}
+
+.big
+{
+	font-weight: bold;
+	font-size: 24px;
+}
+.top
+{
+	margin-bottom: 30px;
+	
+}
+.name
+{
+	font-weight: bold;
+}
+.term
+{
+	display: inline-block;
+	font-weight: bold;
+	font-size: 17px;
+	margin-bottom: 5px;
+}
+.termcontent
+{
+	border: 3px solid #f7f7f7;
+	border-radius: 7px;
+	height: auto;
+	padding: 20px;
+}
+.form-check
+{
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+.moneycheck
+{
+	margin-top: 70px;
+	margin-bottom: 50px;
+}
+.last
+{
+	font-size:15px;
+	font-family: small;
+}
+.lm
+{
+	width: 100px;
+	
+}
+.lsm
+{
+	display: inline-block;
+	width: 100px;
+}
+.con
+{
+	display:inline-block;
+	margin-bottom: 20px;
+}
+.moneylist
+{
+	width: 210px;
+}
+.ownercheck
+{
+	margin: 100px 0 50px 0;
+}
+.lastbtn
+{
+	margin: 100px 0 200px 0;
+}
+.last
+{
+	margin-bottom:5px;
+}
+#inputPassword
+{
+	width: 150px;
+}
+.btn-secondary
+{
+	height: 45px;
+}
+</style>
 <title></title>
 </head>
 <body>
@@ -61,15 +166,12 @@
 					<div>
 						<span class="term">탈퇴 약관</span>
 						<div class="termcontent">
-							<span class="con">탈퇴시 회원정보 및 서비스 이용 약관 상품등록 경매기록 등은 이후 분쟁
-								및 .... 회원 탈퇴 약관에 대한 내용</span> <br />
+							<span class="con">탈퇴시 회원정보 및 서비스 이용 약관 상품등록 경매기록 등은 보존됩니다</span> <br />
 							<ul class="list-group list-group-flush">
-								<li class="list-group-item">탈퇴시 회원정보 및 서비스 이용 기록은 한달 뒤
+								<li class="list-group-item">1.&nbsp;탈퇴시 회원정보는 한달 뒤
 									삭제됩니다.</li>
-								<li class="list-group-item">이런거 있다</li>
-								<li class="list-group-item">123</li>
-								<li class="list-group-item">qwe</li>
-								<li class="list-group-item">ㄱㄴㄷ</li>
+								<li class="list-group-item">2.&nbsp;</li>
+								<li class="list-group-item">3.&nbsp;</li>
 							</ul>
 						</div>
 
@@ -97,14 +199,11 @@
 					<div>
 						<span class="term">머니 환불 약관</span>
 						<div class="termcontent">
-							<span class="con">회원님의 머니는 예치금과 머니를 통합하여 충전된 금액은 본인계좌로
-								환불됩니다 .... 회원 탈퇴 시 환불 약관에 대한 내용</span> <br />
+							<span class="con">회원님의 충전된 금액은 환불이 불가합니다</span> <br />
 							<ul class="list-group list-group-flush">
-								<li class="list-group-item">이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고이런거있고</li>
-								<li class="list-group-item">이런거 있다</li>
-								<li class="list-group-item">123</li>
-								<li class="list-group-item">qwe</li>
-								<li class="list-group-item">ㄱㄴㄷ</li>
+								<li class="list-group-item">1.&nbsp;</li>
+								<li class="list-group-item">2.&nbsp;</li>
+								<li class="list-group-item">3.&nbsp;</li>
 							</ul>
 						</div>
 
@@ -148,6 +247,8 @@
 							<span class="last">위 내용을 모두 확인하고 회원을 탈퇴 합니다.</span>
 							<button class="btn btn-secondary" type="button" onclick="subm()">회원
 								탈퇴</button>
+							<button class="btn btn-secondary" type="button" onclick="back()">돌아 가기</button>
+								
 						</div>
 					</form>
 				</div>
