@@ -1,4 +1,4 @@
-package com.doit.jydto;
+package com.doit.dto;
 
 public class AdminDTO {
 	

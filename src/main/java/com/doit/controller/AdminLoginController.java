@@ -3,7 +3,7 @@ package com.doit.controller;
 import java.io.IOException;
 
 import com.doit.dao.AdminDAO;
-import com.doit.jydto.AdminDTO;
+import com.doit.dto.AdminDTO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

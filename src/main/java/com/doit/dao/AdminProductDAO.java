@@ -129,10 +129,34 @@ public class AdminProductDAO
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException("DB 작업 오류 발생" + e.getMessage(), e);
+			throw new RuntimeException("DB 작업 오류 발생: " + e.getMessage(), e);
 		}
 
 
+		return result;
+	}
+	
+	// 상품 공개 여부를 비공개로 전환
+	public int updateProductHide(int productId)
+	{
+		int result = 0;
+		
+		String sql = "UPDATE PRODUCT SET IS_PUBLIC = 0 WHERE PRODUCT_ID = ?";
+		
+		try (Connection conn = DBCPConn.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(sql);
+			)
+		{
+			pstmt.setInt(1, productId);
+			
+			result = pstmt.executeUpdate();
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException("DB 작업 오류 발생: " + e.getMessage(), e);
+		}
+		
+		
 		return result;
 	}
 	

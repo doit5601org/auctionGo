@@ -39,5 +39,15 @@ public class AdminProductService
 		
 		return result;
 	}
+	
+	// 상품 공개 여부를 비공개로 변경
+	public int changProductHide(int productId)
+	{
+		int result = 0;
+		
+		result = apDao.updateProductHide(productId);
+		
+		return result;
+	}
 
 }// class AdminProductService END

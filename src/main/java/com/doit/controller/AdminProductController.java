@@ -3,7 +3,6 @@ package com.doit.controller;
 import java.io.IOException;
 import java.util.List;
 
-import com.doit.dao.AdminProductDAO;
 import com.doit.dto.ProductDTO;
 import com.doit.service.AdminProductService;
 import com.doit.util.Pagination;
@@ -41,90 +40,110 @@ public class AdminProductController extends HttpServlet
 		
 		String viewPath = "/WEB-INF/views";
 
-		//-- GET 방식 요청 처리 --//
-		// forward 처리
-		if (methodType.equalsIgnoreCase("GET"))
+		try
 		{
-			//-- 상품 --//
-			// 상품 전체 조회
-			if (path.equalsIgnoreCase("/admin/product/list"))
+			//-- GET 방식 요청 처리 --//
+			if (methodType.equalsIgnoreCase("GET"))
 			{
-				// 요청 파라미터 수신
-				//-- productStatus, nowPage
-				
-				String productStatus = request.getParameter("productStatus");
-				//-- 상품 공개 여부
-				//   전체: all
-				//   공개: public
-				//   비공개: privete
-				if (productStatus == null)
+				//-- 상품 --//
+				// 상품 전체 조회
+				if (path.equalsIgnoreCase("/admin/product/list"))
 				{
-					// null → 페이지 최초 진입 → 전체 리스트 출력
-					productStatus = "all";
+					// 요청 파라미터 수신
+					//-- productStatus, nowPage
+					
+					String productStatus = request.getParameter("productStatus");
+					//-- 상품 공개 여부
+					//   전체: all
+					//   공개: public
+					//   비공개: privete
+					if (productStatus == null)
+					{
+						// null → 페이지 최초 진입 → 전체 리스트 출력
+						productStatus = "all";
+					}
+					
+					
+					String strNowPage = request.getParameter("page");
+					//-- 현재 페이지
+					
+					if (strNowPage == null)
+					{
+						strNowPage = "1";
+					}
+					
+					int nowPage = Integer.parseInt(strNowPage);
+
+					
+					
+					// Service 객체 생성
+					AdminProductService apService = new AdminProductService();
+					
+					// 전체 상품 갯수 가져오기
+					int productTotalCount = apService.getProductCount(productStatus);
+					
+					// 상품 리스트 가져오기
+					List<ProductDTO> productList = apService.getProductList(productStatus);
+					
+					
+					// 페이지 엘리먼트 생성
+					Pagination pagination = new Pagination();
+					int totalPageCount = pagination.pageCount(productTotalCount, 10);
+					
+					String listUrl = "/admin/product/list?productStatus=" + productStatus;
+					
+					String pageElement = pagination.paging(nowPage, totalPageCount, listUrl);
+					
+
+					
+					// 필요한 파라미터들 바인딩
+					request.setAttribute("productTotalCount", productTotalCount);
+					request.setAttribute("productList", productList);
+					request.setAttribute("productStatus", productStatus);
+					request.setAttribute("nowPage", nowPage);
+					request.setAttribute("pageElement", pageElement);
+					
+					
+					// 포워드 할 경로 설정
+					viewPath = viewPath + "/admin/productList.jsp";
 				}
 				
 				
-				String strNowPage = request.getParameter("page");
-				//-- 현재 페이지
-				
-				if (strNowPage == null)
-				{
-					strNowPage = "1";
-				}
-				
-				int nowPage = Integer.parseInt(strNowPage);
-
-				
-				
-				// Service 객체 생성
-				AdminProductService apService = new AdminProductService();
-				
-				// 전체 상품 갯수 가져오기
-				int productTotalCount = apService.getProductCount(productStatus);
-				
-				// 상품 리스트 가져오기
-				List<ProductDTO> productList = apService.getProductList(productStatus);
-				
-				
-				// 페이지 엘리먼트 생성
-				Pagination pagination = new Pagination();
-				int totalPageCount = pagination.pageCount(productTotalCount, 10);
-				
-				String listUrl = "/admin/product/list?productStatus=" + productStatus;
-				
-				String pageElement = pagination.paging(nowPage, totalPageCount, listUrl);
-				
-
-				
-				// 필요한 파라미터들 바인딩
-				request.setAttribute("productTotalCount", productTotalCount);
-				request.setAttribute("productList", productList);
-				request.setAttribute("productStatus", productStatus);
-				request.setAttribute("nowPage", nowPage);
-				request.setAttribute("pageElement", pageElement);
-				
-				
-				// 포워드 할 경로 설정
-				viewPath = viewPath + "/admin/productList.jsp";
+				// 포워드 처리
+				request.getRequestDispatcher(viewPath).forward(request, response);
 			}
 			
 			
-			// 포워드 처리
-			request.getRequestDispatcher(viewPath).forward(request, response);
+			
+			// POST 방식 요청 처리
+			else if (methodType.equalsIgnoreCase("POST"))
+			{
+				// 상품 비공개로 전환
+				if (path.equalsIgnoreCase("/admin/product/hideProduct"))
+				{
+					// 전달된 데이터 수신
+					//-- productId, url
+					String strProductId = request.getParameter("productId");
+					int productId = Integer.parseInt(strProductId);
+					
+					String url = request.getParameter("url");
+					
+					
+					// Service 객체 생성
+					AdminProductService apService = new AdminProductService();
+					
+					// 로직 수행
+					int result = apService.changProductHide(productId);
+					
+					
+					// 이전 페이지(=상품 목록) 다시 이동
+					response.sendRedirect(url);
+				}
+			}
 		}
-		
-		
-		
-		// POST 방식 요청 처리
-		else if (methodType.equalsIgnoreCase("POST"))
+		catch (Exception e)
 		{
-			// 상품 비공개로 전환
-			if (path.equalsIgnoreCase("/admin/product/hideProduct"))
-			{
-				String productId = (String)request.getAttribute("productId");
-				
-				System.out.println("확인 : " + productId);
-			}
+			e.printStackTrace();
 		}
 	}// process(...) END
 
