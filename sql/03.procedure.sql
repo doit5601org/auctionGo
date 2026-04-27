@@ -1898,7 +1898,7 @@ END;
 
 
 --  낙찰 결제 기한 확인 스케줄러용 프로시저
--- 낙찰 결제 기한 확인 스케줄러(프로시저) -- 실행 불
+-- 낙찰 결제 기한 확인 스케줄러(프로시저) -- 실행 불가
 CREATE OR REPLACE PROCEDURE REC_AUCTION_CLOSE
 IS
     N_BID_FAIL_TYPE_ID BID_FAILURE_TYPE.BID_FAIL_TYPE_ID%TYPE;
