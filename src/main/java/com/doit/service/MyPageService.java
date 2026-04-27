@@ -277,7 +277,7 @@ public class MyPageService {
 						
 						List<MyBidStatusDTO> rawList = myPageDao.myBidStatusBoard(offset, size, userId);
 						
-						String listUrl = cp+"/user/bids/active";
+						String listUrl = cp+"/user/product/wishlist";
 						//================================================================
 						// #경로수정필요# 실제 경매의 상세 페이지
 						//String detailUrl = cp + "/auction/auctionDetail?auctionId=";
@@ -354,7 +354,7 @@ public class MyPageService {
 					
 					List<MyBidStatusDTO> rawList = myPageDao.myBidHistoryBoard(offset, size, userId);
 					
-					String listUrl = cp+"/user/bids/active";
+					String listUrl = cp+"/user/product/wishlist";
 					//================================================================
 					// #경로수정필요# 실제 경매의 상세 페이지
 					//String detailUrl = cp + "/auction/auctionDetail?auctionId=";
