@@ -7,9 +7,46 @@ public class ReportDTO
     private String reportType;     // 신고 종류 
     private String category;       // 신고 유형 
     private String targetName;     // 신고 대상 명칭 
+    private String reportReason;   // 신고사유 (상세내용)
     private String createdAt;      // 신고 일자
     private String status;         // 처리 결과 
     private String processAt;      // 처리 일자 
+    private String reportTarget;   // 신고대상구분 (상품/경매)
+    private String processReason;  // 처리내용 (관리자 답변)
+    
+    public String getReportReason()
+	{
+		return reportReason;
+	}
+	public void setReportReason(String reportReason)
+	{
+		this.reportReason = reportReason;
+	}
+	public String getReportTarget()
+	{
+		return reportTarget;
+	}
+	public void setReportTarget(String reportTarget)
+	{
+		this.reportTarget = reportTarget;
+	}
+	public String getProcessReason()
+	{
+		return processReason;
+	}
+	public void setProcessReason(String processReason)
+	{
+		this.processReason = processReason;
+	}
+	public String getProcessedAt()
+	{
+		return processedAt;
+	}
+	public void setProcessedAt(String processedAt)
+	{
+		this.processedAt = processedAt;
+	}
+	private String processedAt;    // 처리일시
     
 	public int getReportId()
 	{

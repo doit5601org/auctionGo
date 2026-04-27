@@ -16,7 +16,6 @@ public class ReportDAO
 		
 	    List<ReportDTO> list = new ArrayList<>();
 	    
-	    // 뷰의 "신고유형"이 우리가 원하는 '도배', '광고' 등입니다.
 	    String sql = """
 	                SELECT "신고번호"       AS reportId
 	                     , "카테고리"       AS reportType  -- '상품' 또는 '경매'
@@ -54,4 +53,39 @@ public class ReportDAO
 	    }
 	    return list;
 	}
+	
+	
+	
+	public ReportDTO getReportDetail(String reportId) {
+	    ReportDTO dto = null;
+	    String sql = "SELECT * FROM VW_REPORT_LIST WHERE \"신고번호\" = ?";
+
+	    try (Connection conn = DBCPConn.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        
+	        pstmt.setString(1, reportId);
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            if (rs.next()) {
+	                dto = new ReportDTO();
+	                dto.setReportId(rs.getInt("신고번호"));
+	                dto.setCreatedAt(rs.getString("신고일시"));
+	                dto.setReportTarget(rs.getString("신고대상구분")); // DTO에 추가한 필드
+	                dto.setReportType(rs.getString("신고유형"));
+	                dto.setReportReason(rs.getString("신고사유"));   // DTO에 추가한 필드
+	                dto.setCategory(rs.getString("카테고리"));
+	                dto.setTargetName(rs.getString("신고대상명"));
+	                dto.setStatus(rs.getString("처리결과"));
+	                dto.setProcessReason(rs.getString("처리내용")); // DTO에 추가한 필드
+	                dto.setProcessAt(rs.getString("처리일시"));    // DTO 필드명 확인 (processAt)
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dto;
+	}
+	
+	
+	
+	
 }
