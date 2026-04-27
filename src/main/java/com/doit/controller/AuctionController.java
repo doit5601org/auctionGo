@@ -2,6 +2,7 @@ package com.doit.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -146,8 +147,15 @@ public class AuctionController extends HttpServlet
 		{
 			if (auction.getAuctionEndDate() != null && !"-".equals(auction.getAuctionEndDate()))
 			{
-				DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-				LocalDateTime endDt = LocalDateTime.parse(auction.getAuctionEndDate(), fmt);
+				LocalDateTime endDt;
+				if (auction.getAuctionEndDate().length() <= 10) {
+				    // "yyyy-MM-dd" 형식
+				    endDt = LocalDate.parse(auction.getAuctionEndDate()).atTime(23, 59, 59);
+				} else {
+				    // "yyyy-MM-dd HH:mm" 형식
+				    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				    endDt = LocalDateTime.parse(auction.getAuctionEndDate(), fmt);
+				}
 				remainSeconds = ChronoUnit.SECONDS.between(LocalDateTime.now(), endDt);
 				if (remainSeconds < 0)
 					remainSeconds = 0;
