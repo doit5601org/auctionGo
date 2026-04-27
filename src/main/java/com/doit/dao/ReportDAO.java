@@ -74,6 +74,7 @@ public class ReportDAO
 	                dto.setReportReason(rs.getString("신고사유"));   // DTO에 추가한 필드
 	                dto.setCategory(rs.getString("카테고리"));
 	                dto.setTargetName(rs.getString("신고대상명"));
+	                
 	                dto.setStatus(rs.getString("처리결과"));
 	                dto.setProcessReason(rs.getString("처리내용")); // DTO에 추가한 필드
 	                dto.setProcessAt(rs.getString("처리일시"));    // DTO 필드명 확인 (processAt)
