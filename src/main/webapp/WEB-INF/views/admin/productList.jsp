@@ -1,12 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%-- 시간 문제로 인해 스크립릿으로 개발 진행 --%>
-<%
-	// 페이징
-	int productTotalCount = (Integer)request.getAttribute("productTotalCount");
-	String productStatus = (String)request.getAttribute("productStatus");
-	int nowPage = Integer.parseInt((String)request.getAttribute("nowPage"));
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -91,10 +84,36 @@
 	    color: #6c757d !important;
 	}
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script type="text/javascript">
-
-
+	$(function() {
+		
+		$("input[name='statusFilter']").on("change", function() {
+			let url = "${ pageContext.request.contextPath }/admin/product/list";
+			url = url + "?" + "productStatus=" + $(this).val();
+			
+			location.href = url;
+		});
+		
+	});
+	
+	
+	function hideProduct(productId) {
+		let formEl = document.createElement('form');
+		form.method = 'POST';
+		form.action = "/admin/product/hideProduct";
+		
+		let inputEl = document.createElement('input');
+		inputEl.type = 'hidden';
+		inputEl.name = "productId";
+		inputEl.value = productId;
+		
+		formEl.appendChild(inputEl);
+		
+		// document.body.appendChild(form);
+		formEl.submit();
+		
+	}// hideProduct(...) END
 </script>
 </head>
 <body class="bg-light">
@@ -109,33 +128,33 @@
 		        	<%-- 전체 상품 --%>
 			        <c:choose>
 			        	<c:when test="${ productStatus == 'all' }">
-			        		<input type="radio" class="btn-check" name="statusFilter" id="filterAll" checked>
+			        		<input type="radio" class="btn-check" name="statusFilter" value="all" id="filterAll" checked>
 		            		<label class="btn btn-outline-dark" for="filterAll">전체</label>
 			        	</c:when>
 			        	<c:otherwise>
-			        		<input type="radio" class="btn-check" name="statusFilter" id="filterAll">
+			        		<input type="radio" class="btn-check" name="statusFilter" value="all" id="filterAll">
 		            		<label class="btn btn-outline-dark" for="filterAll">전체</label>
 			        	</c:otherwise>
 			        </c:choose>
 			        <%-- 공개 상품 --%>
 			        <c:choose>
 			        	<c:when test="${ productStatus == 'public' }">
-			        		<input type="radio" class="btn-check" name="statusFilter" id="filterPublic" checked>
+			        		<input type="radio" class="btn-check" name="statusFilter" value="public" id="filterPublic" checked>
 		            		<label class="btn btn-outline-dark" for="filterPublic">공개</label>
 			        	</c:when>
 			        	<c:otherwise>
-			        		<input type="radio" class="btn-check" name="statusFilter" id="filterPublic">
+			        		<input type="radio" class="btn-check" name="statusFilter" value="public" id="filterPublic">
 		            		<label class="btn btn-outline-dark" for="filterPublic">공개</label>
 			        	</c:otherwise>
 			        </c:choose>
 			        <%-- 비공개 상품 --%>
 			        <c:choose>
 			        	<c:when test="${ productStatus == 'privete' }">
-			        		<input type="radio" class="btn-check" name="statusFilter" id="filterPrivate" checked>
+			        		<input type="radio" class="btn-check" name="statusFilter" value="privete" id="filterPrivate" checked>
 		            		<label class="btn btn-outline-dark" for="filterPrivate">비공개</label>
 			        	</c:when>
 			        	<c:otherwise>
-			        		<input type="radio" class="btn-check" name="statusFilter" id="filterPrivate">
+			        		<input type="radio" class="btn-check" name="statusFilter" value="privete" id="filterPrivate">
 		            		<label class="btn btn-outline-dark" for="filterPrivate">비공개</label>
 			        	</c:otherwise>
 			        </c:choose>
@@ -185,7 +204,7 @@
 					        <c:when test="${productDto.isPublicName == '공개'}">
 					        	<%-- 공개 상품에 대한 비공개 버튼 --%>
 					            <button type="button" class="btn btn-sm btn-outline-dark btn-admin-custom" 
-		                        	onclick="hideProduct('')">
+		                        	onclick="hideProduct('${ productDto.productId }')">
 		                        	비공개
 		                        </button>
 					        </c:when>
@@ -239,14 +258,17 @@
                     </ul>
                     --%>
                     
-                    
+                    ${ pageElement }
                 </nav>
             </div>
         </div>
 
 		<!-- 돌아가기 버튼 영역 -->
         <div class="d-flex justify-content-center mt-0 py-5">
+        	<%--
             <button type="button" class="btn btn-secondary px-5 fw-bold" onclick="location.href='mainDashBoard.jsp'">
+            --%>
+            <button type="button" class="btn btn-secondary px-5 fw-bold" onclick="location.href='${ pageContext.request.contextPath }/admin'">
                 대시보드로 돌아가기
             </button>
         </div>      

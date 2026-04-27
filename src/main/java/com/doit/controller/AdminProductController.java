@@ -6,6 +6,7 @@ import java.util.List;
 import com.doit.dao.AdminProductDAO;
 import com.doit.dto.ProductDTO;
 import com.doit.service.AdminProductService;
+import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -50,23 +51,30 @@ public class AdminProductController extends HttpServlet
 			{
 				// 요청 파라미터 수신
 				//-- productStatus, nowPage
+				
 				String productStatus = request.getParameter("productStatus");
-				//-- 전체: all
+				//-- 상품 공개 여부
+				//   전체: all
 				//   공개: public
 				//   비공개: privete
-				String nowPage = request.getParameter("page");
-				
-				// 파라미터 null 처리
-				//-- null → 페이지 최초 진입 → 전체 리스트 출력
 				if (productStatus == null)
 				{
+					// null → 페이지 최초 진입 → 전체 리스트 출력
 					productStatus = "all";
 				}
-				if (nowPage == null)
+				
+				
+				String strNowPage = request.getParameter("page");
+				//-- 현재 페이지
+				
+				if (strNowPage == null)
 				{
-					nowPage = "1";
+					strNowPage = "1";
 				}
+				
+				int nowPage = Integer.parseInt(strNowPage);
 
+				
 				
 				// Service 객체 생성
 				AdminProductService apService = new AdminProductService();
@@ -77,6 +85,15 @@ public class AdminProductController extends HttpServlet
 				// 상품 리스트 가져오기
 				List<ProductDTO> productList = apService.getProductList(productStatus);
 				
+				
+				// 페이지 엘리먼트 생성
+				Pagination pagination = new Pagination();
+				int totalPageCount = pagination.pageCount(productTotalCount, 10);
+				
+				String listUrl = "/admin/product/list?productStatus=" + productStatus;
+				
+				String pageElement = pagination.paging(nowPage, totalPageCount, listUrl);
+				
 
 				
 				// 필요한 파라미터들 바인딩
@@ -84,6 +101,7 @@ public class AdminProductController extends HttpServlet
 				request.setAttribute("productList", productList);
 				request.setAttribute("productStatus", productStatus);
 				request.setAttribute("nowPage", nowPage);
+				request.setAttribute("pageElement", pageElement);
 				
 				
 				// 포워드 할 경로 설정
@@ -100,7 +118,13 @@ public class AdminProductController extends HttpServlet
 		// POST 방식 요청 처리
 		else if (methodType.equalsIgnoreCase("POST"))
 		{
-			
+			// 상품 비공개로 전환
+			if (path.equalsIgnoreCase("/admin/product/hideProduct"))
+			{
+				String productId = (String)request.getAttribute("productId");
+				
+				System.out.println("확인 : " + productId);
+			}
 		}
 	}// process(...) END
 
