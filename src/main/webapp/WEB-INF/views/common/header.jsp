@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,7 +59,9 @@
                             <li class="nav-item text-end border-end px-3">
                                 <div class="d-flex flex-column" style="line-height: 1.2;">
                                     <span class="text-muted" style="font-size: 0.75rem;">보유머니</span>
-                                    <span class="txtColor fw-bold fs-5">50,000<small class="text-dark fw-normal ms-1" style="font-size: 0.9rem;">원</small></span>
+                                    <span class="txtColor fw-bold fs-5 d-flex align-items-center">
+                                    <fmt:formatNumber value="${loginUser.totalMoney}" type="number" />
+                                    <small class="text-dark fw-normal ms-1" style="font-size: 0.9rem;">원</small></span>
                                 </div>
                             </li>
                             <li class="nav-item">
