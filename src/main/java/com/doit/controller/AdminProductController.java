@@ -52,27 +52,16 @@ public class AdminProductController extends HttpServlet
 					// 요청 파라미터 수신
 					//-- productStatus, nowPage
 					
-					String productStatus = request.getParameter("productStatus");
-					//-- 상품 공개 여부
-					//   전체: all
+					// 현재 페이지
+					String strNowPage = request.getParameter("page") == null ? "1" : request.getParameter("page");
+					int nowPage = Integer.parseInt(strNowPage);
+					
+					// 상품 공개 여부 필터값
+					//-- null → 페이지 최초 진입 → 전체 리스트 출력
+					String productStatus = request.getParameter("productStatus") == null ? "all" : request.getParameter("productStatus");
+					//-- 전체: all
 					//   공개: public
 					//   비공개: privete
-					if (productStatus == null)
-					{
-						// null → 페이지 최초 진입 → 전체 리스트 출력
-						productStatus = "all";
-					}
-					
-					
-					String strNowPage = request.getParameter("page");
-					//-- 현재 페이지
-					
-					if (strNowPage == null)
-					{
-						strNowPage = "1";
-					}
-					
-					int nowPage = Integer.parseInt(strNowPage);
 
 					
 					
@@ -83,18 +72,18 @@ public class AdminProductController extends HttpServlet
 					int productTotalCount = apService.getProductCount(productStatus);
 					
 					// 상품 리스트 가져오기
-					List<ProductDTO> productList = apService.getProductList(productStatus);
+					int sizePerPage = 10;
+					List<ProductDTO> productList = apService.getProductList(productStatus, nowPage, sizePerPage);
 					
 					
 					// 페이지 엘리먼트 생성
 					Pagination pagination = new Pagination();
 					int totalPageCount = pagination.pageCount(productTotalCount, 10);
 					
-					String listUrl = "/admin/product/list?productStatus=" + productStatus;
+					String listUrl = request.getContextPath() + "/admin/product/list?productStatus=" + productStatus;
 					
 					String pageElement = pagination.paging(nowPage, totalPageCount, listUrl);
 					
-
 					
 					// 필요한 파라미터들 바인딩
 					request.setAttribute("productTotalCount", productTotalCount);

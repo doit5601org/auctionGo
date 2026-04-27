@@ -380,7 +380,45 @@ public class AuctionDAO {
 	        }
 	        return result;
 	    }
-	}
+			
+			
+			// 경매 취소 메소드
+			public int cancelAuction(int auctionId, int userNo, String reason) {
+				
+			    int result = 0;
+			    
+			    Connection conn = null;
+			    CallableStatement cstmt = null;
+
+			    String sql = "{call PRC_AUCTION_CANCEL(?, ?, ?)}";
+
+			    try {
+			        conn = DBCPConn.getConnection();
+			        cstmt = conn.prepareCall(sql);
+
+			        cstmt.setInt(1, auctionId);
+			        cstmt.setInt(2, userNo);
+			        cstmt.setString(3, reason);
+
+			        cstmt.executeUpdate();
+			        result = 1; 
+
+			    } catch (SQLException e) {
+			        System.err.println("경매 취소 프로시저 오류: " + e.getMessage());
+			        e.printStackTrace();
+			    } finally {
+			        try {
+			            if (cstmt != null) cstmt.close();
+			            if (conn != null) conn.close();
+			        } catch (Exception e2) {}
+			    }
+			    return result;
+			}
+
+
+
+
+}
 
 	
 	

@@ -10,6 +10,7 @@ import com.doit.dto.AuctionDTO;
 import com.doit.dto.AuctionHistoryDTO;
 import com.doit.dto.BidRankDTO;
 import com.doit.dto.MyBidStatusDTO;
+import com.doit.dto.MyPenaltyDTO;
 import com.doit.dto.MyWishlistDTO;
 import com.doit.dto.ProductDTO;
 import com.doit.dto.UserInfoDTO;
@@ -623,7 +624,37 @@ public class MyPageDAO {
 	
 	
 	
-		// 내 패널티 
+		// 내 패널티 리스트
+		public List<MyPenaltyDTO> myPenaltyBoard(int userId){
+			List<MyPenaltyDTO> result = new ArrayList<MyPenaltyDTO>();
+			String sql = """
+					SELECT PENALTY_ID, PENALTY_TYPE_NAME, GIVEN_SCORE, ACCUMULATED_SCORE
+					, TOTAL_SCORE, HISTORY_STATUS, PENALTY_CREATED_AT
+					, PENALTY_START_DATE, PENALTY_END_DATE
+					, PENALTY_ASSIGN_ADMIN
+					, PENALTY_CANCEL_ID, CANCEL_REASON, CANCELED_AT
+					, PENALTY_CANCEL_ADMIN
+					FROM VW_PENALTY_DETAIL_LIST
+					WHERE USER_ID = ?
+					""";
+			try(Connection conn = DBCPConn.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+				pstmt.setInt(1, userId);
+				try(ResultSet rs = pstmt.executeQuery()){
+					while(rs.next()) {
+						MyPenaltyDTO dto = new MyPenaltyDTO();
+						dto.setPenaltyId(rs.getInt(""));
+					}
+				}
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+			
+		}
 	
 	
 	
