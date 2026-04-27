@@ -196,14 +196,7 @@ hr
 	margin-bottom: 20px;
 	box-shadow: 0 0 3px rgba(0,0,0,0.4);
 }
-/* .cashtot
-{
-	padding: 20px 30px 30px 30px;
-	border: 1px solid silver;
-	border-radius: 7px;
-	width: 200px;
-	height: 300px;
-} */
+
 .title
 {
 	font-size: 20px;
@@ -258,18 +251,16 @@ window.onload = function() {
 
     const endDateStr = hiddenInput.value; // 예: "2024-11-13 00:00"
     
-    // 1. 날짜 문자열을 숫자로 쪼갭니다 (하이픈, 공백, 콜론을 기준으로 분리)
-    // 결과: parts = ["2024", "11", "13", "00", "00"]
+    
     const parts = endDateStr.split(/[- :]/);
     
-    // 2. Date 객체 생성 (Month는 0부터 시작하므로 -1)
-    // Date(년, 월-1, 일, 시, 분)
+   
     const endDate = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4]);
     
-    // 3. 하루 더하기
+   
     endDate.setDate(endDate.getDate() + 1);
     
-    // 4. 화면 출력 (패딩 처리)
+   
     const year = endDate.getFullYear();
     const month = String(endDate.getMonth() + 1).padStart(2, '0');
     const day = String(endDate.getDate()).padStart(2, '0');
@@ -279,7 +270,7 @@ window.onload = function() {
 
     document.getElementById('endDate').innerText = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-    // 2. 실시간 카운트다운 (낙찰 종료 시간 기준)
+    
     const targetDate = endDate.getTime(); 
 
     const timer = setInterval(function() {
