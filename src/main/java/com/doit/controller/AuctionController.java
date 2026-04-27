@@ -190,7 +190,7 @@ public class AuctionController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(req.getContextPath() + "/login");
+			resp.sendRedirect(req.getContextPath() + "/user/auth/login");
 			return;
 		}
 

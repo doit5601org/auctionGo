@@ -449,6 +449,35 @@ public class ProductController extends HttpServlet
 		String img3 = saveUploadedFile(req, "productImage3");
 		if (img3 == null) img3 = req.getParameter("existingImage3");
 		dto.setImagePath3(img3);
+		
+		String img4 = saveUploadedFile(req, "productImage4");
+		if (img4 == null) img4 = req.getParameter("existingImage4");
+		dto.setImagePath4(img4);
+
+		String img5 = saveUploadedFile(req, "productImage5");
+		if (img5 == null) img5 = req.getParameter("existingImage5");
+		dto.setImagePath5(img5);
+
+		String img6 = saveUploadedFile(req, "productImage6");
+		if (img6 == null) img6 = req.getParameter("existingImage6");
+		dto.setImagePath6(img6);
+
+		String img7 = saveUploadedFile(req, "productImage7");
+		if (img7 == null) img7 = req.getParameter("existingImage7");
+		dto.setImagePath7(img7);
+
+		String img8 = saveUploadedFile(req, "productImage8");
+		if (img8 == null) img8 = req.getParameter("existingImage8");
+		dto.setImagePath8(img8);
+
+		String img9 = saveUploadedFile(req, "productImage9");
+		if (img9 == null) img9 = req.getParameter("existingImage9");
+		dto.setImagePath9(img9);
+
+		String img10 = saveUploadedFile(req, "productImage10");
+		if (img10 == null) img10 = req.getParameter("existingImage10");
+		dto.setImagePath10(img10);
+		
 		return dto;
 	}
 

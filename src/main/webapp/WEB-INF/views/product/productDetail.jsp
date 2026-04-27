@@ -6,34 +6,45 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${product.productReleaseName} | 쌍용피규어마켓</title>
+<title>${product.productReleaseName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="${ctx}/css/common.css" />
+<script src="https://code.jquery.com/jquery.min.js"></script>
 <style>
-    .navbar-brand { font-weight: 700; color: #4F46E5 !important; }
-    .main-img   { width: 100%; height: 360px; object-fit: cover; border-radius: 8px; }
-    .thumb-img  { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
-    .thumb-img.active { border-color: #0d6efd; }
+    body { background-color: #f8f9fa; }
+    .main-img {
+        width: 100%;
+        height: 360px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+    }
+    .thumb-img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+    .thumb-img.active { border-color: #212529; }
+    .thumb-img:hover { border-color: #adb5bd; }
+    .info-card {
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 24px;
+    }
 </style>
 </head>
-<body class="bg-light">
+<body>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<%-- <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto ms-3">
-                <li class="nav-item"><a class="nav-link fw-semibold" href="${ctx}/product/list">컬렉션</a></li>
-                <li class="nav-item"><a class="nav-link" href="${ctx}/auction/list">경매</a></li>
-                <li class="nav-item"><a class="nav-link" href="${ctx}/product/myList">내 상품</a></li>
-            </ul>
-        </div>
-    </div>
-</nav> --%>
 
 <div class="container py-4">
 
-    <%-- 신고 완료 안내 --%>
     <c:if test="${param.reportOk eq '1'}">
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             신고가 접수되었습니다.
@@ -50,13 +61,12 @@
     </nav>
 
     <div class="row g-4">
+
         <%-- 이미지 영역 --%>
         <div class="col-md-6">
-            <c:set var="mainImg" value="${not empty product.imagePath1 ? product.imagePath1 : null}" />
-
             <c:choose>
-                <c:when test="${not empty mainImg}">
-                    <img src="${ctx}/${mainImg}" class="main-img" id="mainImg" alt="${product.productReleaseName}">
+                <c:when test="${not empty product.imagePath1}">
+                    <img src="${ctx}/${product.imagePath1}" class="main-img" id="mainImg" alt="${product.productReleaseName}">
                 </c:when>
                 <c:otherwise>
                     <img src="https://placehold.co/360x360/e9ecef/6c757d?text=No+Image"
@@ -65,21 +75,22 @@
             </c:choose>
 
             <div class="d-flex gap-2 mt-2 flex-wrap">
-                <%-- imagePath1 ~ imagePath10 까지 있는 것만 썸네일로 표시 --%>
-                <c:forEach var="i" begin="1" end="10">
-                   <%--  <c:set var="img" value="${product['imagePath'.concat(i)]}" />
-                    <c:if test="${not empty img}">
-                        <img src="${ctx}/images/${img}"
-                             class="thumb-img ${i == 1 ? 'active' : ''}"
-                             onclick="changeImg(this)" alt="">
-                    </c:if> --%>
-                </c:forEach>
+                <c:if test="${not empty product.imagePath1}"><img src="${ctx}/${product.imagePath1}" class="thumb-img active" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath2}"><img src="${ctx}/${product.imagePath2}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath3}"><img src="${ctx}/${product.imagePath3}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath4}"><img src="${ctx}/${product.imagePath4}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath5}"><img src="${ctx}/${product.imagePath5}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath6}"><img src="${ctx}/${product.imagePath6}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath7}"><img src="${ctx}/${product.imagePath7}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath8}"><img src="${ctx}/${product.imagePath8}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath9}"><img src="${ctx}/${product.imagePath9}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty product.imagePath10}"><img src="${ctx}/${product.imagePath10}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
             </div>
         </div>
 
         <%-- 상품 정보 --%>
         <div class="col-md-6">
-            <div class="bg-white rounded-3 p-4 shadow-sm">
+            <div class="info-card">
                 <div class="mb-2">
                     <span class="badge bg-secondary me-1">${product.productGradeName}</span>
                     <span class="text-muted small">${product.manufacturerName}</span>
@@ -96,61 +107,43 @@
                 <hr>
                 <table class="table table-sm table-borderless">
                     <c:if test="${not empty product.workName}">
-                        <tr>
-                            <th class="text-muted fw-normal" style="width: 100px">작품명</th>
-                            <td>${product.workName}</td>
-                        </tr>
+                        <tr><th class="text-muted fw-normal" style="width:100px">작품명</th><td>${product.workName}</td></tr>
                     </c:if>
                     <c:if test="${not empty product.characterName}">
-                        <tr>
-                            <th class="text-muted fw-normal">캐릭터</th>
-                            <td>${product.characterName}</td>
-                        </tr>
+                        <tr><th class="text-muted fw-normal">캐릭터</th><td>${product.characterName}</td></tr>
                     </c:if>
                     <c:if test="${not empty product.productCountryName}">
-                        <tr>
-                            <th class="text-muted fw-normal">제조국</th>
-                            <td>${product.productCountryName}</td>
-                        </tr>
+                        <tr><th class="text-muted fw-normal">제조국</th><td>${product.productCountryName}</td></tr>
                     </c:if>
-                    <tr>
-                        <th class="text-muted fw-normal">개봉 여부</th>
-                        <td>${product.isOpenedName}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-muted fw-normal">부품 상태</th>
-                        <td>${product.isPartsMissingName}</td>
-                    </tr>
+                    <tr><th class="text-muted fw-normal">개봉 여부</th><td>${product.isOpenedName}</td></tr>
+                    <tr><th class="text-muted fw-normal">부품 상태</th><td>${product.isPartsMissingName}</td></tr>
                     <c:if test="${not empty product.purchaseDateTime}">
-                        <tr>
-                            <th class="text-muted fw-normal">구매일</th>
-                            <td>${product.purchaseDateTime}</td>
-                        </tr>
+                        <tr><th class="text-muted fw-normal">구매일</th><td>${product.purchaseDateTime}</td></tr>
                     </c:if>
-                    <tr>
-                        <th class="text-muted fw-normal">등록일</th>
-                        <td>${product.createdAt}</td>
-                    </tr>
+                    <tr><th class="text-muted fw-normal">등록일</th><td>${product.createdAt}</td></tr>
                 </table>
 
                 <c:if test="${not empty product.descriptions}">
-                    <p class="small" style="white-space: pre-line;">${product.descriptions}</p>
+                    <p class="small" style="white-space:pre-line;">${product.descriptions}</p>
                 </c:if>
 
                 <hr>
 
-                <%-- 본인 상품이면 수정/삭제, 아니면 신고 버튼 --%>
                 <c:choose>
-                    <c:when test="${not empty sessionScope.userId and product.userId eq sessionScope.userId}">
+                    <c:when test="${not empty loginUserId and product.userId eq loginUserId}">
                         <div class="d-flex gap-2">
-                            <a href="${ctx}/product/update?productId=${product.productId}" class="btn btn-outline-primary w-50">수정</a>
-                            <a href="${ctx}/product/delete?productId=${product.productId}" class="btn btn-outline-danger w-50">삭제</a>
+                            <a href="${ctx}/product/update?productId=${product.productId}"
+                               class="btn w-50 py-2 fw-bold"
+                               style="background-color:#f1f1f1;color:#333;border:1px solid #ddd;border-radius:8px;">수정</a>
+                            <a href="${ctx}/product/delete?productId=${product.productId}"
+                               class="btn w-50 py-2 fw-bold"
+                               style="background-color:#212529;color:#fff;border:none;border-radius:8px;">삭제</a>
                         </div>
                     </c:when>
                     <c:otherwise>
                         <div class="text-end">
-                            <a href="${ctx}/product/report?productId=${product.productId}&type=product&name=${product.productReleaseName}" 
-                                class="btn btn-link btn-sm text-muted">신고하기</a>
+                            <a href="${ctx}/product/report?productId=${product.productId}"
+                               class="btn btn-link btn-sm text-muted">신고하기</a>
                         </div>
                     </c:otherwise>
                 </c:choose>
@@ -159,9 +152,7 @@
     </div>
 </div>
 
-<%-- <jsp:include page="/common/footer.jsp"></jsp:include> --%>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function changeImg(el) {
         document.getElementById('mainImg').src = el.src;
