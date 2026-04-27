@@ -97,7 +97,7 @@ main {
 	<main>
 		<section class="hero-section text-center">
 			<div class="container">
-				<h1 class="display-3 fw-bold mb-3 txtColor" style="text-shadow: 2px 2px 20px #ddd;">나만의 컬렉션, 특별한 경매</h1>
+				<h1 class="display-3 fw-bold mb-3 txtColor" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">나만의 컬렉션, 특별한 경매</h1>
 				<p class="lead mb-5 opacity-75 text-dark fw-bold">당신의 소장품을 뽐내고,
 					경매로 가치를 더하세요!</p>
 				<div class="d-flex justify-content-center gap-3">
