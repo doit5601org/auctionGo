@@ -277,6 +277,11 @@ public class MyPageController extends HttpServlet{
 		        dao.insertWishlist(userId, productId);
 		        response.sendRedirect(cp + "/product/detail?productId=" + productId + "&wish=ok");
 		    }
+		}else if(uri.endsWith("/user/auctions/shipping")) {
+			
+			
+			
+			response.sendRedirect(cp+"/user/auctions/closed");
 		}
 		
 		

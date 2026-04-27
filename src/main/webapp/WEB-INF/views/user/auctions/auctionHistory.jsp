@@ -11,21 +11,15 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 <script>
 $(function() {
-    // 1. 이벤트 대상을 테이블 내의 .detail-btn으로 한정
     $('#auction-history-table').on('click', '.detail-btn', function(e) {
         e.preventDefault();
 
-        // 2. 타겟 설정: 클릭한 버튼의 조상 tr 바로 다음에 오는 .collapse 행
-        const $targetRow = $(this).closest('tr').next('.collapse');
+        let $targetRow = $(this).closest('tr').next('.collapse');
         
-        // 3. 다른 상세창들만 찾기 (사이드바 메뉴는 절대 건드리지 않음)
-        // #auction-history-table 내부의 .collapse 중 현재 타겟이 아닌 것들만!
-        const $otherRows = $('#auction-history-table').find('.collapse').not($targetRow);
+        let $otherRows = $('#auction-history-table').find('.collapse').not($targetRow);
 
-        // 4. 다른 상세 행은 즉시 닫기
         $otherRows.stop(true, true).hide().removeClass('show');
 
-        // 5. 내 타겟 행만 토글
         $targetRow.stop(true, true).slideToggle(200, function() {
             if ($(this).is(':visible')) {
                 $(this).addClass('show');
@@ -37,18 +31,18 @@ $(function() {
 });
 </script>
 <style>
-    /* 상세 정보 열릴 때 데이터 행과 상세 행 사이의 선 제거 */
-    #auction-history-table tr:has(+ .collapse.show) td {
-        border-bottom: none !important;
-    }
-    /* 상세 정보 행 자체의 배경색을 살짝 주어 구분감 강화 */
-    #auction-history-table .collapse.bg-light {
-        background-color: #f8f9fa !important;
-    }
-        .btn-primary{
-    	background-color: #120e63 !important;
-    	border-color: #120e63 !important;
-    }
+#auction-history-table tr:has(+.collapse.show) td {
+	border-bottom: none !important;
+}
+
+#auction-history-table .collapse.bg-light {
+	background-color: #f8f9fa !important;
+}
+
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
 </style>
 </head>
 <body class="bg-light">
@@ -69,19 +63,15 @@ $(function() {
 							<table class="table align-middle" id="auction-history-table">
 								<thead class="table-light">
 									<tr>
-										<th class="text-start" style="width: 5%;">번호</th>
-										<th class="text-center" style="width: 25%;">상품명</th>
-										<th style="width: 25%;">최종 낙찰가</th>
-										<th style="width: 20%;">종료일시</th>
-										<th style="width: 15%;">결과</th>
-										<th style="width: 10%;">비고</th>
+										<th class="text-start" style="width: 5%;">No.</th>
+										<th class="text-center" style="width: 35%;">상품명</th>
+										<th style="width: 15%;">최종 낙찰가</th>
+										<th style="width: 15%;">종료일시</th>
+										<th style="width: 10%;">결과</th>
+										<th style="width: 20%;">비고</th>
 									</tr>
 								</thead>
 								<tbody>
-									<!-- <tr>
-   			<td colspan="6" class="text-center">경매 이력이 존재하지 않습니다.</td>
-   			
-   		</tr> -->
    									<c:forEach var="dto" items="${list }" varStatus="status">
 	   									<tr>
 										<td class="text-center">${status.count }</td>
@@ -91,7 +81,7 @@ $(function() {
 												${dto.auctionTitle }
 												</a></td>
 										<td>${dto.finalPrice }원</td>
-										<td class="small text-muted">${dto.auctionEndDate }</td>
+										<td class="small text-muted">   ${dto.auctionEndDate }</td>
 										<td><span
 											class="badge border ${dto.transactionStatus == '거래완료' ? 'bg-success-subtle text-success border-success' :
 											 dto.transactionStatus == '유찰'? 'bg-danger-subtle text-danger border-danger' : 'bg-warning-subtle text-warning border-warning' }">
@@ -100,6 +90,11 @@ $(function() {
 										<td>
 											<button type="button"
 												class="btn btn-sm btn-outline-primary detail-btn">${dto.transactionStatus == '유찰' ? '사유' : '상세'}</button>
+												
+												<c:if test="${dto.transcationStatus=='거래진행중' && dto.winningPaymentStatus=='Completed' && dto.shippingYn=='N'}">
+													<a type="button" class="btn btn-sm btn-outline-primary" 
+													href="${pageContext.request.contextPath}/user/auctions/shipping?auctionId=${dto.auctionId}">배송완료</a>
+												</c:if>
 										</td>
 									</tr>
 									<tr class="collapse bg-light">
