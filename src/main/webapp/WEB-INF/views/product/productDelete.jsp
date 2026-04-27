@@ -20,8 +20,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg sticky-top">
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%-- <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <a class="navbar-brand" href="${ctx}/main">경매나라</a>
         <div class="d-flex gap-3 ms-4">
@@ -30,7 +30,7 @@
             <a href="${ctx}/product/myList" class="nav-link active">내 상품</a>
         </div>
     </div>
-</nav>
+</nav> --%>
 
 <div class="container">
     <div class="card delete-card text-center">
@@ -56,5 +56,6 @@
         </form>
     </div>
 </div>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

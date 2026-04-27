@@ -39,8 +39,8 @@
     </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg sticky-top">
+ <%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%-- <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <a class="navbar-brand" href="${ctx}/main">경매나라</a>
         <div class="collapse navbar-collapse">
@@ -51,7 +51,7 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav> --%>
 
 <c:if test="${not empty errorMsg}">
     <div class="container mt-3">
@@ -257,5 +257,6 @@ function showSinglePreview(input, previewId) {
     }
 }
 </script>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
