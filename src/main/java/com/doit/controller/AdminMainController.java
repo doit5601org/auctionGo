@@ -78,11 +78,7 @@ public class AdminMainController extends HttpServlet
 
 			
 			
-			// 패널티 취소
-			else if (path.equalsIgnoreCase("/admin/penalty/cancel"))
-			{
-				viewPath = viewPath + "/admin/penaltyCancel.jsp";
-			}
+			
 
 
 			request.getRequestDispatcher(viewPath).forward(request, response);

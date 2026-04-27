@@ -53,17 +53,17 @@ public class AdminPenaltyController extends HttpServlet
 				if (path.equalsIgnoreCase("/admin/penalty/register"))
 				{
 					// 파라미터 수신
-					//-- userId, prevUrl
+					//-- userId, url, page
 					String userId = request.getParameter("userId");
-					String prevUrl = request.getParameter("prevUrl");
+					String url = request.getParameter("url");
 					
 					
-					// 필요시 유저 정보를 가져오는 로직 삽입 가능...
+					// (필요시 유저 정보를 가져오는 로직 삽입 가능...)
 
 					
 					// 데이터 바인딩
 					request.setAttribute("userId", userId);
-					request.setAttribute("prevUrl", prevUrl);
+					request.setAttribute("url", url);
 					
 					
 					viewPath = viewPath + "/admin/penaltyRegister.jsp";
@@ -73,8 +73,8 @@ public class AdminPenaltyController extends HttpServlet
 				{
 					// 이전 페이지(자기 자신, penaltyHistory.jsp)데이터 수신
 					//-- page
-					String strNowPage = request.getParameter("page") == null ? "1" : request.getParameter("page");
-					int nowPage = Integer.parseInt(strNowPage);
+					String strPage = request.getParameter("page") == null ? "1" : request.getParameter("page");
+					int page = Integer.parseInt(strPage);
 					
 					
 					// Service 객체 생성
@@ -84,17 +84,15 @@ public class AdminPenaltyController extends HttpServlet
 					int penaltyHistoryTotalCount = apService.getPenaltyHisotyTotalCount();
 					
 					// 패널티 이력 리스트 가져오기
-					List<PenaltyHistoryDTO> penaltyuHistoryList = apService.getPenaltyHistoryList();
-					
-					
-					
-
+					int sizePerPage = 20;
+					List<PenaltyHistoryDTO> penaltyuHistoryList = apService.getPenaltyHistoryList(page, sizePerPage);
 					
 					// 페이지 엘리먼트 생성
 					Pagination pagination = new Pagination();
-					int totalPageCount = pagination.pageCount(penaltyHistoryTotalCount, 10);
-					String listUrl = request.getContextPath() + "/admin/penalty/history";
-					String pageElement = pagination.paging(nowPage, totalPageCount, listUrl);
+					int totalPageCount = pagination.pageCount(penaltyHistoryTotalCount, sizePerPage);
+					// String listUrl = request.getContextPath() + "/admin/penalty/history";
+					String listUrl = uri;
+					String pageElement = pagination.paging(page, totalPageCount, listUrl);
 					
 					
 					// request에 데이터 바인딩
@@ -111,13 +109,14 @@ public class AdminPenaltyController extends HttpServlet
 			}
 			
 			
-			//-- POST 방식 요청 처리 --// 
+			//-- POST 방식 요청 처리 --//
+			// 메세지 출력 및 리다이렉트 처리 페이지로 포워딩
 			else if (methodType.equalsIgnoreCase("POST"))
 			{
 				// 작업 후 이전 페이지로 돌아가기 위한 URL 정보
 				//  ㄴ 데이터 수신 후 request 에 바인딩
-				String prevUrl = request.getParameter("prevUrl");
-				request.setAttribute("prevUrl", prevUrl);
+				String url = request.getParameter("url");
+				request.setAttribute("url", url);
 				
 				
 				
@@ -176,10 +175,47 @@ public class AdminPenaltyController extends HttpServlet
 					{
 						request.setAttribute("message", "패널티 부여 실패!");
 					}
-					
-					// 메세지 출력 및 리다이렉트 처리 페이지로 포워딩
-					request.getRequestDispatcher("/WEB-INF/views/admin/common/message.jsp").forward(request, response);
+
 				}
+				// 패널티 취소
+				else if (path.equalsIgnoreCase("/admin/penalty/cancel"))
+				{
+					// 이전 페이지(penaltyHistory.jsp)에서 전달된 데이터 수신
+					//-- penaltyId, cancelReason
+					//-- url은 상단의 POST 요청 공통 처리 단에서 이미 수신 및 바인딩 완료
+					int penaltyId = Integer.parseInt(request.getParameter("penaltyId"));
+					String cancelReason = request.getParameter("cancelReason");
+					
+					
+					
+					//------------------------------------------
+					// (temp) 개발용 데이터
+					//------------------------------------------
+					AdminDTO tempAdminDto = new AdminDTO();
+					tempAdminDto.setAdminAccountId(2);
+					request.getSession().setAttribute("adminInfo", tempAdminDto);
+					//------------------------------------------
+					
+					
+					
+					// 세션에서 관리자 정보 가져오기
+					HttpSession session = request.getSession();
+					AdminDTO adminDto = (AdminDTO)session.getAttribute("adminInfo");
+					int adminAccountId = adminDto.getAdminAccountId();
+					
+					
+					
+					// Service 객체 생성
+					AdminPenaltyService apService = new AdminPenaltyService();
+					
+					
+					// 로직 수행
+					apService.cancelPenalty(penaltyId, adminAccountId, cancelReason);
+				}
+				
+				
+				// 메세지 출력 및 리다이렉트 처리 페이지로 포워딩
+				request.getRequestDispatcher("/WEB-INF/views/admin/common/message.jsp").forward(request, response);
 			}
 		}
 		// 패널티 부여 > 프로시저 예외
@@ -187,7 +223,7 @@ public class AdminPenaltyController extends HttpServlet
 		{
 			int errorCode = e.getErrorCode();
 			
-			// 예외 메세지 바인딩
+			// DB 프로시저 사용자 정의 예외 코드 처리
 			if (errorCode == 20100)
 			{
 				request.setAttribute("message", "탈퇴한 회원에게는 패널티 부여가 불가능합니다.");

@@ -14,11 +14,11 @@
     }
     
     // URL 작업
-    let prevUrl = "${ prevUrl }";
-    prevUrl = (prevUrl && prevUrl !== "") ? prevUrl : "${pageContext.request.contextPath}/admin";
+    let url = "${ url }";
+    url = (url && url !== "") ? url : "${pageContext.request.contextPath}/admin";
     // 전달된 URL 없을 시, 관리자 메인 대시보드로 이동.
     
     
     // 최종 이동
-    location.replace(prevUrl); 
+    location.replace(url); 
 </script>
