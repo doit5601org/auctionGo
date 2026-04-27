@@ -4,12 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>내 패널티 이력</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 <script>
 $(function() {
-    // 패널티 테이블 내 버튼 클릭 이벤트
     $('#penalty-history-table').on('click', '.detail-btn', function(e) {
         e.preventDefault();
         const $targetRow = $(this).closest('tr').next('.collapse');
@@ -23,14 +22,16 @@ $(function() {
 });
 </script>
 <style>
-    /* 상세 정보 열릴 때 데이터 행과 상세 행 사이의 선 제거 */
     #penalty-history-table tr:has(+ .collapse.show) td {
         border-bottom: none !important;
     }
-    /* 상세 정보 행 자체의 배경색을 살짝 주어 구분감 강화 */
     #penalty-history-table .collapse.bg-light {
         background-color: #f8f9fa !important;
     }
+    .btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
 </style>
 </head>
 <body class="bg-light">

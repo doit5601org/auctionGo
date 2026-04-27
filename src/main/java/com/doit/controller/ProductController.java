@@ -12,6 +12,7 @@ import com.doit.dto.ProductManufacturerDTO;
 import com.doit.dto.ProductSizeDTO;
 import com.doit.dto.ReportDTO;
 import com.doit.dto.ReportTypeDTO;
+import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;

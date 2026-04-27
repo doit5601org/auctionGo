@@ -52,6 +52,9 @@ public class MyPageController extends HttpServlet{
 		
 		// 마이페이지 이동
 		if(uri.endsWith("/user/my")) {
+			
+			
+			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/my/mypage.jsp");
 			dispatcher.forward(request, response);
 			

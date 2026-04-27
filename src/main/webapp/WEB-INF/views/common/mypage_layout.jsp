@@ -128,6 +128,9 @@ $(function() {
     <a href="${pageContext.request.contextPath}/user/penalty" class="list-group-item list-group-item-action py-3 menu-link">
         <i class="bi bi-exclamation-octagon me-2"></i>내 패널티 내역
     </a>
+        <a href="${pageContext.request.contextPath}/user/report" class="list-group-item list-group-item-action py-3 menu-link">
+        <i class="bi bi-exclamation-octagon me-2"></i>내 신고 내역
+    </a>
 
     <div class="list-group-item p-0 border-0">
         <a href="#infoSubmenu" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 main-menu collapsed">
