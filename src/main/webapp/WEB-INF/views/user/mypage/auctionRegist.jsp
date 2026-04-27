@@ -52,7 +52,7 @@
     </script>
 </head>
 <body>
-
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
 <div class="container mt-5">
     <div class="row mb-5">
         <div class="col-12">

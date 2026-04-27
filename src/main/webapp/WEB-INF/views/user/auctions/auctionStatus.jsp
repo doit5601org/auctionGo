@@ -72,6 +72,14 @@ $(function() {
    	updateCountdown();
    	
 });
+
+$(function() {
+    // 취소 버튼 클릭 시 모달의 hidden input에 auctionId 세팅
+    $('.cancel-modal-btn').on('click', function() {
+        const auctionId = $(this).data('id');
+        $('#modalAuctionId').val(auctionId);
+    });
+});
 </script>
 <style type="text/css">
     .btn-primary{
@@ -173,10 +181,12 @@ $(function() {
 												
 											</div>
 										</td>
-										<td>
-											<a type="button" class="btn btn-sm btn-primary" 
-											href="${pageContext.request.contextPath }/auction/delete?auctionId=?${dto.auctionId}">경매취소</a>
-										</td>
+									<td>
+									    <button type="button" class="btn btn-sm btn-outline-dark cancel-modal-btn" 
+									            data-id="${dto.auctionId}" 
+									            data-bs-toggle="modal" 
+									            data-bs-target="#cancelReasonModal">경매취소</button>
+									</td>
 									</tr>
 									<tr class="collapse bg-light">
 							            <td colspan="6" class="p-3 text-center">
@@ -209,7 +219,30 @@ $(function() {
 			</section>
 		</div>
 	</div>
-
+	<div class="modal fade" id="cancelReasonModal" tabindex="-1" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered">
+	        <div class="modal-content border-0 shadow">
+	            <div class="modal-header bg-dark text-white">
+	                <h5 class="modal-title fw-bold">경매 취소 사유 입력</h5>
+	                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+	            </div>
+	            <form action="${pageContext.request.contextPath}/user/mypage/auctionCancel" method="post">
+	                <input type="hidden" name="auctionId" id="modalAuctionId" value="">
+	                <div class="modal-body p-4">
+	                    <div class="alert alert-warning small mb-3">
+	                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+	                        경매 취소 시 패널티가 부여되며, 판매자 보증금은 반환되지 않습니다.
+	                    </div>
+	                    <textarea name="cancelReason" class="form-control" rows="4" placeholder="취소 사유를 구체적으로 입력해주세요" required></textarea>
+	                </div>
+	                <div class="modal-footer bg-light">
+	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                    <button type="submit" class="btn btn-danger px-4">최종 취소하기</button>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
+	</div>
 	<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
