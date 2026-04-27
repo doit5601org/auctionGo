@@ -87,6 +87,7 @@
                             </c:choose>
                         </div>
                         <input type="file" id="img1" name="productImage1" accept="image/*" class="d-none" onchange="showSinglePreview(this, 'preview1')">
+                       <input type="hidden" name="existingImage1" value="${product.imagePath1}">
                         <div id="preview1" class="img-preview justify-content-center"></div>
                     </div>
                     <div class="col-4">
@@ -103,6 +104,8 @@
                             </c:choose>
                         </div>
                         <input type="file" id="img2" name="productImage2" accept="image/*" class="d-none" onchange="showSinglePreview(this, 'preview2')">
+                        <input type="hidden" name="existingImage2" value="${product.imagePath2}">
+                        
                         <div id="preview2" class="img-preview justify-content-center"></div>
                     </div>
                     <div class="col-4">
@@ -119,6 +122,8 @@
                             </c:choose>
                         </div>
                         <input type="file" id="img3" name="productImage3" accept="image/*" class="d-none" onchange="showSinglePreview(this, 'preview3')">
+                        <input type="hidden" name="existingImage3" value="${product.imagePath3}">
+                        
                         <div id="preview3" class="img-preview justify-content-center"></div>
                     </div>
                 </div>
