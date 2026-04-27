@@ -514,7 +514,6 @@ CREATE OR REPLACE PROCEDURE PRC_AUCTION_CREATE(
     P_PERIOD_CODE       IN NUMBER               --경매기간
 )
 IS
-    -- 에러 번호 변수 선언
     ERR_LACK_MONEY      CONSTANT NUMBER := -20004;
     ERR_UNKNOWN         CONSTANT NUMBER := -20009;
 
@@ -522,14 +521,12 @@ IS
     V_AUCTION_ID        NUMBER;
 BEGIN
     
-    -- 해당 유저의 보증금 확인
-    SELECT NVL(SUM(AMOUNT), 0) INTO v_current_money
-    FROM MONEY_TRANSACTION_HISTORY
-    WHERE USER_ID = P_USER_ID;
+    -- [수정된 부분] 직접 만든 잔액 조회 함수를 사용합니다.
+    V_CURRENT_MONEY := FN_GET_USER_MONEY_BALANCE(P_USER_ID);
 
-    -- 보증금 부족할 시 RAISE
-    IF v_current_money < 30000 THEN
-        RAISE_APPLICATION_ERROR(ERR_LACK_MONEY, '보증금이 부족합니다.');
+    -- 보증금 부족할 시 (함수 에러 -1 포함)
+    IF V_CURRENT_MONEY < 30000 THEN
+        RAISE_APPLICATION_ERROR(ERR_LACK_MONEY, '보증금이 부족합니다. 현재 잔액: ' || V_CURRENT_MONEY);
     END IF;
 
     -- 경매 등록 테이블 INSERT
@@ -539,25 +536,25 @@ BEGIN
     ) VALUES (
         AUCTION_SEQ.NEXTVAL, P_PRODUCT_ID, P_AUCTION_TITLE, 
         P_CONTENT, P_START_PRICE, SYSDATE, P_PERIOD_CODE
-    ) RETURNING AUCTION_ID INTO V_AUCTION_ID;   -- 해당 AUCTION_ID를 바로 V변수에 담음
-    
+    ) RETURNING AUCTION_ID INTO V_AUCTION_ID;
 
-    -- 머니 차감 기록 INSERT
+    -- 머니 차감 기록 INSERT (차감은 HISTORY 테이블에만 기록)
     INSERT INTO MONEY_TRANSACTION_HISTORY (
         MONEY_ID, USER_ID, MONEY_TYPE_ID, AUCTION_ID, AMOUNT, CREATED_AT
     ) VALUES (
         MONEY_TRANSACTION_SEQ.NEXTVAL, P_USER_ID, 2, V_AUCTION_ID, -30000, SYSDATE
     );
+    COMMIT;
+
 EXCEPTION        
     WHEN OTHERS THEN
         ROLLBACK;
         IF SQLCODE BETWEEN -20999 AND -20000 THEN
-            RAISE; -- 이미 정의된 커스텀 에러는 그대로 통과
+            RAISE; 
         ELSE
-            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류가 발생했습니다');
+            RAISE_APPLICATION_ERROR(ERR_UNKNOWN, '예상치 못한 오류 발생: ' || SQLERRM);
         END IF;
 END;
-/
 
 -- ○ 7. 경매 취소 프로시저 
 CREATE OR REPLACE PROCEDURE PRC_AUCTION_CANCEL(
@@ -636,7 +633,7 @@ BEGIN
         AUCTION_CANCEL_SEQ.NEXTVAL, P_AUCTION_ID, P_CANCEL_REASON, SYSDATE
     );
 
-    -- COMMIT; 
+    COMMIT; 
 EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;

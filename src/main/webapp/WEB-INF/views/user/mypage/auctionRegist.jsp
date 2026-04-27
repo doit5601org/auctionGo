@@ -68,13 +68,14 @@
             </div>
         </div>
 
-        <div class="flex-grow-1">
-            <form action="${pageContext.request.contextPath}/user/mypage/auction" method="post">
-                
-                <div class="mb-4">
-                    <label class="wf-label">경매 제목</label>
-                    <input type="text" name="AUCTION_TITLE" id="AUCTION_TITLE" class="form-control wf-input" placeholder="경매 제목을 입력하세요.">
-                </div>
+      <div class="flex-grow-1">
+    	<form action="${pageContext.request.contextPath}/user/mypage/auction" method="post">
+        	<input type="hidden" name="productId" value="${productId}">
+        
+        <div class="mb-4">
+            <label class="wf-label">경매 제목</label>
+            <input type="text" name="AUCTION_TITLE" id="AUCTION_TITLE" class="form-control wf-input" placeholder="경매 제목을 입력하세요.">
+        </div>
 
                 <div class="row mb-4">
                     <div class="col-md-7">
