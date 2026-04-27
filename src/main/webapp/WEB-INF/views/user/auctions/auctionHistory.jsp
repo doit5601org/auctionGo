@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>경매 이력</title>
+<title>내 경매 이력</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 <script>
@@ -44,6 +44,10 @@ $(function() {
     /* 상세 정보 행 자체의 배경색을 살짝 주어 구분감 강화 */
     #auction-history-table .collapse.bg-light {
         background-color: #f8f9fa !important;
+    }
+        .btn-primary{
+    	background-color: #120e63 !important;
+    	border-color: #120e63 !important;
     }
 </style>
 </head>
