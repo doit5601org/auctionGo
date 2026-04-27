@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="ko">
@@ -102,7 +102,7 @@
                 <div class="card product-card h-100" onclick="location.href='${ctx}/product/detail?productId=${p.productId}'">
                     <c:choose>
                         <c:when test="${not empty p.imagePath1}">
-                            <img src="${ctx}/${p.imagePath1}" class="card-img-top" alt="${p.productReleaseName}">
+                            <img src="${ctx}/images/${p.imagePath1}" class="card-img-top" alt="${p.productReleaseName}">
                         </c:when>
                         <c:otherwise>
                             <img src="https://placehold.co/300x180/e9ecef/6c757d?text=No+Image" class="card-img-top" alt="">

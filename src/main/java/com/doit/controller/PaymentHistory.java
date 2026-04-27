@@ -36,7 +36,7 @@ public class PaymentHistory extends HttpServlet{
 		
 		HttpSession session = request.getSession();
 		
-		Object user = session.getAttribute("userId");
+		Object user = session.getAttribute("loginUser");
 		
 		int userId = 0;
 		
@@ -98,7 +98,7 @@ public class PaymentHistory extends HttpServlet{
 		request.setAttribute("userMoney", dao.moneyCheck(userId));
 		
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/머니.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/moneyHistory.jsp");
 		dispatcher.forward(request, response);
 	}
 	

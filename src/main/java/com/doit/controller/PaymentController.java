@@ -53,7 +53,7 @@ public class PaymentController extends HttpServlet
 			takefail(request, response);
 		}
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/충전.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/moneyChargeHome.jsp");
 		dispatcher.forward(request, response);
 	}
 	
@@ -61,7 +61,7 @@ public class PaymentController extends HttpServlet
 	{
 		HttpSession session = request.getSession();
 		
-		Object user = session.getAttribute("userId");
+		Object user = session.getAttribute("loginUser");
 		
 		int userId = 0;
 		
@@ -102,12 +102,12 @@ public class PaymentController extends HttpServlet
 		if(result)
 		{
 			request.setAttribute("message", "충전이 완료되었습니다");
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/charge.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/money/charge.jsp");
 			dispatcher.forward(request, response);
 		}else
 		{
 			request.setAttribute("message", "충전이 완료되지않았습니다");
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/charge.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/money/charge.jsp");
 			dispatcher.forward(request, response);
 		}
 	}
@@ -128,12 +128,12 @@ public class PaymentController extends HttpServlet
 		if(result > 0)
 		{
 			request.setAttribute("massage", "결제가 완료되었습니다!");
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/success.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/success.jsp");
 			dispatcher.forward(request, response);
 		}else
 		{
 			request.setAttribute("massage", "결제가 실패하였습니다..");
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/success.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/success.jsp");
 			dispatcher.forward(request, response);
 		}
 		
@@ -151,8 +151,10 @@ public class PaymentController extends HttpServlet
 		
 		
 		
-		request.setAttribute("massage", "결제가 실패하였습니다..");
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/takefail.jsp");
+		request.setAttribute("massage", "결제가 성공하였습니다..");
+		
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/takefail.jsp");
 		dispatcher.forward(request, response);
 		
 		

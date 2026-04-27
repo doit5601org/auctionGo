@@ -62,7 +62,7 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-bold">충전</a>
+                                <a href="${pageContext.request.contextPath }/payment" class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-bold">충전</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle fw-bold ms-2 fs-6" href="#" id="userDropdown" role="button">

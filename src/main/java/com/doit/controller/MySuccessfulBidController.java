@@ -35,7 +35,7 @@ public class MySuccessfulBidController extends HttpServlet{
 
 		HttpSession session = request.getSession();
 		
-		Object user = session.getAttribute("userId");
+		Object user = session.getAttribute("loginUser");
 		
 		int userId = 0;
 		
@@ -113,7 +113,7 @@ public class MySuccessfulBidController extends HttpServlet{
 		request.setAttribute("endPage", endPage);
 		request.setAttribute("totalPage", totalPage);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/anjinmo_jsp/안진모_내낙찰상품조회.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/mySuccessBid.jsp");
 		dispatcher.forward(request, response);
 	}
 	
