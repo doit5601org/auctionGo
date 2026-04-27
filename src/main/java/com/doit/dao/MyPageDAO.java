@@ -713,45 +713,6 @@ public class MyPageDAO {
 			
 		}
 	
-	
-	//패널티 총 점수 
-		public int totalPaneltyScore(int userId){
-			int result = 0;
-			String sql = """
-					SELECT MAX(TOTAL_SCORE) AS TOTAL
-					FROM VW_PENALTY_DETAIL_LIST
-					WHERE USER_ID = ?
-					""";
-			try(Connection conn = DBCPConn.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
-				pstmt.setInt(1, userId);
-				
-				try(ResultSet rs = pstmt.executeQuery()){
-					if(rs.next()) {
-						result = rs.getInt("TOTAL");
-						
-					}
-				}
-				
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			return result;
-			
-		}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 		// productId + userId로 찜 해제
 		public void deleteWishlistByProduct(int userId, int productId) {
@@ -769,5 +730,34 @@ public class MyPageDAO {
 		    }
 		}
 
+		// 낙찰 입금 코드 찾기
+		public int findPaymentId(int auctionId) {
+			int result = 0;
+			
+			String sql = """
+					
+					""";
+			
+			return result;
+			
+		}
+		
+		// 배송완료
+		public void shippingOk(int auctionId) {
+			
+		    String sql = """
+		            INSERT INTO DELIVERY_COMPLETED(SHIPPING_ID, PAYMENT_ID)
+					VALUES(SHIPPING_SEQ.NEXTVAL, ?)
+		            """;
+		    try (Connection conn = DBCPConn.getConnection();
+		         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		        pstmt.setInt(1, userId);
+		        pstmt.setInt(2, productId);
+		        pstmt.executeUpdate();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+			
+		}
 
 }
