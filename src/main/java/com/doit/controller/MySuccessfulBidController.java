@@ -85,7 +85,7 @@ public class MySuccessfulBidController extends HttpServlet{
 		int selCount = dao.auctionResultCount(userId,type);
 		
 		ArrayList<AuctionResultViewDTO> list = dao.auctionResultList(userId,page,viewCount,type);
-
+		
 		for(AuctionResultViewDTO d : list) {
 		    System.out.println("newconfirm: " + d.getConfirm());
 		    System.out.println("newshipping: " + d.getShipping());

@@ -64,9 +64,11 @@ public class PaymentDetailController extends HttpServlet
 		ProductBuyDAO dao = new ProductBuyDAO();
 		
 		
-		PaymentDetailDTO dto = dao.takeItem(userId);
+		PaymentDetailDTO dto = dao.takeItem(resultId);
 		
 		int money = dao.moneyCheck(userId);
+		
+		System.out.println(dto.getUserName());
 		
 		request.setAttribute("detail", dto);
 		
