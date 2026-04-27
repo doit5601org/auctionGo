@@ -12,7 +12,6 @@
 		body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
 		.container { flex: 1; }
 		
-		/* 대시보드 카드 스타일 */
 		.stat-card {
 			transition: all 0.3s ease;
 			cursor: pointer;
