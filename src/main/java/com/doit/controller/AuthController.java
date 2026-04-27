@@ -41,6 +41,7 @@ public class AuthController extends HttpServlet{
 		// 로그인요청
 		}else if(uri.endsWith("/user/auth/loginAction")) {
 
+			
 			String loginId = request.getParameter("userId");
 			String loginPw = request.getParameter("userPwd");
 			String check = request.getParameter("check");
