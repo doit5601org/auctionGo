@@ -11,6 +11,8 @@ import com.doit.dto.ProductGradeDTO;
 import com.doit.dto.ProductManufacturerDTO;
 import com.doit.dto.ProductSizeDTO;
 import com.doit.dto.UserInfoDTO;
+import com.doit.dto.ReportDTO;
+import com.doit.dto.ReportTypeDTO;
 import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
@@ -22,10 +24,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
+
 @WebServlet("/product/*")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 1, // 1MB
-		maxFileSize = 1024 * 1024 * 10, // 10MB
-		maxRequestSize = 1024 * 1024 * 15 // 15MB
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 1,  // 1MB
+    maxFileSize = 1024 * 1024 * 10,       // 10MB
+    maxRequestSize = 1024 * 1024 * 15     // 15MB
 )
 public class ProductController extends HttpServlet
 {
@@ -119,10 +123,11 @@ public class ProductController extends HttpServlet
 		int end = page * PAGE_SIZE_LIST;
 
 		int totalCount = productDAO.selectProductCount(keyword, genreId, gradeId, sizeId, manufacturerId);
-		int totalPage = pagination.pageCount(totalCount, PAGE_SIZE_LIST);
+		int totalPage = (int) Math.ceil((double) totalCount / PAGE_SIZE_LIST);
 		List<ProductDTO> list = productDAO.selectProductList(start, end, keyword, genreId, gradeId, sizeId,
 				manufacturerId, sort);
 
+		// 드롭다운용 공통 코드
 		List<ProductGenreDTO> genreList = productDAO.selectGenreList();
 		List<ProductGradeDTO> gradeList = productDAO.selectGradeList();
 		List<ProductSizeDTO> sizeList = productDAO.selectSizeList();
@@ -158,7 +163,7 @@ public class ProductController extends HttpServlet
 		int end = page * PAGE_SIZE_MY_LIST;
 
 		int totalCount = productDAO.selectMyProductCount(userId);
-		int totalPage = pagination.pageCount(totalCount, PAGE_SIZE_MY_LIST);
+		int totalPage = (int) Math.ceil((double) totalCount / PAGE_SIZE_MY_LIST);
 		List<ProductDTO> list = productDAO.selectMyProductList(userId, start, end);
 
 		req.setAttribute("myProductList", list);
@@ -207,6 +212,8 @@ public class ProductController extends HttpServlet
 	}
 
 	// 상품 등록 (POST - 저장)
+	// ※ 파일 업로드는 미구현. imagePath1/2/3 에는 일단 파일명만 받는다고 가정.
+	// (운영 시 @MultipartConfig + Part API 로 실제 저장 로직 추가)
 	private void registerPostAction(HttpServletRequest req, HttpServletResponse resp, String ct)
 			throws ServletException, IOException, SQLException
 	{
@@ -307,7 +314,7 @@ public class ProductController extends HttpServlet
 		resp.sendRedirect(ct + "/product/myList");
 	}
 
-	// 상품 신고 폼
+	// 상품 신고 (GET )
 	private void reportFormAction(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException, SQLException
 	{
@@ -327,10 +334,53 @@ public class ProductController extends HttpServlet
 			return;
 		}
 
+		List<ReportTypeDTO> reportTypeList = productDAO.selectReportTypeList();
+
 		req.setAttribute("product", product);
-		req.getRequestDispatcher("/WEB-INF/views/report/reportSubmit.jsp").forward(req, resp);
+		req.setAttribute("reportTypeList", reportTypeList);
+		req.getRequestDispatcher("/WEB-INF/views/product/productReport.jsp").forward(req, resp);
 	}
 
+	// 상품 신고 (POST )
+	private void reportPostAction(HttpServletRequest req, HttpServletResponse resp, String ct)
+			throws ServletException, IOException, SQLException
+	{
+		Integer userId = getLoginUserId(req);
+		if (userId == null)
+		{
+			resp.sendRedirect(ct + "/login");
+			return;
+		}
+
+		int productId = Integer.parseInt(req.getParameter("productId"));
+
+		ReportDTO dto = new ReportDTO();
+		dto.setUserId(userId);
+		dto.setReportTypeId(Integer.parseInt(req.getParameter("reportTypeId")));
+		dto.setProductId(productId);
+		dto.setReportReason(req.getParameter("reportContent"));
+
+		try
+		{
+			productDAO.insertProductReport(dto);
+			resp.sendRedirect(ct + "/product/detail?productId=" + productId + "&reportOk=1");
+		} catch (SQLException e)
+		{
+			if (e.getErrorCode() == ProductDAO.ERR_DUPLICATE_REPORT)
+			{
+				// 중복 신고 → 폼으로 돌려보내고 에러 메시지 표시
+				req.setAttribute("errorMsg", "이미 신고하신 상품입니다.");
+				req.setAttribute("product", productDAO.selectProductDetail(productId));
+				req.setAttribute("reportTypeList", productDAO.selectReportTypeList());
+				req.getRequestDispatcher("/WEB-INF/views/product/productReport.jsp").forward(req, resp);
+			} else
+			{
+				throw e;
+			}
+		}
+	}
+
+	// 헬퍼 메서드
 	// 세션에서 로그인 사용자 userId 가져오기. 없으면 null.
 	private Integer getLoginUserId(HttpServletRequest req)
 	{
@@ -384,6 +434,7 @@ public class ProductController extends HttpServlet
 		dto.setWorkName(req.getParameter("workName"));
 		dto.setCharacterName(req.getParameter("characterName"));
 
+		// purchaseDate 는 JSP 에서 연도 드롭다운('2023' 등) → 'YYYY-01-01' 변환
 		String purchaseYear = req.getParameter("purchaseDate");
 		if (purchaseYear != null && purchaseYear.matches("\\d{4}"))
 		{
@@ -398,21 +449,13 @@ public class ProductController extends HttpServlet
 		dto.setDescriptions(req.getParameter("description"));
 		dto.setIsPublic(parseIntOrZero(req.getParameter("publicCode")));
 
-		String img1 = saveUploadedFile(req, "productImage1");
-		if (img1 == null)
-			img1 = req.getParameter("existingImage1");
-		dto.setImagePath1(img1);
-
-		String img2 = saveUploadedFile(req, "productImage2");
-		if (img2 == null)
-			img2 = req.getParameter("existingImage2");
-		dto.setImagePath2(img2);
-
-		String img3 = saveUploadedFile(req, "productImage3");
-		if (img3 == null)
-			img3 = req.getParameter("existingImage3");
-		dto.setImagePath3(img3);
-
+		// 실제 파일 업로드 처리는 @MultipartConfig + Part API 로 별도 구현.
+		// 현재는 hidden input 또는 수동 파일명 입력 기준.
+		/*
+		 * dto.setImagePath1(getFileName(req.getPart("productImage1")));
+		 * dto.setImagePath2(getFileName(req.getPart("productImage2")));
+		 * dto.setImagePath3(getFileName(req.getPart("productImage3")));
+		 */
 		return dto;
 	}
 

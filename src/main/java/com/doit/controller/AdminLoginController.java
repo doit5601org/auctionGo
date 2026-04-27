@@ -23,7 +23,7 @@ public class AdminLoginController extends HttpServlet {
     	String id = request.getParameter("adminId");
         String pw = request.getParameter("adminPwd");
 
-        // 2. DAO 호출해서 인증하기
+        // DAO 호출해서 인증하기
         AdminDAO dao = new AdminDAO();
         AdminDTO adminInfo = dao.getAdmin(id, pw);
 
