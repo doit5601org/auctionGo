@@ -506,7 +506,7 @@ public class ProductController extends HttpServlet
 		}
 	}
 
-	// Part 헤더에서 원본 파일명 추출
+	// Part 헤더에서 원본 파일명 추출1
 	private String getSubmittedFileName(Part part)
 	{
 		String cd = part.getHeader("content-disposition");
