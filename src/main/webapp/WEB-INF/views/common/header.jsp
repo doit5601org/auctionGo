@@ -30,10 +30,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li class="nav-item px-3">
-                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/productList.jsp">컬렉션</a>
+                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/product/list">컬렉션</a>
                 </li>
                 <li class="nav-item px-3">
-                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/auctionList.jsp">경매</a>
+                    <a class="nav-link text-dark fw-bold fs-5 hover-primary" href="${pageContext.request.contextPath}/auction/list">경매</a>
                 </li>
             </ul>
 

@@ -21,6 +21,7 @@
         background-position: center;
         padding: 120px 0;
         color: white;
+        height: 100%;
     }
 
     /* 카드 공통 호버 효과 */
@@ -61,6 +62,10 @@
     .hero-section{
     	background-image: url('${pageContext.request.contextPath}/images/main.jpeg') !important;
     }
+    .btn-primary{
+    	background-color: #120e63 !important;
+    	border-color: #120e63 !important;
+    }
 </style>
 </head>
 <body class="bg-light">
@@ -68,13 +73,13 @@
 <%-- <jsp:include page="WEB-INF/views/common/header.jsp"></jsp:include> --%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <main>
-    <section class="hero-section text-center mb-5">
+    <section class="hero-section text-center">
         <div class="container">
             <h1 class="display-3 fw-bold mb-3 txtColor">나만의 컬렉션, 특별한 경매</h1>
             <p class="lead mb-5 opacity-75 text-dark fw-bold">당신의 소장품을 뽐내고, 경매로 가치를 더하세요!</p>
             <div class="d-flex justify-content-center gap-3">
-                <a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/auctionList.jsp" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold">경매 입장</a>
-                <a href="${pageContext.request.contextPath}/gangmyeongcheol_jsp/productList.jsp" class="btn btn-outline-dark btn-lg px-5 py-3 rounded-pill fw-bold">컬렉션 구경</a>
+                <a href="${pageContext.request.contextPath}/auction/list" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold">경매 입장</a>
+                <a href="${pageContext.request.contextPath}/product/list" class="btn btn-outline-dark btn-lg px-5 py-3 rounded-pill fw-bold">컬렉션 구경</a>
             </div>
         </div>
     </section>
