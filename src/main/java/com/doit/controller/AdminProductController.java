@@ -50,11 +50,11 @@ public class AdminProductController extends HttpServlet
 				if (path.equalsIgnoreCase("/admin/product/list"))
 				{
 					// 요청 파라미터 수신
-					//-- productStatus, nowPage
+					//-- productStatus, page
 					
 					// 현재 페이지
-					String strNowPage = request.getParameter("page") == null ? "1" : request.getParameter("page");
-					int nowPage = Integer.parseInt(strNowPage);
+					String strPage = request.getParameter("page") == null ? "1" : request.getParameter("page");
+					int page = Integer.parseInt(strPage);
 					
 					// 상품 공개 여부 필터값
 					//-- null → 페이지 최초 진입 → 전체 리스트 출력
@@ -73,23 +73,23 @@ public class AdminProductController extends HttpServlet
 					
 					// 상품 리스트 가져오기
 					int sizePerPage = 10;
-					List<ProductDTO> productList = apService.getProductList(productStatus, nowPage, sizePerPage);
+					List<ProductDTO> productList = apService.getProductList(productStatus, page, sizePerPage);
 					
 					
 					// 페이지 엘리먼트 생성
 					Pagination pagination = new Pagination();
-					int totalPageCount = pagination.pageCount(productTotalCount, 10);
+					int totalPageCount = pagination.pageCount(productTotalCount, sizePerPage);
 					
-					String listUrl = request.getContextPath() + "/admin/product/list?productStatus=" + productStatus;
+					// String listUrl = request.getContextPath() + "/admin/product/list?productStatus=" + productStatus;
+					String listUrl =  uri + "?productStatus=" + productStatus;
 					
-					String pageElement = pagination.paging(nowPage, totalPageCount, listUrl);
+					String pageElement = pagination.paging(page, totalPageCount, listUrl);
 					
 					
 					// 필요한 파라미터들 바인딩
 					request.setAttribute("productTotalCount", productTotalCount);
 					request.setAttribute("productList", productList);
 					request.setAttribute("productStatus", productStatus);
-					request.setAttribute("nowPage", nowPage);
 					request.setAttribute("pageElement", pageElement);
 					
 					
