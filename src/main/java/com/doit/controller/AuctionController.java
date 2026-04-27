@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.doit.dao.AuctionDAO;
 import com.doit.dto.AuctionDTO;
+import com.doit.dto.UserInfoDTO;
 import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
@@ -209,27 +210,13 @@ public class AuctionController extends HttpServlet
 	// 세션에서 로그인 사용자 userId 가져오기. 없으면 null.
 	private Integer getLoginUserId(HttpServletRequest req)
 	{
-		HttpSession session = req.getSession(false);
-		if (session == null)
-			return null;
+	    HttpSession session = req.getSession(false);
+	    if (session == null) return null;
 
-		Object obj = session.getAttribute("userId");
+	    UserInfoDTO loginUser = (UserInfoDTO) session.getAttribute("loginUser");
+	    if (loginUser == null) return null;
 
-		if (obj instanceof Integer)
-			return (Integer) obj;
-
-		return null;
+	    return loginUser.getUserId();
 	}
-
-	/*
-	 * private Integer getLoginUserId(HttpServletRequest req) { // 테스트용 임시 - 로그인 기능
-	 * return 1;
-	 * 
-	 * 실제 로그인 세션 코드 HttpSession session = req.getSession(false); if (session ==
-	 * null) return null; Object obj = session.getAttribute("userId"); if (obj
-	 * instanceof Integer) return (Integer) obj; return null;
-	 * 
-	 * }
-	 */
 
 }

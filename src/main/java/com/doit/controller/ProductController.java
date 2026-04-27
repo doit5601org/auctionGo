@@ -12,6 +12,7 @@ import com.doit.dto.ProductManufacturerDTO;
 import com.doit.dto.ProductSizeDTO;
 import com.doit.dto.ReportDTO;
 import com.doit.dto.ReportTypeDTO;
+import com.doit.dto.UserInfoDTO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -62,10 +63,11 @@ public class ProductController extends HttpServlet
 			if (uri.endsWith("/product/list"))
 			{
 				listAction(req, resp);
-			} else if (uri.endsWith("/product/myList"))
-			{
-				myListAction(req, resp, ct);
-			} else if (uri.endsWith("/product/detail"))
+			} 
+			/*
+			 * else if (uri.endsWith("/user/product")) { myListAction(req, resp, ct); }
+			 */
+			else if (uri.endsWith("/product/detail"))
 			{
 				detailAction(req, resp);
 			} else if (uri.endsWith("/product/register"))
@@ -145,35 +147,28 @@ public class ProductController extends HttpServlet
 		req.getRequestDispatcher("/WEB-INF/views/product/productList.jsp").forward(req, resp);
 	}
 
-	// 내 상품 목록 (마이페이지)
-	private void myListAction(HttpServletRequest req, HttpServletResponse resp, String ct)
-			throws ServletException, IOException, SQLException
-	{
-		Integer userId = getLoginUserId(req);
-		if (userId == null)
-		{
-			resp.sendRedirect(ct + "/login");
-			return;
-		}
-
-		int page = parseIntWithDefault(req.getParameter("page"), 1);
-		if (page < 1)
-			page = 1;
-		int start = (page - 1) * PAGE_SIZE_MY_LIST + 1;
-		int end = page * PAGE_SIZE_MY_LIST;
-
-		int totalCount = productDAO.selectMyProductCount(userId);
-		int totalPage = (int) Math.ceil((double) totalCount / PAGE_SIZE_MY_LIST);
-		List<ProductDTO> list = productDAO.selectMyProductList(userId, start, end);
-
-		req.setAttribute("myProductList", list);
-		req.setAttribute("totalCount", totalCount);
-		req.setAttribute("totalPage", totalPage);
-		req.setAttribute("currentPage", page);
-		req.setAttribute("pageStart", start); // JSP 에서 행번호 계산용
-
-		req.getRequestDispatcher("/WEB-INF/views/product/productMyList.jsp").forward(req, resp);
-	}
+	/*
+	 * // 내 상품 목록 (마이페이지) private void myListAction(HttpServletRequest req,
+	 * HttpServletResponse resp, String ct) throws ServletException, IOException,
+	 * SQLException { Integer userId = getLoginUserId(req); if (userId == null) {
+	 * resp.sendRedirect(ct + "/login"); return; }
+	 * 
+	 * int page = parseIntWithDefault(req.getParameter("page"), 1); if (page < 1)
+	 * page = 1; int start = (page - 1) * PAGE_SIZE_MY_LIST + 1; int end = page *
+	 * PAGE_SIZE_MY_LIST;
+	 * 
+	 * int totalCount = productDAO.selectMyProductCount(userId); int totalPage =
+	 * (int) Math.ceil((double) totalCount / PAGE_SIZE_MY_LIST); List<ProductDTO>
+	 * list = productDAO.selectMyProductList(userId, start, end);
+	 * 
+	 * req.setAttribute("myProductList", list); req.setAttribute("totalCount",
+	 * totalCount); req.setAttribute("totalPage", totalPage);
+	 * req.setAttribute("currentPage", page); req.setAttribute("pageStart", start);
+	 * // JSP 에서 행번호 계산용
+	 * 
+	 * req.getRequestDispatcher("/WEB-INF/views/product/productMyList.jsp").forward(
+	 * req, resp); }
+	 */
 
 	// 상품 상세
 	private void detailAction(HttpServletRequest req, HttpServletResponse resp)
@@ -228,7 +223,7 @@ public class ProductController extends HttpServlet
 		dto.setUserId(userId);
 
 		productDAO.insertProduct(dto);
-		resp.sendRedirect(ct + "/product/myList");
+		resp.sendRedirect(ct + "/user/product");
 	}
 
 	// 상품 수정 (GET )
@@ -380,23 +375,18 @@ public class ProductController extends HttpServlet
 		}
 	}
 
-	// 헬퍼 메서드
 	// 세션에서 로그인 사용자 userId 가져오기. 없으면 null.
-	/*
-	 * private Integer getLoginUserId(HttpServletRequest req) { HttpSession session
-	 * = req.getSession(false); if (session == null) return null;
-	 * 
-	 * Object obj = session.getAttribute("userId");
-	 * 
-	 * if (obj instanceof Integer) return (Integer) obj;
-	 * 
-	 * return null; }
-	 */
-
 	private Integer getLoginUserId(HttpServletRequest req)
 	{
-		return 1;
-	} // 테스트용 login }
+	    HttpSession session = req.getSession(false);
+	    if (session == null) return null;
+
+	    UserInfoDTO loginUser = (UserInfoDTO) session.getAttribute("loginUser");
+	    if (loginUser == null) return null;
+
+	    return loginUser.getUserId();
+	}
+
 
 	// 파라미터 → Integer 변환. 빈 값/숫자 아니면 null
 	private Integer parseInteger(String s)
