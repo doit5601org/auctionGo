@@ -9,7 +9,7 @@ public class AuctionResultViewDTO
 	private String auctionTitle,winnerDate
 	,auctionStartDate,winnerBidDate,auctionStat
 	,winnerStat,paymentStat,paymentDate,fail,shipping
-	,shippingDate,confirm,confirmDate,winner;
+	,shippingDate,confirm,confirmDate,winner,img;
 
 	public AuctionResultViewDTO() {}
 	
@@ -17,7 +17,7 @@ public class AuctionResultViewDTO
 			int auctionUseDate, int winnerBidId, int finalPrice, int winnerId, int paymentId, int failType,
 			String auctionTitle, String winnerDate, String auctionStartDate, String winnerBidDate,
 			String auctionStat, String winnerStat, String paymentStat, String paymentDate, String fail, String shipping,
-			String shippingDate, String confirm, String confirmDate, String winner)
+			String shippingDate, String confirm, String confirmDate, String winner, String img)
 	{
 		this.auctionId = auctionId;
 		this.winnerUserId = winnerUserId;
@@ -44,9 +44,20 @@ public class AuctionResultViewDTO
 		this.confirm = confirm;
 		this.confirmDate = confirmDate;
 		this.winner = winner;
+		this.img = img;
 	}
 
 	
+	public String getImg()
+	{
+		return img;
+	}
+
+	public void setImg(String img)
+	{
+		this.img = img;
+	}
+
 	public String getWinner()
 	{
 		return winner;
