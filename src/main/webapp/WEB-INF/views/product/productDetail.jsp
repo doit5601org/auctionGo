@@ -56,7 +56,7 @@
 
             <c:choose>
                 <c:when test="${not empty mainImg}">
-                    <img src="${ctx}/images/${mainImg}" class="main-img" id="mainImg" alt="${product.productReleaseName}">
+                    <img src="${ctx}/${mainImg}" class="main-img" id="mainImg" alt="${product.productReleaseName}">
                 </c:when>
                 <c:otherwise>
                     <img src="https://placehold.co/360x360/e9ecef/6c757d?text=No+Image"

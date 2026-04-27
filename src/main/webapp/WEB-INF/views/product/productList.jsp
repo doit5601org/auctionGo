@@ -102,7 +102,7 @@
                 <div class="card product-card h-100" onclick="location.href='${ctx}/product/detail?productId=${p.productId}'">
                     <c:choose>
                         <c:when test="${not empty p.imagePath1}">
-                            <img src="${ctx}/images/${p.imagePath1}" class="card-img-top" alt="${p.productReleaseName}">
+                            <img src="${ctx}/${p.imagePath1}" class="card-img-top" alt="${p.productReleaseName}">
                         </c:when>
                         <c:otherwise>
                             <img src="https://placehold.co/300x180/e9ecef/6c757d?text=No+Image" class="card-img-top" alt="">
