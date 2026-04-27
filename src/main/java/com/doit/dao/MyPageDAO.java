@@ -217,7 +217,7 @@ public class MyPageDAO {
 				SELECT AUCTION_ID, AUCTION_TITLE
 				, AUCTION_START_DATE, AUCTION_END_DATE, IMAGE_PATH_1, BID_COUNT
 				FROM VW_AUCTION_LIST
-				WHERE USER_ID = ? AND AUCTION_END_DATE > SYSDATE
+				WHERE USER_ID = ? AND AUCTION_END_DATE > SYSDATE AND IS_FINISHED = '진행중'
 				ORDER BY AUCTION_ID DESC OFFSET ? ROWS FETCH FIRST ? ROWS ONLY""";
 		
 		try(Connection conn = DBCPConn.getConnection();
@@ -298,20 +298,30 @@ public class MyPageDAO {
 		
 		
 		String sql = """
-				SELECT VR.AUCTION_ID, AL.AUCTION_TITLE, NVL(VR.WINNING_BID_PRICE,0) AS FINAL_PRICE, AL.AUCTION_END_DATE, 
-				CASE WHEN BID_FAIL_YN = 'N' AND PURCHASE_CONFIRM_YN = 'N' THEN '거래진행중'
-				WHEN BID_FAIL_YN = 'N' AND PURCHASE_CONFIRM_YN = 'Y' THEN '거래완료'
-				ELSE '유찰'
-				END AS TRANSACTION_STATUS
-				, VR.PURCHASE_CONFIRM_DATE, 
-				CASE WHEN BID_FAIL_TYPE = 1 THEN '결제기한만료'
-				WHEN BID_FAIL_TYPE = 2 THEN '낙찰포기'
-				END AS BID_FAIL_TYPE
-				FROM VW_AUCTION_LIST AL 
+				SELECT
+				    AL.AUCTION_ID,
+				    AL.AUCTION_TITLE,
+				    NVL(VR.WINNING_BID_PRICE, 0) AS FINAL_PRICE,
+				    TO_CHAR(AL.AUCTION_END_DATE, 'YYYY-MM-DD') AS AUCTION_END_DATE, 
+				    CASE
+				        WHEN AL.IS_FINISHED = '경매취소' THEN '경매취소'
+				        WHEN VR.BID_FAIL_YN = 'N' AND VR.PURCHASE_CONFIRM_YN = 'N' THEN '거래진행중'
+				        WHEN VR.BID_FAIL_YN = 'N' AND VR.PURCHASE_CONFIRM_YN = 'Y' THEN '거래완료'
+				        ELSE '유찰'
+				    END AS TRANSACTION_STATUS,
+				    VR.PURCHASE_CONFIRM_DATE,
+				    CASE
+				        WHEN VR.BID_FAIL_TYPE = 1 THEN '결제기한만료'
+				        WHEN VR.BID_FAIL_TYPE = 2 THEN '낙찰포기'
+				    END AS BID_FAIL_TYPE
+				    , VR.WINNING_PAYMENT_STATUS, VR.SHIPPING_YN
+				FROM VW_AUCTION_LIST AL
 				LEFT OUTER JOIN VW_AUCTION_WINNING_RESULT VR ON AL.AUCTION_ID = VR.AUCTION_ID
-				WHERE AL.USER_ID = ? AND AL.AUCTION_END_DATE<SYSDATE
-				ORDER BY AL.AUCTION_END_DATE DESC OFFSET ? ROWS FETCH FIRST ? ROWS ONLY
-				
+				WHERE AL.USER_ID = ?
+				  AND (AL.AUCTION_END_DATE < SYSDATE OR AL.IS_FINISHED = '경매취소') 
+				  AND AL.IS_FINISHED != '진행중'
+				ORDER BY AL.AUCTION_END_DATE DESC
+				OFFSET ? ROWS FETCH FIRST ? ROWS ONLY
 				""";
 		
 		try(Connection conn = DBCPConn.getConnection();
@@ -333,6 +343,8 @@ public class MyPageDAO {
 					dto.setTransactionStatus(rs.getString("TRANSACTION_STATUS"));
 					dto.setPurchaseConfirmDate(rs.getString("PURCHASE_CONFIRM_DATE"));
 					dto.setBidFailType(rs.getString("BID_FAIL_TYPE"));
+					dto.setWinningPaymentStatus(rs.getString("WINNING_PAYMENT_STATUS"));
+					dto.setShippingYn(rs.getString("SHIPPING_YN"));
 	
 					result.add(dto);
 					
