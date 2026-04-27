@@ -87,6 +87,33 @@ $(function() {
     .bg-primary{
     background-color: #120e63 !important;
     }
+   	i.text-primary{
+   		color: #120e63 !important;
+   	}
+    .btn-primary, .bg-primary {
+        background-color: #120e63 !important;
+        border-color: #120e63 !important;
+        color: #ffffff !important; /* 글자색 흰색 유지 */
+    }
+
+    .badge.bg-primary {
+        background-color: #5172a6 !important;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #120e63 !important;
+        border-color: #120e63 !important;
+        color: #ffffff !important;
+    }
+
+    .pagination .page-link:hover {
+        color: #120e63;
+    }
+    
+    .page-link:focus {
+        box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
+    }
+    
 </style>
 </head>
 <body class="bg-light">
