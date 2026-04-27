@@ -45,11 +45,7 @@
 <title></title>
 </head>
 <body>
-	<jsp:include page="/common/header.jsp"></jsp:include>
 	<div class="row">
-		<aside class="col-md-3">
-			<jsp:include page="/common/mypage_layout.jsp" />
-		</aside>
 		<div class="col-md-9">
 			<div class="body shadow-sm border-0 bg-white p-4">
 
@@ -158,7 +154,6 @@
 			</div>
 		</div>
 	</div>
-	<jsp:include page="/common/footer.jsp"></jsp:include>
 
 </body>
 </html>
