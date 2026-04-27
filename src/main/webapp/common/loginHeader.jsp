@@ -18,8 +18,7 @@
 <body>
     <nav class="navbar navbar-light bg-white border-bottom sticky-top">
         <div class="container justify-content-center">
-            <a class="navbar-brand navbar-brand-custom fw-bold text-secondary" 
-               href="${pageContext.request.contextPath}/common/main.jsp">
+            <a class="navbar-brand navbar-brand-custom fw-bold text-secondary" >
                 경매나라
             </a>
         </div>
