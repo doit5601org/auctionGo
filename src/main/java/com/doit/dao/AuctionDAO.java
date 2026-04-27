@@ -415,7 +415,43 @@ public class AuctionDAO {
 			    return result;
 			}
 
+			
+			// 입찰 메소드
+			public String insertBid(long auctionId, long userNo, int bidPrice) {
+			    String result = "";
+			    Connection conn = null;
+			    CallableStatement cstmt = null;
 
+			    String sql = "{call PRC_AUCTION_BID_CREATE(?, ?, ?, ?)}";
+
+			    try {
+			        conn = DBCPConn.getConnection();
+			        cstmt = conn.prepareCall(sql);
+
+			        cstmt.setLong(1, auctionId);
+			        cstmt.setLong(2, userNo);
+			        cstmt.setInt(3, bidPrice);
+
+			        // 2. OUT 파라미터 등록 (Oracle의 VARCHAR2는 Types.VARCHAR 매칭)
+			        cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
+
+			        cstmt.executeUpdate();
+
+			        result = cstmt.getString(4);
+
+			    } catch (Exception e) {
+			        System.err.println("입찰 프로시저 실행 중 예외 발생: " + e.getMessage());
+			        e.printStackTrace();
+			        result = "시스템 오류가 발생했습니다.";
+			    } finally {
+			        try {
+			            if (cstmt != null) cstmt.close();
+			            if (conn != null) conn.close();
+			        } catch (Exception e2) {}
+			    }
+
+			    return result;
+			}
 
 
 }
