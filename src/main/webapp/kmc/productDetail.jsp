@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -150,10 +150,8 @@
                     </c:when>
                     <c:otherwise>
                         <div class="text-end">
-                            <a href="${ctx}/product/report?productId=${product.productId}"
-                               class="btn btn-link btn-sm text-muted p-0 small text-decoration-none">
-                                <i class="bi bi-flag"></i> 신고하기
-                            </a>
+                            <a href="${ctx}/product/report?productId=${product.productId}&type=product&name=${product.productReleaseName}" 
+                                class="btn btn-link btn-sm text-muted">신고하기</a>
                         </div>
                     </c:otherwise>
                 </c:choose>

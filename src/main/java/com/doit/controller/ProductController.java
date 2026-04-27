@@ -26,7 +26,8 @@ import jakarta.servlet.http.Part;
 		maxFileSize = 1024 * 1024 * 10, // 10MB
 		maxRequestSize = 1024 * 1024 * 15 // 15MB
 )
-public class ProductController extends HttpServlet {
+public class ProductController extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	// 페이지 사이즈
@@ -37,58 +38,72 @@ public class ProductController extends HttpServlet {
 	private Pagination pagination = new Pagination();
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	{
 		process(req, resp);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	{
 		process(req, resp);
 	}
 
-	protected void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	{
 		String uri = req.getRequestURI();
 		String method = req.getMethod(); // "GET" / "POST"
 		String ct = req.getContextPath();
 
-		try {
-			if (uri.endsWith("/product/list")) {
+		try
+		{
+			if (uri.endsWith("/product/list"))
+			{
 				listAction(req, resp);
-			} else if (uri.endsWith("/product/myList")) {
+			} else if (uri.endsWith("/product/myList"))
+			{
 				myListAction(req, resp, ct);
-			} else if (uri.endsWith("/product/detail")) {
+			} else if (uri.endsWith("/product/detail"))
+			{
 				detailAction(req, resp);
-			} else if (uri.endsWith("/product/register")) {
+			} else if (uri.endsWith("/product/register"))
+			{
 				if ("POST".equalsIgnoreCase(method))
 					registerPostAction(req, resp, ct);
 				else
 					registerFormAction(req, resp);
-			} else if (uri.endsWith("/product/update")) {
+			} else if (uri.endsWith("/product/update"))
+			{
 				if ("POST".equalsIgnoreCase(method))
 					updatePostAction(req, resp, ct);
 				else
 					updateFormAction(req, resp);
-			} else if (uri.endsWith("/product/delete")) {
+			} else if (uri.endsWith("/product/delete"))
+			{
 				if ("POST".equalsIgnoreCase(method))
 					deletePostAction(req, resp, ct);
 				else
 					deleteFormAction(req, resp);
-			} else if (uri.endsWith("/product/report")) {
+			} else if (uri.endsWith("/product/report"))
+			{
 				reportFormAction(req, resp);
 			}
-		} catch (SQLException e) {
+		} catch (SQLException e)
+		{
 			e.printStackTrace();
 
 			resp.getWriter().print("SQL Error: " + e.getMessage());
 			return;
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
 
 	// 공개 상품 목록
 	private void listAction(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		String keyword = req.getParameter("keyword");
 		String sort = req.getParameter("sort"); // newest / grade / popular
 		Integer genreId = parseInteger(req.getParameter("genre"));
@@ -126,9 +141,11 @@ public class ProductController extends HttpServlet {
 
 	// 내 상품 목록 (마이페이지)
 	private void myListAction(HttpServletRequest req, HttpServletResponse resp, String ct)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		Integer userId = getLoginUserId(req);
-		if (userId == null) {
+		if (userId == null)
+		{
 			resp.sendRedirect(ct + "/login");
 			return;
 		}
@@ -154,11 +171,13 @@ public class ProductController extends HttpServlet {
 
 	// 상품 상세
 	private void detailAction(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		int productId = Integer.parseInt(req.getParameter("productId"));
 		ProductDTO product = productDAO.selectProductDetail(productId);
 
-		if (product == null) {
+		if (product == null)
+		{
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "상품을 찾을 수 없습니다.");
 			return;
 		}
@@ -169,9 +188,11 @@ public class ProductController extends HttpServlet {
 
 	// 상품 등록 (GET - 폼)
 	private void registerFormAction(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		Integer userId = getLoginUserId(req);
-		if (userId == null) {
+		if (userId == null)
+		{
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
@@ -186,9 +207,11 @@ public class ProductController extends HttpServlet {
 
 	// 상품 등록 (POST - 저장)
 	private void registerPostAction(HttpServletRequest req, HttpServletResponse resp, String ct)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		Integer userId = getLoginUserId(req);
-		if (userId == null) {
+		if (userId == null)
+		{
 			resp.sendRedirect(ct + "/login");
 			return;
 		}
@@ -202,9 +225,11 @@ public class ProductController extends HttpServlet {
 
 	// 상품 수정 (GET )
 	private void updateFormAction(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		Integer userId = getLoginUserId(req);
-		if (userId == null) {
+		if (userId == null)
+		{
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
@@ -212,7 +237,8 @@ public class ProductController extends HttpServlet {
 		int productId = Integer.parseInt(req.getParameter("productId"));
 		ProductDTO product = productDAO.selectProductDetail(productId);
 
-		if (product == null || product.getUserId() != userId) {
+		if (product == null || product.getUserId() != userId)
+		{
 			// 본인 상품 아님
 			resp.sendError(HttpServletResponse.SC_FORBIDDEN, "수정 권한이 없습니다.");
 			return;
@@ -229,9 +255,11 @@ public class ProductController extends HttpServlet {
 
 	// 상품 수정 (POST - 저장)
 	private void updatePostAction(HttpServletRequest req, HttpServletResponse resp, String ct)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		Integer userId = getLoginUserId(req);
-		if (userId == null) {
+		if (userId == null)
+		{
 			resp.sendRedirect(ct + "/login");
 			return;
 		}
@@ -246,12 +274,14 @@ public class ProductController extends HttpServlet {
 
 	// 상품 삭제 (GET - 확인폼)
 	private void deleteFormAction(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		int productId = Integer.parseInt(req.getParameter("productId"));
 		ProductDTO product = productDAO.selectProductDetail(productId);
 
 		Integer userId = getLoginUserId(req);
-		if (userId == null || product == null || product.getUserId() != userId) {
+		if (userId == null || product == null || product.getUserId() != userId)
+		{
 			resp.sendError(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}
@@ -262,9 +292,11 @@ public class ProductController extends HttpServlet {
 
 	// 상품 삭제 (POST - 실행)
 	private void deletePostAction(HttpServletRequest req, HttpServletResponse resp, String ct)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		Integer userId = getLoginUserId(req);
-		if (userId == null) {
+		if (userId == null)
+		{
 			resp.sendRedirect(ct + "/login");
 			return;
 		}
@@ -276,9 +308,11 @@ public class ProductController extends HttpServlet {
 
 	// 상품 신고 폼
 	private void reportFormAction(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, SQLException {
+			throws ServletException, IOException, SQLException
+	{
 		Integer userId = getLoginUserId(req);
-		if (userId == null) {
+		if (userId == null)
+		{
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
@@ -286,7 +320,8 @@ public class ProductController extends HttpServlet {
 		int productId = Integer.parseInt(req.getParameter("productId"));
 		ProductDTO product = productDAO.selectProductDetail(productId);
 
-		if (product == null) {
+		if (product == null)
+		{
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
@@ -296,40 +331,48 @@ public class ProductController extends HttpServlet {
 	}
 
 	// 세션에서 로그인 사용자 userId 가져오기. 없으면 null.
+	private Integer getLoginUserId(HttpServletRequest req)
+	{
+		HttpSession session = req.getSession(false);
+		if (session == null)
+			return null;
+
+		Object obj = session.getAttribute("userId");
+
+		if (obj instanceof Integer)
+			return (Integer) obj;
+
+		return null;
+	}
+
 	/*
-	 * private Integer getLoginUserId(HttpServletRequest req) { HttpSession session
-	 * = req.getSession(false); if (session == null) return null;
-	 * 
-	 * Object obj = session.getAttribute("userId");
-	 * 
-	 * if (obj instanceof Integer) return (Integer) obj;
-	 * 
-	 * return null; }
+	 * private Integer getLoginUserId(HttpServletRequest req) { return 1; } // 테스트용
+	 * login }
 	 */
-
-	private Integer getLoginUserId(HttpServletRequest req) {
-		return 1;
-	} // 테스트용 login }
-
 	// 파라미터 → Integer 변환. 빈 값/숫자 아니면 null
-	private Integer parseInteger(String s) {
+	private Integer parseInteger(String s)
+	{
 		if (s == null || s.trim().isEmpty())
 			return null;
-		try {
+		try
+		{
 			return Integer.parseInt(s.trim());
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException e)
+		{
 			return null;
 		}
 	}
 
 	// 파라미터 → int 변환. 실패 시 기본값
-	private int parseIntWithDefault(String s, int defaultValue) {
+	private int parseIntWithDefault(String s, int defaultValue)
+	{
 		Integer v = parseInteger(s);
 		return v == null ? defaultValue : v;
 	}
 
 	// 등록/수정 폼 → ProductDTO 공통 빌드
-	private ProductDTO buildProductDTOFromRequest(HttpServletRequest req) {
+	private ProductDTO buildProductDTOFromRequest(HttpServletRequest req)
+	{
 		ProductDTO dto = new ProductDTO();
 
 		dto.setProductReleaseName(req.getParameter("productName"));
@@ -342,9 +385,11 @@ public class ProductController extends HttpServlet {
 		dto.setCharacterName(req.getParameter("characterName"));
 
 		String purchaseYear = req.getParameter("purchaseDate");
-		if (purchaseYear != null && purchaseYear.matches("\\d{4}")) {
+		if (purchaseYear != null && purchaseYear.matches("\\d{4}"))
+		{
 			dto.setPurchaseDateTime(purchaseYear + "-01-01");
-		} else {
+		} else
+		{
 			dto.setPurchaseDateTime(null); // 미선택 시 null → DB에 NULL 저장
 		}
 
@@ -371,17 +416,19 @@ public class ProductController extends HttpServlet {
 		return dto;
 	}
 
-	private int parseIntOrZero(String s) {
+	private int parseIntOrZero(String s)
+	{
 		Integer v = parseInteger(s);
 		return v == null ? 0 : v;
 	}
 
 	/**
-	 * multipart 파일을 /upload/product/ 에 저장
-	 * 파일이 없거나 비어있으면 null
+	 * multipart 파일을 /upload/product/ 에 저장 파일이 없거나 비어있으면 null
 	 */
-	private String saveUploadedFile(HttpServletRequest req, String partName) {
-		try {
+	private String saveUploadedFile(HttpServletRequest req, String partName)
+	{
+		try
+		{
 			Part part = req.getPart(partName);
 			if (part == null || part.getSize() == 0)
 				return null;
@@ -405,19 +452,23 @@ public class ProductController extends HttpServlet {
 			part.write(uploadDir + java.io.File.separator + savedName);
 			return "upload/product/" + savedName;
 
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	// Part 헤더에서 원본 파일명 추출
-	private String getSubmittedFileName(Part part) {
+	private String getSubmittedFileName(Part part)
+	{
 		String cd = part.getHeader("content-disposition");
 		if (cd == null)
 			return null;
-		for (String s : cd.split(";")) {
-			if (s.trim().startsWith("filename")) {
+		for (String s : cd.split(";"))
+		{
+			if (s.trim().startsWith("filename"))
+			{
 				String name = s.substring(s.indexOf('=') + 1).trim().replace("\"", "");
 				int slash = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
 				if (slash >= 0)
