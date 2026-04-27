@@ -142,7 +142,7 @@ $(function() {
         <div class="collapse submenu-list" id="infoSubmenu">
             <a href="${pageContext.request.contextPath}/user/my/change-info" class="list-group-item list-group-item-action py-2 ps-5">• 회원 정보 변경</a>
             <a href="${pageContext.request.contextPath}/user/my/change-pw" class="list-group-item list-group-item-action py-2 ps-5">• 비밀번호 변경</a>
-            <a href="${pageContext.request.contextPath}/user/my/withdraw.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 회원 탈퇴</a>
+            <a href="${pageContext.request.contextPath}/unregister/" class="list-group-item list-group-item-action py-2 ps-5">• 회원 탈퇴</a>
         </div>
     </div>
 </div>
