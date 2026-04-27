@@ -103,7 +103,8 @@ public class ProductBuyDAO
 	{
 		Connection conn = DBCPConn.getConnection();
 		CallableStatement cstmt = null;
-		String sql = "";
+
+		String sql = "{CALL BID_FAILURE_HISTORY(?,?)";
 		
 		try
 		{
@@ -137,6 +138,8 @@ public class ProductBuyDAO
 	// 머니 이력
 	public ArrayList<MoneyTransactionListDTO> moneyTransectionList(int userId,int page,int viewCount,String part,String inout)
 	{
+		ArrayList<MoneyTransactionListDTO> result = new ArrayList<>();
+		
 		Connection conn = DBCPConn.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet res = null;
@@ -393,6 +396,7 @@ public class ProductBuyDAO
 				System.out.println(e);
 			}
 		}
+
 		return list;
 	}
 	
@@ -595,6 +599,7 @@ public class ProductBuyDAO
 				System.out.println(e);
 			}
 		}
+
 		return result;
 	}
 
@@ -646,6 +651,8 @@ public class ProductBuyDAO
 	// 낙찰 조회
 	public ArrayList<AuctionResultViewDTO> auctionResultList(int userId,int page,int viewCount,int type)
 	{
+		ArrayList<AuctionResultViewDTO> result = new ArrayList<>();
+		
 		Connection conn = DBCPConn.getConnection();
 		
 		if (conn != null) {
@@ -987,8 +994,6 @@ public class ProductBuyDAO
 				
 				System.out.println(dto.getAddress());
 			}
-
-
 		} catch (Exception e)
 		{
 			e.printStackTrace();
