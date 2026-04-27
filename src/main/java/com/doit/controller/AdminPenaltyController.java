@@ -1,10 +1,13 @@
 package com.doit.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 import com.doit.dto.AdminDTO;
 import com.doit.dto.PenaltyHistoryDTO;
 import com.doit.service.AdminPenaltyService;
+import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -65,22 +68,67 @@ public class AdminPenaltyController extends HttpServlet
 					
 					viewPath = viewPath + "/admin/penaltyRegister.jsp";
 				}
+				// 패널티 이력 페이지로 이동
+				else if (path.equalsIgnoreCase("/admin/penalty/history"))
+				{
+					// 이전 페이지(자기 자신, penaltyHistory.jsp)데이터 수신
+					//-- page
+					String strNowPage = request.getParameter("page") == null ? "1" : request.getParameter("page");
+					int nowPage = Integer.parseInt(strNowPage);
+					
+					
+					// Service 객체 생성
+					AdminPenaltyService apService = new AdminPenaltyService();
+					
+					// 전체 데이터 갯수 가져오기
+					int penaltyHistoryTotalCount = apService.getPenaltyHisotyTotalCount();
+					
+					// 패널티 이력 리스트 가져오기
+					List<PenaltyHistoryDTO> penaltyuHistoryList = apService.getPenaltyHistoryList();
+					
+					
+					
+
+					
+					// 페이지 엘리먼트 생성
+					Pagination pagination = new Pagination();
+					int totalPageCount = pagination.pageCount(penaltyHistoryTotalCount, 10);
+					String listUrl = request.getContextPath() + "/admin/penalty/history";
+					String pageElement = pagination.paging(nowPage, totalPageCount, listUrl);
+					
+					
+					// request에 데이터 바인딩
+					request.setAttribute("penaltyuHistoryList", penaltyuHistoryList);
+					request.setAttribute("pageElement", pageElement);
+					
+					
+					// view 페이지 경로 지정
+					viewPath = viewPath + "/admin/penaltyHistory.jsp";
+				}
 				
+				// 지정된 view 페이지로 포워딩 처리
 				request.getRequestDispatcher(viewPath).forward(request, response);
 			}
+			
+			
 			//-- POST 방식 요청 처리 --// 
 			else if (methodType.equalsIgnoreCase("POST"))
 			{
+				// 작업 후 이전 페이지로 돌아가기 위한 URL 정보
+				//  ㄴ 데이터 수신 후 request 에 바인딩
+				String prevUrl = request.getParameter("prevUrl");
+				request.setAttribute("prevUrl", prevUrl);
+				
+				
+				
 				//-- 패널티 처리 --//
 				// 패널티 부여 처리
 				if (path.equalsIgnoreCase("/admin/penalty/register"))
 				{
 					// 전달된 데이터 수신
-					//-- prevUrl, userId, penaltyPoint, penaltyReason
-					String prevUrl = request.getParameter("prevUrl");
+					//-- userId, penaltyPoint, penaltyReason
 					int userId = Integer.parseInt(request.getParameter("userId"));
 					int penaltyScore = Integer.parseInt(request.getParameter("penaltyScore"));
-					
 					
 					
 					
@@ -129,14 +177,28 @@ public class AdminPenaltyController extends HttpServlet
 						request.setAttribute("message", "패널티 부여 실패!");
 					}
 					
-					// prevUrl 을 request 에 바인딩하여 함께 전달.
-					request.setAttribute("prevUrl", prevUrl);
-					
-					
 					// 메세지 출력 및 리다이렉트 처리 페이지로 포워딩
 					request.getRequestDispatcher("/WEB-INF/views/admin/common/message.jsp").forward(request, response);
 				}
 			}
+		}
+		// 패널티 부여 > 프로시저 예외
+		catch (SQLException e)
+		{
+			int errorCode = e.getErrorCode();
+			
+			// 예외 메세지 바인딩
+			if (errorCode == 20100)
+			{
+				request.setAttribute("message", "탈퇴한 회원에게는 패널티 부여가 불가능합니다.");
+			}
+			else if (errorCode == 20101)
+			{
+				request.setAttribute("message", "이미 영구 정지 처리된 회원에게는 추가 패널티 부여가 불가능합니다.");
+			}
+			
+			// 메세지 출력 및 리다이렉트 처리 페이지로 포워딩
+			request.getRequestDispatcher("/WEB-INF/views/admin/common/message.jsp").forward(request, response);
 		}
 		catch (Exception e)
 		{

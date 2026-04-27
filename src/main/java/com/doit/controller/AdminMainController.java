@@ -77,11 +77,7 @@ public class AdminMainController extends HttpServlet
 			}
 
 			
-			// 패널티 이력
-			else if (path.equalsIgnoreCase("/admin/show-history-penalties"))
-			{
-				viewPath = viewPath + "/admin/penaltyHistory.jsp";
-			}
+			
 			// 패널티 취소
 			else if (path.equalsIgnoreCase("/admin/penalty/cancel"))
 			{
