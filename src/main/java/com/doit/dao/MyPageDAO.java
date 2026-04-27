@@ -623,6 +623,7 @@ public class MyPageDAO {
 	
 	
 	
+		// 내 패널티 
 	
 	
 	

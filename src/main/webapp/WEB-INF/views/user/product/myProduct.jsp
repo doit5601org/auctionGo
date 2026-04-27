@@ -24,7 +24,7 @@ body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
     .btn-primary, .bg-primary, .btn-outline-primary:hover {
         background-color: #120e63 !important;
         border-color: #120e63 !important;
-        color: #ffffff !important; /* 글자색 흰색 유지 */
+        color: #ffffff !important; 
     }
     
     .btn-outline-primary{
@@ -39,20 +39,20 @@ body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
     }
 
     .pagination .page-item.active .page-link {
-        background-color: #120e63 !important;
-        border-color: #120e63 !important;
+        background-color: #5172a6 !important;
+        border-color: #5172a6 !important;
         color: #ffffff !important;
     }
 
     .pagination .page-link:hover {
-        color: #120e63;
+        color: #5172a6;
     }
     
     .page-link:focus {
         box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
     }
     .nav-link{
-    	color: #120e63 !important;
+    	color: #5172a6 !important;
     }
 </style>
 </head>
@@ -70,7 +70,7 @@ body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
                   <h5 class="mb-0 fw-bold">
                      내 등록 상품 <span class="txtColor small">${dataCount }</span>
                   </h5>
-                  <a href="${pageContext.request.contextPath}/kmc/productRegister.jsp" class="btn btn-primary btn-sm px-3">
+                  <a href="${pageContext.request.contextPath}/product/register" class="btn btn-primary btn-sm px-3">
                      <i class="bi bi-plus-lg"></i> 새 상품 등록
                   </a>
                   <!-- </button> -->

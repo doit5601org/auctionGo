@@ -341,4 +341,47 @@ public class AuctionDAO {
 		}
 	}
 
-}
+			// 경매 등록 메소드
+			public int insertAuction(long userNo, String productId, String title, int startPrice, int period, String info) {
+	        int result = 0;
+	        Connection conn = null;
+	        CallableStatement cstmt = null;
+
+	        // DB에 작성하신 프로시저: PRC_AUCTION_CREATE(유저고유키, 상품코드, 제목, 내용, 시작가, 기간)
+	        String sql = "{call PRC_AUCTION_CREATE(?, ?, ?, ?, ?, ?)}";
+
+	        try {
+	            conn = DBCPConn.getConnection();
+	            cstmt = conn.prepareCall(sql);
+
+	            cstmt.setLong(1, userNo);                     // P_USER_ID
+	            cstmt.setLong(2, Long.parseLong(productId));  // P_PRODUCT_ID
+	            cstmt.setString(3, title);                    // P_AUCTION_TITLE
+	            cstmt.setString(4, info);                     // P_CONTENT (소개글)
+	            cstmt.setInt(5, startPrice);                  // P_START_PRICE
+	            cstmt.setInt(6, period);                      // P_PERIOD_CODE
+
+	            cstmt.executeUpdate();
+	            result = 1; // 성공 시 1 반환
+
+	        } catch (SQLException e) {
+	            // 보증금 부족(-20004) 등의 에러가 발생하면 콘솔에 출력
+	            System.err.println("경매 등록 프로시저 실행 오류: " + e.getMessage());
+	            e.printStackTrace();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                if (cstmt != null) cstmt.close();
+	                if (conn != null) conn.close();
+	            } catch (Exception e2) {
+	                e2.printStackTrace();
+	            }
+	        }
+	        return result;
+	    }
+	}
+
+	
+	
+

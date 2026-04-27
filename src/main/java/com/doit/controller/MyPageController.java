@@ -54,6 +54,13 @@ public class MyPageController extends HttpServlet{
 		if(uri.endsWith("/user/my")) {
 			
 			
+			int auctionCnt = dao.auctionDataCount(userId);
+			int bidCnt = dao.bidDataCount(userId);
+			int wishCnt = dao.wishlistDataCount(userId);
+			
+			request.setAttribute("auctionCnt", auctionCnt);
+			request.setAttribute("bidCnt", bidCnt);
+			request.setAttribute("wishCnt", wishCnt);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/my/mypage.jsp");
 			dispatcher.forward(request, response);
