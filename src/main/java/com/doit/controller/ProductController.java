@@ -466,4 +466,61 @@ public class ProductController extends HttpServlet
 		Integer v = parseInteger(s);
 		return v == null ? 0 : v;
 	}
+
+	/**
+	 * multipart 파일을 /upload/product/ 에 저장 파일이 없거나 비어있으면 null
+	 */
+	private String saveUploadedFile(HttpServletRequest req, String partName)
+	{
+		try
+		{
+			Part part = req.getPart(partName);
+			if (part == null || part.getSize() == 0)
+				return null;
+
+			String originalName = getSubmittedFileName(part);
+			if (originalName == null || originalName.isEmpty())
+				return null;
+
+			String ext = "";
+			int dot = originalName.lastIndexOf('.');
+			if (dot >= 0)
+				ext = originalName.substring(dot);
+
+			String savedName = java.util.UUID.randomUUID().toString() + ext;
+
+			String uploadDir = req.getServletContext().getRealPath("/upload/product");
+			java.io.File dir = new java.io.File(uploadDir);
+			if (!dir.exists())
+				dir.mkdirs();
+
+			part.write(uploadDir + java.io.File.separator + savedName);
+			return "upload/product/" + savedName;
+
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	// Part 헤더에서 원본 파일명 추출1
+	private String getSubmittedFileName(Part part)
+	{
+		String cd = part.getHeader("content-disposition");
+		if (cd == null)
+			return null;
+		for (String s : cd.split(";"))
+		{
+			if (s.trim().startsWith("filename"))
+			{
+				String name = s.substring(s.indexOf('=') + 1).trim().replace("\"", "");
+				int slash = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
+				if (slash >= 0)
+					name = name.substring(slash + 1);
+				return name;
+			}
+		}
+		return null;
+	}
 }
