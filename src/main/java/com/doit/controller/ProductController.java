@@ -100,7 +100,7 @@ public class ProductController extends HttpServlet
 			e.printStackTrace();
 			
 			resp.getWriter().print("SQL Error: " + e.getMessage()); 
-		    return; // 더 이상 진행 방지
+		    return; 
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -183,6 +183,18 @@ public class ProductController extends HttpServlet
 			return;
 		}
 
+		// 로그인 유저 ID
+		Integer userId = getLoginUserId(req);
+		req.setAttribute("loginUserId", userId);
+
+		// 찜 여부 체크
+		int isWishlisted = 0;
+		if (userId != null) {
+			com.doit.dao.MyPageDAO myPageDAO = new com.doit.dao.MyPageDAO();
+			isWishlisted = myPageDAO.checkWishlist(userId, productId);
+		}
+		req.setAttribute("isWishlisted", isWishlisted);
+
 		req.setAttribute("product", product);
 		req.getRequestDispatcher("/WEB-INF/views/product/productDetail.jsp").forward(req, resp);
 	}
@@ -194,7 +206,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(req.getContextPath() + "/login");
+			resp.sendRedirect(req.getContextPath() + "/user/auth/login");
 			return;
 		}
 
@@ -215,7 +227,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(ct + "/login");
+			resp.sendRedirect(ct + "/user/auth/login");
 			return;
 		}
 
@@ -233,7 +245,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(req.getContextPath() + "/login");
+			resp.sendRedirect(req.getContextPath() + "/user/auth/login");
 			return;
 		}
 
@@ -263,7 +275,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(ct + "/login");
+			resp.sendRedirect(ct + "/user/auth/login");
 			return;
 		}
 
@@ -300,7 +312,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(ct + "/login");
+			resp.sendRedirect(ct + "/user/auth/login");
 			return;
 		}
 
@@ -316,7 +328,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(req.getContextPath() + "/login");
+			resp.sendRedirect(req.getContextPath() + "/user/auth/login");
 			return;
 		}
 
@@ -343,7 +355,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(ct + "/login");
+			resp.sendRedirect(ct + "/user/auth/login");
 			return;
 		}
 
