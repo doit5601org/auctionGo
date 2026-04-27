@@ -11,6 +11,7 @@ import com.doit.dto.AuctionDTO;
 import com.doit.dto.AuctionHistoryDTO;
 import com.doit.dto.BidRankDTO;
 import com.doit.dto.MyBidStatusDTO;
+import com.doit.dto.MyPenaltyDTO;
 import com.doit.dto.MyWishlistDTO;
 import com.doit.dto.ProductDTO;
 import com.doit.dto.UserInfoDTO;
@@ -454,7 +455,25 @@ public class MyPageService {
 		
 		
 		
-		
+		// 패널티 호출
+			public Map<String, Object> myPenaltyList(int userId) {
+				
+				Map<String, Object> resultMap = new HashMap<>();
+				try {
+					
+					List<MyPenaltyDTO> list = myPageDao.myPenaltyBoard(userId);
+					
+					int totalScore = list.isEmpty() ? 0 : list.get(0).getTotalScore();
+					
+					resultMap.put("list", list);
+					resultMap.put("totalScore", totalScore);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				return resultMap;
+			}
 		
 		
 		

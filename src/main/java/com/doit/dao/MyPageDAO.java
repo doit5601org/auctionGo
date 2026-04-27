@@ -438,6 +438,35 @@ public class MyPageDAO {
 		return result;
 	}
 	
+	// 내 진행 입찰 데이터 갯수
+	public int activeBidDataCount(int userId) {
+		int result = 0;
+		
+		String sql = """
+				SELECT COUNT(*) AS COUNT
+				FROM VW_BID_LIST
+				WHERE BIDDER_ID=? AND AUCTION_STATUS='진행중'
+				""";
+		try (Connection conn = DBCPConn.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql)){
+			
+			pstmt.setInt(1, userId);
+			try(ResultSet rs = pstmt.executeQuery()){
+				if(rs.next()) {
+					result = rs.getInt("COUNT");
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	
+	
+	
 	// 입찰 이력 리스트 
 		public List<MyBidStatusDTO> myBidHistoryBoard(int offset, int size, int userId){
 			
@@ -655,7 +684,23 @@ public class MyPageDAO {
 				try(ResultSet rs = pstmt.executeQuery()){
 					while(rs.next()) {
 						MyPenaltyDTO dto = new MyPenaltyDTO();
-						dto.setPenaltyId(rs.getInt(""));
+						dto.setPenaltyId(rs.getInt("PENALTY_ID"));
+						dto.setPenaltyTypeName(rs.getString("PENALTY_TYPE_NAME"));
+						dto.setGivenScore(rs.getInt("GIVEN_SCORE"));
+						dto.setAccumulatedScore(rs.getInt("ACCUMULATED_SCORE"));
+						dto.setTotalScore(rs.getInt("TOTAL_SCORE"));
+						dto.setHistoryStatus(rs.getString("HISTORY_STATUS"));
+						dto.setPenaltyCreatedAt(rs.getString("PENALTY_CREATED_AT"));
+						dto.setPenaltyStartDate(rs.getString("PENALTY_START_DATE"));
+						dto.setPenaltyEndDate(rs.getString("PENALTY_END_DATE"));
+						dto.setPenaltyAssignAdmin(rs.getInt("PENALTY_ASSIGN_ADMIN"));
+						dto.setPenaltyCancelId(rs.getInt("PENALTY_CANCEL_ID"));
+						dto.setCancleReason(rs.getString("CANCEL_REASON"));
+						dto.setCanceledAt(rs.getString("CANCELED_AT"));
+						dto.setPenaltyCancelAdmin(rs.getInt("PENALTY_CANCEL_ADMIN"));
+						
+						result.add(dto);
+						
 					}
 				}
 				
@@ -669,7 +714,33 @@ public class MyPageDAO {
 		}
 	
 	
-	
+	//패널티 총 점수 
+		public int totalPaneltyScore(int userId){
+			int result = 0;
+			String sql = """
+					SELECT MAX(TOTAL_SCORE) AS TOTAL
+					FROM VW_PENALTY_DETAIL_LIST
+					WHERE USER_ID = ?
+					""";
+			try(Connection conn = DBCPConn.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+				pstmt.setInt(1, userId);
+				
+				try(ResultSet rs = pstmt.executeQuery()){
+					if(rs.next()) {
+						result = rs.getInt("TOTAL");
+						
+					}
+				}
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+			
+		}
 	
 	
 	
