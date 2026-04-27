@@ -29,7 +29,7 @@ public class ConfirmController extends HttpServlet {
 	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
         int bidId = Integer.parseInt(request.getParameter("bidId"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
+        int userId = Integer.parseInt(request.getParameter("loginUser"));
         
         // DAO 객체 생성 및 프로시저 호출
         ProductBuyDAO dao = new ProductBuyDAO();

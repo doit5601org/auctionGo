@@ -1,116 +1,90 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>AuctionGo - 개인 컬렉션 & 경매</title>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-body {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-}
+    /* 전체 레이아웃 Sticky Footer 설정 */
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    main { flex: 1; }
 
-main {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-}
+    /* 히어로 섹션: 윈도우 너비 전체 차지 */
+    .hero-section {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                    url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1920');
+        background-size: cover;
+        background-position: center;
+        padding: 120px 0;
+        color: white;
+        height: 100%;
+    }
 
-.hero-section {
-	background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-		url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1920');
-	background-size: cover;
-	background-position: center;
-	padding: 120px 0;
-	color: white;
-	flex: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background-size: cover;
-	background-position: center;
-	color: white;
-}
+    /* 카드 공통 호버 효과 */
+    .custom-card {
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+        border: none !important;
+        border-radius: 15px;
+    }
+    .custom-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+    }
 
-.custom-card {
-	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-	border: none !important;
-	border-radius: 15px;
-}
+    /* 찜하기 버튼 스타일 */
+    .btn-wish {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 10;
+        background: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ff4757;
+        transition: 0.2s;
+    }
+    .btn-wish:hover { background: #ff4757; color: white; }
 
-.custom-card:hover {
-	transform: translateY(-10px);
-	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
-}
-
-/* 찜하기 버튼 스타일 */
-.btn-wish {
-	position: absolute;
-	top: 15px;
-	left: 15px;
-	z-index: 10;
-	background: rgba(255, 255, 255, 0.8);
-	border-radius: 50%;
-	width: 38px;
-	height: 38px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #ff4757;
-	transition: 0.2s;
-}
-
-.btn-wish:hover {
-	background: #ff4757;
-	color: white;
-}
-
-.text-truncate-2 {
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-}
-
-.hero-section {
-	background-image:
-		url('${pageContext.request.contextPath}/images/main.jpeg') !important;
-}
-
-.btn-primary {
-	background-color: #120e63 !important;
-	border-color: #120e63 !important;
-}
+    .text-truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .hero-section{
+    	background-image: url('${pageContext.request.contextPath}/images/main.jpeg') !important;
+    }
+    .btn-primary{
+    	background-color: #120e63 !important;
+    	border-color: #120e63 !important;
+    }
 </style>
 </head>
 <body class="bg-light">
-	<%@ include file="/WEB-INF/views/common/header.jsp"%>
-	<main>
-		<section class="hero-section text-center">
-			<div class="container">
-				<h1 class="display-3 fw-bold mb-3 txtColor" style="text-shadow: 2px 2px 20px #ddd;">나만의 컬렉션, 특별한 경매</h1>
-				<p class="lead mb-5 opacity-75 text-dark fw-bold">당신의 소장품을 뽐내고,
-					경매로 가치를 더하세요!</p>
-				<div class="d-flex justify-content-center gap-3">
-					<a href="${pageContext.request.contextPath}/auction/list"
-						class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold">경매
-						입장</a> <a href="${pageContext.request.contextPath}/product/list"
-						class="btn btn-outline-dark btn-lg px-5 py-3 rounded-pill fw-bold">컬렉션
-						구경</a>
-				</div>
-			</div>
-		</section>
 
-		<%--     <div class="container">
+<%-- <jsp:include page="WEB-INF/views/common/header.jsp"></jsp:include> --%>
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<main>
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold mb-3 txtColor">나만의 컬렉션, 특별한 경매</h1>
+            <p class="lead mb-5 opacity-75 text-dark fw-bold">당신의 소장품을 뽐내고, 경매로 가치를 더하세요!</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="${pageContext.request.contextPath}/auction/list" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold">경매 입장</a>
+                <a href="${pageContext.request.contextPath}/product/list" class="btn btn-outline-dark btn-lg px-5 py-3 rounded-pill fw-bold">컬렉션 구경</a>
+            </div>
+        </div>
+    </section>
+
+<%--     <div class="container">
         <section class="mb-5">
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <div>
@@ -176,7 +150,8 @@ main {
             </div>
         </section>
     </div> --%>
-	</main>
-	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+</main>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+<%-- <jsp:include page="footer.jsp"></jsp:include> --%>
 </body>
 </html>

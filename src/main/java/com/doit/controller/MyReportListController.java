@@ -35,6 +35,7 @@ public class MyReportListController extends HttpServlet {
         }
 
         // 3. DAO를 통해 해당 유저의 신고 목록 조회
+        // 세션에 담긴 유저의 PK(userId)를 사용합니다.
         int userIdx = loginUser.getUserId(); 
         List<ReportDTO> reportList = ReportDAO.getUserReportList(userIdx);
 
