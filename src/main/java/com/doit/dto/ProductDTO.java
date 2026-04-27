@@ -43,7 +43,22 @@ public class ProductDTO
 	private String imagePath9;          // IMAGE_PATH_9
 	private String imagePath10;         // IMAGE_PATH_10
 
+	
+	private int auctionId;
+	private String isFinished;
 
+	public int getAuctionId() {
+		return auctionId;
+	}
+	public void setAuctionId(int auctionId) {
+		this.auctionId = auctionId;
+	}
+	public String getIsFinished() {
+		return isFinished;
+	}
+	public void setIsFinished(String isFinished) {
+		this.isFinished = isFinished;
+	}
 	public int getProductId()
 	{
 		return productId;

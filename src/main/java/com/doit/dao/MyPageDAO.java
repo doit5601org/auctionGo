@@ -130,9 +130,14 @@ public class MyPageDAO {
 		
 		
 		String sql = """
-				SELECT PRODUCT_ID, PRODUCT_RELEASE_NAME, PRODUCT_ALIAS, IMAGE_PATH_1, IS_PUBLIC, CREATED_AT   
-				FROM PRODUCT
-				WHERE USER_ID = ?""";
+				SELECT P.PRODUCT_ID, P.PRODUCT_RELEASE_NAME
+				, P.PRODUCT_ALIAS, P.IMAGE_PATH_1, P.IS_PUBLIC, P.CREATED_AT
+				, VA.AUCTION_ID, VA.IS_FINISHED
+				FROM PRODUCT P LEFT OUTER JOIN VW_AUCTION_LIST VA
+				ON P.PRODUCT_ID = VA.PRODUCT_ID
+				WHERE P.USER_ID = ?
+				
+				""";
 		
 				if("PUBLIC".equals(type)) {
 					sql+= " AND IS_PUBLIC = 1";
@@ -158,6 +163,8 @@ public class MyPageDAO {
 					dto.setImagePath1(rs.getString("IMAGE_PATH_1"));
 					dto.setIsPublic(rs.getInt("IS_PUBLIC"));
 					dto.setCreatedAt(rs.getString("CREATED_AT"));
+					dto.setAuctionId(rs.getInt("AUCTION_ID"));
+					dto.setIsFinished(rs.getString("IS_FINISHED"));
 					
 					result.add(dto);
 					
