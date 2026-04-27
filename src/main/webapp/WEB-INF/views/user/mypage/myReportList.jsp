@@ -82,7 +82,7 @@
     <c:choose>
         <c:when test="${not empty reportList}">
             <c:forEach var="report" items="${reportList}">
-                <tr class="report-row" onclick="location.href='reportDetail.jsp?id=${report.reportId}'">
+                <tr class="report-row" onclick="location.href='${pageContext.request.contextPath}/user/mypage/myreport-detail?reportId=${report.reportId}'">
                     <td>${report.reportType}</td> <td>${report.category}</td>   <td>${report.targetName}</td> <td>${report.createdAt}</td>  <td class="${report.status == '승인' ? 'status-approve' : 'status-wait'}">
                         ${report.status}
                     </td>
