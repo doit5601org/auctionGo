@@ -100,7 +100,7 @@ public class ProductController extends HttpServlet
 			e.printStackTrace();
 			
 			resp.getWriter().print("SQL Error: " + e.getMessage()); 
-		    return; // 더 이상 진행 방지
+		    return; 
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -183,6 +183,18 @@ public class ProductController extends HttpServlet
 			return;
 		}
 
+		// 로그인 유저 ID
+		Integer userId = getLoginUserId(req);
+		req.setAttribute("loginUserId", userId);
+
+		// 찜 여부 체크
+		int isWishlisted = 0;
+		if (userId != null) {
+			com.doit.dao.MyPageDAO myPageDAO = new com.doit.dao.MyPageDAO();
+			isWishlisted = myPageDAO.checkWishlist(userId, productId);
+		}
+		req.setAttribute("isWishlisted", isWishlisted);
+
 		req.setAttribute("product", product);
 		req.getRequestDispatcher("/WEB-INF/views/product/productDetail.jsp").forward(req, resp);
 	}
@@ -194,7 +206,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(req.getContextPath() + "/login");
+			resp.sendRedirect(req.getContextPath() + "/user/auth/login");
 			return;
 		}
 
@@ -215,7 +227,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(ct + "/login");
+			resp.sendRedirect(ct + "/user/auth/login");
 			return;
 		}
 
@@ -233,7 +245,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(req.getContextPath() + "/login");
+			resp.sendRedirect(req.getContextPath() + "/user/auth/login");
 			return;
 		}
 
@@ -263,7 +275,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(ct + "/login");
+			resp.sendRedirect(ct + "/user/auth/login");
 			return;
 		}
 
@@ -300,7 +312,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(ct + "/login");
+			resp.sendRedirect(ct + "/user/auth/login");
 			return;
 		}
 
@@ -316,7 +328,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(req.getContextPath() + "/login");
+			resp.sendRedirect(req.getContextPath() + "/user/auth/login");
 			return;
 		}
 
@@ -343,7 +355,7 @@ public class ProductController extends HttpServlet
 		Integer userId = getLoginUserId(req);
 		if (userId == null)
 		{
-			resp.sendRedirect(ct + "/login");
+			resp.sendRedirect(ct + "/user/auth/login");
 			return;
 		}
 
@@ -449,6 +461,35 @@ public class ProductController extends HttpServlet
 		String img3 = saveUploadedFile(req, "productImage3");
 		if (img3 == null) img3 = req.getParameter("existingImage3");
 		dto.setImagePath3(img3);
+		
+		String img4 = saveUploadedFile(req, "productImage4");
+		if (img4 == null) img4 = req.getParameter("existingImage4");
+		dto.setImagePath4(img4);
+
+		String img5 = saveUploadedFile(req, "productImage5");
+		if (img5 == null) img5 = req.getParameter("existingImage5");
+		dto.setImagePath5(img5);
+
+		String img6 = saveUploadedFile(req, "productImage6");
+		if (img6 == null) img6 = req.getParameter("existingImage6");
+		dto.setImagePath6(img6);
+
+		String img7 = saveUploadedFile(req, "productImage7");
+		if (img7 == null) img7 = req.getParameter("existingImage7");
+		dto.setImagePath7(img7);
+
+		String img8 = saveUploadedFile(req, "productImage8");
+		if (img8 == null) img8 = req.getParameter("existingImage8");
+		dto.setImagePath8(img8);
+
+		String img9 = saveUploadedFile(req, "productImage9");
+		if (img9 == null) img9 = req.getParameter("existingImage9");
+		dto.setImagePath9(img9);
+
+		String img10 = saveUploadedFile(req, "productImage10");
+		if (img10 == null) img10 = req.getParameter("existingImage10");
+		dto.setImagePath10(img10);
+		
 		return dto;
 	}
 

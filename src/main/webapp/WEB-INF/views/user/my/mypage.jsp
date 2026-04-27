@@ -47,7 +47,7 @@
 			<section class="col-md-9">
 				<div class="d-flex align-items-center justify-content-between mb-4">
 					<div>
-						<h3 class="fw-bold mb-1">반갑습니다, 사용자 님!</h3>
+						<h3 class="fw-bold mb-1">반갑습니다, ${loginUser.userName } 님!</h3>
 					</div>
 					<a href="${pageContext.request.contextPath}/user/my/change-info" class="btn btn-outline-secondary btn-sm rounded-pill">정보 수정</a>
 				</div>
@@ -59,7 +59,7 @@
 								<i class="bi bi-hammer fs-4"></i>
 							</div>
 							<small class="text-muted fw-semibold">진행중인 경매</small>
-							<h4 class="mt-1 fw-bold">5<span class="fs-6 fw-normal ms-1">건</span></h4>
+							<h4 class="mt-1 fw-bold">${auctionCnt }<span class="fs-6 fw-normal ms-1">건</span></h4>
 						</div>
 					</div>
 					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/bids/active'">
@@ -68,7 +68,7 @@
 								<i class="bi bi-clock-history fs-4"></i>
 							</div>
 							<small class="text-muted fw-semibold">진행중인 입찰</small>
-							<h4 class="mt-1 fw-bold">3<span class="fs-6 fw-normal ms-1">건</span></h4>
+							<h4 class="mt-1 fw-bold">${bidCnt }<span class="fs-6 fw-normal ms-1">건</span></h4>
 						</div>
 					</div>
 					<div class="col-md-4" onclick="location.href='${pageContext.request.contextPath}/user/product/wishlist'">
@@ -77,7 +77,7 @@
 								<i class="bi bi-heart-fill fs-4"></i>
 							</div>
 							<small class="text-muted fw-semibold">내 관심 상품</small>
-							<h4 class="mt-1 fw-bold">12<span class="fs-6 fw-normal ms-1">건</span></h4>
+							<h4 class="mt-1 fw-bold">${wishCnt }<span class="fs-6 fw-normal ms-1">건</span></h4>
 						</div>
 					</div>
 				</div>
@@ -88,7 +88,10 @@
 							<div class="d-flex justify-content-between align-items-center">
 								<div>
 									<small class="text-muted d-block mb-1">사용 가능한 보유머니</small>
-									<h3 class="fw-bold txtColor mb-0">50,000원</h3>
+									<h3 class="fw-bold txtColor mb-0">
+									<fmt:formatNumber value="${loginUser.totalMoney}" type="number" />
+									
+									원</h3>
 								</div>
 								<div class="btn btn-primary rounded-pill px-3">충전</div>
 							</div>

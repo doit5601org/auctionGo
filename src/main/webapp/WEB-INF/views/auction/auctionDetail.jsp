@@ -1,22 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>${auction.auctionTitle} | 경매나라</title>
+<title>${auction.auctionTitle}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="${ctx}/css/common.css" />
+<script src="https://code.jquery.com/jquery.min.js"></script>
 <style>
     body { background: #f8f9fa; }
-    .navbar-brand { font-weight: 700; color: #4F46E5 !important; }
-    .main-img { width: 100%; height: 360px; object-fit: cover; border-radius: 12px; }
-    .thumb-img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px;
-                 border: 2px solid transparent; cursor: pointer; }
+    .main-img {
+        width: 100%;
+        height: 360px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+    }
+    .thumb-img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
     .thumb-img.active { border-color: #EF4444; }
+    .thumb-img:hover { border-color: #adb5bd; }
     .info-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
     .current-price { color: #EF4444; font-size: 1.6rem; font-weight: 700; }
     .notice-box { background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 8px;
@@ -25,19 +40,7 @@
 </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="${ctx}/main">경매나라</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto ms-3">
-                <li class="nav-item"><a class="nav-link" href="${ctx}/product/list">컬렉션</a></li>
-                <li class="nav-item"><a class="nav-link fw-semibold text-primary" href="${ctx}/auction/list">경매</a></li>
-                <li class="nav-item"><a class="nav-link" href="${ctx}/product/myList">내 상품</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 <%-- 신고 완료 안내 --%>
 <c:if test="${param.reportOk eq '1'}">
@@ -63,22 +66,31 @@
         <div class="col-md-6">
             <c:choose>
                 <c:when test="${not empty auction.imagePath1}">
-                    <img src="${ctx}/images/${auction.imagePath1}" class="main-img" id="mainImg" alt="${auction.auctionTitle}">
-                    <div class="d-flex gap-2 mt-2">
-                        <img src="${ctx}/images/${auction.imagePath1}" class="thumb-img active" onclick="changeImg(this)">
-                    </div>
+                    <img src="${ctx}/${auction.imagePath1}" class="main-img" id="mainImg" alt="${auction.auctionTitle}">
                 </c:when>
                 <c:otherwise>
                     <img src="https://placehold.co/360x360/e9ecef/6c757d?text=No+Image"
                          class="main-img" id="mainImg" alt="이미지 없음">
                 </c:otherwise>
             </c:choose>
+
+            <div class="d-flex gap-2 mt-2 flex-wrap">
+                <c:if test="${not empty auction.imagePath1}"><img src="${ctx}/${auction.imagePath1}" class="thumb-img active" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath2}"><img src="${ctx}/${auction.imagePath2}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath3}"><img src="${ctx}/${auction.imagePath3}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath4}"><img src="${ctx}/${auction.imagePath4}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath5}"><img src="${ctx}/${auction.imagePath5}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath6}"><img src="${ctx}/${auction.imagePath6}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath7}"><img src="${ctx}/${auction.imagePath7}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath8}"><img src="${ctx}/${auction.imagePath8}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath9}"><img src="${ctx}/${auction.imagePath9}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+                <c:if test="${not empty auction.imagePath10}"><img src="${ctx}/${auction.imagePath10}" class="thumb-img" onclick="changeImg(this)" alt=""></c:if>
+            </div>
         </div>
 
         <%-- 경매 정보 카드 --%>
         <div class="col-md-6">
             <div class="info-card">
-                <%-- 진행/마감 상태 --%>
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <c:choose>
                         <c:when test="${viewStatus.startsWith('ongoing')}">
@@ -122,15 +134,11 @@
                     </ul>
                 </div>
 
-                <%-- 입찰 버튼 / 결과 영역 --%>
                 <div class="d-grid gap-2">
                     <c:choose>
-                        <%-- 진행중 + 비로그인 --%>
                         <c:when test="${viewStatus == 'ongoing_guest'}">
-                            <a href="${ctx}/login" class="btn btn-outline-primary btn-lg">로그인 후 입찰 가능</a>
+                            <a href="${ctx}/user/auth/login" class="btn btn-outline-primary btn-lg">로그인 후 입찰 가능</a>
                         </c:when>
-
-                        <%-- 진행중 + 로그인 --%>
                         <c:when test="${viewStatus == 'ongoing_user'}">
                             <c:choose>
                                 <c:when test="${bidCount >= 10}">
@@ -147,8 +155,6 @@
                                 </c:otherwise>
                             </c:choose>
                         </c:when>
-
-                        <%-- 마감 + 낙찰자 --%>
                         <c:when test="${viewStatus == 'finished_winner'}">
                             <div class="alert alert-success text-center py-3 mb-0 border-2">
                                 <h5 class="fw-bold mb-2">축하합니다! 낙찰되셨습니다.</h5>
@@ -156,16 +162,12 @@
                                    class="btn btn-success w-100 mt-2">지금 바로 결제하기</a>
                             </div>
                         </c:when>
-
-                        <%-- 마감 + 탈락 --%>
                         <c:when test="${viewStatus == 'finished_loser'}">
                             <div class="alert alert-light text-center py-3 mb-0 border">
                                 <h6 class="fw-bold text-muted mb-1">아쉽게도 낙찰되지 않았습니다.</h6>
                                 <p class="small mb-0 text-muted">보증금은 규정에 따라 환급됩니다.</p>
                             </div>
                         </c:when>
-
-                        <%-- 마감 + 그 외 --%>
                         <c:otherwise>
                             <div class="alert alert-secondary text-center py-3 mb-0">
                                 <h6 class="fw-bold mb-1">경매가 마감되었습니다.</h6>
@@ -178,7 +180,6 @@
                     </c:choose>
                 </div>
 
-                <%-- 취소 / 신고 버튼 --%>
                 <div class="text-end mt-4 d-flex justify-content-end gap-3">
                     <c:if test="${viewStatus.startsWith('ongoing')}">
                         <button type="button" class="btn btn-outline-secondary w-50"
@@ -186,8 +187,8 @@
                             경매 취소
                         </button>
                     </c:if>
-                    <a href="${ctx}/auction/report?auctionId=${auction.auctionId}&type=auction&name=${auction.auctionTitle}"
-                            class="btn btn-outline-danger">신고하기</a>
+                    <a href="${ctx}/auction/report?auctionId=${auction.auctionId}"
+                       class="btn btn-outline-danger">신고하기</a>
                 </div>
             </div>
         </div>
@@ -202,7 +203,7 @@
     </div>
 </div>
 
-<%-- 경매 취소 모달 1: 규정 안내 --%>
+<%-- 경매 취소 모달 1 --%>
 <div class="modal fade" id="cancelNoticeModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
@@ -231,7 +232,7 @@
     </div>
 </div>
 
-<%-- 경매 취소 모달 2: 사유 입력 --%>
+<%-- 경매 취소 모달 2 --%>
 <div class="modal fade" id="cancelReasonModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
@@ -239,7 +240,6 @@
                 <h5 class="modal-title fw-bold">경매 취소 사유 입력</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <%-- TODO: action을 실제 경매 취소 URL로 변경 --%>
             <form action="${ctx}/auction/cancel" method="post">
                 <input type="hidden" name="auctionId" value="${auction.auctionId}">
                 <div class="modal-body p-4">
@@ -256,9 +256,7 @@
     </div>
 </div>
 
-<%-- <jsp:include page="/common/footer.jsp"></jsp:include> --%>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function changeImg(el) {
         document.getElementById('mainImg').src = el.src;
@@ -266,7 +264,6 @@
         el.classList.add('active');
     }
 
-    // 카운트다운 (컨트롤러에서 remainSeconds 전달)
     const totalSeconds = ${remainSeconds};
     let remaining = totalSeconds;
     const countdownEl = document.getElementById('countdown');
@@ -275,8 +272,7 @@
         if (!countdownEl) return;
         if (remaining <= 0) {
             countdownEl.textContent = '경매 마감';
-            if (remaining === 0) location.reload();
-            return;
+            return; // reload 제거
         }
         const h = String(Math.floor(remaining / 3600)).padStart(2, '0');
         const m = String(Math.floor((remaining % 3600) / 60)).padStart(2, '0');
@@ -290,5 +286,6 @@
         setInterval(updateTimer, 1000);
     }
 </script>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

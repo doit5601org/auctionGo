@@ -14,28 +14,22 @@
 $(function() {
 	
     $('#auction-status-table').on('click', '.detail-btn', function(e) {
-        e.preventDefault();
-        
-
-        // 2. 타겟 설정: 클릭한 버튼의 조상 tr 바로 다음에 오는 .collapse 행
-        const $targetRow = $(this).closest('tr').next('.collapse');
-        
-        // 3. 다른 상세창들만 찾기 (사이드바 메뉴는 절대 건드리지 않음)
-        // #auction-status-table 내부의 .collapse 중 현재 타겟이 아닌 것들만!
-        const $otherRows = $('#auction-status-table').find('.collapse').not($targetRow);
-
-        // 4. 다른 상세 행은 즉시 닫기
-        $otherRows.stop(true, true).hide().removeClass('show');
-
-        // 5. 내 타겟 행만 토글
-        $targetRow.stop(true, true).slideToggle(200, function() {
-            if ($(this).is(':visible')) {
-                $(this).addClass('show');
-            } else {
-                $(this).removeClass('show');
-            }
-        });
-        
+	        e.preventDefault();
+	
+	        let $targetRow = $(this).closest('tr').next('.collapse');
+	        
+	        let $otherRows = $('#auction-status-table').find('.collapse').not($targetRow);
+	
+	        $otherRows.stop(true, true).hide().removeClass('show');
+	
+	        $targetRow.stop(true, true).slideToggle(200, function() {
+	            if ($(this).is(':visible')) {
+	                $(this).addClass('show');
+	            } else {
+	                $(this).removeClass('show');
+	            }
+	        });
+	        
         	
         });
         
@@ -98,10 +92,15 @@ $(function() {
    	i.text-primary{
    		color: #120e63 !important;
    	}
-    .btn-primary, .bg-primary {
+    .btn-primary, .bg-primary, .btn-outline-primary:hover  {
         background-color: #120e63 !important;
         border-color: #120e63 !important;
-        color: #ffffff !important; /* 글자색 흰색 유지 */
+        color: #ffffff !important;
+    }
+        .btn-outline-primary{
+    	background-color: #fff !important;
+    	border-color: #120e63 !important;
+    	color: #120e63 !important;
     }
 
     .badge.bg-primary {
@@ -109,13 +108,13 @@ $(function() {
     }
 
     .pagination .page-item.active .page-link {
-        background-color: #120e63 !important;
-        border-color: #120e63 !important;
+        background-color: #5172a6 !important;
+        border-color: #5172a6 !important;
         color: #ffffff !important;
     }
 
     .pagination .page-link:hover {
-        color: #120e63;
+        color: #5172a6;
     }
     
     .page-link:focus {
@@ -145,10 +144,10 @@ $(function() {
 								<thead class="table-light">
 									<tr class="text-center">
 										<th style="width: 5%">번호</th>
-										<th style="width: 35%">경매 상품 정보</th>
-										<th style="width: 15%">남은 시간</th>
+										<th style="width: 45%">경매 상품 정보</th>
+										<th style="width: 10%">남은 시간</th>
 										<th style="width: 10%">참여 인원</th>
-										<th style="width: 15%">입찰 현황</th>
+										<th style="width: 10%">입찰 현황</th>
 										<th style="width: 10%">취소</th>
 									</tr>
 								</thead>
@@ -178,7 +177,7 @@ $(function() {
 											class="badge rounded-pill bg-primary px-3">${dto.bidCount } 명</span></td>
 										<td class="text-center">
 											<div class="small px-3">
-												<button type="button" class="btn btn-sm btn-dark detail-btn" data-id="${dto.auctionId }">상세</button>
+												<button type="button" class="btn btn-sm btn-outline-dark detail-btn" data-id="${dto.auctionId }">상세</button>
 												
 											</div>
 										</td>

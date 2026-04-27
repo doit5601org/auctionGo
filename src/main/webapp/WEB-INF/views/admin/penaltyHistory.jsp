@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -18,29 +19,56 @@
             <table class="table table-hover mb-0">
                 <thead class="wf-header">
                     <tr>
-                        <th>순번</th>
+                        <th>페널티 ID</th>
                         <th>처리자</th>
                         <th>대상 유저</th>
                         <th>점수</th>
+                        <%--
                         <th>사유</th>
+                        --%>
                         <th>처리 일시</th>
                         <th>취소자</th>
                         <th>취소 사유</th>
                         <th>취소 일시</th>
+                        <th>취소하기</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>System</td>
-                        <td>user_01</td>
-                        <td><span class="badge bg-danger">2</span></td>
+                	<c:forEach var="penaltyHistoryDto" items="${ penaltyuHistoryList }">
+                	<tr>
+                        <td>${ penaltyHistoryDto.penaltyId }</td>
+                        <td>${ penaltyHistoryDto.adminAccountId }</td>
+                        <td>${ penaltyHistoryDto.userId }</td>
+                        <td>
+                        	<span class="badge bg-danger">
+                        		${ penaltyHistoryDto.penaltyScore }
+							</span>
+						</td>
+						<%--
                         <td>허위 매물 등록</td>
-                        <td>2026-04-19 14:20</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
+                        --%>
+                        <td>${ penaltyHistoryDto.createdAt }</td>
+                        <td>${ penaltyHistoryDto.cancelAdminAccountId }</td>
+                        <td>${ penaltyHistoryDto.cancelReason }</td>
+                        <td>${ penaltyHistoryDto.canceledAt }</td>
+                        <td>
+                        	<c:choose>
+                        		<c:when test="${ empty penaltyHistoryDto.penaltyCancelId }">
+                        			<%-- 취소 가능한 상태 --%>
+                        			<button type="button" class="btn btn-sm btn-outline-danger btn-admin-custom">
+                        				취소하기
+                        			</button>
+                        		</c:when>
+						        <c:otherwise>
+						            <%-- 이미 취소 완료된 상태 --%>
+						            <button type="button" class="btn btn-sm btn-action-disabled btn-admin-custom" tabindex="-1">
+						                취소완료
+						            </button>
+						        </c:otherwise>
+						    </c:choose>
+						</td>
                     </tr>
+                	</c:forEach>
                 </tbody>
             </table>
         </div>

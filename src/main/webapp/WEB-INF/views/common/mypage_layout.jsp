@@ -101,7 +101,9 @@ $(function() {
     <a href="${pageContext.request.contextPath}/user/product" class="list-group-item list-group-item-action py-3 menu-link">
         <i class="bi bi-box-seam me-2"></i>내 등록 상품
     </a>
-
+	 <a href="${pageContext.request.contextPath}/user/products" class="list-group-item list-group-item-action py-3 menu-link">
+        <i class="bi bi-box-seam me-2"></i>내 낙찰 상품
+    </a>
     <div class="list-group-item p-0 border-0">
         <a href="#auctionSubmenu" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 main-menu collapsed">
             <span><i class="bi bi-hammer me-2"></i>내 경매 내역</span>
@@ -128,8 +130,8 @@ $(function() {
     <a href="${pageContext.request.contextPath}/user/penalty" class="list-group-item list-group-item-action py-3 menu-link">
         <i class="bi bi-exclamation-octagon me-2"></i>내 패널티 내역
     </a>
-        <a href="${pageContext.request.contextPath}/user/report" class="list-group-item list-group-item-action py-3 menu-link">
-        <i class="bi bi-exclamation-octagon me-2"></i>내 신고 내역
+        <a href="${pageContext.request.contextPath}/payment.history" class="list-group-item list-group-item-action py-3 menu-link">
+        <i class="bi bi-exclamation-octagon me-2"></i>내 머니 내역
     </a>
 
     <div class="list-group-item p-0 border-0">
@@ -140,7 +142,7 @@ $(function() {
         <div class="collapse submenu-list" id="infoSubmenu">
             <a href="${pageContext.request.contextPath}/user/my/change-info" class="list-group-item list-group-item-action py-2 ps-5">• 회원 정보 변경</a>
             <a href="${pageContext.request.contextPath}/user/my/change-pw" class="list-group-item list-group-item-action py-2 ps-5">• 비밀번호 변경</a>
-            <a href="${pageContext.request.contextPath}/user/my/withdraw.jsp" class="list-group-item list-group-item-action py-2 ps-5">• 회원 탈퇴</a>
+            <a href="${pageContext.request.contextPath}/unregister/" class="list-group-item list-group-item-action py-2 ps-5">• 회원 탈퇴</a>
         </div>
     </div>
 </div>

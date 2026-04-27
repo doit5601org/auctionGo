@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="ko">
@@ -32,7 +32,7 @@
 </head>
 <body>
 
-<%-- <jsp:include page="/common/header.jsp"></jsp:include> --%>
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 <div class="page-header text-center">
     <div class="container">
@@ -65,7 +65,7 @@
                      onclick="location.href='${ctx}/auction/detail?auctionId=${a.auctionId}'">
                     <c:choose>
                         <c:when test="${not empty a.imagePath1}">
-                            <img src="${ctx}/images/${a.imagePath1}" alt="${a.auctionTitle}">
+                            <img src="${ctx}/${a.imagePath1}" alt="${a.auctionTitle}">
                         </c:when>
                         <c:otherwise>
                             <img src="https://placehold.co/300x300/e3f2fd/1565c0?text=No+Image" alt="">
@@ -114,6 +114,6 @@
     </c:if>
 </div>
 
-<%-- <jsp:include page="/common/footer.jsp"></jsp:include> --%>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

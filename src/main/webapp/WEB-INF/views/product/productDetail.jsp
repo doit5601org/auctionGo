@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -19,7 +19,8 @@
 </head>
 <body class="bg-light">
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<%-- <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto ms-3">
@@ -29,7 +30,7 @@
             </ul>
         </div>
     </div>
-</nav> --%>
+</nav>
 
 <div class="container py-4">
 
@@ -139,18 +140,43 @@
 
                 <hr>
 
+                <%-- 찜 버튼 (로그인 시 표시) --%>
+                <c:if test="${not empty loginUserId}">
+                    <c:choose>
+                        <c:when test="${isWishlisted > 0}">
+                            <a href="${ctx}/user/product/wishlist/add?productId=${product.productId}"
+                               class="btn w-100 mb-2 fw-bold"
+                               style="background-color:#fff;color:#dc3545;border:1px solid #dc3545;border-radius:8px;">
+                                관심상품 취소
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${ctx}/user/product/wishlist/add?productId=${product.productId}"
+                               class="btn w-100 mb-2 fw-bold"
+                               style="background-color:#dc3545;color:#fff;border:none;border-radius:8px;">
+                                관심상품 등록
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+
+
                 <%-- 본인 상품이면 수정/삭제, 아니면 신고 버튼 --%>
                 <c:choose>
-                    <c:when test="${not empty sessionScope.userId and product.userId eq sessionScope.userId}">
+                    <c:when test="${not empty loginUserId and product.userId eq loginUserId}">
                         <div class="d-flex gap-2">
-                            <a href="${ctx}/product/update?productId=${product.productId}" class="btn btn-outline-primary w-50">수정</a>
-                            <a href="${ctx}/product/delete?productId=${product.productId}" class="btn btn-outline-danger w-50">삭제</a>
+                            <a href="${ctx}/product/update?productId=${product.productId}"
+                               class="btn w-50 py-2 fw-bold"
+                               style="background-color:#f1f1f1;color:#333;border:1px solid #ddd;border-radius:8px;">수정</a>
+                            <a href="${ctx}/product/delete?productId=${product.productId}"
+                               class="btn w-50 py-2 fw-bold"
+                               style="background-color:#212529;color:#fff;border:none;border-radius:8px;">삭제</a>
                         </div>
                     </c:when>
                     <c:otherwise>
                         <div class="text-end">
-                            <a href="${ctx}/product/report?productId=${product.productId}&type=product&name=${product.productReleaseName}" 
-                                class="btn btn-link btn-sm text-muted">신고하기</a>
+                            <a href="${ctx}/product/report?productId=${product.productId}"
+                               class="btn btn-link btn-sm text-muted">신고하기</a>
                         </div>
                     </c:otherwise>
                 </c:choose>
@@ -159,7 +185,6 @@
     </div>
 </div>
 
-<%-- <jsp:include page="/common/footer.jsp"></jsp:include> --%>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -171,6 +196,7 @@
         el.classList.add('active');
     }
 </script>
+
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

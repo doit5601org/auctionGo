@@ -5,7 +5,7 @@ import java.util.List;
 public class AuctionDTO
 {
 	// AUCTION_REGISTRATION 테이블 컬럼
-	
+
 	private int auctionId; // AUCTION_ID (PK)
 	private int productId; // PRODUCT_ID (FK)
 	private String auctionTitle; // AUCTION_TITLE
@@ -26,21 +26,24 @@ public class AuctionDTO
 	private String manufacturerName; // MANUFACTURER_NAME
 	private String productGradeName; // PRODUCT_GRADE_NAME
 	private String imagePath1; // IMAGE_PATH_1 (대표 이미지)
+	private String imagePath2, imagePath3, imagePath4, imagePath5, imagePath6, imagePath7, imagePath8, imagePath9,
+			imagePath10;
 
 	// 입찰 집계
 	private int bidCurrentPrice; // 현재가 (NVL 처리, 입찰 없으면 시작가)
 	private Integer bidMaxPrice; // 최고 입찰가 (입찰 없으면 null인데 null처리를 하려면 integer를 쓴다함
 	private int bidCount; // 입찰 건수
 
-	
 	// 추가
 	private List<BidRankDTO> bidRankList;
-	
-	public List<BidRankDTO> getBidRankList() {
+
+	public List<BidRankDTO> getBidRankList()
+	{
 		return bidRankList;
 	}
 
-	public void setBidRankList(List<BidRankDTO> bidRankList) {
+	public void setBidRankList(List<BidRankDTO> bidRankList)
+	{
 		this.bidRankList = bidRankList;
 	}
 
@@ -204,6 +207,96 @@ public class AuctionDTO
 	public void setImagePath1(String imagePath1)
 	{
 		this.imagePath1 = imagePath1;
+	}
+
+	public String getImagePath2()
+	{
+		return imagePath2;
+	}
+
+	public void setImagePath2(String imagePath2)
+	{
+		this.imagePath2 = imagePath2;
+	}
+
+	public String getImagePath3()
+	{
+		return imagePath3;
+	}
+
+	public void setImagePath3(String imagePath3)
+	{
+		this.imagePath3 = imagePath3;
+	}
+
+	public String getImagePath4()
+	{
+		return imagePath4;
+	}
+
+	public void setImagePath4(String imagePath4)
+	{
+		this.imagePath4 = imagePath4;
+	}
+
+	public String getImagePath5()
+	{
+		return imagePath5;
+	}
+
+	public void setImagePath5(String imagePath5)
+	{
+		this.imagePath5 = imagePath5;
+	}
+
+	public String getImagePath6()
+	{
+		return imagePath6;
+	}
+
+	public void setImagePath6(String imagePath6)
+	{
+		this.imagePath6 = imagePath6;
+	}
+
+	public String getImagePath7()
+	{
+		return imagePath7;
+	}
+
+	public void setImagePath7(String imagePath7)
+	{
+		this.imagePath7 = imagePath7;
+	}
+
+	public String getImagePath8()
+	{
+		return imagePath8;
+	}
+
+	public void setImagePath8(String imagePath8)
+	{
+		this.imagePath8 = imagePath8;
+	}
+
+	public String getImagePath9()
+	{
+		return imagePath9;
+	}
+
+	public void setImagePath9(String imagePath9)
+	{
+		this.imagePath9 = imagePath9;
+	}
+
+	public String getImagePath10()
+	{
+		return imagePath10;
+	}
+
+	public void setImagePath10(String imagePath10)
+	{
+		this.imagePath10 = imagePath10;
 	}
 
 	// ── 입찰 집계 ──

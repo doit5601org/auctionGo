@@ -10,6 +10,7 @@ import com.doit.dto.AuctionDTO;
 import com.doit.dto.AuctionHistoryDTO;
 import com.doit.dto.BidRankDTO;
 import com.doit.dto.MyBidStatusDTO;
+import com.doit.dto.MyPenaltyDTO;
 import com.doit.dto.MyWishlistDTO;
 import com.doit.dto.ProductDTO;
 import com.doit.dto.UserInfoDTO;
@@ -479,28 +480,25 @@ public class MyPageDAO {
 			
 			
 			String sql = """
-					SELECT 
-					    PW.WISHLIST_ID,
-					    P.PRODUCT_ID,
-					    P.PRODUCT_RELEASE_NAME,
-					    P.IMAGE_PATH_1,
-					    V.AUCTION_ID,
-					    V.AUCTION_END_DATE,
-					    V.IS_FINISHED
-					FROM PRODUCT_WISHLIST PW
-					JOIN PRODUCT P ON PW.PRODUCT_ID = P.PRODUCT_ID
-					LEFT OUTER JOIN (
-					    SELECT * FROM (
-					        SELECT VA.*,
-					               ROW_NUMBER() OVER(PARTITION BY PRODUCT_ID ORDER BY AUCTION_ID DESC) as rn
-					        FROM VW_AUCTION_LIST VA
-					    ) WHERE rn = 1
-					) V ON P.PRODUCT_ID = V.PRODUCT_ID
-					WHERE PW.USER_ID = ?
-					ORDER BY WISHLIST_ID DESC
-					OFFSET ? ROWS FETCH FIRST ? ROWS ONLY	
-					
-					""";
+			        SELECT 
+			            PW.WISHLIST_ID,
+			            P.PRODUCT_ID,
+			            P.PRODUCT_RELEASE_NAME,
+			            P.IMAGE_PATH_1,
+			            AR.AUCTION_ID,
+			            NULL AS AUCTION_END_DATE,
+			            CASE WHEN AR.AUCTION_ID IS NOT NULL THEN '진행중' ELSE NULL END AS IS_FINISHED
+			        FROM PRODUCT_WISHLIST PW
+			        JOIN PRODUCT P ON PW.PRODUCT_ID = P.PRODUCT_ID
+			        LEFT OUTER JOIN (
+			            SELECT AUCTION_ID, PRODUCT_ID,
+			                   ROW_NUMBER() OVER(PARTITION BY PRODUCT_ID ORDER BY AUCTION_ID DESC) AS rn
+			            FROM AUCTION_REGISTRATION
+			        ) AR ON P.PRODUCT_ID = AR.PRODUCT_ID AND AR.rn = 1
+			        WHERE PW.USER_ID = ?
+			        ORDER BY WISHLIST_ID DESC
+			        OFFSET ? ROWS FETCH FIRST ? ROWS ONLY
+			        """;
 			
 			try(Connection conn = DBCPConn.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -583,6 +581,80 @@ public class MyPageDAO {
 			
 			return result;
 		}
+		
+		// 관심상품 등록
+		public int insertWishlist(int userId, int productId) {
+		    int result = 0;
+		    String sql = """
+		            INSERT INTO PRODUCT_WISHLIST (WISHLIST_ID, USER_ID, PRODUCT_ID)
+		            VALUES (WISHLIST_SEQ.NEXTVAL, ?, ?)
+		            """;
+		    try (Connection conn = DBCPConn.getConnection();
+		         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		        pstmt.setInt(1, userId);
+		        pstmt.setInt(2, productId);
+		        result = pstmt.executeUpdate();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    return result;
+		}
+		
+		// 이미 찜했는지 확인
+		public int checkWishlist(int userId, int productId) {
+		    int result = 0;
+		    String sql = """
+		            SELECT COUNT(*) FROM PRODUCT_WISHLIST
+		            WHERE USER_ID = ? AND PRODUCT_ID = ?
+		            """;
+		    try (Connection conn = DBCPConn.getConnection();
+		         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		        pstmt.setInt(1, userId);
+		        pstmt.setInt(2, productId);
+		        try (ResultSet rs = pstmt.executeQuery()) {
+		            if (rs.next()) result = rs.getInt(1);
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    return result;
+		}
+		
+		
+	
+	
+	
+		// 내 패널티 리스트
+		public List<MyPenaltyDTO> myPenaltyBoard(int userId){
+			List<MyPenaltyDTO> result = new ArrayList<MyPenaltyDTO>();
+			String sql = """
+					SELECT PENALTY_ID, PENALTY_TYPE_NAME, GIVEN_SCORE, ACCUMULATED_SCORE
+					, TOTAL_SCORE, HISTORY_STATUS, PENALTY_CREATED_AT
+					, PENALTY_START_DATE, PENALTY_END_DATE
+					, PENALTY_ASSIGN_ADMIN
+					, PENALTY_CANCEL_ID, CANCEL_REASON, CANCELED_AT
+					, PENALTY_CANCEL_ADMIN
+					FROM VW_PENALTY_DETAIL_LIST
+					WHERE USER_ID = ?
+					""";
+			try(Connection conn = DBCPConn.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+				pstmt.setInt(1, userId);
+				try(ResultSet rs = pstmt.executeQuery()){
+					while(rs.next()) {
+						MyPenaltyDTO dto = new MyPenaltyDTO();
+						dto.setPenaltyId(rs.getInt(""));
+					}
+				}
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+			
+		}
 	
 	
 	
@@ -597,7 +669,22 @@ public class MyPageDAO {
 	
 	
 	
-	
-	
-	
+
+		// productId + userId로 찜 해제
+		public void deleteWishlistByProduct(int userId, int productId) {
+		    String sql = """
+		            DELETE FROM PRODUCT_WISHLIST
+		            WHERE USER_ID = ? AND PRODUCT_ID = ?
+		            """;
+		    try (Connection conn = DBCPConn.getConnection();
+		         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		        pstmt.setInt(1, userId);
+		        pstmt.setInt(2, productId);
+		        pstmt.executeUpdate();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}
+
+
 }
