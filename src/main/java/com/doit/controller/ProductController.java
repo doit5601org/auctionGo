@@ -10,6 +10,7 @@ import com.doit.dto.ProductGenreDTO;
 import com.doit.dto.ProductGradeDTO;
 import com.doit.dto.ProductManufacturerDTO;
 import com.doit.dto.ProductSizeDTO;
+import com.doit.dto.UserInfoDTO;
 import com.doit.dto.ReportDTO;
 import com.doit.dto.ReportTypeDTO;
 import com.doit.util.Pagination;
@@ -21,6 +22,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 
 
 @WebServlet("/product/*")
@@ -382,16 +384,15 @@ public class ProductController extends HttpServlet
 	// 세션에서 로그인 사용자 userId 가져오기. 없으면 null.
 	private Integer getLoginUserId(HttpServletRequest req)
 	{
-		HttpSession session = req.getSession(false);
-		if (session == null)
-			return null;
+	    HttpSession session = req.getSession(false);
+	    if (session == null)
+	        return null;
 
-		Object obj = session.getAttribute("userId");
+	    UserInfoDTO loginUser = (UserInfoDTO) session.getAttribute("loginUser");
+	    if (loginUser == null)
+	        return null;
 
-		if (obj instanceof Integer)
-			return (Integer) obj;
-
-		return null;
+	    return loginUser.getUserId();
 	}
 
 	/*
