@@ -37,8 +37,59 @@
 	cursor: pointer;
 }
 
+.breadcrumb-item>a{color: #666; text-decoration: none;}
+.breadcrumb-item.active{color: #333; font-weight: bold;}
+
+
 .thumb-img.active {
-	border-color: #0d6efd;
+	border-color: #120e63;
+}
+
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+
+.bg-primary {
+	background-color: #120e63 !important;
+}
+
+i.text-primary {
+	color: #120e63 !important;
+}
+
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
+.badge.bg-primary {
+	background-color: #5172a6 !important;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #5172a6 !important;
+	border-color: #5172a6 !important;
+	color: #ffffff !important;
+}
+
+.pagination .page-link:hover {
+	color: #5172a6;
+}
+
+.page-link:focus {
+	box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
+}
+
+.nav-link {
+	color: #5172a6 !important;
 }
 </style>
 </head>
@@ -199,14 +250,14 @@
 									<a
 										href="${ctx}/user/product/wishlist/add?productId=${product.productId}"
 										class="btn w-100 mb-2 fw-bold"
-										style="background-color: #fff; color: #dc3545; border: 1px solid #dc3545; border-radius: 8px;">
+										style="background-color: #fff; color: #dc3545; border: 1px solid #dc3545; border-radius: 8px; height: 45px; line-height: 35px; font-size: 18px;">
 										관심상품 취소 </a>
 								</c:when>
 								<c:otherwise>
 									<a
 										href="${ctx}/user/product/wishlist/add?productId=${product.productId}"
 										class="btn w-100 mb-2 fw-bold"
-										style="background-color: #dc3545; color: #fff; border: none; border-radius: 8px;">
+										style="background-color: #dc3545; color: #fff; border: none; border-radius: 8px; height: 45px; line-height: 35px; font-size: 18px;">
 										관심상품 등록 </a>
 								</c:otherwise>
 							</c:choose>
