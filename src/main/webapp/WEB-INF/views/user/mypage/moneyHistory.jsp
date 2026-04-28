@@ -165,20 +165,21 @@ hr {
 							<span>보유 머니</span>
 							<hr />
 							<span class="view"><fmt:formatNumber
-									value="${loginUser.totalMoney}" /> 원</span>
+									value="${userMoney}" /> 원</span>
 						</div>
 						<span>▶</span>
 						<div class="bid">
 							<span>환급 예정 보증금</span>
 							<hr />
-							<span class="view">0 원</span>
+							<span class="view"><fmt:formatNumber
+									value="${userDeposit}" /> 원</span>
 						</div>
 						<span>▶</span>
 						<div class="bid">
 							<span>전체 머니</span>
 							<hr />
 							<span class="view"><fmt:formatNumber
-									value="${loginUser.totalMoney}" /> 원</span>
+									value="${userMoney+userDeposit}" /> 원</span>
 						</div>
 					</div>
 
