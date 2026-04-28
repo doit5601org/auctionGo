@@ -273,7 +273,7 @@ public class MyPageDAO {
 		
 		String sql = """
 				SELECT AUCTION_ID, AUCTION_TITLE
-				, AUCTION_START_DATE, AUCTION_END_DATE, IMAGE_PATH_1, BID_COUNT
+				,AUCTION_START_DATE, AUCTION_END_DATE, IMAGE_PATH_1, BID_COUNT
 				FROM VW_AUCTION_LIST
 				WHERE USER_ID = ? AND AUCTION_END_DATE > SYSDATE AND IS_FINISHED = '진행중'
 				ORDER BY AUCTION_ID DESC OFFSET ? ROWS FETCH FIRST ? ROWS ONLY""";
@@ -749,13 +749,15 @@ public class MyPageDAO {
 			List<MyPenaltyDTO> result = new ArrayList<MyPenaltyDTO>();
 			String sql = """
 					SELECT PENALTY_ID, PENALTY_TYPE_NAME, GIVEN_SCORE, ACCUMULATED_SCORE
-					, TOTAL_SCORE, HISTORY_STATUS, PENALTY_CREATED_AT
+					, SUM(CASE WHEN PENALTY_CANCEL_ID IS NULL THEN GIVEN_SCORE ELSE 0 END) OVER() as TOTAL_SCORE
+					, HISTORY_STATUS, PENALTY_CREATED_AT
 					, PENALTY_START_DATE, PENALTY_END_DATE
 					, PENALTY_ASSIGN_ADMIN
 					, PENALTY_CANCEL_ID, CANCEL_REASON, CANCELED_AT
 					, PENALTY_CANCEL_ADMIN
 					FROM VW_PENALTY_DETAIL_LIST
 					WHERE USER_ID = ?
+					ORDER BY PENALTY_ID DESC
 					""";
 			try (Connection conn = DBCPConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 				pstmt.setInt(1, userId);
@@ -821,7 +823,7 @@ public class MyPageDAO {
 
 				
 				
-				//
+				
 //				// 낙찰 입금 코드 찾기
 //				public int findPaymentId(int auctionId) {
 //					int result = 0;
