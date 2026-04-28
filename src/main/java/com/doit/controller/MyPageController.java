@@ -59,12 +59,12 @@ public class MyPageController extends HttpServlet{
 			int auctionCnt = dao.auctionDataCount(userId);
 			int bidCnt = dao.activeBidDataCount(userId);
 			int wishCnt = dao.wishlistDataCount(userId);
-			int paneltyScore = dao.totalPaneltyScore(userId);
+			/* int paneltyScore = dao. */
 			
 			request.setAttribute("auctionCnt", auctionCnt);
 			request.setAttribute("bidCnt", bidCnt);
 			request.setAttribute("wishCnt", wishCnt);
-			request.setAttribute("paneltyScore", paneltyScore);
+//			request.setAttribute("paneltyScore", paneltyScore);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/my/mypage.jsp");
 			dispatcher.forward(request, response);
