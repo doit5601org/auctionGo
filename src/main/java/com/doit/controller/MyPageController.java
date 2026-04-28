@@ -285,9 +285,15 @@ public class MyPageController extends HttpServlet{
 		    }
 		}else if(uri.endsWith("/user/auctions/shipping")) {
 			
+			int auctionId = Integer.parseInt(request.getParameter("auctionId"));
 			
+			int paymentId = dao.findPaymentId(auctionId);			
+			int result = dao.shippingOk(paymentId);
 			
-			response.sendRedirect(cp+"/user/auctions/closed");
+			if(result>0) {
+				request.getSession().setAttribute("msg", "배송 처리가 완료되었습니다.");
+				response.sendRedirect(cp+"/user/auctions/closed");
+			}
 		}
 		
 		

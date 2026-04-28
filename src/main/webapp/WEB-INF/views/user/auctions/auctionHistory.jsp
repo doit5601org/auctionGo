@@ -29,7 +29,15 @@ $(function() {
         });
     });
 });
+
 </script>
+<c:if test="${not empty sessionScope.msg}">
+    <script>
+        alert("${sessionScope.msg}");
+        <c:remove var="msg" scope="session" />
+    </script>
+</c:if>
+
 <style>
 #auction-history-table tr:has(+.collapse.show) td {
 	border-bottom: none !important;
@@ -131,7 +139,7 @@ $(function() {
 												class="btn btn-sm btn-outline-primary detail-btn">${dto.transactionStatus == '유찰' ? '사유' : '상세'}</button>
 												
 												<c:if test="${dto.transactionStatus=='거래진행중' && dto.winningPaymentStatus=='Completed' && dto.shippingYn=='N'}">
-													<a type="button" class="btn btn-sm btn-outline-primary" 
+													<a type="button" class="btn btn-sm btn-primary" 
 													href="${pageContext.request.contextPath}/user/auctions/shipping?auctionId=${dto.auctionId}">배송완료</a>
 												</c:if>
 										</td>
