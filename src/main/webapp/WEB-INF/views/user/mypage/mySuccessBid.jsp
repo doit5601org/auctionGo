@@ -192,8 +192,15 @@ hr {
 </style>
 
 <script type="text/javascript">
-/* 기존 스크립트 유지 */
+
 function con(userId, bidId) {
+	
+
+	if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+	}
+	
     if (!confirm("구매를 확정하시겠습니까?")) return;
     fetch("${pageContext.request.contextPath}/user/purchaseConfirmAction?bidId=" + bidId + "&userId=" + userId)
     .then(response => response.text())

@@ -28,7 +28,8 @@ public class ConfirmController extends HttpServlet {
 		process(request, response);
 	}
 	
-	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 		
         String bidIdStr = request.getParameter("bidId");
         
@@ -42,6 +43,7 @@ public class ConfirmController extends HttpServlet {
 		    	bidId = 1;
 		    }
 		}
+        
         String cp = request.getContextPath();
 		
 		HttpSession session = request.getSession();
@@ -54,20 +56,29 @@ public class ConfirmController extends HttpServlet {
         }
 		
 		int userId = user.getUserId();
-        // DAO 객체 생성 및 프로시저 호출
+     
         ProductBuyDAO dao = new ProductBuyDAO();
+        
         BidActionDTO dto = new BidActionDTO(userId,bidId,0);
-        int result = dao.confirmBid(dto); // 
         
+        System.out.println(dto.getUserId());
+        System.out.println(dto.getBidResultId());
         
-        // 응답 보내기
-        response.setContentType("text/plain; charset=UTF-8");
+        int result = dao.confirmBid(dto); 
         
-        if (result > 0) {
-            response.getWriter().write("success"); // 성공 시 
-        } else {
-            response.getWriter().write("fail");    // 실패 시 
-        }
+        System.out.println("구해확정결과"+result);
+        
+		
+		response.setContentType("text/plain; charset=UTF-8");
+		 
+		if (result > 0) 
+		{ 
+			response.getWriter().write("success");
+		}else 
+		{
+			response.getWriter().write("fail");
+		}
+		
     }
 }
 
