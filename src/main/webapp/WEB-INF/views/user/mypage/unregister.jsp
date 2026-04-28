@@ -50,8 +50,23 @@
 </script>
 
 <style type="text/css">
-
-.body2 {
+body
+{
+	background-color:#f7f7f7;
+}
+/* .body
+{
+	margin: auto;
+	font-size: 16px;
+	color: black;
+	font-family: "맑은 고딕";
+	width: 700px;
+	margin-top: 50px;
+	border-radius: 8px;
+	height: auto;
+} */
+.body2
+{
 	margin: auto;
 	width: 90%;
 }
@@ -149,10 +164,21 @@ body2 hr
 {
 	height: 1400px;
 }
-
+		.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
 </style>
 </head>
 <body class="bg-light">
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<main class="container" style="margin-top: 50px; margin-bottom: 50px;">
+	<div class="row">
+	<aside class="col-md-3">
+				<%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
+			</aside>
+		<section class="col-md-9">
+			<div class="body shadow-sm border-0 bg-white p-4">
 
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 
@@ -263,12 +289,10 @@ body2 hr
 						</div>
 					</div>
 				</div>
-			</section>
-
-		</div>
+			</div>
+		</section>
 	</div>
-
-	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
-
+	</main>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
