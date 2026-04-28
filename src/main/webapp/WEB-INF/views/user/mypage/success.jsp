@@ -23,27 +23,26 @@
 
 
 body
-{
-	margin-top:50px;
-	
+{	
 	
 }
 h1,h2
 {
-	font-size: 20px;
-	font-weight: bold;
+	font-size: 20px !important;
+	font-weight: bold !important;
 }
 h2{
 	margin-bottom: 20px;
 }
 .body
 {
-	margin:auto;
+	margin:50px auto 0 auto;
 	width:760px;
 	border: 2px; solid silver;
 	border-radius: 7px;
 	box-shadow: 0 0 3px rgba(0,0,0,0.4);
 	padding: 30px;
+	min-height:1000px;
 }
 .body div
 {
@@ -174,6 +173,6 @@ button
 			</div>
 		</div>
 	</div>
-
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

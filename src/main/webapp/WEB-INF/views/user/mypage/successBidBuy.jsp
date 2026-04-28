@@ -24,17 +24,26 @@
 body
 {
 	margin-top:50px;
+	margin:50px auto 0 auto !important;
 	
 }
+
 h1,h2
 {
-	font-size: 20px;
-	font-weight: bold;
+	font-size: 20px !important;
+	font-weight: bold !important;
 }
 .body
 {
-	margin:auto;
+	margin:30px auto !important;
 	width:80%;
+	
+}
+.b
+{
+	margin-left:180px;
+	width:1032px;
+	height: 1400px;
 }
 .body div
 {
@@ -43,6 +52,7 @@ h1,h2
 
 .box
 {
+
 	width:80%;
 	margin:auto;
 	position: relative;
@@ -381,12 +391,13 @@ window.onload = function() {
 			postDetail.focus();
 			bol = true;
 		}
-		let currentPrice = ${money-detail.currentPrice};
-		let myMoney = ${money};
+		let currentPrice = parseInt("${money-detail.currentPrice}");
 		
-		if(myMoney - currentPrice < 0)
+		
+		if(currentPrice < 0)
 		{
 			alert("보유금액이 부족합니다 \n충전 후 결제해주세요");
+			bol = true;
 		}
 		
 		if(bol)
@@ -450,7 +461,9 @@ window.onload = function() {
 		<input type="hidden" name="bid" value="${detail.bidResult }">
 		<input type="hidden" name="user" value="${detail.userId }">
 	</form>
+
 	<div class="body">
+	<div class="b">
 		<div class="box">
 			<div class="item">
 				<h1>낙찰 구매 상품</h1>
@@ -461,8 +474,8 @@ window.onload = function() {
 				<div class="itemtext">
 					<span class="title"> ${detail.auctionTitle } </span> <br /> <span class="condition">
 						상태: ${detail.gradeName } / 제조사: ${detail.manudacturerName} </span><br /> <br /> <span class="date"> <span
-						class="tt">낙찰일</span> <span class="condition">${detail.auctionEndDate }</span> <br /> <span class="tt" >결제마감일</span>
-						<span id="endDate condition"></span> <br /> <span class="tt" >남은시간</span> <span id="endTime condition"></span><br />
+						class="tt">낙찰일</span> <span class="condition">${fn:substring(detail.auctionEndDate,0,fn:length(detail.auctionEndDate)-8)}</span> <br /> <span class="tt" >결제마감일</span>
+						<span class="endDate condition">${fn:substring(detail.auctionStartDate,0,fn:length(detail.auctionStartDate)-8) }</span> <br /> <span class="tt" >남은시간</span> <span id="endTime condition"></span><br />
 					</span> <span class="countmoney"> <span class="tt">입찰가</span>
 						<span class="condition">${detail.maxPrice } 원</span><br /> <span class="tt">낙찰가</span> <span class="condition">${detail.currentPrice } 원</span><br />
 					</span>
@@ -557,6 +570,7 @@ window.onload = function() {
 			</div>
 		</div>
 	</div>
-
+	</div>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

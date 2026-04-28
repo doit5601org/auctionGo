@@ -1,6 +1,7 @@
 package com.doit.controller;
 
 import java.io.IOException;
+import java.util.Date;
 
 import com.doit.dao.ProductBuyDAO;
 import com.doit.dto.BidActionDTO;
@@ -161,12 +162,15 @@ public class PaymentController extends HttpServlet
 		ProductBuyDAO dao = new ProductBuyDAO();
 		BidActionDTO dto = new BidActionDTO(userId, bid, amount);
 		
-		request.setAttribute("today", new java.util.Date());
+		
+		Date today = new java.util.Date();
+		
+		request.setAttribute("today",today );
 		
 		int result = dao.paymentBid(dto);
-		System.out.println(dto.getAmount());
-		System.out.println(dto.getBidResultId());
-		System.out.println(dto.getUserId());
+		System.out.println("결제가격"+dto.getAmount());
+		System.out.println("결제낙찰"+dto.getBidResultId());
+		System.out.println("결제유저"+dto.getUserId());
 		System.out.println(result);
 		
 		if(result > 0)
