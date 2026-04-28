@@ -35,7 +35,7 @@ public class AdminPenaltyController extends HttpServlet
 
 //-----------------------------------------------------------------------------------------------------------------------------------
 
-	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		String methodType = request.getMethod();
 		String uri = request.getRequestURI();
