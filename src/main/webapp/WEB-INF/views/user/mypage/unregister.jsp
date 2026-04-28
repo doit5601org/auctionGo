@@ -171,14 +171,7 @@ body2 hr
 </style>
 </head>
 <body class="bg-light">
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
-<main class="container" style="margin-top: 50px; margin-bottom: 50px;">
-	<div class="row">
-	<aside class="col-md-3">
-				<%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
-			</aside>
-		<section class="col-md-9">
-			<div class="body shadow-sm border-0 bg-white p-4">
+
 
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 

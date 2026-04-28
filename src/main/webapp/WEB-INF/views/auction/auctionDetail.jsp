@@ -158,10 +158,10 @@
                                     <button class="btn btn-secondary btn-lg" disabled>입찰 참여 불가</button>
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="${ctx}/bid/form?auctionId=${auction.auctionId}"
-                                       class="btn btn-danger btn-lg shadow-sm">
-                                        <i class="bi bi-hammer me-2"></i>입찰 참여
-                                    </a>
+									<button type="button" class="btn btn-danger btn-lg shadow-sm" 
+							            data-bs-toggle="modal" data-bs-target="#bidModal">
+								        <i class="bi bi-hammer me-2"></i>입찰 참여
+								    </button>
                                 </c:otherwise>
                             </c:choose>
                         </c:when>
@@ -212,6 +212,65 @@
         </p>
     </div>
 </div>
+
+
+
+<!-- 입찰 모달 -->
+<div class="modal fade" id="bidModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-hammer me-2"></i>경매 입찰하기</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="${ctx}/bid/insert" method="post" id="bidForm">
+                <input type="hidden" name="auctionId" value="${auction.auctionId}">
+                
+                <div class="modal-body p-4">
+                    <%-- 현재가 정보 --%>
+                    <div class="mb-3 p-3 bg-light rounded border">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="text-muted small fw-bold">현재가 (2순위 가격)</span>
+                            <span class="badge bg-white text-primary border border-primary">비크리 방식</span>
+                        </div>
+                        <div class="fs-3 fw-bold text-danger">
+                            <fmt:formatNumber value="${auction.bidCurrentPrice}" pattern="#,###" />원
+                        </div>
+                    </div>
+                    
+                    <%-- 입찰가 입력 --%>
+                    <div class="mb-4">
+                        <label for="bidPrice" class="form-label fw-bold">내 응찰 금액</label>
+                        <div class="input-group input-group-lg">
+                            <input type="number" name="bidPrice" id="bidPrice" class="form-control" 
+                                   placeholder="최대 지불 가능 금액 입력" required 
+                                   step="${bidUnit}" min="${auction.bidCurrentPrice + bidUnit}">
+                            <span class="input-group-text">원</span>
+                        </div>
+                        <div class="form-text mt-2 text-primary">
+                            <i class="bi bi-info-circle-fill me-1"></i> 
+                            최소 입찰가: <strong><fmt:formatNumber value="${auction.bidCurrentPrice + bidUnit}" pattern="#,###" />원</strong>
+                        </div>
+                    </div>
+
+                    <%-- 안내 문구 --%>
+                    <div class="alert alert-info border-0 mb-0 px-3 py-2" style="font-size: 0.85rem;">
+                        <ul class="mb-0 ps-3">
+                            <li>첫 참여 시 <strong>보증금 30,000원</strong>이 즉시 차감됩니다.</li>
+                            <li>낙찰 시 본인이 쓴 금액이 아닌, <strong>2순위 입찰가</strong>로 결제합니다.</li>
+                            <li>본인의 최고 응찰가는 타인에게 공개되지 않습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="submit" class="btn btn-primary px-4 fw-bold">입찰 등록</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <%-- 경매 취소 모달 1 --%>
 <div class="modal fade" id="cancelNoticeModal" tabindex="-1" aria-hidden="true">
@@ -295,6 +354,15 @@
         updateTimer();
         setInterval(updateTimer, 1000);
     }
+    
+    
+    $(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('bidOk') === '1') {
+            alert('입찰이 성공적으로 등록되었습니다!');
+        }
+    });
+    
 </script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>

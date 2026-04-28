@@ -1,11 +1,9 @@
 package com.doit.controller;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import com.doit.dao.MyPageDAO;
-import com.doit.dto.MyPenaltyDTO;
 import com.doit.dto.UserInfoDTO;
 import com.doit.service.MyPageService;
 
@@ -56,15 +54,15 @@ public class MyPageController extends HttpServlet{
 		if(uri.endsWith("/user/my")) {
 			
 			
-			int auctionCnt = dao.auctionDataCount(userId);
+			int auctionCnt = dao.activeAuctionDataCount(userId);
 			int bidCnt = dao.activeBidDataCount(userId);
 			int wishCnt = dao.wishlistDataCount(userId);
-			/* int paneltyScore = dao. */
+			int paneltyScore = dao.totalPaneltyScore(userId);
 			
 			request.setAttribute("auctionCnt", auctionCnt);
 			request.setAttribute("bidCnt", bidCnt);
 			request.setAttribute("wishCnt", wishCnt);
-//			request.setAttribute("paneltyScore", paneltyScore);
+			request.setAttribute("paneltyScore", paneltyScore);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/my/mypage.jsp");
 			dispatcher.forward(request, response);
@@ -242,9 +240,8 @@ public class MyPageController extends HttpServlet{
 		}else if(uri.endsWith("/user/penalty")){
 			
 			Map<String, Object> result = service.myPenaltyList(userId);
-			
-			
-			request.setAttribute("reulst", result);
+				
+			request.setAttribute("result", result);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/penalties/penaltyHistory.jsp");
 			dispatcher.forward(request, response);
