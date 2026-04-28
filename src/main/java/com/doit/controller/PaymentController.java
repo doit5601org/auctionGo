@@ -104,7 +104,7 @@ public class PaymentController extends HttpServlet
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e);
+			//System.out.println(e);
 		}
 		
 		int totalMoney = dao.moneyCheck(userId);
@@ -172,10 +172,10 @@ public class PaymentController extends HttpServlet
 		request.setAttribute("today",today );
 		
 		int result = dao.paymentBid(dto);
-		System.out.println("결제가격"+dto.getAmount());
-		System.out.println("결제낙찰"+dto.getBidResultId());
-		System.out.println("결제유저"+dto.getUserId());
-		System.out.println(result);
+		//System.out.println("결제가격"+dto.getAmount());
+		//System.out.println("결제낙찰"+dto.getBidResultId());
+		//System.out.println("결제유저"+dto.getUserId());
+		//System.out.println(result);
 		
 		String img =  request.getParameter("img");
 		String title = request.getParameter("title");

@@ -180,7 +180,7 @@ public class AuctionController extends HttpServlet
 		req.setAttribute("isOwner", isOwner);
 		req.setAttribute("loginUserId", userId);
 
-		System.out.println(userId);
+		//System.out.println(userId);
 		
 		req.setAttribute("auction", auction);
 		req.setAttribute("viewStatus", viewStatus);

@@ -71,7 +71,7 @@ public class PaymentDetailController extends HttpServlet
 		
 		int money = dao.moneyCheck(userId);
 		
-		System.out.println(dto.getUserName());
+		//System.out.println(dto.getUserName());
 		
 		request.setAttribute("detail", dto);
 		
