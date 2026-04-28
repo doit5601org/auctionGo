@@ -51,11 +51,11 @@ public class AdminPenaltyService
 	
 	
 	// 패널티 취소
-	public int cancelPenalty(int penaltyId, int adminAccountId, String cancelReason)
+	public int cancelPenalty(PenaltyHistoryDTO phDto)
 	{
 		int result = 0;
 		
-		apDao.insertPenaltyCancel(penaltyId, adminAccountId, cancelReason);
+		apDao.insertPenaltyCancel(phDto);
 		
 		return result;
 	}
