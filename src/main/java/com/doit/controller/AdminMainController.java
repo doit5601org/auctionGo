@@ -29,12 +29,8 @@ public class AdminMainController extends HttpServlet
 	
 	protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		String viewPath = "/WEB-INF/views/admin/mainDashBoard";
+		String viewPath = "/WEB-INF/views/admin/mainDashBoard.jsp";
 		
-		//----------
-		// (temp) 개발용 임시 메인 페이지 경로
-		viewPath = "/JY/mainDashBoard.jsp";
-		//----------
 		
 		request.getRequestDispatcher(viewPath).forward(request, response);
 		return;
