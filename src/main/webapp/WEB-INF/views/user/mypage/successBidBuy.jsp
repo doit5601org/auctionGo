@@ -406,6 +406,7 @@ window.onload = function() {
 		}
 		
 		document.formRight.action ="${pageContext.request.contextPath}/payment/success"
+		document.formRight.method ="GET";
 		document.formRight.submit();
 		
 		

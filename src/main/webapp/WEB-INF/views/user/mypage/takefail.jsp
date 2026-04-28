@@ -109,8 +109,14 @@ a:visited, a {
 			return;
 		}
 		
-		location.href="${pageContext.request.contextPath}/payment/takefailSuccess";
 		
+		document.takefaillForm.action ="${pageContext.request.contextPath}/payment/takefailSuccess";
+		document.takefaillForm.submit();
+	}
+	function back()
+	{
+		
+		location.href="${pageContext.request.contextPath}/user/products";
 	}
 </script>
 
@@ -120,9 +126,12 @@ a:visited, a {
 	<div class="body shadow-sm">
 		<h1>낙찰 취소</h1>
 		<hr />
-
-		`
-		<form action="">
+		
+		
+		<form action="" name="takefaillForm">
+			<input type="hidden" name="bid" value="${bidId }" />
+			<input type="hidden" name="price" value="${amount }" />
+		</form>
 			<div class="adressconfirm">
 				<ul class="list-group">
 					<li class="list-group-item"><input
@@ -140,7 +149,7 @@ a:visited, a {
 				</ul>
 				<hr />
 				<select class="form-select" aria-label="Default select example"
-					id="postDetail" onchange="check(this)">
+					id="postDetail" >
 					<option selected>취소 사유</option>
 					<option value="1" selected="selected">낙찰 포기</option>
 				</select>
@@ -153,10 +162,10 @@ a:visited, a {
 			</div>
 			<div class="bt">
 				<a href="${pageContext.request.contextPath }/payment/">
-					<button type="button" class="btn btn-secondary" onclick="">이전으로</button>
+					<button type="button" class="btn btn-secondary" onclick="back()">이전으로</button>
 				</a> <button type="button" class="btn btn-danger" onclick="check()">낙찰포기</button>
 			</div>
-		</form>
+		
 	</div>
 </body>
 </body>
