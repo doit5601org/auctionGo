@@ -2,6 +2,8 @@ package com.doit.controller;
 
 import java.io.IOException;
 
+import com.doit.service.AdminAuctionService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -43,13 +45,23 @@ public class AdminAuctionController extends HttpServlet
 				if (path.equalsIgnoreCase("/admin/auction/list"))
 				{
 					// 이전 페이지 (mainDashBoard.jsp, auctionList.jsp)에서 전달된 데이터 수신
+					//-- auctionStatus, page
+					String auctionStatus = request.getParameter("auctionStatus");
+					int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
 					
 					
-					// 진행중인 경매 리스트 가져오기
-					// 진행중인 경매의 페이지 엘리먼트 생성
+					// Service 객체 생성
+					AdminAuctionService adminAuctionService  = new AdminAuctionService();
 					
-					// 종료된 경매 가져오기
-					// 종료된 경매의 페이지 엘리먼트 생성
+					
+					// 경매 총 갯수 가져오기
+					int auctionTotalCount = adminAuctionService.getAuctionTotalCount(auctionStatus);
+					
+					// 경매 리스트 가져오기
+					int sizePerPage = 10;
+					adminAuctionService.getAuctionList(auctionStatus, page, sizePerPage);
+					
+					// 경매의 페이지 엘리먼트 생성
 					
 					
 					viewPath = viewPath + "/admin/auctionList.jsp";

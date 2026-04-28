@@ -159,7 +159,11 @@
         <!-- 필터 검색 영역 -->
         <div class="filter-container d-flex align-items-center justify-content-between">
 		    <div class="d-flex align-items-center">
+		    	<%--
 		        <span class="fw-bold me-3"><i class="bi bi-funnel-fill"></i> 상태 필터</span>
+		        --%>
+		        <span class="fw-bold me-3">상태 필터</span>
+		        
 		        <div class="btn-group" role="group" aria-label="Product Status Filter">
 		        	<%-- 전체 상품 --%>
 			        <c:choose>
@@ -309,7 +313,7 @@
             <button type="button" class="btn btn-secondary px-5 fw-bold" onclick="location.href='${ pageContext.request.contextPath }/admin'">
                 대시보드로 돌아가기
             </button>
-        </div>      
+        </div>
 
     </div>
 </body>

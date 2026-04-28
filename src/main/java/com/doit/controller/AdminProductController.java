@@ -66,14 +66,14 @@ public class AdminProductController extends HttpServlet
 					
 					
 					// Service 객체 생성
-					AdminProductService apService = new AdminProductService();
+					AdminProductService adminProductService = new AdminProductService();
 					
 					// 전체 상품 갯수 가져오기
-					int productTotalCount = apService.getProductCount(productStatus);
+					int productTotalCount = adminProductService.getProductCount(productStatus);
 					
 					// 상품 리스트 가져오기
 					int sizePerPage = 10;
-					List<ProductDTO> productList = apService.getProductList(productStatus, page, sizePerPage);
+					List<ProductDTO> productList = adminProductService.getProductList(productStatus, page, sizePerPage);
 					
 					
 					// 페이지 엘리먼트 생성
@@ -119,10 +119,10 @@ public class AdminProductController extends HttpServlet
 					
 					
 					// Service 객체 생성
-					AdminProductService apService = new AdminProductService();
+					AdminProductService adminProductService = new AdminProductService();
 					
 					// 로직 수행
-					int result = apService.changProductHide(productId);
+					int result = adminProductService.changProductHide(productId);
 					
 					
 					// 이전 페이지(=상품 목록) 다시 이동
