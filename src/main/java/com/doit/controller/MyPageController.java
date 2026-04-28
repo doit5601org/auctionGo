@@ -240,9 +240,8 @@ public class MyPageController extends HttpServlet{
 		}else if(uri.endsWith("/user/penalty")){
 			
 			Map<String, Object> result = service.myPenaltyList(userId);
-			
-			
-			request.setAttribute("reulst", result);
+				
+			request.setAttribute("result", result);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/penalties/penaltyHistory.jsp");
 			dispatcher.forward(request, response);

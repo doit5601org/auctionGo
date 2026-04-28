@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
-<html lang="ko">
+<html >
 <head>
 <meta charset="UTF-8">
 <title>${auction.auctionTitle}</title>
@@ -327,6 +327,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+   // 이미지 교체
     function changeImg(el) {
         document.getElementById('mainImg').src = el.src;
         document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
@@ -336,7 +338,8 @@
     const totalSeconds = ${remainSeconds};
     let remaining = totalSeconds;
     const countdownEl = document.getElementById('countdown');
-
+ 
+    // 경매 카운트
     function updateTimer() {
         if (!countdownEl) return;
         if (remaining <= 0) {
@@ -355,7 +358,7 @@
         setInterval(updateTimer, 1000);
     }
     
-    
+    // 입찰 완료 알림
     $(function() {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('bidOk') === '1') {

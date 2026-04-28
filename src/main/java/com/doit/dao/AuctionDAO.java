@@ -22,14 +22,14 @@ public class AuctionDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT * FROM (" + "    SELECT ROWNUM rnum, a.* FROM ("
+		String sql = "SELECT * FROM (" + " SELECT ROWNUM rnum, a.* FROM ("
 				+ "        SELECT AUCTION_ID, AUCTION_TITLE, START_PRICE,"
 				+ "               AUCTION_START_DATE, AUCTION_END_DATE, IS_FINISHED,"
 				+ "               PRODUCT_ID, PRODUCT_RELEASE_NAME,"
 				+ "               MANUFACTURER_NAME, PRODUCT_GRADE_NAME, IMAGE_PATH_1,"
-				+ "               BID_CURRENT_PRICE, BID_COUNT" + "        FROM VW_AUCTION_LIST"
-				+ "        WHERE IS_FINISHED = '진행중'" + "        AND AUCTION_TITLE LIKE ?"
-				+ "        ORDER BY AUCTION_ID DESC" + "    ) a" + ") WHERE rnum BETWEEN ? AND ?";
+				+ "               BID_CURRENT_PRICE, BID_COUNT" + " FROM VW_AUCTION_LIST"
+				+ "        WHERE IS_FINISHED = '진행중'" + " AND AUCTION_TITLE LIKE ?"
+				+ "        ORDER BY AUCTION_ID DESC" + " ) a" + ") WHERE rnum BETWEEN ? AND ?";
 
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -448,6 +448,54 @@ public class AuctionDAO {
 			    return result;
 			}
 
+<<<<<<< Updated upstream
+=======
+	// 입찰 메소드
+	public String insertBid(long auctionId, long userNo, int bidPrice)
+	{
+		String result = "FAIL";
+		Connection conn = null;
+		CallableStatement cstmt = null;
+		String sql = "{call PRC_AUCTION_BID_CREATE(?, ?, ?, ?)}";
+
+		try
+		{
+			conn = DBCPConn.getConnection();
+			cstmt = conn.prepareCall(sql);
+
+			cstmt.setLong(1, auctionId);
+			cstmt.setLong(2, userNo);
+			cstmt.setInt(3, bidPrice);
+			cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
+
+			cstmt.executeUpdate();
+			result = cstmt.getString(4);
+
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			result = "DAO 에러: " + e.getMessage();
+		} finally
+		{
+			// 자원 해제 필수
+			if (cstmt != null)
+				try
+				{
+					cstmt.close();
+				} catch (Exception e)
+				{
+				}
+			if (conn != null)
+				try
+				{
+					conn.close();
+				} catch (Exception e)
+				{
+				}
+		}
+		return result;
+	}
+>>>>>>> Stashed changes
 
 }
 
