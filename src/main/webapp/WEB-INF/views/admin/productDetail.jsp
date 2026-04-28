@@ -28,20 +28,29 @@
         <div class="info-header">기본 상품 정보</div>
         <div class="info-row">
             <div class="info-label">상품 이미지</div>
-            <div class="info-value text-center"><img src="${ pageContext.request.contextPath }/images/tempFigureImage.png" class="detail-img"></div>
+            <div class="info-value text-center">
+            	<img src="${ pageContext.request.contextPath }/${ productDto.imagePath1 }" class="detail-img">
+           	</div>
         </div>
         <div class="info-row">
             <div class="info-label">상품명</div>
-            <div class="info-value">하츠네 미쿠 한정판 피규어</div>
+            <div class="info-value">${ productDto.productReleaseName }</div>
         </div>
         <div class="info-row">
             <div class="info-label">제조사/국가</div>
-            <div class="info-value">모름 / 일본</div>
+            <div class="info-value">${ productDto.manufacturerName } / ${ productDto.productCountryName }</div>
         </div>
         <div class="info-row">
             <div class="info-label">상태 등급</div>
-            <div class="info-value"><span class="badge bg-success">최상</span></div>
+            <div class="info-value"><span class="badge bg-success">${ productDto.productGradeName }</span></div>
         </div>
+    </div>
+    
+    <!-- 돌아가기 버튼 영역 -->
+    <div class="d-flex justify-content-center mt-0 py-5">
+        <button type="button" class="btn btn-secondary px-5 fw-bold" onclick="history.back();">
+            이전 페이지로 돌아가기
+        </button>
     </div>
 </div>
 </body>
