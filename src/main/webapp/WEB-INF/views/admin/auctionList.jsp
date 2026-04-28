@@ -130,6 +130,18 @@
 			url = url + "?" + "auctionStatus=" + $(this).val();
 			location.href = url;
 		});
+		
+		
+		$('.product-link').click(function() {
+			let auctionId = $(this).data("id");
+			
+			let url = "${ pageContext.request.contextPath }/admin/auction/detail";
+			url = url + "?";
+			url = url + "auctionId=" + auctionId;
+			url = url + "&" + "prevUrl=" + location.href;
+			
+			location.href = url;
+		});
 	});
 
 	
@@ -182,7 +194,6 @@
 						<th>최고 입찰가</th>
 						<th>입찰 횟수</th>
 						<th>종료(예정)일</th>
-						<th>관리</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -211,7 +222,9 @@
 							</td>
 							<!-- 경매명 -->
 							<td class="text-start">
-								<a href="" class="product-link">
+								<a class="product-link" href="javascript:void(0)"
+									data-id="${ auctionDto.auctionId }">
+									
 									${ auctionDto.auctionTitle }
 								</a>
 								<br>
@@ -227,39 +240,8 @@
 								<span class="badge bg-light text-dark border">${ auctionDto.bidCount }회</span>
 							</td>
 							<td><small>${ auctionDto.auctionEndDate }</small></td>
-							<td>
-								<button type="button"
-									class="btn btn-sm btn-outline-dark btn-admin-custom"
-									onclick="viewDetail('${ auctionDto.auctionId }')">상세관리</button>
-							</td>
 						</tr>
 					</c:forEach>
-
-					<%-- 테스트용 하드코딩 데이터 --%>
-					<%--
-					<c:if test="${ empty auctionList }">
-						<tr>
-							<td><img
-								src="${ pageContext.request.contextPath }/images/tempFigureImage.png"
-								class="product-thumb"></td>
-							<td>회원A</td>
-							<td><span
-								class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">
-									<i class="bi bi-play-fill"></i> 진행 중
-							</span></td>
-							<td class="text-start">하츠네 미쿠 피규어 (진행중)<br>
-							<small class="text-muted">ID: AUC-1001</small></td>
-							<td><span class="fw-bold text-primary">165,000원</span></td>
-							<td><span class="text-danger fw-bold">180,000원</span></td>
-							<td><span class="badge bg-light text-dark border">12회</span></td>
-							<td><small>2026-04-30 14:00</small></td>
-							<td>
-								<button type="button"
-									class="btn btn-sm btn-outline-dark btn-admin-custom">상세관리</button>
-							</td>
-						</tr>
-					</c:if>
-					--%>
 				</tbody>
 			</table>
 		</div>
