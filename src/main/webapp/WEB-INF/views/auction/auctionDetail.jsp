@@ -309,7 +309,7 @@
                 <h5 class="modal-title fw-bold">경매 취소 사유 입력</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form action="${ctx}/auction/cancel" method="post">
+            <form action="${ctx}/user/mypage/auctioncancel" method="post">
                 <input type="hidden" name="auctionId" value="${auction.auctionId}">
                 <div class="modal-body p-4">
                     <textarea name="cancelReason" class="form-control" rows="4"
