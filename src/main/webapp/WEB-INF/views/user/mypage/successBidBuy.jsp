@@ -470,7 +470,7 @@ window.onload = function() {
 				<h1>낙찰 구매 상품</h1>
 				<hr />
 				<div class="itemimg">
-					<img src="<%-- ${detail.img } --%>https://image2.1004gundam.com/item_images/goods/380/1376406523.JPG" alt="제품이미지" />
+					<img src="${detail.img }<!-- https://image2.1004gundam.com/item_images/goods/380/1376406523.JPG -->" alt="제품이미지" />
 				</div>
 				<div class="itemtext">
 					<span class="title"> ${detail.auctionTitle } </span> <br /> <span class="condition">
