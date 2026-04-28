@@ -99,28 +99,28 @@ public class ProductBuyDAO
 	}
 
 	// 낙찰 결제 취소
-	public void failBid(BidActionDTO dto) throws SQLException
+	public int failBid(BidActionDTO dto) 
 	{
 		Connection conn = DBCPConn.getConnection();
 		CallableStatement cstmt = null;
 
-		String sql = "{CALL BID_FAILURE_HISTORY(?,?)";
+		String sql = "";
+		int result = 0;
 		
 		try
 		{
 			
-			sql = "{CALL BID_FAILURE_HISTORY(?,?)}";
+			sql = "{CALL PRC_BID_FAILURE_PROCESS(?,?)}";
 			cstmt = conn.prepareCall(sql);
 			
 			cstmt.setInt(1, dto.getUserId());
 			cstmt.setInt(2, dto.getBidResultId());
 			
-			cstmt.executeUpdate();
+			result = cstmt.executeUpdate();
 			
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw e;
 		}finally
 		{
 			try
@@ -133,6 +133,7 @@ public class ProductBuyDAO
 				System.out.println(e);
 			}
 		}
+		return result;
 	}
 
 	// 머니 이력
@@ -1016,6 +1017,41 @@ public class ProductBuyDAO
 		}
 
 		return dto;
+	}
+	
+	public int unregist(int userId)
+	{
+		Connection conn = DBCPConn.getConnection();
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = "";
+		
+		try
+		{
+			sql ="{CALL PRC_USER_DELETE(?)}";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, userId);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}finally
+		{
+			try
+			{
+				pstmt.close();
+				DBCPConn.close(conn);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println(e);
+			}
+		}
+		return result;
 	}
 
 }

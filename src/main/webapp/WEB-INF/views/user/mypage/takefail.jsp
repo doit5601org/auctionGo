@@ -109,7 +109,7 @@ a:visited, a {
 			return;
 		}
 		
-		location.href="${pageContext.request.contextPath}/user/products";
+		location.href="${pageContext.request.contextPath}/payment/takefailSuccess";
 		
 	}
 </script>

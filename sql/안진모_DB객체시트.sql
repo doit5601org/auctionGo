@@ -1323,3 +1323,5 @@ BEGIN
 END;
 
 
+SELECT *
+FROM money_type;
