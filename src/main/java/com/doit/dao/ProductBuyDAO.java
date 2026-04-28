@@ -936,7 +936,52 @@ public class ProductBuyDAO
 		{
 			sql = "SELECT FN_GET_USER_MONEY_BALANCE(?) AS RESULT FROM DUAL";
 
-			pstmt = conn.prepareCall(sql);
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, userId);
+
+			res = pstmt.executeQuery();
+
+			while (res.next())
+			{
+				result = res.getInt("RESULT");
+			}
+
+
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+			try
+			{
+				res.close();
+				pstmt.close();
+				DBCPConn.close(conn);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println(e);
+			}
+		}
+
+		return result;
+	}
+	
+	// 회원 보증금 반환예정금 확인
+	public int depositCheck(int userId)
+	{
+		Connection conn = DBCPConn.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet res = null;
+		String sql = "";
+		int result = 0;
+
+		try
+		{
+			sql = "SELECT FN_DEPOSIT_MONEY(?) AS RESULT FROM DUAL";
+
+			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setInt(1, userId);
 

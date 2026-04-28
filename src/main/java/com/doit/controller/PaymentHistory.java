@@ -96,6 +96,7 @@ public class PaymentHistory extends HttpServlet{
 		request.setAttribute("page", page);
 		
 		request.setAttribute("userMoney", dao.moneyCheck(user.getUserId()));
+		request.setAttribute("userDeposit", dao.depositCheck(user.getUserId()));
 		
 		System.out.println(dao.moneyCheck(user.getUserId()));
 		

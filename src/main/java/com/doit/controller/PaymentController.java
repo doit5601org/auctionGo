@@ -291,6 +291,7 @@ public class PaymentController extends HttpServlet
 		
 		String bidStr = request.getParameter("bid");
 		String amountStr = request.getParameter("price");
+		String resultIdStr = request.getParameter("resultId");
 		
 		int bid = 1; 
 
@@ -299,7 +300,7 @@ public class PaymentController extends HttpServlet
 		    	bid = Integer.parseInt(request.getParameter("bid"));
 		    } catch (NumberFormatException e) {
 		       
-		    	bid = 1;
+		    	bid = 0;
 		    }
 		}
 		
@@ -310,13 +311,24 @@ public class PaymentController extends HttpServlet
 		    	amount = Integer.parseInt(request.getParameter("price"));
 		    } catch (NumberFormatException e) {
 		       
-		    	amount = 1;
+		    	amount = 0;
+		    }
+		}
+		
+		int resultId = 1; 
+
+		if (resultIdStr != null && !resultIdStr.trim().isEmpty()) {
+		    try {
+		    	resultId = Integer.parseInt(request.getParameter("resultId"));
+		    } catch (NumberFormatException e) {
+		       
+		    	resultId = 0;
 		    }
 		}
 		
 		ProductBuyDAO dao = new ProductBuyDAO();
 		
-		BidActionDTO dto = new BidActionDTO(userId, bid, amount);
+		BidActionDTO dto = new BidActionDTO(userId, resultId, amount);
 		
 		int result = dao.failBid(dto);
 		

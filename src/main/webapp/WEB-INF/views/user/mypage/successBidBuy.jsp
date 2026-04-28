@@ -470,7 +470,7 @@ window.onload = function() {
 				<h1>낙찰 구매 상품</h1>
 				<hr />
 				<div class="itemimg">
-					<img src="${detail.img }<!-- https://image2.1004gundam.com/item_images/goods/380/1376406523.JPG -->" alt="제품이미지" />
+					<img src="${pageContext.request.contextPath}/images/${detail.img }" alt="제품이미지" />
 				</div>
 				<div class="itemtext">
 					<span class="title"> ${detail.auctionTitle } </span> <br /> <span class="condition">
@@ -514,17 +514,17 @@ window.onload = function() {
 				<div >
 				<div class="mb-3 pa">
 					<label for="userName" class="form-label ms-1">이름 <span class="text-danger">*</span></label> 
-					<input type="text" class="form-control w-50 required s" id="userName" name="userName" value="${detail.userName }">
+					<input type="text" class="form-control w-50 required s" id="userName" name="userName" value="${loginUser.userName }">
 					<span class="text-danger ms-1 errMsg" id="nameErr">이름을 입력해주세요.</span>
 				</div>
 				<div class="mb-3 pass">
 					<label class="form-label ms-1">전화번호 <span class="text-danger">*</span></label>
 					<div class="d-flex">
-						<input type="text" class="form-control me-1 w-25 required ss" id="userPhone1" maxlength="3" name="userPhone1" value="${fn:substring(detail.phone,0,3) }">
+						<input type="text" class="form-control me-1 w-25 required ss" id="userPhone1" maxlength="3" name="userPhone1" value="${fn:substring(loginUser.userPhone,0,3) }">
 						<span class="mt-2 ms-2 me-2"> - </span>
-						<input type="text" class="form-control ms-1 w-25 required sss" id="userPhone2" maxlength="4" name="userPhone2" value="${fn:substring(detail.phone,3,7) }">
+						<input type="text" class="form-control ms-1 w-25 required sss" id="userPhone2" maxlength="4" name="userPhone2" value="${fn:substring(loginUser.userPhone,3,7) }">
 						<span class="mt-2 ms-2 me-2"> - </span>
-						<input type="text" class="form-control ms-1 w-25 required sss" id="userPhone3" maxlength="4" name="userPhone3" value="${fn:substring(detail.phone,7,11) }">					
+						<input type="text" class="form-control ms-1 w-25 required sss" id="userPhone3" maxlength="4" name="userPhone3" value="${fn:substring(loginUser.userPhone,7,11) }">					
 					</div>					
 				<span class="text-danger ms-1 errMsg" id="phoneErr">전화번호를 입력해주세요.</span>
 				</div>
@@ -537,16 +537,16 @@ window.onload = function() {
 					<label class="form-label ms-1">주소 <span class="text-danger">*</span></label>
 					<div class="d-flex justify-content-start mb-2">
 						<input type="text" placeholder="우편번호" disabled="disabled"
-							class="form-control w-50 me-2" id="zipcode" value="${detail.zipcode }">
+							class="form-control w-50 me-2" id="zipcode" value="${loginUser.userZipcode }">
 						<button type="button" class="btn btn-outline-dark ms-2" id="addrcode" onclick="execDaumPostcode()">주소검색</button>
 					</div>
 					<div class="mb-2">
 						<input type="text" class="form-control" placeholder="기본주소"
-							disabled="disabled" id="addr1" value="${detail.address }"/>
+							disabled="disabled" id="addr1" value="${loginUser.userAddress }"/>
 					</div>
 					<div class="mb-2">
 						<input type="text" class="form-control" placeholder="상세주소"
-							id="addr2" value="${detail.addressDetail }"/>
+							id="addr2" value="${loginUser.userAddressDetail }"/>
 					</div>
 					<span class="text-danger ms-1 errMsg" id="adressErr">주소를 입력해주세요.</span>
 				</div>
