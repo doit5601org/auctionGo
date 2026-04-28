@@ -1,8 +1,11 @@
 package com.doit.controller;
 
 import java.io.IOException;
+import java.util.List;
 
+import com.doit.dto.AuctionDTO;
 import com.doit.service.AdminAuctionService;
+import com.doit.util.Pagination;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -46,7 +49,7 @@ public class AdminAuctionController extends HttpServlet
 				{
 					// 이전 페이지 (mainDashBoard.jsp, auctionList.jsp)에서 전달된 데이터 수신
 					//-- auctionStatus, page
-					String auctionStatus = request.getParameter("auctionStatus");
+					String auctionStatus = request.getParameter("auctionStatus") == null ? "all" : request.getParameter("auctionStatus");
 					int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
 					
 					
@@ -59,9 +62,23 @@ public class AdminAuctionController extends HttpServlet
 					
 					// 경매 리스트 가져오기
 					int sizePerPage = 10;
-					adminAuctionService.getAuctionList(auctionStatus, page, sizePerPage);
+					List<AuctionDTO> auctionList = adminAuctionService.getAuctionList(auctionStatus, page, sizePerPage);
 					
 					// 경매의 페이지 엘리먼트 생성
+					Pagination pagination = new Pagination();
+					int totalPage = pagination.pageCount(auctionTotalCount, sizePerPage);
+					
+					String listUrl = uri + "?auctionStatus=" + auctionStatus;
+					
+					String pageElement = pagination.paging(page, totalPage, listUrl);
+					
+					
+					
+					// 데이터 request에 바인딩
+					request.setAttribute("auctionStatus", auctionStatus);
+					request.setAttribute("auctionTotalCount", auctionTotalCount);
+					request.setAttribute("auctionList", auctionList);
+					request.setAttribute("pageElement", pageElement);
 					
 					
 					viewPath = viewPath + "/admin/auctionList.jsp";
