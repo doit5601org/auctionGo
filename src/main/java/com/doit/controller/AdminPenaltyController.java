@@ -78,14 +78,14 @@ public class AdminPenaltyController extends HttpServlet
 					
 					
 					// Service 객체 생성
-					AdminPenaltyService apService = new AdminPenaltyService();
+					AdminPenaltyService adminPenaltyService = new AdminPenaltyService();
 					
 					// 전체 데이터 갯수 가져오기
-					int penaltyHistoryTotalCount = apService.getPenaltyHisotyTotalCount();
+					int penaltyHistoryTotalCount = adminPenaltyService.getPenaltyHisotyTotalCount();
 					
 					// 패널티 이력 리스트 가져오기
 					int sizePerPage = 20;
-					List<PenaltyHistoryDTO> penaltyuHistoryList = apService.getPenaltyHistoryList(page, sizePerPage);
+					List<PenaltyHistoryDTO> penaltyuHistoryList = adminPenaltyService.getPenaltyHistoryList(page, sizePerPage);
 					
 					// 페이지 엘리먼트 생성
 					Pagination pagination = new Pagination();
@@ -148,7 +148,7 @@ public class AdminPenaltyController extends HttpServlet
 					
 					
 					// Service 객체 생성
-					AdminPenaltyService apService = new AdminPenaltyService();
+					AdminPenaltyService adminPenaltyService = new AdminPenaltyService();
 					
 					
 					// DTO 생성
@@ -163,7 +163,7 @@ public class AdminPenaltyController extends HttpServlet
 					
 					
 					// 로직 수행
-					int result = apService.registerPenalty(phDto);
+					int result = adminPenaltyService.registerPenalty(phDto);
 					
 					
 					// 결과에 맞춰 request에 결과값 바인딩 
@@ -217,8 +217,8 @@ public class AdminPenaltyController extends HttpServlet
 					
 					
 					// Service 객체 생성 및 로직 수행
-					AdminPenaltyService apService = new AdminPenaltyService();
-					apService.cancelPenalty(phDto);
+					AdminPenaltyService adminPenaltyService = new AdminPenaltyService();
+					adminPenaltyService.cancelPenalty(phDto);
 				}
 				
 				

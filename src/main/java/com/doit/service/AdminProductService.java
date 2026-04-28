@@ -9,12 +9,12 @@ import com.doit.dto.ProductDTO;
 public class AdminProductService
 {
 //-- 속성 --//
-	private final AdminProductDAO apDao;
+	private final AdminProductDAO adminProductDao;
 	
 //-- 생성자 --//
 	public AdminProductService()
 	{
-		this.apDao = new AdminProductDAO();
+		this.adminProductDao = new AdminProductDAO();
 	}
 	
 //-- 메서드 --//
@@ -24,7 +24,7 @@ public class AdminProductService
 	{
 		int result = 0;
 		
-		result = apDao.selectProductCount(productStatus);
+		result = adminProductDao.selectProductCount(productStatus);
 		
 		return result;
 	}// getTotalProductCount() END
@@ -35,7 +35,7 @@ public class AdminProductService
 	{
 		List<ProductDTO> result = new ArrayList<>();
 		
-		result = apDao.selectProductList(productStatus, page, sizePerPage);
+		result = adminProductDao.selectProductList(productStatus, page, sizePerPage);
 		
 		return result;
 	}
@@ -45,7 +45,7 @@ public class AdminProductService
 	{
 		int result = 0;
 		
-		result = apDao.updateProductHide(productId);
+		result = adminProductDao.updateProductHide(productId);
 		
 		return result;
 	}
