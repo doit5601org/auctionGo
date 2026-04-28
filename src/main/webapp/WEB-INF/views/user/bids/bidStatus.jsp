@@ -1,16 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>내 입찰 현황</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 <style>
 #bid-history-table th {
 	/* font-size: 0.85rem; */
-/* 	color: #666; */
+	/* 	color: #666; */
 	font-weight: 600;
 	background-color: #f8f9fa;
 }
@@ -70,51 +73,59 @@
 }
 
 .btn-primary {
-   background-color: #120e63 !important;
-   border-color: #120e63 !important;
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
 }
- .bg-primary{
-    background-color: #120e63 !important;
-    }
-   	i.text-primary{
-   		color: #120e63 !important;
-   	}
-    .btn-primary, .bg-primary, .btn-outline-primary:hover {
-        background-color: #120e63 !important;
-        border-color: #120e63 !important;
-        color: #ffffff !important; 
-    }
-    
-    .btn-outline-primary{
-    	background-color: #fff !important;
-    	border-color: #120e63 !important;
-    	color: #120e63 !important;
-    }
 
+.bg-primary {
+	background-color: #120e63 !important;
+}
 
-    .badge.bg-primary {
-        background-color: #5172a6 !important;
-    }
+i.text-primary {
+	color: #120e63 !important;
+}
 
-    .pagination .page-item.active .page-link {
-        background-color: #5172a6 !important;
-        border-color: #5172a6 !important;
-        color: #ffffff !important;
-    }
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
 
-    .pagination .page-link:hover {
-        color: #5172a6;
-    }
-    
-    .page-link:focus {
-        box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
-    }
-    .nav-link{
-    	color: #5172a6 !important;
-    }
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
+.badge.bg-primary {
+	background-color: #5172a6 !important;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #5172a6 !important;
+	border-color: #5172a6 !important;
+	color: #ffffff !important;
+}
+
+.pagination .page-link:hover {
+	color: #5172a6;
+}
+
+.page-link:focus {
+	box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
+}
+
+.nav-link {
+	color: #5172a6 !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+	background-color: #5172a6 !important;
+}
 </style>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery.min.js"></script>
 <script>
 $(function() {
     function updateCountdown() {
@@ -183,59 +194,66 @@ $(function() {
 </script>
 </head>
 <body class="bg-light">
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
-    <div class="row">
-        <aside class="col-md-3">
-            <%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
-        </aside>
-        
-        <section class="col-md-9">
-            <div class="card shadow-sm border-0 bg-white p-4">
-                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center px-0">
-                    <h5 class="mb-0 fw-bold">내 입찰 현황</h5>
-                </div>
-                
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table align-middle" id="bid-history-table">
-                            <thead>
-                                <tr class="text-center text-nowrap">
-                                    <th style="width: 5%">No.</th>
-                                    <th style="width: 30%">상품명</th>
-                                    <th style="width: 15%">현재가</th>
-                                    <th style="width: 15%">나의 최고가</th>
-                                    <th style="width: 10%">예상 순위</th>
-                                    <th style="width: 15%">마감 기한</th>
-                                    <th style="width: 10%">관리</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            	<c:forEach var="dto" items="${list }" varStatus="status">
-                            	
-	                                <tr class="table-success-subtle">
-	                                    <td class="text-center text-muted small">${status.count }</td>
-	                                    <td>
-	                                        <a class="fw-bold text-dark text-decoration-none" href="${pageContext.request.contextPath }/auction/detail?auctionId=${dto.auctionId}">${dto.auctionTitle }</a>
-	                                        <div class="text-muted" style="font-size: 0.75rem;">입찰 총 ${dto.bidCount }회</div>
-	                                    </td>
-	                                    <td class="text-center fw-bold text-danger">${dto.currentPrice }원</td>
-	                                    <td class="text-center fw-bold text-dark">${dto.maxPrice }원</td>
-	                                    <td class="text-center"><span class="badge ${dto.bidRank==1? 'bg-success' : dto.bidRank==2? 'bg-warning' : 'bg-danger' } ">${dto.bidRank }순위</span></td>
-	                                    	<td class="text-center countdown" data-end="${dto.auctionEndDate }"><span class="text-danger fw-bold time-display">계산중...</span>
-										</td>
-	                                    <td class="text-center">
-	                                        <button type="button" class="btn btn-sm btn-outline-primary detail-btn">내역</button>
-	                                    </td>
-	                                </tr>
-	                                <tr class="bid-detail-row">
-	                                    <td colspan="7" class="p-0">
-	                                        <div class="history-container">
-	                                            <div class="history-list">
-	                                                <div class="history-item history-header">
-	                                                    <div>회차</div><div>입찰 일시</div><div>입찰 금액</div><div>상태</div>
-	                                                </div>
+	<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
+		<div class="row">
+			<aside class="col-md-3">
+				<%@ include file="/WEB-INF/views/common/mypage_layout.jsp"%>
+			</aside>
+
+			<section class="col-md-9">
+				<div class="card shadow-sm border-0 bg-white p-4">
+					<div
+						class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center px-0">
+						<h5 class="mb-0 fw-bold">내 입찰 현황</h5>
+					</div>
+
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table align-middle" id="bid-history-table">
+								<thead>
+									<tr class="text-center text-nowrap">
+										<th style="width: 5%">No.</th>
+										<th style="width: 30%">상품명</th>
+										<th style="width: 15%">현재가</th>
+										<th style="width: 15%">나의 최고가</th>
+										<th style="width: 10%">예상 순위</th>
+										<th style="width: 15%">마감 기한</th>
+										<th style="width: 10%">관리</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="dto" items="${list }" varStatus="status">
+
+										<tr class="table-success-subtle">
+											<td class="text-center text-muted small">${status.count }</td>
+											<td><a class="fw-bold text-dark text-decoration-none"
+												href="${pageContext.request.contextPath }/auction/detail?auctionId=${dto.auctionId}">${dto.auctionTitle }</a>
+												<div class="text-muted" style="font-size: 0.75rem;">입찰
+													총 ${dto.bidCount }회</div></td>
+											<td class="text-center fw-bold text-danger">${dto.currentPrice }원</td>
+											<td class="text-center fw-bold text-dark">${dto.maxPrice }원</td>
+											<td class="text-center"><span
+												class="badge ${dto.bidRank==1? 'bg-success' : dto.bidRank==2? 'bg-warning' : 'bg-danger' } ">${dto.bidRank }순위</span></td>
+											<td class="text-center countdown"
+												data-end="${dto.auctionEndDate }"><span
+												class="text-danger fw-bold time-display">계산중...</span></td>
+											<td class="text-center">
+												<button type="button"
+													class="btn btn-sm btn-outline-primary detail-btn">내역</button>
+											</td>
+										</tr>
+										<tr class="bid-detail-row">
+											<td colspan="7" class="p-0">
+												<div class="history-container">
+													<div class="history-list">
+														<div class="history-item history-header">
+															<div>회차</div>
+															<div>입찰 일시</div>
+															<div>입찰 금액</div>
+															<div>상태</div>
+														</div>
 														<c:forEach var="h" items="${dto.bidDetail}"
 															varStatus="hStatus">
 															<div
@@ -252,22 +270,21 @@ $(function() {
 															</div>
 														</c:forEach>
 													</div>
-	                                        </div>
-	                                    </td>
-	                                </tr>
-                            	</c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                    	<div class="d-flex justify-content-center mt-4">
-							${actualCount == 0? "등록된 게시물이 없습니다.": paging }
+												</div>
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
 						</div>
-                </div>
-            </div>
-        </section>
-    </div>
-</div>
+						<div class="d-flex justify-content-center mt-4">
+							${actualCount == 0? "등록된 게시물이 없습니다.": paging }</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
 
-<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </body>
 </html>

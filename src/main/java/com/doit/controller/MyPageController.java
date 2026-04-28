@@ -55,7 +55,12 @@ public class MyPageController extends HttpServlet{
 			
 			
 			int auctionCnt = dao.activeAuctionDataCount(userId);
-			int bidCnt = dao.activeBidDataCount(userId);
+			
+			Map<String, Object> bidData = service.myBidStatus("1", userId, cp);
+			int bidCnt = (int) bidData.get("actualCount");
+			
+			
+			//int bidCnt = dao.activeBidDataCount(userId);
 			int wishCnt = dao.wishlistDataCount(userId);
 			int paneltyScore = dao.totalPaneltyScore(userId);
 			

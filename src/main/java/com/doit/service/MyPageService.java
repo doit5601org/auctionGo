@@ -246,7 +246,7 @@ public class MyPageService {
 
 			List<MyBidStatusDTO> rawList = myPageDao.myBidStatusBoard(offset, size, userId);
 
-			String listUrl = cp + "/user/product/wishlist";
+			String listUrl = cp + "/user/bids/active";
 			String query = "page=" + currentPage;
 			String paging = util.paging(currentPage, totalPage, listUrl);
 
@@ -313,7 +313,8 @@ public class MyPageService {
 
 			List<MyBidStatusDTO> rawList = myPageDao.myBidHistoryBoard(offset, size, userId);
 
-			String listUrl = cp + "/user/product/wishlist";
+
+			String listUrl = cp + "/user/bids/closed";
 			String query = "page=" + currentPage;
 			String paging = util.paging(currentPage, totalPage, listUrl);
 
@@ -382,7 +383,7 @@ public class MyPageService {
 
 			List<MyWishlistDTO> list = myPageDao.myWishlistBoard(offset, size, userId);
 
-			String listUrl = cp + "/user/bids/active";
+			String listUrl = cp + "/user/product/wishlist";
 			String query = "page=" + currentPage;
 			String paging = util.paging(currentPage, totalPage, listUrl);
 
