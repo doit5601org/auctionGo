@@ -22,14 +22,19 @@ public class AuctionDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT * FROM (" + " SELECT ROWNUM rnum, a.* FROM ("
-				+ "        SELECT AUCTION_ID, AUCTION_TITLE, START_PRICE,"
-				+ "               AUCTION_START_DATE, AUCTION_END_DATE, IS_FINISHED,"
-				+ "               PRODUCT_ID, PRODUCT_RELEASE_NAME,"
-				+ "               MANUFACTURER_NAME, PRODUCT_GRADE_NAME, IMAGE_PATH_1,"
-				+ "               BID_CURRENT_PRICE, BID_COUNT" + " FROM VW_AUCTION_LIST"
-				+ "        WHERE IS_FINISHED = '진행중'" + " AND AUCTION_TITLE LIKE ?"
-				+ "        ORDER BY AUCTION_ID DESC" + " ) a" + ") WHERE rnum BETWEEN ? AND ?";
+		String sql = "SELECT * FROM ("
+		        + " SELECT ROWNUM rnum, a.* FROM ("
+		        + "        SELECT AUCTION_ID, USER_ID, AUCTION_TITLE, START_PRICE,"  
+		        + "               AUCTION_START_DATE, AUCTION_END_DATE, IS_FINISHED,"
+		        + "               PRODUCT_ID, PRODUCT_RELEASE_NAME,"
+		        + "               MANUFACTURER_NAME, PRODUCT_GRADE_NAME, IMAGE_PATH_1,"
+		        + "               BID_CURRENT_PRICE, BID_COUNT"
+		        + "        FROM VW_AUCTION_LIST"
+		        + "        WHERE IS_FINISHED = '진행중'"
+		        + "        AND AUCTION_TITLE LIKE ?"
+		        + "        ORDER BY AUCTION_ID DESC"
+		        + " ) a"
+		        + ") WHERE rnum BETWEEN ? AND ?";
 
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -43,6 +48,7 @@ public class AuctionDAO {
 			while (rs.next()) {
 				AuctionDTO dto = new AuctionDTO();
 				dto.setAuctionId(rs.getInt("AUCTION_ID"));
+				dto.setUserId(rs.getInt("USER_ID")); 
 				dto.setAuctionTitle(rs.getString("AUCTION_TITLE"));
 				dto.setStartPrice(rs.getInt("START_PRICE"));
 				dto.setAuctionStartDate(rs.getString("AUCTION_START_DATE"));
@@ -129,6 +135,7 @@ public class AuctionDAO {
 			if (rs.next()) {
 				dto = new AuctionDTO();
 				dto.setAuctionId(rs.getInt("AUCTION_ID"));
+				dto.setUserId(rs.getInt("USER_ID"));
 				dto.setAuctionTitle(rs.getString("AUCTION_TITLE"));
 				dto.setAuctionContent(rs.getString("AUCTION_CONTENT"));
 				dto.setStartPrice(rs.getInt("START_PRICE"));
