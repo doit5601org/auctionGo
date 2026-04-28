@@ -135,7 +135,7 @@ public class AdminPenaltyController extends HttpServlet
 					// (temp) 개발용 데이터
 					//------------------------------------------
 					AdminDTO tempAdminDto = new AdminDTO();
-					tempAdminDto.setAdminAccountId(2);
+					tempAdminDto.setAdminAccountId(1);
 					request.getSession().setAttribute("adminInfo", tempAdminDto);
 					//------------------------------------------
 					
@@ -192,7 +192,7 @@ public class AdminPenaltyController extends HttpServlet
 					// (temp) 개발용 데이터
 					//------------------------------------------
 					AdminDTO tempAdminDto = new AdminDTO();
-					tempAdminDto.setAdminAccountId(2);
+					tempAdminDto.setAdminAccountId(1);
 					request.getSession().setAttribute("adminInfo", tempAdminDto);
 					//------------------------------------------
 					
@@ -205,12 +205,20 @@ public class AdminPenaltyController extends HttpServlet
 					
 					
 					
-					// Service 객체 생성
+					// DTO 생성 및 세팅
+					//-- PenaltyHistoryDTO에 취소에 대한 속성도 함께 있으므로
+					//   PenaltyHistoryDTO를 사용함.
+					PenaltyHistoryDTO phDto = new PenaltyHistoryDTO();
+					
+					phDto.setPenaltyId(penaltyId);
+					phDto.setAdminAccountId(adminAccountId);
+					phDto.setCancelReason(cancelReason);
+					
+					
+					
+					// Service 객체 생성 및 로직 수행
 					AdminPenaltyService apService = new AdminPenaltyService();
-					
-					
-					// 로직 수행
-					apService.cancelPenalty(penaltyId, adminAccountId, cancelReason);
+					apService.cancelPenalty(phDto);
 				}
 				
 				
