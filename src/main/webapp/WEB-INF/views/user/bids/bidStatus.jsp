@@ -217,7 +217,7 @@ $(function() {
 	                                <tr class="table-success-subtle">
 	                                    <td class="text-center text-muted small">${status.count }</td>
 	                                    <td>
-	                                        <div class="fw-bold text-dark">${dto.auctionTitle }</div>
+	                                        <a class="fw-bold text-dark text-decoration-none" href="${pageContext.request.contextPath }/auction/detail?auctionId=${dto.auctionId}">${dto.auctionTitle }</a>
 	                                        <div class="text-muted" style="font-size: 0.75rem;">입찰 총 ${dto.bidCount }회</div>
 	                                    </td>
 	                                    <td class="text-center fw-bold text-danger">${dto.currentPrice }원</td>
