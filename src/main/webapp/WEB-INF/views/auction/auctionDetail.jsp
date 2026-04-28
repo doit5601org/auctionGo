@@ -137,60 +137,60 @@
 
                 <div class="d-grid gap-2">
                     <c:choose>
-    <%-- 경매 등록자 --%>
-    <c:when test="${isOwner and viewStatus.startsWith('ongoing')}">
-        <button type="button" class="btn btn-outline-secondary btn-lg"
-                data-bs-toggle="modal" data-bs-target="#cancelNoticeModal">
-            경매 취소
-        </button>
-    </c:when>
-    <%-- 비로그인 --%>
-    <c:when test="${viewStatus == 'ongoing_guest'}">
-        <a href="${ctx}/user/auth/login" class="btn btn-outline-primary btn-lg">로그인 후 입찰 가능</a>
-    </c:when>
-    <%-- 로그인 일반 사용자 --%>
-    <c:when test="${viewStatus == 'ongoing_user' and not isOwner}">
-        <c:choose>
-            <c:when test="${bidCount >= 10}">
-                <div class="alert alert-warning text-center py-2 mb-2" style="font-size:.85rem;">
-                    동시 입찰 참여는 최대 10개까지 가능합니다.
-                </div>
-                <button class="btn btn-secondary btn-lg" disabled>입찰 참여 불가</button>
-            </c:when>
-            <c:otherwise>
-                <button type="button" class="btn btn-danger btn-lg shadow-sm"
-                        data-bs-toggle="modal" data-bs-target="#bidModal">
-                    <i class="bi bi-hammer me-2"></i>입찰 참여
-                </button>
-            </c:otherwise>
-        </c:choose>
-    </c:when>
-    <%-- 낙찰자 --%>
-    <c:when test="${viewStatus == 'finished_winner'}">
-        <div class="alert alert-success text-center py-3 mb-0 border-2">
-            <h5 class="fw-bold mb-2">축하합니다! 낙찰되셨습니다.</h5>
-            <a href="${ctx}/auction/payment?auctionId=${auction.auctionId}"
-               class="btn btn-success w-100 mt-2">지금 바로 결제하기</a>
-        </div>
-    </c:when>
-    <%-- 탈락 --%>
-    <c:when test="${viewStatus == 'finished_loser'}">
-        <div class="alert alert-light text-center py-3 mb-0 border">
-            <h6 class="fw-bold text-muted mb-1">아쉽게도 낙찰되지 않았습니다.</h6>
-            <p class="small mb-0 text-muted">보증금은 규정에 따라 환급됩니다.</p>
-        </div>
-    </c:when>
-    <%-- 마감 --%>
-    <c:otherwise>
-        <div class="alert alert-secondary text-center py-3 mb-0">
-            <h6 class="fw-bold mb-1">경매가 마감되었습니다.</h6>
-            <p class="small mb-0">
-                최종 낙찰가:
-                <fmt:formatNumber value="${auction.bidCurrentPrice}" pattern="#,###"/>원
-            </p>
-        </div>
-    </c:otherwise>
-</c:choose>
+                        <%-- 경매 등록자 → 취소 버튼만 --%>
+                        <c:when test="${isOwner and viewStatus.startsWith('ongoing')}">
+                            <button type="button" class="btn btn-outline-secondary btn-lg"
+                                    data-bs-toggle="modal" data-bs-target="#cancelNoticeModal">
+                                경매 취소
+                            </button>
+                        </c:when>
+                        <%-- 비로그인 --%>
+                        <c:when test="${viewStatus == 'ongoing_guest'}">
+                            <a href="${ctx}/user/auth/login" class="btn btn-outline-primary btn-lg">로그인 후 입찰 가능</a>
+                        </c:when>
+                        <%-- 로그인 일반 사용자 --%>
+                        <c:when test="${viewStatus == 'ongoing_user'}">
+                            <c:choose>
+                                <c:when test="${bidCount >= 10}">
+                                    <div class="alert alert-warning text-center py-2 mb-2" style="font-size:.85rem;">
+                                        동시 입찰 참여는 최대 10개까지 가능합니다.
+                                    </div>
+                                    <button class="btn btn-secondary btn-lg" disabled>입찰 참여 불가</button>
+                                </c:when>
+                                <c:otherwise>
+                           <button type="button" class="btn btn-danger btn-lg shadow-sm" 
+                                 data-bs-toggle="modal" data-bs-target="#bidModal">
+                                <i class="bi bi-hammer me-2"></i>입찰 참여
+                            </button>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:when>
+                        <%-- 낙찰자 --%>
+                        <c:when test="${viewStatus == 'finished_winner'}">
+                            <div class="alert alert-success text-center py-3 mb-0 border-2">
+                                <h5 class="fw-bold mb-2">축하합니다! 낙찰되셨습니다.</h5>
+                                <a href="${ctx}/auction/payment?auctionId=${auction.auctionId}"
+                                   class="btn btn-success w-100 mt-2">지금 바로 결제하기</a>
+                            </div>
+                        </c:when>
+                        <%-- 탈락 --%>
+                        <c:when test="${viewStatus == 'finished_loser'}">
+                            <div class="alert alert-light text-center py-3 mb-0 border">
+                                <h6 class="fw-bold text-muted mb-1">아쉽게도 낙찰되지 않았습니다.</h6>
+                                <p class="small mb-0 text-muted">보증금은 규정에 따라 환급됩니다.</p>
+                            </div>
+                        </c:when>
+                        <%-- 마감 --%>
+                        <c:otherwise>
+                            <div class="alert alert-secondary text-center py-3 mb-0">
+                                <h6 class="fw-bold mb-1">경매가 마감되었습니다.</h6>
+                                <p class="small mb-0">
+                                    최종 낙찰가:
+                                    <fmt:formatNumber value="${auction.bidCurrentPrice}" pattern="#,###"/>원
+                                </p>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <%-- 신고하기 (등록자 제외) --%>
@@ -341,25 +341,22 @@
  
     // 경매 카운트
     function updateTimer() {
-    if (!countdownEl) return;
-    if (remaining <= 0) {
-        countdownEl.textContent = '마감';  
-        return;
-    }
-    const h = String(Math.floor(remaining / 3600)).padStart(2, '0');
-    const m = String(Math.floor((remaining % 3600) / 60)).padStart(2, '0');
-    const s = String(remaining % 60).padStart(2, '0');
-    countdownEl.textContent = h + ':' + m + ':' + s;
-    remaining--;
+        if (!countdownEl) return;
+        if (remaining <= 0) {
+            location.reload(); 
+            return;
+        }
+        const h = String(Math.floor(remaining / 3600)).padStart(2, '0');
+        const m = String(Math.floor((remaining % 3600) / 60)).padStart(2, '0');
+        const s = String(remaining % 60).padStart(2, '0');
+        countdownEl.textContent = h + ':' + m + ':' + s;
+        remaining--;
     }
 
     if (countdownEl) {
         updateTimer();
         setInterval(updateTimer, 1000);
     }
-    <p style="color:red">
-    viewStatus: ${viewStatus} / isFinished: ${auction.isFinished}
-</p>
     
     // 입찰 완료 알림
     $(function() {
@@ -370,7 +367,6 @@
     });
     
 </script>
-
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
