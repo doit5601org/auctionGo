@@ -359,7 +359,7 @@ public class MyPageDAO {
 				SELECT
 				    AL.AUCTION_ID,
 				    AL.AUCTION_TITLE,
-				    NVL(VR.WINNING_BID_PRICE, 0) AS FINAL_PRICE,
+				    NVL(VR.AUCTION_FINAL_PRICE, 0) AS FINAL_PRICE,
 				    TO_CHAR(AL.AUCTION_END_DATE, 'YYYY-MM-DD') AS AUCTION_END_DATE, 
 				    CASE
 				        WHEN AL.IS_FINISHED = '경매취소' THEN '경매취소'
@@ -560,6 +560,7 @@ public class MyPageDAO {
 						dto.setBidPrice(rs.getInt("BID_PRICE"));
 						dto.setBidRank(rs.getInt("BID_RANK"));
 						dto.setAuctionEndDate(rs.getString("AUCTION_END_DATE"));
+						dto.setAuctionId(rs.getInt("AUCTION_ID"));
 		
 						result.add(dto);
 						
@@ -573,6 +574,36 @@ public class MyPageDAO {
 			return result;
 			
 		}	
+		
+		// 경매 최종가 
+		public int finalAuctionPrice(int auctionId) {
+			int result = 0;
+			String sql = """
+					SELECT AUCTION_FINAL_PRICE
+					FROM VW_AUCTION_WINNING_RESULT
+					WHERE AUCTION_ID=?
+					""";
+			try(Connection conn = DBCPConn.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+				
+				pstmt.setInt(1, auctionId);
+				
+				try(ResultSet rs = pstmt.executeQuery())
+				{
+					if(rs.next()) {
+						result = rs.getInt("AUCTION_FINAL_PRICE");
+					}
+				}
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+			
+		}
+		
 		
 		
 //[관심상품]========================================================================================================================		

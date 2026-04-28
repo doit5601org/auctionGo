@@ -904,7 +904,7 @@ BEGIN
         WHEN OTHERS
         THEN ROLLBACK;
         DBMS_OUTPUT.PUT_LINE('예외 발생 :'|| SQLERRM);
-        RAISE_APPLICATION_ERROR(-20099,'실패');
+      --  RAISE_APPLICATION_ERROR(-20099,'실패');
 END;
 /
 
@@ -1082,7 +1082,7 @@ BEGIN
         WHEN OTHERS
         THEN ROLLBACK;
         DBMS_OUTPUT.PUT_LINE('예외 발생 :'|| SQLERRM);
-        RAISE_APPLICATION_ERROR(-20099,'실패');
+        --RAISE_APPLICATION_ERROR(-20099,'실패');
 END;
 /
 

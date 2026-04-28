@@ -143,7 +143,7 @@ $(function() {
                                                 ${dto.auctionTitle }
                                             </a>
                                         </td>
-                                        <td>${dto.maxPrice }원</td>
+                                        <td>${dto.bidPrice }원</td>
                                         <td>${dto.bidCount }회 </td>
                                         
                                         <td><span class="badge ${dto.maxRank==1?'bg-success':'bg-secondary' }">${dto.maxRank==1?'낙찰':'패찰' }</span></td>

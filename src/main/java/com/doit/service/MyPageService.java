@@ -324,7 +324,10 @@ public class MyPageService {
 
 				if (!groupedMap.containsKey(auctionId)) {
 					item.setBidDetail(new ArrayList<>());
-					item.setMaxPrice(item.getBidPrice());
+					
+					int finalPrice = myPageDao.finalAuctionPrice(auctionId);
+					item.setMaxPrice(finalPrice);
+					item.setBidPrice(item.getBidPrice());
 					item.setMaxRank(item.getBidRank());
 					groupedMap.put(auctionId, item);
 				}

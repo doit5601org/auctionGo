@@ -269,7 +269,7 @@ public class MyPageController extends HttpServlet{
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/product/wishlist.jsp");
 			dispatcher.forward(request, response);
 		
-			// 관심상품 삭제
+		// 관심상품 삭제
 		}else if(uri.endsWith("/user/product/wishlist/delete")) {
 			int wishId = Integer.parseInt(request.getParameter("wishId"));
 			dao.deleteWishlist(wishId);
@@ -304,8 +304,6 @@ public class MyPageController extends HttpServlet{
 				response.sendRedirect(cp+"/user/auctions/closed");
 			}
 		}
-		
-		
 		
 	}
 }
