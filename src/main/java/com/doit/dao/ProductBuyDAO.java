@@ -60,13 +60,23 @@ public class ProductBuyDAO
 	public int confirmBid(BidActionDTO dto)
 	{
 		Connection conn = DBCPConn.getConnection();
+		if(conn != null)
+		{
+			System.out.println("구매확정데이터베이스연결");
+		}else
+		{
+			System.out.println("구매확정데이터베이스연결실패");
+		}
+			
 		CallableStatement cstmt = null;
 		String sql = "";
-
+		System.out.println("sql:"+sql);
 		int result = 0;
 		try
 		{
 			sql = "{CALL PRC_PURCHASE_CONFIRM(?,?)}";
+			
+			System.out.println("sql:"+sql);
 
 			cstmt = conn.prepareCall(sql);
 
@@ -78,7 +88,9 @@ public class ProductBuyDAO
 			System.out.println("userId: " + dto.getUserId());
 	        System.out.println("bidResultId: " + dto.getBidResultId());
 			
-			System.out.println("result: " + result);
+			System.out.println("구매확정결과: " + result);
+			System.out.println("구매확정유저아이디: " + dto.getUserId());
+			System.out.println("구매확정낙찰번호: " + dto.getBidResultId());
 		} catch (Exception e)
 		{
 			e.printStackTrace();
