@@ -142,7 +142,7 @@ hr {
 }
 .itemtext > div {
     display: flex !important;
-    justify-content: space-between; /* 구조를 왼쪽 끝과 오른쪽 끝으로 배치 */
+    justify-content: space-between; 
     align-items: right;
     font-size:15px;
 }
@@ -298,7 +298,7 @@ function con(userId, bidId) {
 									href="${pageContext.request.contextPath }/product/detail?productId=${bid.productId}">
 									<div class="item shadow-sm">
 										<div class="imgwrap">
-											<img src="${bid.img}" alt="상품이미지" />
+											<img src="${pageContext.request.contextPath}/images/${bid.img}" alt="상품이미지" />
 										</div>
 										<div class="itemtext">
 											<span class="title">${bid.auctionTitle}</span>
