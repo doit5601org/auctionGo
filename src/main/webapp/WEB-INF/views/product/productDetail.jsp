@@ -22,9 +22,10 @@
 
 .main-img {
 	width: 100%;
-	height: 360px;
+	aspect-ratio: 1/1;
 	object-fit: cover;
-	border-radius: 8px;
+	border-radius: 12px;
+	border: 1px solid #e9ecef;
 }
 
 .thumb-img {
@@ -173,7 +174,9 @@
 						<c:if test="${not empty product.purchaseDateTime}">
 							<tr>
 								<th class="text-muted fw-normal">구매일</th>
-								<td>${product.purchaseDateTime}</td>
+								<td><fmt:parseDate value="${product.purchaseDateTime}"
+										pattern="yyyy-MM-dd HH:mm:ss" var="parsedDate" /> <fmt:formatDate
+										value="${parsedDate}" pattern="yyyy-MM-dd" /></td>
 							</tr>
 						</c:if>
 						<tr>

@@ -10,12 +10,12 @@ import com.doit.dto.PenaltyHistoryDTO;
 public class AdminPenaltyService
 {
 	//-- 속성 --//
-	private AdminPenaltyDAO apDao;
+	private AdminPenaltyDAO adminPenaltyDao;
 	
 	//-- 생성자 --//
 	public AdminPenaltyService()
 	{
-		this.apDao = new AdminPenaltyDAO();
+		this.adminPenaltyDao = new AdminPenaltyDAO();
 	}
 	
 	//-- 메서드 --//
@@ -24,7 +24,7 @@ public class AdminPenaltyService
 	{
 		int result = 0;
 		
-		result = apDao.insertPenalty(phDto);
+		result = adminPenaltyDao.insertPenalty(phDto);
 		
 		return result;
 	}
@@ -34,7 +34,7 @@ public class AdminPenaltyService
 	{
 		List<PenaltyHistoryDTO> result = new ArrayList<>();
 		
-		result = apDao.selectPenaltyHistoryList(page, sizePerPage);
+		result = adminPenaltyDao.selectPenaltyHistoryList(page, sizePerPage);
 		
 		return result;
 	}
@@ -44,18 +44,18 @@ public class AdminPenaltyService
 	{
 		int result = 0;
 		
-		result = apDao.selectPenaltyHistoryTotalCount();
+		result = adminPenaltyDao.selectPenaltyHistoryTotalCount();
 		
 		return result;
 	}
 	
 	
 	// 패널티 취소
-	public int cancelPenalty(int penaltyId, int adminAccountId, String cancelReason)
+	public int cancelPenalty(PenaltyHistoryDTO phDto)
 	{
 		int result = 0;
 		
-		apDao.insertPenaltyCancel(penaltyId, adminAccountId, cancelReason);
+		result = adminPenaltyDao.insertPenaltyCancel(phDto);
 		
 		return result;
 	}
