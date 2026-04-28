@@ -45,8 +45,7 @@ public class AdminProductController extends HttpServlet
 			//-- GET 방식 요청 처리 --//
 			if (methodType.equalsIgnoreCase("GET"))
 			{
-				//-- 상품 --//
-				// 상품 전체 조회
+				//-- 전체 상품 조회 --//
 				if (path.equalsIgnoreCase("/admin/product/list"))
 				{
 					// 요청 파라미터 수신
@@ -96,9 +95,32 @@ public class AdminProductController extends HttpServlet
 					// 포워드 할 경로 설정
 					viewPath = viewPath + "/admin/productList.jsp";
 				}
+				//-- 상품 상세 조회 --//
+				else if (path.equalsIgnoreCase("/admin/product/detail"))
+				{
+					// 이전 페이지(productList.jsp)에서 전달된 데이터 수신
+					//-- productId, prevUrl
+					String productId = request.getParameter("productId");
+					String prevUrl = request.getParameter("prevUrl");
+					
+					// (들어온 파라미터에 대한 유효성 검사는 시간 문제상 생략...)
+					
+					
+					// Service 객체 생성
+					AdminProductService adminProductService = new AdminProductService();
+					
+					
+					// 상품 데이터 가져오기
+					// adminProductService.getProductDetail(productId);
+					
+					
+					
+					
+					viewPath = viewPath + "/admin/productDetail.jsp";
+				}
 				
 				
-				// 포워드 처리
+				//-- (GET 요청 공통) 포워드 처리 --//
 				request.getRequestDispatcher(viewPath).forward(request, response);
 			}
 			

@@ -17,7 +17,7 @@
 <body class="bg-light">
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold">일반 상품 상세 정보</h4>
+        <h4 class="fw-bold">상품 상세 정보</h4>
         <div>
             <button class="btn btn-outline-secondary me-2">상품 비공개 처리</button>
             <button class="btn btn-danger">삭제 및 패널티 부여</button>

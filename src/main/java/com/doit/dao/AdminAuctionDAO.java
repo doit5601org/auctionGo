@@ -56,14 +56,21 @@ public class AdminAuctionDAO
 		List<AuctionDTO> result = new ArrayList<>();
 		
 		
-		// 현재 페이지의 데이터 시작 번호, 끝 번호 구하기
-		int dataStartNum = (page - 1) * sizePerPage + 1;
-		int dataEndNum = page * sizePerPage;
-		
-		
-		// 쿼리문 준비
-		String sql = "";
-		
+		// 쿼리문 준비 (1/2)
+		String sql = "SELECT *"
+					+ " FROM ("
+					+ "	SELECT"
+					+ "		ROW_NUMBER() OVER(ORDER BY AUCTION_ID DESC) AS AUCTION_NUM"
+					+ "		, AUCTION_ID"
+					+ "		, USER_ID"
+					+ "		, AUCTION_TITLE"
+					+ "		, TO_CHAR(AUCTION_END_DATE, 'YYYY-MM-DD HH24:MI:SS') AS AUCTION_END_DATE"
+					+ "		, IS_FINISHED"
+					+ "		, IMAGE_PATH_1"
+					+ "		, BID_CURRENT_PRICE"
+					+ "		, BID_MAX_PRICE"
+					+ "		, BID_COUNT"
+					+ "	FROM VW_AUCTION_LIST";
 		
 		if (auctionStatus.equalsIgnoreCase("active"))
 		{
@@ -75,17 +82,47 @@ public class AdminAuctionDAO
 		}
 		
 		
+		// 쿼리문 준비 (2/2)
+		sql +=  ")"
+				+ " WHERE AUCTION_NUM >= ?"		// 시작번호 
+				+ "  AND AUCTION_NUM <= ?";		// 끝 번호
 		
 		
+		
+		// 현재 페이지의 데이터 시작 번호, 끝 번호 구하기
+		int dataStartNum = (page - 1) * sizePerPage + 1;
+		int dataEndNum = page * sizePerPage;
 		
 		// DB 작업 수행
-		try
+		try(Connection conn = DBCPConn.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql);)
 		{
-			
+			pstmt.setInt(1, dataStartNum);
+			pstmt.setInt(2, dataEndNum);
+
+			try(ResultSet rs = pstmt.executeQuery();)
+			{
+				while (rs.next())
+				{
+					AuctionDTO dto = new AuctionDTO();
+					
+					dto.setAuctionId(rs.getInt("AUCTION_ID"));
+					dto.setUserId(rs.getInt("USER_ID"));
+					dto.setAuctionTitle(rs.getString("AUCTION_TITLE"));
+					dto.setAuctionEndDate(rs.getString("AUCTION_END_DATE"));
+					dto.setIsFinished(rs.getString("IS_FINISHED"));
+					dto.setImagePath1(rs.getString("IMAGE_PATH_1"));
+					dto.setBidCurrentPrice(rs.getInt("BID_CURRENT_PRICE"));
+					dto.setBidMaxPrice(rs.getInt("BID_MAX_PRICE"));
+					dto.setBidCount(rs.getInt("BID_COUNT"));
+					
+					result.add(dto);
+				}
+			}
 		}
 		catch (Exception e)
 		{
-			// TODO: handle exception
+			throw new RuntimeException("DB 작업 중 에러 발생: " + e.getMessage(), e);
 		}
 		
 		return result;

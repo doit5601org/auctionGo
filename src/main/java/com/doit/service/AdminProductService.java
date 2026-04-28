@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.doit.dao.AdminProductDAO;
+import com.doit.dao.ProductDAO;
 import com.doit.dto.ProductDTO;
 
 public class AdminProductService
@@ -46,6 +47,15 @@ public class AdminProductService
 		int result = 0;
 		
 		result = adminProductDao.updateProductHide(productId);
+		
+		return result;
+	}
+	
+	
+	// 상품 상세 조회
+	public ProductDTO getProductDetail(int productId)
+	{
+		ProductDTO result = adminProductDao.selectProductDetail(productId);
 		
 		return result;
 	}
