@@ -354,6 +354,15 @@
         updateTimer();
         setInterval(updateTimer, 1000);
     }
+    
+    
+    $(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('bidOk') === '1') {
+            alert('입찰이 성공적으로 등록되었습니다!');
+        }
+    });
+    
 </script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>

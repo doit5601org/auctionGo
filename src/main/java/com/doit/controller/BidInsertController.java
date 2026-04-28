@@ -51,7 +51,7 @@ public class BidInsertController extends HttpServlet {
 
             // 4. 응답 처리
             if ("SUCCESS".equals(result)) {
-                // 성공 시 상세페이지로 이동 (캐시 방지를 위해 랜덤값이나 성공 파라미터 추가)
+                // 성공 시 상세페이지로 이동
                 resp.sendRedirect(req.getContextPath() + "/auction/detail?auctionId=" + auctionId + "&bidOk=1");
             } else {
                 // 프로시저에서 반환한 에러 메시지 (금액 부족 등) 출력
