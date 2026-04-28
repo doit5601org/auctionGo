@@ -100,7 +100,7 @@ public class AdminProductController extends HttpServlet
 				{
 					// 이전 페이지(productList.jsp)에서 전달된 데이터 수신
 					//-- productId, prevUrl
-					String productId = request.getParameter("productId");
+					int productId = Integer.parseInt(request.getParameter("productId"));
 					String prevUrl = request.getParameter("prevUrl");
 					
 					// (들어온 파라미터에 대한 유효성 검사는 시간 문제상 생략...)
@@ -111,11 +111,15 @@ public class AdminProductController extends HttpServlet
 					
 					
 					// 상품 데이터 가져오기
-					// adminProductService.getProductDetail(productId);
+					ProductDTO productDto = adminProductService.getProductDetail(productId);
 					
 					
+					// request 에 데이터 바인딩
+					request.setAttribute("productDto", productDto);
+					request.setAttribute("prevUrl", prevUrl);
 					
 					
+					// 포워딩 경로 설정
 					viewPath = viewPath + "/admin/productDetail.jsp";
 				}
 				
