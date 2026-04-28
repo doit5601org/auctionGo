@@ -181,12 +181,12 @@ $(function() {
 											class="badge rounded-pill bg-primary px-3">${dto.bidCount } 명</span></td>
 										<td class="text-center">
 											<div class="small px-3">
-												<button type="button" class="btn btn-sm btn-outline-dark detail-btn" data-id="${dto.auctionId }">상세</button>
+												<button type="button" class="btn btn-sm btn-outline-primary detail-btn" data-id="${dto.auctionId }">상세</button>
 												
 											</div>
 										</td>
 									<td>
-									    <button type="button" class="btn btn-sm btn-outline-dark cancel-modal-btn" 
+									    <button type="button" class="btn btn-sm btn-primary cancel-modal-btn" 
 									            data-id="${dto.auctionId}" 
 									            data-bs-toggle="modal" 
 									            data-bs-target="#cancelReasonModal">경매취소</button>
