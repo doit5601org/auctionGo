@@ -89,7 +89,7 @@
 								<div>
 									<small class="text-muted d-block mb-1">사용 가능한 보유머니</small>
 									<h3 class="fw-bold txtColor mb-0">
-									<fmt:formatNumber value="${loginUser.totalMoney}" type="number" />
+									<fmt:formatNumber value="${currentMoney}" type="number" />
 									
 									원</h3>
 								</div>
