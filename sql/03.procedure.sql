@@ -143,7 +143,8 @@ BEGIN
             RAISE_APPLICATION_ERROR(-20014, '필수 입력 항목이 누락되었습니다.');
 END;
 /
-
+select *
+from user_account
 -- ○ 2. 회원탈퇴 프로시저
 CREATE OR REPLACE PROCEDURE PRC_USER_DELETE
 ( P_USER_ID IN USERS.USER_ID%TYPE
