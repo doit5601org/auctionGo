@@ -240,7 +240,10 @@ public class MyPageController extends HttpServlet{
 		}else if(uri.endsWith("/user/penalty")){
 			
 			Map<String, Object> result = service.myPenaltyList(userId);
-				
+			
+			int paneltyScore = dao.totalPaneltyScore(userId);
+			
+			request.setAttribute("penaltyScore", paneltyScore);
 			request.setAttribute("result", result);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/penalties/penaltyHistory.jsp");
@@ -266,11 +269,14 @@ public class MyPageController extends HttpServlet{
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/product/wishlist.jsp");
 			dispatcher.forward(request, response);
 		
+			// 관심상품 삭제
 		}else if(uri.endsWith("/user/product/wishlist/delete")) {
 			int wishId = Integer.parseInt(request.getParameter("wishId"));
 			dao.deleteWishlist(wishId);
 			response.sendRedirect(cp + "/user/product/wishlist");
 
+			
+		// 관심상품 등록	
 		}else if(uri.endsWith("/user/product/wishlist/add")) {
 		    int productId = Integer.parseInt(request.getParameter("productId"));
 
@@ -283,6 +289,9 @@ public class MyPageController extends HttpServlet{
 		        dao.insertWishlist(userId, productId);
 		        response.sendRedirect(cp + "/product/detail?productId=" + productId + "&wish=ok");
 		    }
+		    
+		    
+		   // 배송완료 처리 
 		}else if(uri.endsWith("/user/auctions/shipping")) {
 			
 			int auctionId = Integer.parseInt(request.getParameter("auctionId"));
