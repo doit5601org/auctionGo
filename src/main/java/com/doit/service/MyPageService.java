@@ -202,7 +202,7 @@ public class MyPageService {
 							currentPage = Integer.parseInt(page);
 						}
 						
-						int dataCount = myPageDao.auctionDataCount(userId);
+						int dataCount = myPageDao.closedAuctionDataCount(userId);
 
 						int size = 10;
 						int totalPage = util.pageCount(dataCount, size);
@@ -224,22 +224,13 @@ public class MyPageService {
 						//================================================================
 						String query = "page="+currentPage;
 						String paging = util.paging(currentPage, totalPage, listUrl);
-						
-						
-						// 리스트에 랭킹 데이터 추가
-//						for(AuctionHistoryDTO dto:list) {
-//							List<AuctionHistoryDTO> rankList = myPageDao.myAuctionBidRank(dto.getAuctionId());
-//							dto.setBidRankList(rankList);
-//						}
-						
-						
+											
 						resultMap.put("paging", paging);
 						resultMap.put("list", list);
 						resultMap.put("page", currentPage);
 						resultMap.put("dataCount", dataCount);
 						resultMap.put("size", size);
 						resultMap.put("totalPage", totalPage);
-						//resultMap.put("detailUrl", detailUrl);
 						resultMap.put("query", query);
 						resultMap.put("actualCount", list.size());
 
@@ -249,7 +240,8 @@ public class MyPageService {
 					
 					return resultMap;
 				}
-				
+
+//===========================================================================================================================				
 		
 		// 내 입찰 현황 리스트 
 	public Map<String, Object> myBidStatus(String page, int userId, String cp) {
@@ -306,9 +298,6 @@ public class MyPageService {
 							mainDto.setBidCount(mainDto.getBidDetail().size());
 						}
 						
-					
-						
-						
 						resultMap.put("paging", paging);
 						resultMap.put("list", list);
 						resultMap.put("page", currentPage);
@@ -326,8 +315,6 @@ public class MyPageService {
 					return resultMap;
 				}
 		
-		
-	
 			// 내 입찰 이력 리스트 
 			public Map<String, Object> myBidHistory(String page, int userId, String cp) {
 				
