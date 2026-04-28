@@ -63,8 +63,8 @@
 							<i class="bi bi-exclamation-octagon-fill me-2"></i>패널티 이력
 						</h5>
 						<span class="badge bg-danger"
-							style="width: 140px; height: 40px; font-size: 16px; line-height: 30px;">최종
-							패널티 점수: ${empty result.totalScore ? 0 : result.totalScore}점</span>
+							style="width: 200px; height: 40px; font-size: 16px; line-height: 30px;">최종
+							패널티 점수: ${penaltyScore}점</span>
 					</div>
 
 					<div class="card-body">
