@@ -182,5 +182,15 @@ public class AdminProductDAO
 		return result;
 	}
 	
+	
+	// 상품 상세 조회
+	public ProductDTO selectProductDetail(int productId)
+	{
+		ProductDTO result = new ProductDTO();
+		
+		
+		return result;
+	}
+	
 
 }// class AdminProductDAO END
