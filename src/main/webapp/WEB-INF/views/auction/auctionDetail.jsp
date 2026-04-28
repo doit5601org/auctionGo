@@ -158,10 +158,10 @@
                                     <button class="btn btn-secondary btn-lg" disabled>입찰 참여 불가</button>
                                 </c:when>
                                 <c:otherwise>
-									<button type="button" class="btn btn-danger btn-lg shadow-sm" 
-							            data-bs-toggle="modal" data-bs-target="#bidModal">
-								        <i class="bi bi-hammer me-2"></i>입찰 참여
-								    </button>
+                           <button type="button" class="btn btn-danger btn-lg shadow-sm" 
+                                 data-bs-toggle="modal" data-bs-target="#bidModal">
+                                <i class="bi bi-hammer me-2"></i>입찰 참여
+                            </button>
                                 </c:otherwise>
                             </c:choose>
                         </c:when>
@@ -367,4 +367,3 @@
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
-
