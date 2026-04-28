@@ -91,7 +91,7 @@ $(function() {
 											<button type="button"
 												class="btn btn-sm btn-outline-primary detail-btn">${dto.transactionStatus == '유찰' ? '사유' : '상세'}</button>
 												
-												<c:if test="${dto.transcationStatus=='거래진행중' && dto.winningPaymentStatus=='Completed' && dto.shippingYn=='N'}">
+												<c:if test="${dto.transactionStatus=='거래진행중' && dto.winningPaymentStatus=='Completed' && dto.shippingYn=='N'}">
 													<a type="button" class="btn btn-sm btn-outline-primary" 
 													href="${pageContext.request.contextPath}/user/auctions/shipping?auctionId=${dto.auctionId}">배송완료</a>
 												</c:if>
@@ -120,7 +120,10 @@ $(function() {
 													</p>
 												</c:when>
 												<c:otherwise>
-												<p class="mb-1 small"><strong>현재 상태:</strong> 결제 대기 또는 배송 중</p>
+												<p class="mb-1 small"><strong>현재 상태:</strong>
+													${dto.transactionStatus=='경매취소'?'취소된 경매입니다.':dto.transactionStatus=='거래완료'?'거래가 완료되었습니다.':'낙찰된 상품입니다.' }
+												
+												</p>
             
 												</c:otherwise>
 											</c:choose>
