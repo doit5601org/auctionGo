@@ -167,7 +167,9 @@ $(function() {
 													<div class="fw-bold">
 														<a href="/auctions/#" class="text-decoration-none text-dark link-primary">${dto.auctionTitle }</a>
 													</div>
-													<div class="text-muted small">시작일: ${dto.auctionStartDate }</div>
+													<div class="text-muted small">시작일: 
+													<fmt:formatDate value="${dto.auctionStartDate }" type="yyyy-MM-dd"/>
+													</div>
 												</div>
 											</div>
 										</td>
