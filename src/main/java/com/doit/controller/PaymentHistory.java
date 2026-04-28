@@ -95,8 +95,9 @@ public class PaymentHistory extends HttpServlet{
 		request.setAttribute("inout", inout);
 		request.setAttribute("page", page);
 		
-		request.setAttribute("userMoney", dao.moneyCheck(userId));
+		request.setAttribute("userMoney", dao.moneyCheck(user.getUserId()));
 		
+		System.out.println(dao.moneyCheck(user.getUserId()));
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/moneyHistory.jsp");
 		dispatcher.forward(request, response);

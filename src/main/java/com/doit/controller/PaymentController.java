@@ -1,6 +1,7 @@
 package com.doit.controller;
 
 import java.io.IOException;
+import java.util.Date;
 
 import com.doit.dao.ProductBuyDAO;
 import com.doit.dto.BidActionDTO;
@@ -50,7 +51,11 @@ public class PaymentController extends HttpServlet
 			success(request, response);
 			return;
 		}
-		
+		if(uri.endsWith("/successPage"))
+		{
+			successPage(request, response);
+			return;
+		}
 		if(uri.endsWith("/takefail"))
 		{
 			takefail(request, response);
@@ -161,28 +166,68 @@ public class PaymentController extends HttpServlet
 		ProductBuyDAO dao = new ProductBuyDAO();
 		BidActionDTO dto = new BidActionDTO(userId, bid, amount);
 		
-		request.setAttribute("today", new java.util.Date());
+		
+		Date today = new java.util.Date();
+		
+		request.setAttribute("today",today );
 		
 		int result = dao.paymentBid(dto);
-		System.out.println(dto.getAmount());
-		System.out.println(dto.getBidResultId());
-		System.out.println(dto.getUserId());
+		System.out.println("결제가격"+dto.getAmount());
+		System.out.println("결제낙찰"+dto.getBidResultId());
+		System.out.println("결제유저"+dto.getUserId());
 		System.out.println(result);
+		
+		String img =  request.getParameter("img");
+		String title = request.getParameter("title");
+		String grade = request.getParameter("grade");
+		String manudacturer = request.getParameter("manudacturer");
+		String price = request.getParameter("price");
+
+		String url = "?bid="+bid+"&price="+price;
 		
 		if(result > 0)
 		{
 			request.setAttribute("massage", "결제가 완료되었습니다!");
+			//url += "&type=1";
+			//response.sendRedirect(cp+"/payment/successPage"+url);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/success.jsp");
 			dispatcher.forward(request, response);
+			return;
 		}else
 		{
 			request.setAttribute("massage", "결제가 실패하였습니다..");
+			//url += "&type=2";
+			//response.sendRedirect(cp+"/payment/successPage"+url);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/success.jsp");
 			dispatcher.forward(request, response);
+			return;
 		}
 		
 		
 		
+	}
+	
+	protected void successPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		
+		Date today = new java.util.Date();
+		
+		request.setAttribute("today",today );
+		
+		String img =  request.getParameter("img");
+		String title = request.getParameter("title");
+		String grade = request.getParameter("grade");
+		String manudacturer = request.getParameter("manudacturer");
+		String price = request.getParameter("price");
+		
+		request.setAttribute("img", img);
+		request.setAttribute("title", title);
+		request.setAttribute("grade", grade);
+		request.setAttribute("manudacturer", manudacturer);
+		request.setAttribute("price", price);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/success.jsp");
+		dispatcher.forward(request, response);
 	}
 	
 	protected void takefail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
