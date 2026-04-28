@@ -44,7 +44,7 @@ $(function() {
 }
 
 .product-link:hover {
-	color: #0d6efd !important;
+	color: #120e63 !important;
 }
 
 #bid-history-table .collapse.bg-light {
@@ -128,13 +128,6 @@ $(function() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                               		<!-- 게시글이 없을 때  -->
-                               		<!-- <tr>
-                               			<td class="text-center" colspan="6">
-                               				입찰 내역이 존재하지 않습니다.
-                               			</td>
-                               		</tr> -->
-                               		<!-- 게시글이 있을 때  -->
                                		<c:forEach var="dto" items="${list }" varStatus="status">
                                 	<tr>
                                     	<td class="text-center">${status.count }</td>
@@ -147,7 +140,7 @@ $(function() {
                                         <td>${dto.bidCount }회 </td>
                                         
                                         <td><span class="badge ${dto.maxRank==1?'bg-success':'bg-secondary' }">${dto.maxRank==1?'낙찰':'패찰' }</span></td>
-                                        <td><button type="button" class="btn btn-sm btn-light border text-primary detail-btn">상세</button></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-primary border detail-btn">상세</button></td>
                                     </tr>
                                     <tr class="collapse bg-light">
                                         <td colspan="6" class="p-3 text-start">
