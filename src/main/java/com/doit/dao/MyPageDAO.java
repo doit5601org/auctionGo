@@ -825,34 +825,55 @@ public class MyPageDAO {
 				
 				
 //				// 낙찰 입금 코드 찾기
-//				public int findPaymentId(int auctionId) {
-//					int result = 0;
-//					
-//					String sql = """
-//							
-//							""";
-//					
-//					return result;
-//					
-//				}
+				public int findPaymentId(int auctionId) {
+					int result = 0;
+					
+					String sql = """
+							SELECT AWP.PAYMENT_ID
+							FROM AUCTION_WINNING_RESULT AWR
+							JOIN AUCTION_BID_PARTICIPATION ABP ON ABP.BID_ID = AWR.BID_ID
+							LEFT OUTER JOIN AUCTION_WINNING_PAYMENT AWP ON AWR.BID_RESULT_ID = AWP.BID_RESULT_ID
+							LEFT OUTER JOIN BID_FAILURE_HISTORY BFH ON AWR.BID_RESULT_ID = BFH.BID_RESULT_ID
+							WHERE ABP.AUCTION_ID = ? 
+							  AND BFH.BID_RESULT_ID IS NULL
+							""";
+					
+					try(Connection conn = DBCPConn.getConnection();
+						PreparedStatement pstmt = conn.prepareStatement(sql)) {
+						
+						pstmt.setInt(1, auctionId);
+						
+						try(ResultSet rs = pstmt.executeQuery()){
+							if(rs.next()) {
+								result = rs.getInt("PAYMENT_ID");
+							}
+						}
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					return result;
+					
+				}
 				
 //				// 배송완료
-//				public void shippingOk(int auctionId) {
-//					
-//				    String sql = """
-//				            INSERT INTO DELIVERY_COMPLETED(SHIPPING_ID, PAYMENT_ID)
-//							VALUES(SHIPPING_SEQ.NEXTVAL, ?)
-//				            """;
-//				    try (Connection conn = DBCPConn.getConnection();
-//				         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//				        pstmt.setInt(1, userId);
-//				        pstmt.setInt(2, productId);
-//				        pstmt.executeUpdate();
-//				    } catch (Exception e) {
-//				        e.printStackTrace();
-//				    }
-//					
-//				}
+				public int shippingOk(int paymentId) {
+					int result = 0;
+				    String sql = """
+				            INSERT INTO DELIVERY_COMPLETED(SHIPPING_ID, PAYMENT_ID)
+							VALUES(SHIPPING_SEQ.NEXTVAL, ?)
+				            """;
+				    try (Connection conn = DBCPConn.getConnection();
+				         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+				       
+				    	pstmt.setInt(1, paymentId);
+				        result = pstmt.executeUpdate();
+				    } catch (Exception e) {
+				        e.printStackTrace();
+				    }
+				    return result;
+					
+				}
 				
 				
 				
