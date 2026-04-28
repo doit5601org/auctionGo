@@ -64,6 +64,10 @@ span.text-primary {
 .nav-link {
 	color: #5172a6 !important;
 }
+
+.dropdown-item.active, .dropdown-item:active {
+	background-color: #5172a6 !important;
+}
 </style>
 </head>
 <body class="bg-light">
