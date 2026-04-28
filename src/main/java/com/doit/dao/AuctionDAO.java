@@ -416,40 +416,6 @@ public class AuctionDAO {
 			}
 
 			
-			// 입찰 메소드
-			public String insertBid(long auctionId, long userNo, int bidPrice) {
-			    String result = "FAIL";
-			    Connection conn = null;
-			    CallableStatement cstmt = null;
-			    String sql = "{call PRC_AUCTION_BID_CREATE(?, ?, ?, ?)}";
-
-			    try {
-			        conn = DBCPConn.getConnection();
-			        cstmt = conn.prepareCall(sql);
-
-			        cstmt.setLong(1, auctionId);
-			        cstmt.setLong(2, userNo);
-			        cstmt.setInt(3, bidPrice);
-			        cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
-
-			        cstmt.executeUpdate();
-			        result = cstmt.getString(4);
-			        
-			        System.out.println("DAO 입찰 프로시저 실행 완료: " + result);
-
-			    } catch (Exception e) {
-			        e.printStackTrace();
-			        result = "DAO 에러: " + e.getMessage();
-			    } finally {
-			        // 자원 해제 필수
-			        if(cstmt != null) try { cstmt.close(); } catch(Exception e) {}
-			        if(conn != null) try { conn.close(); } catch(Exception e) {}
-			    }
-			    return result;
-			}
-
-<<<<<<< Updated upstream
-=======
 	// 입찰 메소드
 	public String insertBid(long auctionId, long userNo, int bidPrice)
 	{
@@ -495,7 +461,6 @@ public class AuctionDAO {
 		}
 		return result;
 	}
->>>>>>> Stashed changes
 
 }
 
