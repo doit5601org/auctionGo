@@ -669,37 +669,42 @@ public class ProductBuyDAO
 		try
 		{
 			list = new ArrayList<AuctionResultViewDTO>();
+			
+			 
 
 			sql =   """
-					SELECT 경매번호,경매제목,낙찰자번호,낙찰자ID,낙찰금액,낙찰일시,낙찰결과번호
+					SELECT *
+                    FROM(
+                    SELECT 경매번호,경매제목,낙찰자번호,낙찰자ID,낙찰금액,낙찰일시,낙찰결과번호
 					,C.PRODUCT_ID AS 제품ID,C.IMAGE_PATH_1 AS 이미지,START_PRICE AS 시작가,B.CREATED_AT AS 경매생성일
 					,AUCTION_PERIOD_ID AS 경매기간,WINNING_BID_ID AS 낙찰자입찰번호,WINNING_BID_TIME AS 낙찰시간,AUCTION_FINAL_PRICE AS 결제낙찰금액
 					,AUCTION_STATUS AS 경매상태, WINNING_STATUS AS 낙찰상태, WINNING_PAYMENT_STATUS AS 낙찰자결제상태, WINNING_PAYMENT_MONEY_ID AS 머니ID
 					,WINNING_PAYMENT_DATE AS 결제일자, BID_FAIL_YN AS 실패여부, BID_FAIL_TYPE AS 실패타입, SHIPPING_YN AS 배송여부, SHIPPING_DATE AS 배송일자
 					,PURCHASE_CONFIRM_YN AS 구매확정여부, PURCHASE_CONFIRM_DATE AS 구매확정일자
+                    ,ROW_NUMBER() OVER(PARTITION BY 경매번호 ORDER BY 낙찰금액 DESC, 낙찰일시 DESC) AS RANK
 					FROM VW_UNPAID_WINNING_TARGET_1 A
 					LEFT JOIN VW_AUCTION_WINNING_RESULT B
 					ON B.AUCTION_ID = A.경매번호
                     JOIN PRODUCT C
                     ON B.PRODUCT_ID = C.PRODUCT_ID
 					WHERE A.낙찰자번호 = ?
-					
+                    )WHERE RANK = 1
 					""";
 			if(type == 1)
 			{
-				sql += " AND BID_FAIL_YN = 'Y'";
+				sql += " AND 실패여부 = 'Y'";
 			}else if(type == 2)
 			{
-				sql += " AND WINNING_PAYMENT_STATUS = 'Pending' AND BID_FAIL_YN = 'N'";
+				sql += " AND 낙찰자결제상태 = 'Pending' AND 실패여부 = 'N'";
 			}else if(type == 3)
 			{
-				sql += " AND WINNING_PAYMENT_STATUS = 'Completed' AND BID_FAIL_YN = 'N' AND SHIPPING_YN = 'N'";
+				sql += " AND 낙찰자결제상태 = 'Completed' AND 실패여부 = 'N' AND 배송여부 = 'N'";
 			}else if(type == 4)
 			{
-				sql += " AND SHIPPING_YN = 'Y' AND PURCHASE_CONFIRM_YN = 'N'";
+				sql += " AND 배송여부 = 'Y' AND 구매확정여부 = 'N'";
 			}else if(type == 5)
 			{
-				sql += " AND PURCHASE_CONFIRM_YN = 'Y'";
+				sql += " AND 구매확정여부 = 'Y'";
 			}
 			
 			sql += " ORDER BY 낙찰일시"
@@ -791,10 +796,13 @@ public class ProductBuyDAO
 					,COUNT(CASE WHEN WINNING_PAYMENT_STATUS = 'Completed' AND BID_FAIL_YN = 'N' AND SHIPPING_YN = 'N' THEN 1 END) AS UNSHIPPING
 					,COUNT(CASE WHEN SHIPPING_YN = 'Y' AND PURCHASE_CONFIRM_YN = 'N' THEN 1 END) AS SHIPPING
 					,COUNT(CASE WHEN PURCHASE_CONFIRM_YN = 'Y' THEN 1 END) AS CONFIRM
+                    FROM(
+                    SELECT BID_FAIL_YN,WINNING_PAYMENT_STATUS,SHIPPING_YN,PURCHASE_CONFIRM_YN,ROW_NUMBER() OVER(PARTITION BY 경매번호 ORDER BY 낙찰금액 DESC, 낙찰일시 DESC) AS RANK
 					FROM VW_UNPAID_WINNING_TARGET_1 A
 					LEFT JOIN VW_AUCTION_WINNING_RESULT B
 					ON B.AUCTION_ID = A.경매번호
 					WHERE A.낙찰자번호 = ?
+                    )WHERE RANK = 1
 					""";                                                 
 			pstmt = conn.prepareStatement(sql);
 			
@@ -847,10 +855,14 @@ public class ProductBuyDAO
 		{
 			sql =   """
 					SELECT COUNT(*) AS TOTAL
-					FROM JOIN VW_UNPAID_WINNING_TARGET_1 A
-					LEFT VW_AUCTION_WINNING_RESULT B
+                    FROM( SELECT BID_FAIL_YN,WINNING_PAYMENT_STATUS
+                    ,SHIPPING_YN,PURCHASE_CONFIRM_YN,ROW_NUMBER() OVER(PARTITION BY 경매번호 ORDER BY 낙찰금액 DESC, 낙찰일시 DESC) AS RANK
+					FROM VW_UNPAID_WINNING_TARGET_1 A
+					LEFT JOIN VW_AUCTION_WINNING_RESULT B
 					ON B.AUCTION_ID = A.경매번호
 					WHERE A.낙찰자번호 = ?
+                    )
+                    WHERE RANK = 1
 					""";                                                 
 			if(type == 1)
 			{
