@@ -418,10 +418,9 @@ public class AuctionDAO {
 			
 			// 입찰 메소드
 			public String insertBid(long auctionId, long userNo, int bidPrice) {
-			    String result = "";
+			    String result = "FAIL";
 			    Connection conn = null;
 			    CallableStatement cstmt = null;
-
 			    String sql = "{call PRC_AUCTION_BID_CREATE(?, ?, ?, ?)}";
 
 			    try {
@@ -431,25 +430,21 @@ public class AuctionDAO {
 			        cstmt.setLong(1, auctionId);
 			        cstmt.setLong(2, userNo);
 			        cstmt.setInt(3, bidPrice);
-
-			        // 2. OUT 파라미터 등록 (Oracle의 VARCHAR2는 Types.VARCHAR 매칭)
 			        cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
 
 			        cstmt.executeUpdate();
-
 			        result = cstmt.getString(4);
+			        
+			        System.out.println("DAO 입찰 프로시저 실행 완료: " + result);
 
 			    } catch (Exception e) {
-			        System.err.println("입찰 프로시저 실행 중 예외 발생: " + e.getMessage());
 			        e.printStackTrace();
-			        result = "시스템 오류가 발생했습니다.";
+			        result = "DAO 에러: " + e.getMessage();
 			    } finally {
-			        try {
-			            if (cstmt != null) cstmt.close();
-			            if (conn != null) conn.close();
-			        } catch (Exception e2) {}
+			        // 자원 해제 필수
+			        if(cstmt != null) try { cstmt.close(); } catch(Exception e) {}
+			        if(conn != null) try { conn.close(); } catch(Exception e) {}
 			    }
-
 			    return result;
 			}
 
