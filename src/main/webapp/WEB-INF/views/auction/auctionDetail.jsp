@@ -387,6 +387,7 @@ i.text-primary {
         updateTimer();
         setInterval(updateTimer, 1000);
     }
+  
     
     // 입찰 완료 알림
     $(function() {
@@ -397,6 +398,8 @@ i.text-primary {
     });
     
 </script>
+
+
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
