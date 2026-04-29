@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/user/mypage/auctionCancel")
+@WebServlet("/user/mypage/auctioncancel")
 public class AuctionCancelController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -27,6 +27,7 @@ public class AuctionCancelController extends HttpServlet {
             return;
         }
 
+        System.out.println("넘어온 ID: " + req.getParameter("auctionId"));
         int auctionId = Integer.parseInt(req.getParameter("auctionId"));
         String cancelReason = req.getParameter("cancelReason");
         int userNo = loginUser.getUserId();
@@ -35,7 +36,7 @@ public class AuctionCancelController extends HttpServlet {
         int result = dao.cancelAuction(auctionId, userNo, cancelReason);
 
         if (result > 0) {
-            resp.sendRedirect(req.getContextPath() + "/user/auctions/active"); 
+            resp.sendRedirect(req.getContextPath() + "/auction/list"); 
         } else {
             resp.sendRedirect(req.getContextPath() + "/user/mypage/auctionStatus?error=cancel_fail");
         }
