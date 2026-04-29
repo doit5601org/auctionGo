@@ -376,11 +376,15 @@ public class MyPageDAO {
 		        FROM VW_AUCTION_LIST AL
 		        LEFT OUTER JOIN VW_AUCTION_WINNING_RESULT VR ON AL.AUCTION_ID = VR.AUCTION_ID
 		        WHERE AL.USER_ID = ?
-		          AND (TO_DATE(AL.AUCTION_END_DATE, 'YYYY-MM-DD HH24:MI') < SYSDATE OR AL.IS_FINISHED = '경매취소')
+		        AND (AL.AUCTION_END_DATE < TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI') OR AL.IS_FINISHED = '경매취소')
+
 		          AND AL.IS_FINISHED != '진행중'
 		        ORDER BY AL.AUCTION_END_DATE DESC
 		        OFFSET ? ROWS FETCH FIRST ? ROWS ONLY
 		        """;
+		
+        //AND (AL.AUCTION_END_DATE < SYSDATE OR AL.IS_FINISHED = '경매취소')
+//        AND (TO_DATE(AL.AUCTION_END_DATE, 'YYYY-MM-DD HH24:MI') < SYSDATE OR AL.IS_FINISHED = '경매취소')
 		
 		try(Connection conn = DBCPConn.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
