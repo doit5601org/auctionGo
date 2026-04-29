@@ -66,7 +66,7 @@ public class AdminAuctionDAO
 					+ "		, AUCTION_ID"
 					+ "		, USER_ID"
 					+ "		, AUCTION_TITLE"
-					+ "		, TO_CHAR(AUCTION_END_DATE, 'YYYY-MM-DD HH24:MI:SS') AS AUCTION_END_DATE"
+					+ "		, AUCTION_END_DATE AS AUCTION_END_DATE"
 					+ "		, IS_FINISHED"
 					+ "		, IMAGE_PATH_1"
 					+ "		, BID_CURRENT_PRICE"

@@ -119,13 +119,13 @@
                 <div class="col-md-3">
                     <div class="card summary-card shadow-sm p-4 text-center">
                         <div class="summary-label mb-2">전체 회원</div>
-                        <div class="summary-value">1,240</div>
+                        <div class="summary-value">${totalCount}</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card summary-card shadow-sm p-4 text-center">
                         <div class="summary-label mb-2">진행 중인 경매</div>
-                        <div class="summary-value">86</div>
+                        <div class="summary-value">${activeAuctionCount }</div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -136,8 +136,8 @@
                 </div>
                 <div class="col-md-3">
                     <div class="card summary-card shadow-sm p-4 text-center">
-                        <div class="summary-label mb-2 text-primary">신규 상품</div>
-                        <div class="summary-value text-primary">42</div>
+                        <div class="summary-label mb-2 text-primary">등록된 상품</div>
+                        <div class="summary-value text-primary">44</div>
                     </div>
                 </div>
             </div>

@@ -259,5 +259,31 @@ public class AdminUserDAO
 	}
 	
 	
+	// 진행 중인 경매 데이터 갯수
+	public int activeAuctionDataCount() {
+		int result = 0;
+		
+		String sql = """
+				SELECT COUNT(*) AS COUNT
+				FROM VW_AUCTION_LIST
+				""";
+		try (Connection conn = DBCPConn.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql)){
+			
+			try(ResultSet rs = pstmt.executeQuery()){
+				if(rs.next()) {
+					result = rs.getInt("COUNT");
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	
+	
 	
 }
