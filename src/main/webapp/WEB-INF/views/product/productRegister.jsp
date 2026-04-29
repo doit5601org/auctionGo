@@ -46,6 +46,29 @@
         .form-label { font-size: 13px; color: #333; font-weight: 600; }
         .form-control, .form-select { font-size: 14px; border-radius: 8px; }
         .form-control:focus, .form-select:focus { box-shadow: none; border-color: #adb5bd; }
+        
+        .btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+
+.bg-primary {
+	background-color: #120e63 !important;
+}
+
+
+
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
     </style>
 </head>
 <body>

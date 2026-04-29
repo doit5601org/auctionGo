@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +32,7 @@
 				});
 	});
 </script>
+
 <style>
 #penalty-history-table tr:has(+.collapse.show) td {
 	border-bottom: none !important;
@@ -44,6 +45,52 @@
 .btn-primary {
 	background-color: #120e63 !important;
 	border-color: #120e63 !important;
+}
+
+.bg-primary {
+	background-color: #120e63 !important;
+}
+
+i.text-primary {
+	color: #120e63 !important;
+}
+
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
+.badge.bg-primary {
+	background-color: #5172a6 !important;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #5172a6 !important;
+	border-color: #5172a6 !important;
+	color: #ffffff !important;
+}
+
+.pagination .page-link:hover {
+	color: #5172a6;
+}
+
+.page-link:focus {
+	box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
+}
+
+.nav-link {
+	color: #5172a6 !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+	background-color: #5172a6 !important;
 }
 </style>
 </head>
@@ -76,8 +123,8 @@
 								</div>
 								<div class="col-3 border-end">
 									<span class="badge rounded-pill bg-orange text-white mb-1"
-										style="background-color: #fd7e14;">2단계</span><br>
-									<strong>2점:</strong> 7일 정지
+										style="background-color: #fd7e14;">2단계</span><br> <strong>2점:</strong>
+									7일 정지
 								</div>
 								<div class="col-3 border-end">
 									<span class="badge rounded-pill bg-danger mb-1">3단계</span><br>
@@ -90,232 +137,116 @@
 							</div>
 						</div>
 
-				<div class="table-responsive">
-    <table class="table align-middle text-center" id="penalty-history-table">
-        <thead class="table-light">
-            <tr>
-                <th style="width: 60px;">No.</th>
-                <th>부여일</th>
-                <th>내용</th>
-                <th>부여점수</th>
-                <th>누적점수</th>
-                <th>상태</th> <th style="width: 100px;">비고</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:choose>
-                <c:when test="${empty result.list}">
-                    <tr>
-                        <td colspan="7" class="py-5 text-center text-muted">
-                            <i class="bi bi-info-circle d-block mb-2 fs-4"></i> 패널티 이력이 존재하지 않습니다.
-                        </td>
-                    </tr>
-                </c:when>
-                <c:otherwise>
-                    <c:forEach var="dto" items="${result.list}" varStatus="status">
-                        <tr class="${dto.penaltyCancelId > 0 ? 'table-active opacity-50' : ''}">
-                            <td>${status.count}</td>
-                            <%-- 날짜 초 단위 절삭 (예: 2026-04-28) --%>
-                            <td>${fn:substring(dto.penaltyCreatedAt, 0, 10)}</td>
-                            
-                            <%-- [동적 내용] 부여 점수에 따른 텍스트 출력 --%>
-                            <td class="fw-bold">
-                                <c:choose>
-                                    <c:when test="${dto.givenScore == 1}">경고</c:when>
-                                    <c:when test="${dto.givenScore == 2}">7일 정지</c:when>
-                                    <c:when test="${dto.givenScore == 3}">30일 정지</c:when>
-                                    <c:when test="${dto.givenScore == 4}">영구 정지</c:when>
-                                    <c:otherwise>기타 제재</c:otherwise>
-                                </c:choose>
-                            </td>
-                            
-                            <td><span class="text-secondary">+${dto.givenScore}점</span></td>
-                            
-                            <%-- [누적 점수 배지] --%>
-                            <td>
-                                <span class="badge fs-6 fw-bold
-                                    <c:choose>
-                                        <c:when test="${dto.penaltyCancelId > 0}">bg-white text-secondary border</c:when>
-                                        <c:when test="${dto.accumulatedScore == 1}">text-warning</c:when>
-                                        <c:when test="${dto.accumulatedScore == 3}">text-danger</c:when>
-                                        <c:when test="${dto.accumulatedScore == 4}">text-dark</c:when>
-                                    </c:choose>"
-                                    style="${dto.accumulatedScore == 2 && dto.penaltyCancelId <= 0 ? 'color: #fd7e14;' : ''}">
-                                    ${dto.accumulatedScore}점
-                                </span>
-                            </td>
-
-                            <%-- [제재 상태 배지] --%>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${dto.penaltyCancelId > 0}">
-                                        <span class="badge bg-light text-secondary border">부여취소</span>
-                                    </c:when>
-                                    <c:when test="${dto.historyStatus eq '적용중'}">
-                                        <span class="badge bg-danger">적용중</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="badge bg-light text-muted border">기한종료</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-
-                            <td>
-                                <button type="button"
-                                    class="btn btn-sm ${dto.penaltyCancelId > 0 ? 'btn-secondary' : 'btn-outline-dark'} detail-btn">
-                                    ${dto.penaltyCancelId > 0 ? '취소사유' : '상세'}
-                                </button>
-                            </td> 
-                        </tr>
-                        
-                        <%-- 상세 슬라이드 영역 --%>
-                        <tr class="collapse bg-light">
-                            <td colspan="7" class="p-4 text-start">
-                                <c:choose>
-                                    <c:when test="${dto.penaltyCancelId > 0}">
-                                        <div class="ms-4 border-start ps-3 border-3 border-secondary">
-                                            <h6 class="fw-bold text-secondary">취소 및 철회 정보</h6>
-                                            <p class="mb-1 small"><strong>취소 일시:</strong> ${dto.canceledAt}</p>
-                                            <p class="mb-0 small text-muted"><strong>철회 사유:</strong> ${dto.cancleReason}</p>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="ms-4 border-start ps-3 border-3 border-danger">
-                                            <h6 class="fw-bold">제재 상세 내용</h6>
-                                            <c:if test="${not empty dto.penaltyStartDate}">
-                                                <p class="mb-1 small">
-                                                    <strong>제재 기간:</strong> ${dto.penaltyStartDate} ~ ${dto.penaltyEndDate}
-                                                </p>
-                                            </c:if>
-                                            <p class="mb-0 small text-muted"><strong>부여 사유:</strong> ${dto.penaltyTypeName}</p>
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-        </tbody>
-    </table>
-</div>
-
-<%-- 						<div class="table-responsive">
+						<div class="table-responsive">
 							<table class="table align-middle text-center"
 								id="penalty-history-table">
 								<thead class="table-light">
 									<tr>
-										<th style="width: 80px;">No.</th>
+										<th style="width: 60px;">No.</th>
 										<th>부여일</th>
 										<th>내용</th>
 										<th>부여점수</th>
 										<th>누적점수</th>
-										<th style="width: 120px;">비고</th>
+										<th>상태</th>
+										<th style="width: 100px;">비고</th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:choose>
 										<c:when test="${empty result.list}">
 											<tr>
-												<td colspan="6" class="py-5 text-center text-muted">
-													<i class="bi bi-info-circle d-block mb-2 fs-4"></i> 패널티 이력이 존재하지 않습니다.
-												</td>
+												<td colspan="7" class="py-5 text-center text-muted"><i
+													class="bi bi-info-circle d-block mb-2 fs-4"></i> 패널티 이력이
+													존재하지 않습니다.</td>
 											</tr>
 										</c:when>
 										<c:otherwise>
-											<c:forEach var="dto" items="${result.list}" varStatus="status">
+											<c:forEach var="dto" items="${result.list}"
+												varStatus="status">
 												<tr
-													class="${dto.penaltyCancelId >0 ? 'table-active opacity-75' : ''}">
+													class="${dto.penaltyCancelId > 0 ? 'table-active opacity-50' : ''}">
 													<td>${status.count}</td>
-													<td>${dto.penaltyCreatedAt}</td>
-													<td>영구정지</td>
-													<td>
-														<span class="fw-bold text-dark">
-															+ ${dto.givenScore}점 
-														</span>
-													</td>
-													<td>
-													<span class="badge fs-6
-													    <c:choose>
-													        <c:when test="${dto.penaltyCancelId > 0}">
-													            bg-white text-secondary border
-													        </c:when>
-													        <c:when test="${dto.accumulatedScore == 1}">
-													            text-warning
-													        </c:when>
-													        <c:when test="${dto.accumulatedScore == 2}">
-													        </c:when>
-													        <c:when test="${dto.accumulatedScore == 3}">
-													            text-danger
-													        </c:when>
-													        <c:when test="${dto.accumulatedScore == 4}">
-													            text-dark
-													        </c:when>
-													    </c:choose>"
-													    style="${dto.accumulatedScore == 2 && dto.penaltyCancelId <= 0 ? 'color: #fd7e14;' : ''}">
-													    ${dto.accumulatedScore}점
-													</span>
-							
-													</td>
-													<td>
-														<c:choose>
-																<c:when test="${dto.penaltyCancelId > 0}">
-																	<span
-																		class="badge bg-white text-secondary border border-secondary shadow-sm">
-																		<i class="bi bi-x-circle-fill me-1"></i>부여취소
-																	</span>
-																</c:when>
-																<c:otherwise>
-																	<span class="badge bg-danger px-3">${dto.historyStatus }</span>
-																</c:otherwise>
-														</c:choose>
-													</td>
+													<td>${fn:substring(dto.penaltyCreatedAt, 0, 10)}</td>
+
+													<td class="fw-bold"><c:choose>
+															<c:when test="${dto.givenScore == 1}">경고</c:when>
+															<c:when test="${dto.givenScore == 2}">7일 정지</c:when>
+															<c:when test="${dto.givenScore == 3}">30일 정지</c:when>
+															<c:when test="${dto.givenScore == 4}">영구 정지</c:when>
+															<c:otherwise>기타 제재</c:otherwise>
+														</c:choose></td>
+
+													<td><span class="text-secondary">+${dto.givenScore}점</span></td>
+
+													<td><span
+														class="badge fs-6 fw-bold
+                                    <c:choose>
+                                        <c:when test="${dto.penaltyCancelId > 0}">bg-white text-secondary border</c:when>
+                                        <c:when test="${dto.accumulatedScore == 1}">text-warning</c:when>
+                                        <c:when test="${dto.accumulatedScore == 3}">text-danger</c:when>
+                                        <c:when test="${dto.accumulatedScore == 4}">text-dark</c:when>
+                                    </c:choose>"
+														style="${dto.accumulatedScore == 2 && dto.penaltyCancelId <= 0 ? 'color: #fd7e14;' : ''}">
+															${dto.accumulatedScore}점 </span></td>
+
+													<td><c:choose>
+															<c:when test="${dto.penaltyCancelId > 0}">
+																<span class="badge bg-light text-secondary border">부여취소</span>
+															</c:when>
+															<c:when test="${dto.historyStatus eq '적용중'}">
+																<span class="badge bg-danger">적용중</span>
+															</c:when>
+															<c:otherwise>
+																<span class="badge bg-light text-muted border">기한종료</span>
+															</c:otherwise>
+														</c:choose></td>
+
 													<td>
 														<button type="button"
-															class="btn btn-sm ${dto.penaltyCancelId >0 ? 'btn-secondary' : 'btn-outline-dark'} detail-btn">
-															${dto.penaltyCancelId>0 ? '취소사유' : '상세'}</button>
-													</td> 
+															class="btn btn-sm ${dto.penaltyCancelId > 0 ? 'btn-primary' : 'btn-outline-primary'} detail-btn">
+															${dto.penaltyCancelId > 0 ? '취소사유' : '상세'}</button>
+													</td>
 												</tr>
+
+												<%-- 상세 슬라이드 영역 --%>
 												<tr class="collapse bg-light">
-													<td colspan="6" class="p-4 text-start">
-														<c:choose>
-																<c:when test="${dto.penaltyCancelId>0}">
-																	<div
-																		class="ms-4 border-start ps-3 border-3 border-secondary">
-																		<h6 class="fw-bold text-secondary">취소 및 철회 정보</h6>
-																		<p class="mb-1 small text-primary">
-																			<strong>취소 일시:</strong> ${dto.canceledAt}
+													<td colspan="7" class="p-4 text-start"><c:choose>
+															<c:when test="${dto.penaltyCancelId > 0}">
+																<div
+																	class="ms-4 border-start ps-3 border-3 border-secondary">
+																	<h6 class="fw-bold text-secondary">취소 및 철회 정보</h6>
+																	<p class="mb-1 small">
+																		<strong>취소 일시:</strong> ${dto.canceledAt}
+																	</p>
+																	<p class="mb-0 small text-muted">
+																		<strong>철회 사유:</strong> ${dto.cancleReason}
+																	</p>
+																</div>
+															</c:when>
+															<c:otherwise>
+																<div
+																	class="ms-4 border-start ps-3 border-3 border-danger">
+																	<h6 class="fw-bold">제재 상세 내용</h6>
+																	<c:if test="${not empty dto.penaltyStartDate}">
+																		<p class="mb-1 small">
+																			<strong>제재 기간:</strong> ${dto.penaltyStartDate} ~
+																			${dto.penaltyEndDate}
 																		</p>
-																		<p class="mb-0 small text-muted">
-																			<strong>철회 사유:</strong> ${dto.cancleReason}
-																		</p>
-																	</div>
-																</c:when>
-																<c:otherwise>
-																	<div
-																		class="ms-4 border-start ps-3 border-3 border-danger">
-																		<h6 class="fw-bold">상세 내용</h6>
-																		<c:if test="${not empty dto.penaltyStartDate}">
-																			<p class="mb-1 small text-muted">
-																				<strong>제재 기간:</strong> ${dto.penaltyStartDate} ~
-																				${dto.penaltyEndDate}
-																			</p>
-																		</c:if>
-																		<p class="mb-0 small text-muted">
-																			<strong>누적 합계:</strong> ${dto.accumulatedScore}점
-																		</p>
-																	</div>
-																</c:otherwise>
-															</c:choose>
-														</td>
+																	</c:if>
+																	<p class="mb-0 small text-muted">
+																		<strong>부여 사유:</strong> ${dto.penaltyTypeName}
+																	</p>
+																</div>
+															</c:otherwise>
+														</c:choose></td>
 												</tr>
 											</c:forEach>
 										</c:otherwise>
 									</c:choose>
-
 								</tbody>
 							</table>
-						</div> --%>
+						</div>
+
 					</div>
 				</div>
 			</section>

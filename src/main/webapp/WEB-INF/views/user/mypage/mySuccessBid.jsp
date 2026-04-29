@@ -142,7 +142,7 @@ hr {
 }
 .itemtext > div {
     display: flex !important;
-    justify-content: space-between; /* 구조를 왼쪽 끝과 오른쪽 끝으로 배치 */
+    justify-content: space-between; 
     align-items: right;
     font-size:15px;
 }
@@ -189,6 +189,55 @@ hr {
 	font-weight: bold;
 	padding: 1px;
 }
+
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+
+.bg-primary {
+	background-color: #120e63 !important;
+}
+
+i.text-primary {
+	color: #120e63 !important;
+}
+
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
+.badge.bg-primary {
+	background-color: #5172a6 !important;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #5172a6 !important;
+	border-color: #5172a6 !important;
+	color: #ffffff !important;
+}
+
+.pagination .page-link:hover {
+	color: #5172a6;
+}
+
+.page-link:focus {
+	box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
+}
+
+.nav-link {
+	color: #5172a6 !important;
+}
+a.btn{color: #fff !important;}
+
 </style>
 
 <script type="text/javascript">
@@ -298,7 +347,7 @@ function con(userId, bidId) {
 									href="${pageContext.request.contextPath }/product/detail?productId=${bid.productId}">
 									<div class="item shadow-sm">
 										<div class="imgwrap">
-											<img src="${bid.img}" alt="상품이미지" />
+											<img src="${pageContext.request.contextPath}/${bid.img}" alt="상품이미지" />
 										</div>
 										<div class="itemtext">
 											<span class="title">${bid.auctionTitle}</span>

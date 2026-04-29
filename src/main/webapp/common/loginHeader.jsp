@@ -13,14 +13,17 @@
     .navbar-brand-custom:hover {
         color: #212529 !important;
     }
+    .container{position: relative;}
+    .hide{position: absolute; top: 0; right: 0; color: #fff; text-decoration: none;}
 </style>
 </head>
 <body>
     <nav class="navbar navbar-light bg-white border-bottom sticky-top">
         <div class="container justify-content-center">
             <a class="navbar-brand navbar-brand-custom fw-bold text-secondary" >
-                경매나라
+                <img src="images/logo.png" alt="로고이미지" style="width: 150px;"/>
             </a>
+            <a href="${pageContext.request.contextPath }/main" class="hide">사용자페이지</a>
         </div>
     </nav>
 

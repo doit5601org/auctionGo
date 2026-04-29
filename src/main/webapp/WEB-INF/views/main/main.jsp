@@ -9,71 +9,86 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-    /* 전체 레이아웃 Sticky Footer 설정 */
-    body { display: flex; flex-direction: column; min-height: 100vh; }
-    main { flex: 1; 
-    display: flex; 
-    flex-direction: column;}
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
 
-    /* 히어로 섹션: 윈도우 너비 전체 차지 */
-    .hero-section {
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                    url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1920');
-        background-size: cover;
-        background-position: center;
-        padding: 120px 0;
-        color: white;
-        flex: 1; 
-    display: flex;
-    align-items: center; 
-    justify-content: center; 
-    background-size: cover;
-    background-position: center;
-    color: white;
-    }
+main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
 
-    /* 카드 공통 호버 효과 */
-    .custom-card {
-        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-        border: none !important;
-        border-radius: 15px;
-    }
-    .custom-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
-    }
+.hero-section {
+	background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+		url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1920');
+	background-size: cover;
+	background-position: center;
+	padding: 120px 0;
+	color: white;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-size: cover;
+	background-position: center;
+	color: white;
+}
 
-    /* 찜하기 버튼 스타일 */
-    .btn-wish {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        z-index: 10;
-        background: rgba(255,255,255,0.8);
-        border-radius: 50%;
-        width: 38px;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ff4757;
-        transition: 0.2s;
-    }
-    .btn-wish:hover { background: #ff4757; color: white; }
+.custom-card {
+	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+	border: none !important;
+	border-radius: 15px;
+}
 
-    .text-truncate-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-    .hero-section{
-    	background-image: url('${pageContext.request.contextPath}/images/main.jpeg') !important;
-    }
-    .btn-primary{
-    	background-color: #120e63 !important;
-    	border-color: #120e63 !important;
-    }
+.custom-card:hover {
+	transform: translateY(-10px);
+	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.btn-wish {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	z-index: 10;
+	background: rgba(255, 255, 255, 0.8);
+	border-radius: 50%;
+	width: 38px;
+	height: 38px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ff4757;
+	transition: 0.2s;
+}
+
+.btn-wish:hover {
+	background: #ff4757;
+	color: white;
+}
+
+.text-truncate-2 {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.hero-section {
+	background-image:
+		url('${pageContext.request.contextPath}/images/main.jpeg') !important;
+}
+
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+
+.dropdown-item.active, .dropdown-item:active{
+background-color: #5172a6  !important;
+}
 </style>
 </head>
 <body class="bg-light">

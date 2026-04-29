@@ -16,11 +16,61 @@
 
         .page-header { background: #f8f9fa; padding: 3rem 0 2rem 0; }
         .header-title { font-weight: 800; color: #222; }
+        
+        
+        
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+
+.bg-primary {
+	background-color: #120e63 !important;
+}
+
+i.text-primary {
+	color: #120e63 !important;
+}
+
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
+.badge.bg-primary {
+	background-color: #5172a6 !important;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #5172a6 !important;
+	border-color: #5172a6 !important;
+	color: #ffffff !important;
+}
+
+.pagination .page-link:hover {
+	color: #5172a6;
+}
+
+.page-link:focus {
+	box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
+}
+
+.nav-link {
+	color: #5172a6 !important;
+}
+
+        
     </style>
 </head>
 <body class="bg-light">
  <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<%-- <jsp:include page="/common/header.jsp"></jsp:include> --%>
 
 <%-- 상단 헤더 --%>
 <div class="page-header text-center">
@@ -70,7 +120,7 @@
                 <input type="text" name="keyword" class="form-control form-control-sm" placeholder="키워드 검색" value="${param.keyword}">
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-dark btn-sm">검색</button>
+                <button type="submit" class="btn btn-outline-primary btn-sm">검색</button>
             </div>
             <div class="col-auto ms-auto">
                 <div class="btn-group btn-group-sm">
@@ -83,7 +133,7 @@
                 </div>
             </div>
              <div class="col-auto">
-                <a href="${ctx}/product/register" class="btn btn-primary btn-sm px-3">
+                <a href="${ctx}/product/register" class="btn btn-primary btn px-3">
                     <i class="bi bi-plus-lg"></i> 내 상품 등록하기
                 </a>
             </div>

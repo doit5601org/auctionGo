@@ -129,7 +129,8 @@ a:visited, a {
 		
 		
 		<form action="" name="takefaillForm">
-			<input type="hidden" name="bid" value="${bidId }" />
+			<input type="hidden" name="bid" value="${param.bid }" />
+			<input type="hidden" name="resultId" value="${resultId }" />
 			<input type="hidden" name="price" value="${amount }" />
 		</form>
 			<div class="adressconfirm">

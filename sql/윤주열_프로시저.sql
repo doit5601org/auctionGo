@@ -139,7 +139,7 @@ FROM MONEY_TRANSACTION_HISTORY;
 DECLARE
     v_result NUMBER;
 BEGIN
-    v_result := FN_GET_USER_MONEY_BALANCE(2);
+    v_result := FN_GET_USER_MONEY_BALANCE(1);
     DBMS_OUTPUT.PUT_LINE('결과: ' || v_result);
 END;
 -- 결과 : 210000
@@ -187,8 +187,8 @@ FROM AUCTION_REGISTRATION;
 
 -- 5번 경매의 종료 시간을 어제로 변경 (강제 마감 처리)
 UPDATE AUCTION_REGISTRATION
-SET CREATED_AT = SYSDATE - 8
-WHERE AUCTION_ID = 5;
+SET CREATED_AT = SYSDATE - 2
+WHERE AUCTION_ID = 11;
 COMMIT;
 
 
@@ -461,11 +461,5 @@ BEGIN
 END;
 
     
-    
-
-    
-    
-    
-
-
+select * from VW_MONEY_HISTORY;
 

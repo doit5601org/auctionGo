@@ -1,15 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>    
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>내 경매 현황</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+	crossorigin="anonymous">
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery.min.js"></script>
 <script>
 $(function() {
 	
@@ -82,54 +87,61 @@ $(function() {
 });
 </script>
 <style type="text/css">
-    .btn-primary{
-    	background-color: #120e63 !important;
-    	border-color: #120e63 !important;
-    }
-    .bg-primary{
-    background-color: #120e63 !important;
-    }
-   	i.text-primary{
-   		color: #120e63 !important;
-   	}
-    .btn-primary, .bg-primary, .btn-outline-primary:hover  {
-        background-color: #120e63 !important;
-        border-color: #120e63 !important;
-        color: #ffffff !important;
-    }
-        .btn-outline-primary{
-    	background-color: #fff !important;
-    	border-color: #120e63 !important;
-    	color: #120e63 !important;
-    }
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
 
-    .badge.bg-primary {
-        background-color: #5172a6 !important;
-    }
+.bg-primary {
+	background-color: #120e63 !important;
+}
 
-    .pagination .page-item.active .page-link {
-        background-color: #5172a6 !important;
-        border-color: #5172a6 !important;
-        color: #ffffff !important;
-    }
+i.text-primary {
+	color: #120e63 !important;
+}
 
-    .pagination .page-link:hover {
-        color: #5172a6;
-    }
-    
-    .page-link:focus {
-        box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
-    }
-    
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
+.badge.bg-primary {
+	background-color: #5172a6 !important;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #5172a6 !important;
+	border-color: #5172a6 !important;
+	color: #ffffff !important;
+}
+
+.pagination .page-link:hover {
+	color: #5172a6;
+}
+
+.page-link:focus {
+	box-shadow: 0 0 0 0.25rem rgba(18, 14, 99, 0.25);
+}
+
+.dropdown-item.active, .dropdown-item:active {
+	background-color: #5172a6 !important;
+}
 </style>
 </head>
 <body class="bg-light">
- <%@ include file="/WEB-INF/views/common/header.jsp" %>
+	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 
 	<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
 		<div class="row">
 			<aside class="col-md-3">
-				<%@ include file="/WEB-INF/views/common/mypage_layout.jsp" %>
+				<%@ include file="/WEB-INF/views/common/mypage_layout.jsp"%>
 			</aside>
 			<section class="col-md-9">
 				<div class="card shadow-sm border-0 mb-4 p-4">
@@ -140,7 +152,8 @@ $(function() {
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table align-middle border-top" id="auction-status-table">
+							<table class="table align-middle border-top"
+								id="auction-status-table">
 								<thead class="table-light">
 									<tr class="text-center">
 										<th style="width: 5%">No.</th>
@@ -156,97 +169,111 @@ $(function() {
 										<td colspan="5" class="text-center">진행 중인 경매가 존재하지 않습니다.</td>
 									</tr> -->
 									<c:forEach var="dto" items="${list }" varStatus="status">
-									<tr>
-										<td class="text-center">${status.count}</td>
-										<td>
-											<div class="d-flex align-items-center ps-3">
-												<img
-											src="${pageContext.request.contextPath}/${dto.imagePath1 }"
-											class="rounded shadow-sm" alt="상품" style="width: 60px; height: 60px; object-fit: cover;">
-												<div class="ms-4">
-													<div class="fw-bold">
-														<a href="${pageContext.request.contextPath }/auction/detail?auctionId=${dto.auctionId}" class="text-decoration-none text-dark link-primary">${dto.auctionTitle }</a>
-													</div>
-													<div class="text-muted small">시작일: 
-												<%-- 	<fmt:formatDate value="${dto.auctionStartDate }" pattern="yyyy-MM-dd"/> --%>
-												<fmt:parseDate value="${dto.auctionEndDate}" var="parsedDate" pattern="yyyy-MM-dd HH:mm:ss" />
-												<fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm" />
+										<tr>
+											<td class="text-center">${status.count}</td>
+											<td>
+												<div class="d-flex align-items-center ps-3">
+													<img
+														src="${pageContext.request.contextPath}/${dto.imagePath1 }"
+														class="rounded shadow-sm" alt="상품"
+														style="width: 60px; height: 60px; object-fit: cover;">
+													<div class="ms-4">
+														<div class="fw-bold">
+															<a
+																href="${pageContext.request.contextPath }/auction/detail?auctionId=${dto.auctionId}"
+																class="text-decoration-none text-dark link-primary">${dto.auctionTitle }</a>
+														</div>
+														<div class="text-muted small">
+															시작일:
+															<%-- 	<fmt:formatDate value="${dto.auctionStartDate }" pattern="yyyy-MM-dd"/> --%>
+															<fmt:parseDate value="${dto.auctionEndDate}"
+																var="parsedDate" pattern="yyyy-MM-dd HH:mm:ss" />
+															<fmt:formatDate value="${parsedDate}"
+																pattern="yyyy-MM-dd HH:mm" />
+														</div>
 													</div>
 												</div>
-											</div>
-										</td>
-										<td class="text-center countdown" data-end="${dto.auctionEndDate }"><span class="text-danger fw-bold time-display">계산중...</span>
-										</td>
-										<td class="text-center"><span
-											class="badge rounded-pill bg-primary px-3">${dto.bidCount } 명</span></td>
-										<td class="text-center">
-											<div class="small px-3">
-												<button type="button" class="btn btn-sm btn-outline-dark detail-btn" data-id="${dto.auctionId }">상세</button>
-												
-											</div>
-										</td>
-									<td>
-									    <button type="button" class="btn btn-sm btn-outline-dark cancel-modal-btn" 
-									            data-id="${dto.auctionId}" 
-									            data-bs-toggle="modal" 
-									            data-bs-target="#cancelReasonModal">경매취소</button>
-									</td>
-									</tr>
-									<tr class="collapse bg-light">
-							            <td colspan="6" class="p-3 text-center">
-							            	<c:forEach var="rank" items="${dto.bidRankList }" varStatus="status" end="2">
+											</td>
+											<td class="text-center countdown"
+												data-end="${dto.auctionEndDate }"><span
+												class="text-danger fw-bold time-display">계산중...</span></td>
+											<td class="text-center"><span
+												class="badge rounded-pill bg-primary px-3">${dto.bidCount }
+													명</span></td>
+											<td class="text-center">
+												<div class="small px-3">
+													<button type="button"
+														class="btn btn-sm btn-outline-primary detail-btn"
+														data-id="${dto.auctionId }">상세</button>
+
+												</div>
+											</td>
+											<td>
+												<button type="button"
+													class="btn btn-sm btn-primary cancel-modal-btn"
+													data-id="${dto.auctionId}" data-bs-toggle="modal"
+													data-bs-target="#cancelReasonModal">경매취소</button>
+											</td>
+										</tr>
+										<tr class="collapse bg-light">
+											<td colspan="6" class="p-3 text-center"><c:forEach
+													var="rank" items="${dto.bidRankList }" varStatus="status"
+													end="2">
 													<div class="ranking-item">
-														<strong class="${rank.currentRank == 1 ? 'text-success' : 'text-muted'}">
-															${rank.currentRank}순위 </strong> 
-															<span class="ms-1 ${rank.currentRank == 1 ? 'text-success' : 'text-muted'}"> 
-																<fmt:formatNumber value="${rank.bidPrice}" type="number" />원
-															</span>
-															<span>(입찰 시간: ${rank.bidTime })</span>
+														<strong
+															class="${rank.currentRank == 1 ? 'text-success' : 'text-muted'}">
+															${rank.currentRank}순위 </strong> <span
+															class="ms-1 ${rank.currentRank == 1 ? 'text-success' : 'text-muted'}">
+															<fmt:formatNumber value="${rank.bidPrice}" type="number" />원
+														</span> <span>(입찰 시간: ${rank.bidTime })</span>
 													</div>
 
 
-												</c:forEach>
-							            	
-							            </td>
-							        </tr>
+												</c:forEach></td>
+										</tr>
 									</c:forEach>
-								
+
 								</tbody>
 							</table>
 						</div>
 					</div>
 					<div class="d-flex justify-content-center mt-4">
-							${actualCount == 0? "등록된 게시물이 없습니다.": paging }
-						</div>
-		
+						${actualCount == 0? "등록된 게시물이 없습니다.": paging }</div>
+
 				</div>
 			</section>
 		</div>
 	</div>
-	<div class="modal fade" id="cancelReasonModal" tabindex="-1" aria-hidden="true">
-	    <div class="modal-dialog modal-dialog-centered">
-	        <div class="modal-content border-0 shadow">
-	            <div class="modal-header bg-dark text-white">
-	                <h5 class="modal-title fw-bold">경매 취소 사유 입력</h5>
-	                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-	            </div>
-	            <form action="${pageContext.request.contextPath}/user/mypage/auctionCancel" method="post">
-	                <input type="hidden" name="auctionId" id="modalAuctionId" value="">
-	                <div class="modal-body p-4">
-	                    <div class="alert alert-warning small mb-3">
-	                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-	                        경매 취소 시 패널티가 부여되며, 판매자 보증금은 반환되지 않습니다.
-	                    </div>
-	                    <textarea name="cancelReason" class="form-control" rows="4" placeholder="취소 사유를 구체적으로 입력해주세요" required></textarea>
-	                </div>
-	                <div class="modal-footer bg-light">
-	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-	                    <button type="submit" class="btn btn-danger px-4">최종 취소하기</button>
-	                </div>
-	            </form>
-	        </div>
-	    </div>
+	<div class="modal fade" id="cancelReasonModal" tabindex="-1"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content border-0 shadow">
+				<div class="modal-header bg-dark text-white">
+					<h5 class="modal-title fw-bold">경매 취소 사유 입력</h5>
+					<button type="button" class="btn-close btn-close-white"
+						data-bs-dismiss="modal"></button>
+				</div>
+				<form
+					action="${pageContext.request.contextPath}/user/mypage/auctionCancel"
+					method="post">
+					<input type="hidden" name="auctionId" id="modalAuctionId" value="">
+					<div class="modal-body p-4">
+						<div class="alert alert-warning small mb-3">
+							<i class="bi bi-exclamation-triangle-fill me-2"></i> 경매 취소 시 패널티가
+							부여되며, 판매자 보증금은 반환되지 않습니다.
+						</div>
+						<textarea name="cancelReason" class="form-control" rows="4"
+							placeholder="취소 사유를 구체적으로 입력해주세요" required></textarea>
+					</div>
+					<div class="modal-footer bg-light">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">닫기</button>
+						<button type="submit" class="btn btn-danger px-4">최종 취소하기</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
-	<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </body>
 </html>

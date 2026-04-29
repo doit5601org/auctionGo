@@ -33,6 +33,7 @@ h1,h2
 }
 h2{
 	margin-bottom: 20px;
+	padding:10px;
 }
 .body
 {
@@ -114,10 +115,20 @@ hr
 .tt
 {
 	display:inline-block;
-	width: 100px;
+	width: 140px;
 	font-weight: bold;
 	vertical-align: bottom;
+	font-size:16px;
 	
+	
+}
+.ttt
+{
+	display:inline-block;
+	width: 80px;
+	font-weight: bold;
+	vertical-align: bottom;
+	font-size:16px;
 	
 }
 .infoD
@@ -136,7 +147,7 @@ hr
 	font-family: small;
 	font-weight: bold;
 }
-button
+.btn-dark
 {
 	width: 90%;
     height: 17%;
@@ -161,14 +172,14 @@ button
 				<h1>낙찰 결제 상품</h1>
 				<hr />
 				<div class="itemimg">
-					<img src="${param.img }" alt="제품이미지" />
+					<img src="${pageContext.request.contextPath}/${param.img }" alt="제품이미지" />
 				</div>
 				<div class="itemtext">
 					<span class="title"> ${param.title } </span> <br /> <span class="condition">
-						상태: ${grade } / 제조사: ${param.manudacturer} </span><br /> <br /> <span class="date"> <span
-						class="tt">결제일</span> <span class="tt"><fmt:formatDate value="${today }"/></span><br /> <span class="tt">결제금액</span> <span style="font-weight:bold;">${param.price } 원</span><br />
-					</span>
-					<a href="${pageContext.request.contextPath }/user/products"><button type="button" class="btn btn-light">돌아가기</button></a>
+						상태: ${grade } / 제조사: ${param.manudacturer} </span><br /> <br /> <span class="date">  <span class="ttt">결제금액</span> <span class="tt">${param.price } 원</span><br />
+					<span
+						class="ttt">결제일</span> <span class="tt"><fmt:formatDate value="${today }" pattern="yyyy년 MM월 dd일"/></span></span>
+					<a href="${pageContext.request.contextPath }/user/products"><button type="button" class="btn btn-dark">확 인</button></a>
 				</div>
 				
 			</div>

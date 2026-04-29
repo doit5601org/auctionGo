@@ -1,11 +1,14 @@
 package com.doit.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
+import com.doit.dto.AuctionBidParticipationDTO;
 import com.doit.dto.AuctionDTO;
 import com.doit.service.AdminAuctionService;
 import com.doit.util.Pagination;
+import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -82,6 +85,85 @@ public class AdminAuctionController extends HttpServlet
 					
 					
 					viewPath = viewPath + "/admin/auctionList.jsp";
+				}
+				// 경매 상세 조회
+				else if (path.equalsIgnoreCase("/admin/auction/detail"))
+				{
+					// 이전 페이지 (admin/auctionList.jsp)에서 전달된 데이터 수신
+					//-- auctionId, prevUrl
+					int auctionId = Integer.parseInt(request.getParameter("auctionId"));
+					String prevUrl = request.getParameter("prevUrl");
+					
+					
+					// Service 객체 생성
+					AdminAuctionService adminAuctionService = new AdminAuctionService();
+					
+					// 경매 상세 정보 가져오기
+					AuctionDTO auctionDto = adminAuctionService.getAuctionDetail(auctionId);
+					
+					
+					// request에 데이터 바인딩
+					request.setAttribute("auctionDto", auctionDto);
+					
+					
+					// 포워딩 경로 설정
+					viewPath = viewPath + "/admin/auctionDetail.jsp";
+				}
+				
+				
+				// 경매 상세 조회 > 입찰 이력 총 갯수 가져오기 (AJAX)
+				else if (path.equalsIgnoreCase("/admin/auction/ajax/bidCount"))
+				{
+					// 이전 페이지(admin/auctionDetail.jsp)에서 전달된 데이터 수신
+					//-- auctionId
+					int auctionId = Integer.parseInt(request.getParameter("auctionId"));
+					
+					// Service 객체 생성
+					AdminAuctionService adminAuctionService = new AdminAuctionService();
+					
+					// 해당 경매의 총 입찰 횟수 가져오기
+					int auctionBidTotalCount = adminAuctionService.getAuctionBidTotalCount(auctionId);
+					
+					
+					// 응답값 반환
+					response.setContentType("text/plain");
+					response.setCharacterEncoding("UTF-8");
+					
+					PrintWriter out = response.getWriter();
+					out.print(auctionBidTotalCount);
+					out.flush();
+					
+					return;
+				}
+				
+				// 경매 상세 조회 > 경매의 입찰 정보 가져오기 (AJAX)
+				else if (path.equalsIgnoreCase("/admin/auction/ajax/bidHistory"))
+				{
+					// 이전 페이지(auctionDetail.jsp)에서 전달된 데이터 수신
+					//-- auctionId
+					//   (페이징은 구현하려다 생략)
+					int auctionId = Integer.parseInt(request.getParameter("auctionId"));
+					//int page = Integer.parseInt(request.getParameter("page"));
+					
+					// Service 객체 생성
+					AdminAuctionService adminAuctionService = new AdminAuctionService();
+					
+					// 입찰 리스트 가져오기
+					List<AuctionBidParticipationDTO> bidHistory = adminAuctionService.getAuctionBidHistory(auctionId);
+					
+					// 데이터를 json으로 변환 (Gson 라이브러리 사용)
+					//-- https://mvnrepository.com/artifact/com.google.code.gson/gson/2.14.0
+					Gson gson = new Gson();
+					String jsonData = gson.toJson(bidHistory);
+					
+					
+					// 변환한 데이터를 반환
+					response.setContentType("application/json; charset=UTF-8");
+					
+					PrintWriter out = response.getWriter();
+					out.print(jsonData);
+					out.flush();
+					return;
 				}
 				
 				request.getRequestDispatcher(viewPath).forward(request, response);

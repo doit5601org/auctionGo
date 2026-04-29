@@ -104,7 +104,7 @@ public class PaymentController extends HttpServlet
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e);
+			//System.out.println(e);
 		}
 		
 		int totalMoney = dao.moneyCheck(userId);
@@ -172,10 +172,10 @@ public class PaymentController extends HttpServlet
 		request.setAttribute("today",today );
 		
 		int result = dao.paymentBid(dto);
-		System.out.println("결제가격"+dto.getAmount());
-		System.out.println("결제낙찰"+dto.getBidResultId());
-		System.out.println("결제유저"+dto.getUserId());
-		System.out.println(result);
+		//System.out.println("결제가격"+dto.getAmount());
+		//System.out.println("결제낙찰"+dto.getBidResultId());
+		//System.out.println("결제유저"+dto.getUserId());
+		//System.out.println(result);
 		
 		String img =  request.getParameter("img");
 		String title = request.getParameter("title");
@@ -291,6 +291,7 @@ public class PaymentController extends HttpServlet
 		
 		String bidStr = request.getParameter("bid");
 		String amountStr = request.getParameter("price");
+		String resultIdStr = request.getParameter("resultId");
 		
 		int bid = 1; 
 
@@ -299,7 +300,7 @@ public class PaymentController extends HttpServlet
 		    	bid = Integer.parseInt(request.getParameter("bid"));
 		    } catch (NumberFormatException e) {
 		       
-		    	bid = 1;
+		    	bid = 0;
 		    }
 		}
 		
@@ -310,7 +311,18 @@ public class PaymentController extends HttpServlet
 		    	amount = Integer.parseInt(request.getParameter("price"));
 		    } catch (NumberFormatException e) {
 		       
-		    	amount = 1;
+		    	amount = 0;
+		    }
+		}
+		
+		int resultId = 1; 
+
+		if (resultIdStr != null && !resultIdStr.trim().isEmpty()) {
+		    try {
+		    	resultId = Integer.parseInt(request.getParameter("resultId"));
+		    } catch (NumberFormatException e) {
+		       
+		    	resultId = 0;
 		    }
 		}
 		

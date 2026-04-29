@@ -88,7 +88,7 @@ public class PaymentHistory extends HttpServlet{
 		
 		int totalPage = pageM.totalPage(viewCount, viewContent);
 		
-		System.out.println(totalPage);
+		//System.out.println(totalPage);
 		
 		request.setAttribute("totalPage", totalPage);
 		request.setAttribute("part", part);
@@ -96,8 +96,9 @@ public class PaymentHistory extends HttpServlet{
 		request.setAttribute("page", page);
 		
 		request.setAttribute("userMoney", dao.moneyCheck(user.getUserId()));
+		request.setAttribute("userDeposit", dao.depositCheck(user.getUserId()));
 		
-		System.out.println(dao.moneyCheck(user.getUserId()));
+		//System.out.println(dao.moneyCheck(user.getUserId()));
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/user/mypage/moneyHistory.jsp");
 		dispatcher.forward(request, response);

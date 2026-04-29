@@ -56,9 +56,12 @@ public class PaymentDetailController extends HttpServlet
 		    	resultId = Integer.parseInt(request.getParameter("resultId"));
 		    } catch (NumberFormatException e) {
 		       
-		    	resultId = 1;
+		    	resultId = 0;
 		    }
 		}
+		
+		
+		request.setAttribute("resultId", resultId);
 		
 		
 		ProductBuyDAO dao = new ProductBuyDAO();
@@ -68,7 +71,7 @@ public class PaymentDetailController extends HttpServlet
 		
 		int money = dao.moneyCheck(userId);
 		
-		System.out.println(dto.getUserName());
+		//System.out.println(dto.getUserName());
 		
 		request.setAttribute("detail", dto);
 		

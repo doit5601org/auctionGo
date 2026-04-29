@@ -60,6 +60,7 @@ public class AuctionController extends HttpServlet
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
+			 resp.getWriter().println("에러: " + e.getMessage());
 		}
 
 	}
@@ -179,7 +180,7 @@ public class AuctionController extends HttpServlet
 		req.setAttribute("isOwner", isOwner);
 		req.setAttribute("loginUserId", userId);
 
-		System.out.println(userId);
+		//System.out.println(userId);
 		
 		req.setAttribute("auction", auction);
 		req.setAttribute("viewStatus", viewStatus);
@@ -188,8 +189,6 @@ public class AuctionController extends HttpServlet
 		req.setAttribute("bidCount", activeBidCount); // JSP 에서 ${bidCount >= 10} 체크
 		
 		
-		System.out.println(isOwner);
-		System.out.println(viewStatus);
 		
 		req.getRequestDispatcher("/WEB-INF/views/auction/auctionDetail.jsp").forward(req, resp);
 	}

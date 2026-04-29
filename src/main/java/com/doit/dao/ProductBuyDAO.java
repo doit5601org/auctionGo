@@ -936,7 +936,52 @@ public class ProductBuyDAO
 		{
 			sql = "SELECT FN_GET_USER_MONEY_BALANCE(?) AS RESULT FROM DUAL";
 
-			pstmt = conn.prepareCall(sql);
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, userId);
+
+			res = pstmt.executeQuery();
+
+			while (res.next())
+			{
+				result = res.getInt("RESULT");
+			}
+
+
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+			try
+			{
+				res.close();
+				pstmt.close();
+				DBCPConn.close(conn);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println(e);
+			}
+		}
+
+		return result;
+	}
+	
+	// 회원 보증금 반환예정금 확인
+	public int depositCheck(int userId)
+	{
+		Connection conn = DBCPConn.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet res = null;
+		String sql = "";
+		int result = 0;
+
+		try
+		{
+			sql = "SELECT FN_DEPOSIT_MONEY(?) AS RESULT FROM DUAL";
+
+			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setInt(1, userId);
 
@@ -979,8 +1024,11 @@ public class ProductBuyDAO
 		try
 		{
 			sql = """
-					SELECT M.BID_RESULT_ID,A.USER_ID, A.AUCTION_ID, AUCTION_TITLE,START_PRICE,BID_CURRENT_PRICE,BID_MAX_PRICE,AUCTION_END_DATE+1 AS AUCTION_START_DATE,AUCTION_END_DATE,IS_FINISHED,PRODUCT_ID
-					,PRODUCT_ALIAS,MANUFACTURER_NAME,PRODUCT_GRADE_NAME,IMAGE_PATH_1,USER_NAME,USER_EMAIL,USER_PHONE,USER_ZIPCODE,USER_ADDRESS,USER_ADDRESS_DETAIL
+					SELECT M.BID_RESULT_ID,A.USER_ID, A.AUCTION_ID, A.AUCTION_TITLE
+                    ,START_PRICE,BID_CURRENT_PRICE,BID_MAX_PRICE
+                    ,AUCTION_END_DATE,IS_FINISHED,PRODUCT_ID, TO_CHAR(TO_DATE(AUCTION_END_DATE, 'YYYY-MM-DD HH24:MI:SS') + 1, 'YYYY-MM-DD HH24:MI:SS') AS AUCTION_START_DATE
+					,PRODUCT_ALIAS,MANUFACTURER_NAME,PRODUCT_GRADE_NAME,IMAGE_PATH_1,USER_NAME
+                    ,USER_EMAIL,USER_PHONE,USER_ZIPCODE,USER_ADDRESS,USER_ADDRESS_DETAIL
 					FROM  AUCTION_WINNING_RESULT M
 					LEFT JOIN AUCTION_BID_PARTICIPATION Q
 					ON M.BID_ID = Q.BID_ID
