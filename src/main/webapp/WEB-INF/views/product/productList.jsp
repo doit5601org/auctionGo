@@ -65,6 +65,7 @@ i.text-primary {
 .nav-link {
 	color: #5172a6 !important;
 }
+
         
     </style>
 </head>

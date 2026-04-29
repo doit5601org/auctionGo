@@ -275,7 +275,7 @@ public class MyPageDAO {
 				SELECT AUCTION_ID, AUCTION_TITLE
 				,AUCTION_START_DATE, AUCTION_END_DATE, IMAGE_PATH_1, BID_COUNT
 				FROM VW_AUCTION_LIST
-				WHERE USER_ID = ? AND IS_FINISHED = '진행중'
+				WHERE USER_ID = ? AND TO_DATE(AUCTION_END_DATE, 'YYYY-MM-DD HH24:MI:SS') > SYSDATE AND IS_FINISHED = '진행중'
 				ORDER BY AUCTION_ID DESC OFFSET ? ROWS FETCH FIRST ? ROWS ONLY""";
 		
 		try(Connection conn = DBCPConn.getConnection();
@@ -376,11 +376,15 @@ public class MyPageDAO {
 		        FROM VW_AUCTION_LIST AL
 		        LEFT OUTER JOIN VW_AUCTION_WINNING_RESULT VR ON AL.AUCTION_ID = VR.AUCTION_ID
 		        WHERE AL.USER_ID = ?
-		          AND (TO_DATE(AL.AUCTION_END_DATE, 'YYYY-MM-DD HH24:MI:SS') < SYSDATE OR AL.IS_FINISHED = '경매취소')
+		        AND (AL.AUCTION_END_DATE < TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI') OR AL.IS_FINISHED = '경매취소')
+
 		          AND AL.IS_FINISHED != '진행중'
 		        ORDER BY AL.AUCTION_END_DATE DESC
 		        OFFSET ? ROWS FETCH FIRST ? ROWS ONLY
 		        """;
+		
+        //AND (AL.AUCTION_END_DATE < SYSDATE OR AL.IS_FINISHED = '경매취소')
+//        AND (TO_DATE(AL.AUCTION_END_DATE, 'YYYY-MM-DD HH24:MI') < SYSDATE OR AL.IS_FINISHED = '경매취소')
 		
 		try(Connection conn = DBCPConn.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -479,10 +483,18 @@ public class MyPageDAO {
 	public int activeBidDataCount(int userId) {
 		int result = 0;
 
+//		String sql = """
+//			SELECT COUNT(DISTINCT AUCTION_ID) AS COUNT
+//			FROM VW_BID_LIST
+//			WHERE BIDDER_ID=? AND AUCTION_STATUS='진행중'
+//				""";
+//		
 		String sql = """
-				SELECT COUNT(*) AS COUNT
-				FROM VW_BID_LIST
-				WHERE BIDDER_ID=? AND AUCTION_STATUS='진행중'
+			SELECT COUNT(DISTINCT AUCTION_ID) AS COUNT
+			FROM VW_BID_LIST
+			WHERE USER_ID = ? 
+            AND AUCTION_STATUS = '진행중'
+            AND AUCTION_END_DATE > SYSDATE
 				""";
 		try (Connection conn = DBCPConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -506,7 +518,7 @@ public class MyPageDAO {
 		int result = 0;
 		
 		String sql = """
-				SELECT COUNT(*) AS COUNT
+				SELECT COUNT(DISTINCT AUCTION_ID) AS COUNT
 				FROM AUCTION_BID_PARTICIPATION
 				WHERE USER_ID = ?
 				""";

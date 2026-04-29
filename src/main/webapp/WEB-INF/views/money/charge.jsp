@@ -74,6 +74,30 @@ a:visited ,a
 {
 	text-decoration: none !important;
 }
+
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+
+.bg-primary {
+	background-color: #120e63 !important;
+}
+
+
+
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
 </style>
 <script type="text/javascript">
 	document.onkeydown = function(e) {

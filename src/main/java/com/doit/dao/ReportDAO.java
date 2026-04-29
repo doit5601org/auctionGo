@@ -1,8 +1,10 @@
 package com.doit.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +88,37 @@ public class ReportDAO
 	    return dto;
 	}
 	
+	
+	public boolean insertAuctionReport(long auctionId, long userNo, int reportTypeId, String content) {
+	    Connection conn = null;
+	    CallableStatement cstmt = null;
+	    boolean isSuccess = false;
+
+	    try {
+	        conn = DBCPConn.getConnection();
+	        // 프로시저 호출 (상품 신고와 동일한 프로시저 사용)
+	        String sql = "{CALL PRC_REPORT_CREATE(?, ?, ?, ?, ?)}";
+	        cstmt = conn.prepareCall(sql);
+
+	        cstmt.setLong(1, userNo);         // P_USER_ID (신고자)
+	        cstmt.setInt(2, reportTypeId);   // P_REPORT_TYPE (신고 유형 ID)
+	        cstmt.setLong(3, auctionId);      // P_TARGET_ID (경매 ID)
+	        cstmt.setInt(4, 2);              // P_TARGET_TYPE (경매는 '2'로 고정하여 구분)
+	        cstmt.setString(5, content);      // P_REPORT_REASON (신고 사유)
+
+	        int rows = cstmt.executeUpdate();
+	        isSuccess = true; 
+
+	    } catch (SQLException e) {
+	        System.err.println("[ReportDAO] 경매 신고 등록 중 에러 발생");
+	        e.printStackTrace();
+	        isSuccess = false;
+	    } finally {
+	        if (cstmt != null) try { cstmt.close(); } catch (Exception e) {}
+	        DBCPConn.close(conn);
+	    }
+	    return isSuccess;
+	}
 	
 	
 	

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -7,87 +6,204 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>경매 신고</title>
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
 	rel="stylesheet">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-	rel="stylesheet">
+<link rel="stylesheet" href="${ctx}/css/common.css" />
+<script src="https://code.jquery.com/jquery.min.js"></script>
 <style>
-.navbar-brand {
+body {
+	background-color: #f8f9fa;
+}
+
+.page-title {
+	font-weight: 800;
+	color: #222;
+	font-size: 1.6rem;
+}
+
+.report-card {
+	background: #fff;
+	border: 1px solid #e9ecef;
+	border-radius: 12px;
+	padding: 32px;
+}
+
+.product-summary {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	background-color: #f8f9fa;
+	border: 1px solid #e9ecef;
+	border-radius: 10px;
+	padding: 16px;
+	margin-bottom: 24px;
+}
+
+.product-summary img {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	border-radius: 8px;
+	border: 1px solid #dee2e6;
+}
+
+.section-title {
+	font-size: 13px;
 	font-weight: 700;
-	color: #4F46E5 !important;
+	color: #555;
+	margin-bottom: 12px;
+	padding-bottom: 8px;
+	border-bottom: 2px solid #eee;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
 }
+
+.form-label {
+	font-size: 13px;
+	color: #333;
+	font-weight: 600;
+}
+
+.form-control, .form-select {
+	font-size: 14px;
+	border-radius: 8px;
+}
+
+.form-control:focus, .form-select:focus {
+	box-shadow: none;
+	border-color: #adb5bd;
+}
+
+.btn-cancel {
+	background-color: #fff;
+	color: #555;
+	border: 1px solid #dee2e6;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.btn-cancel:hover {
+	background-color: #f8f9fa;
+}
+
+.btn-report {
+	background-color: #dc3545;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	font-weight: 700;
+	font-size: 15px;
+}
+
+.btn-report:hover {
+	background-color: #bb2d3b;
+	color: #fff;
+}
+
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+
+.bg-primary {
+	background-color: #120e63 !important;
+}
+
+
+
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
+
+
 </style>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-function updateCount(el) {
-    document.getElementById('charCount').textContent = el.value.length;
-}
-</script>
 </head>
-<body class="bg-light">
+<body>
 	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-	<%-- 에러 메시지 (중복 신고 등) --%>
-	<c:if test="${not empty errorMsg}">
-		<div class="container mt-3">
-			<div class="alert alert-danger">${errorMsg}</div>
+	<div class="container py-5" style="max-width: 620px;">
+
+		<div class="mb-4">
+			<h2 class="page-title">경매 신고</h2>
+			<p class="text-muted small mb-0">허위 신고 시 본인에게 패널티가 부여될 수 있습니다.</p>
 		</div>
-	</c:if>
 
-	<div class="container py-4">
-		<div class="bg-white rounded-3 p-4 shadow-sm"
-			style="max-width: 520px; margin: 0 auto;">
-			<div class="d-flex align-items-center gap-2 mb-4">
-				<h5 class="fw-bold mb-0">경매 신고</h5>
-			</div>
+		<div class="report-card">
 
-			<%-- 신고 대상 경매 표시 --%>
-			<div class="alert alert-light border mb-4">
-				<p class="mb-0 text-muted small">신고 대상 경매</p>
-				<p class="fw-semibold mb-0">${auction.auctionTitle}</p>
-			</div>
+			<%-- 에러 메시지 --%>
+			<c:if test="${not empty errorMsg}">
+				<div class="alert alert-danger">${errorMsg}</div>
+			</c:if>
 
-			<form action="${ctx}/auction/report" method="post">
-				<input type="hidden" name="auctionId" value="${auction.auctionId}">
-
-				<%-- 신고 유형 --%>
-				<div class="mb-3">
-					<label class="form-label fw-semibold">신고 유형 <span
-						class="text-danger">*</span></label> <select name="reportTypeId"
-						class="form-select" required>
-						<option value="">선택하세요</option>
-						<c:forEach var="t" items="${reportTypeList}">			
-							<option value="${t.reportTypeId}">${t.reportTypeName}</option>
-						</c:forEach>
-					</select>
-				</div>
-
-				<%-- 신고 사유 --%>
-				<div class="mb-4">
-					<label class="form-label fw-semibold">신고 사유 <span
-						class="text-danger">*</span></label>
-					<textarea name="reportContent" id="reportContent"
-						class="form-control" rows="5" required maxlength="500"
-						placeholder="구체적인 신고 사유를 입력해 주세요 (최대 500자)"
-						oninput="updateCount(this)"></textarea>
-					<p class="text-end text-muted small mt-1">
-						<span id="charCount">0</span> / 500
-					</p>
-				</div>
-
-				<div class="d-flex gap-2">
-					<button type="button" onclick="history.back()"
-						class="btn btn-outline-secondary w-50">취소</button>
-					<button type="submit" class="btn btn-danger w-50">신고 제출</button>
-				</div>
-			</form>
+		    <p class="section-title">신고 대상 경매</p>
+		    <div class="product-summary mb-4">
+		        <c:choose>
+		            <c:when test="${not empty auction.imagePath1}">
+		                <img src="${ctx}/${auction.imagePath1}" alt="">
+		            </c:when>
+		            <c:otherwise>
+		                <img src="https://placehold.co/60x60/f8f9fa/adb5bd?text=No" alt="">
+		            </c:otherwise>
+		        </c:choose>
+		        <div>
+		            <%-- 경매 제목 및 정보 출력 --%>
+		            <p class="fw-bold mb-0" style="font-size: 15px;">${auction.auctionTitle}</p>
+		            <p class="text-muted small mb-0">${auction.manufacturerName} · ${auction.productGradeName}</p>
+		        </div>
+		    </div>
+		
+		    <form action="${ctx}/auction/report" method="post">
+		        <input type="hidden" name="auctionId" value="${auction.auctionId}">
+		
+		        <div class="mb-3">
+		            <label class="form-label">신고 유형 <span class="text-danger">*</span></label>
+		            <select name="reportTypeId" class="form-select" required>
+		                <option value="">선택하세요</option>
+		                <c:forEach var="t" items="${reportTypeList}">
+		                    <option value="${t.reportTypeId}">${t.reportTypeName}</option>
+		                </c:forEach>
+		            </select>
+		        </div>
+		        
+		        <div class="mb-4">
+                    <label class="form-label">신고 사유 <span class="text-danger">*</span></label>
+                    <textarea name="reportContent" class="form-control" rows="5"
+                        maxlength="500" required placeholder="신고 사유를 상세히 입력해주세요 (최대 500자)"
+                        oninput="document.getElementById('cnt').innerText=this.value.length"></textarea>
+                    <div class="text-end text-muted small mt-1">
+                        <span id="cnt">0</span> / 500
+                    </div>
+                </div>
+                
+		        <div class="alert small mb-4"
+					style="background-color: #fff5f5; border: 1px solid #f5c6cb; color: #842029;">
+					신고 내용은 관리자가 검토 후 처리 결과를 알려드립니다.</div>
+		        
+		        <div class="d-flex gap-2">
+		            <button type="button" class="btn w-50 py-2 fw-bold"
+		                style="background-color: #f1f1f1; color: #555; border: 1px solid #ddd; border-radius: 8px;"
+		                onclick="location.href='${ctx}/auction/detail?auctionId=${auction.auctionId}'">취소</button>
+		            <button type="submit" class="btn w-50 py-2 fw-bold"
+		                style="background-color: #dc3545; color: #fff; border: none; border-radius: 8px;">신고 제출</button>
+		        </div>
+		    </form>
 		</div>
 	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </body>
 </html>
