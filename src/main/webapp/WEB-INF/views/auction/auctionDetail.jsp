@@ -37,6 +37,36 @@
     .notice-box { background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 8px;
                   padding: 12px 16px; font-size: .85rem; color: #7F1D1D; }
     .countdown { font-size: 1.1rem; font-weight: 700; color: #4F46E5; font-variant-numeric: tabular-nums; }
+    
+              
+.btn-primary {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+}
+
+.bg-primary {
+	background-color: #120e63 !important;
+}
+
+i.text-primary {
+	color: #120e63 !important;
+}
+
+.btn-primary, .bg-primary, .btn-outline-primary:hover {
+	background-color: #120e63 !important;
+	border-color: #120e63 !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-primary {
+	background-color: #fff !important;
+	border-color: #120e63 !important;
+	color: #120e63 !important;
+}
+
+.breadcrumb-item>a{color: #666; text-decoration: none;}
+.breadcrumb-item.active{font-weight: bold; color: #333;}
+    
 </style>
 </head>
 <body>
