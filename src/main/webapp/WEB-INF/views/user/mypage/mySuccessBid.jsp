@@ -347,7 +347,7 @@ function con(userId, bidId) {
 									href="${pageContext.request.contextPath }/product/detail?productId=${bid.productId}">
 									<div class="item shadow-sm">
 										<div class="imgwrap">
-											<img src="${pageContext.request.contextPath}/images/${bid.img}" alt="상품이미지" />
+											<img src="${pageContext.request.contextPath}/${bid.img}" alt="상품이미지" />
 										</div>
 										<div class="itemtext">
 											<span class="title">${bid.auctionTitle}</span>

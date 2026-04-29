@@ -449,7 +449,8 @@ window.onload = function() {
 	
 	function fail()
 	{
-		window.location.href="${pageContext.request.contextPath }/payment/takefail"
+		document.formRight.action="${pageContext.request.contextPath }/payment/takefail";
+		document.formRight.submit();
 	}
 </script>
 <body>
@@ -470,13 +471,13 @@ window.onload = function() {
 				<h1>낙찰 구매 상품</h1>
 				<hr />
 				<div class="itemimg">
-					<img src="${pageContext.request.contextPath}/images/${detail.img }" alt="제품이미지" />
+					<img src="${pageContext.request.contextPath}/${detail.img }" alt="제품이미지" />
 				</div>
 				<div class="itemtext">
 					<span class="title"> ${detail.auctionTitle } </span> <br /> <span class="condition">
 						상태: ${detail.gradeName } / 제조사: ${detail.manudacturerName} </span><br /> <br /> <span class="date"> <span
 						class="tt">낙찰일</span> <span class="condition">${fn:substring(detail.auctionEndDate,0,fn:length(detail.auctionEndDate)-8)}</span> <br /> <span class="tt" >결제마감일</span>
-						<span class="endDate condition">${fn:substring(detail.auctionStartDate,0,fn:length(detail.auctionStartDate)-8) }</span> <br /> <span class="tt" >남은시간</span> <span id="endTime condition"></span><br />
+						<span class="endDate condition">${fn:substring(detail.auctionStartDate,0,fn:length(detail.auctionStartDate)-8) }</span> <br /> <span id="endTime condition"></span><br />
 					</span> <span class="countmoney"> <span class="tt">입찰가</span>
 						<span class="condition">${detail.maxPrice } 원</span><br /> <span class="tt">낙찰가</span> <span class="condition">${detail.currentPrice } 원</span><br />
 					</span>

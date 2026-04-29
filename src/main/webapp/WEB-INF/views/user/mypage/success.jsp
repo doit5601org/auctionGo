@@ -161,7 +161,7 @@ button
 				<h1>낙찰 결제 상품</h1>
 				<hr />
 				<div class="itemimg">
-					<img src="${param.img }" alt="제품이미지" />
+					<img src="${pageContext.request.contextPath}/${param.img }" alt="제품이미지" />
 				</div>
 				<div class="itemtext">
 					<span class="title"> ${param.title } </span> <br /> <span class="condition">
