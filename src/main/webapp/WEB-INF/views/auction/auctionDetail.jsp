@@ -357,9 +357,7 @@
         updateTimer();
         setInterval(updateTimer, 1000);
     }
-    <p style="color:red">
-    viewStatus: ${viewStatus} / isFinished: ${auction.isFinished}
-</p>
+  
     
     // 입찰 완료 알림
     $(function() {
@@ -370,6 +368,7 @@
     });
     
 </script>
+
 
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
