@@ -328,7 +328,7 @@ public class PaymentController extends HttpServlet
 		
 		ProductBuyDAO dao = new ProductBuyDAO();
 		
-		BidActionDTO dto = new BidActionDTO(userId, resultId, amount);
+		BidActionDTO dto = new BidActionDTO(userId, bid, amount);
 		
 		int result = dao.failBid(dto);
 		
